@@ -1,11 +1,19 @@
 spring:
-  application:
-    name: backend
-
   profiles:
     active: ${PROFILE}
 
----
+  application:
+    name: backend
+  config:
+    import: optional:file:.env[.properties]
+  web:
+    resources:
+      add-mappings: false
+
+
+
+
+--- # 로컬 설정
 spring:
   config:
     activate:
@@ -13,15 +21,20 @@ spring:
 
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:zzf
-    username: ssafy
-    password: ssafy
+    url: jdbc:h2:mem:zzfDB
+    username: sa
 
   jpa:
     hibernate:
       ddl-auto: create-drop
+    show-sql: true
 
----
+
+logging:
+  level:
+    root: info
+
+--- # 개발 서버 설정
 spring:
   config:
     activate:
@@ -32,3 +45,12 @@ spring:
     url: ${RDB_URL}
     username: ${RDB_USERNAME}
     password: ${RDB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+
+logging:
+  level:
+    root: warn
