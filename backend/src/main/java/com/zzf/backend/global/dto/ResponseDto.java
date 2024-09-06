@@ -10,20 +10,20 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public class ResponseDto<T> {
 
-    private HttpStatus status;
+    private int httpStatus;
     private String message;
     private T body;
 
     public static <T> ResponseDto<T> success(SuccessCode code, T body) {
-        return new ResponseDto<>(code.getStatus(), code.getMessage(), body);
+        return new ResponseDto<>(code.getHttpStatus(), code.getMessage(), body);
     }
 
     public static <T> ResponseDto<T> fail(ErrorCode code) {
-        return new ResponseDto<>(code.getStatus(), code.getMessage(), null);
+        return new ResponseDto<>(code.getHttpStatus(), code.getMessage(), null);
     }
 
     public static <T> ResponseDto<T> fail(HttpStatus code, String message) {
-        return new ResponseDto<>(code, message, null);
+        return new ResponseDto<>(code.value(), message, null);
     }
 
 }
