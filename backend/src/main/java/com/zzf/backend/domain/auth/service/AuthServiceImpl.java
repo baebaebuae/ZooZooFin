@@ -1,11 +1,18 @@
 package com.zzf.backend.domain.auth.service;
 
+import com.zzf.backend.domain.auth.dto.KakaoTokenDto;
+import com.zzf.backend.domain.auth.dto.KakaoUserDto;
 import com.zzf.backend.domain.auth.dto.LoginResponse;
 import com.zzf.backend.global.exception.CustomException;
+import io.netty.handler.codec.http.HttpHeaderValues;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import static com.zzf.backend.global.status.ErrorCode.*;
 
@@ -52,6 +59,47 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public LoginResponse loginOAuth(String provider, String code) {
-        return null;
+        switch (provider) {
+            case "kakao" -> {
+                KakaoTokenDto tokenDto = WebClient.create(KAKAO_TOKEN_HOST)
+                        .post()
+                        .uri(uriBuilder -> uriBuilder
+                                .scheme("https")
+                                .path("/oauth/token")
+                                .queryParam("grant_type", "authorization_code")
+                                .queryParam("client_id", kakaoClientId)
+                                .queryParam("code", code)
+                                .build(true))
+                        .header(HttpHeaders.CONTENT_TYPE, HttpHeaderValues.APPLICATION_X_WWW_FORM_URLENCODED.toString())
+                        .retrieve()
+                        .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new CustomException(KAKAO_PARAMETER_ERROR)))
+                        .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> Mono.error(new CustomException(KAKAO_SERVER_ERROR)))
+                        .bodyToMono(KakaoTokenDto.class)
+                        .block();
+
+                KakaoUserDto userDto = WebClient.create(KAKAO_USER_HOST)
+                        .get()
+                        .uri(uriBuilder -> uriBuilder
+                                .scheme("https")
+                                .path("/v2/user/me")
+                                .build(true))
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDto.accessToken)
+                        .header(HttpHeaders.CONTENT_TYPE, HttpHeaderValues.APPLICATION_X_WWW_FORM_URLENCODED.toString())
+                        .retrieve()
+                        .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new CustomException(KAKAO_PARAMETER_ERROR)))
+                        .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> Mono.error(new CustomException(KAKAO_SERVER_ERROR)))
+                        .bodyToMono(KakaoUserDto.class)
+                        .block();
+
+                Long userId = userDto.id;
+
+                log.info("userId: {}", userId);
+
+                return null;
+
+            }
+        }
+
+        return new LoginResponse(null, null, null);
     }
 }
