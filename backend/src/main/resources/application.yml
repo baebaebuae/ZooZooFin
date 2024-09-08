@@ -46,6 +46,11 @@ spring:
 
 base-url: http://localhost:8080
 
+redis:
+  ttl:
+    access: 18000
+    refresh: 180000
+
 logging:
   level:
     root: info
@@ -71,6 +76,11 @@ spring:
       ddl-auto: none
 
 base-url: ${BASE_URL}
+
+redis:
+  ttl:
+    access: ${ACCESS_EXPIRE}
+    refresh: ${REFRESH_EXPIRE}
 
 logging:
   level:
