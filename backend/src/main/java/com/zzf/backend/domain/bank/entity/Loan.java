@@ -33,9 +33,9 @@ public class Loan extends BaseEntity {
     @NotNull
     private Integer loanStartTurn;
 
-    @Column(name = "loan_end_turn")
+    @Column(name = "loan_period")
     @NotNull
-    private Integer loanEndTurn;
+    private Integer loanPeriod;
 
     @Column(name = "loan_to_end")
     @NotNull
