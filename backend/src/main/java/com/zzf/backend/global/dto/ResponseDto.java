@@ -18,6 +18,10 @@ public class ResponseDto<T> {
         return new ResponseDto<>(code.getHttpStatus(), code.getMessage(), body);
     }
 
+    public static ResponseDto<Void> success(SuccessCode code) {
+        return new ResponseDto<>(code.getHttpStatus(), code.getMessage(), null);
+    }
+
     public static <T> ResponseDto<T> fail(ErrorCode code) {
         return new ResponseDto<>(code.getHttpStatus(), code.getMessage(), null);
     }
