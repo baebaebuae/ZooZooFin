@@ -8,10 +8,11 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum SuccessCode {
 
-    OK(HttpStatus.OK, "성공"),
+    OK(200, "성공"),
+    LOGIN_SUCCESS(200, "로그인 성공")
     ;
 
-    private final HttpStatus status;
+    private final int httpStatus;
     private final String message;
 
 }
