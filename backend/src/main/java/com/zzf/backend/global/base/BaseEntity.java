@@ -3,6 +3,7 @@ package com.zzf.backend.global.base;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -15,10 +16,12 @@ import java.time.Instant;
 @MappedSuperclass
 public abstract class BaseEntity {
 
+    @NotNull
     @CreatedDate
     @Column(updatable = false)
     private Instant createdDate;
 
+    @NotNull
     @LastModifiedDate
     private Instant modifiedDate;
 
