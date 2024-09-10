@@ -1,0 +1,26 @@
+@font-face {
+    font-family: 'OneMobile';
+    src: url('./src/assets/fonts/ONE\ Mobile\ Regular.ttf') format('truetype');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'OneMobile';
+    src: url('./src/assets/fonts/ONE\ Mobile\ Bold.ttf') format('truetype');
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: 'OneMobile';
+    src: url('./src/assets/fonts/ONE\ Mobile\ Light.ttf') format('truetype');
+    font-weight: light;
+}
+
+@font-face {
+    font-family: 'OneMobilePop';
+    src: url('./src/assets/fonts/ONE\ Mobile\ POP.ttf') format('truetype');
+}
+
+body {
+    font-family: 'OneMobile';
+}
