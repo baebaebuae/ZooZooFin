@@ -1,5 +1,6 @@
 package com.zzf.backend.domain.bank.entity;
 
+import com.zzf.backend.domain.character.entity.Character;
 import com.zzf.backend.global.base.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -34,8 +35,12 @@ public class Deposit extends BaseEntity {
     private Boolean depositIsEnd;
 
     // FK
-    private Long character;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "character_id")
+    @NotNull
+    private Character character;
 
+    // FK
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "deposit_type_id")
     @NotNull

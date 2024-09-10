@@ -1,5 +1,6 @@
 package com.zzf.backend.domain.bank.entity;
 
+import com.zzf.backend.domain.character.entity.Character;
 import com.zzf.backend.global.base.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -54,5 +55,7 @@ public class Loan extends BaseEntity {
     private Boolean loanIsEnd;
 
     // FK
-    private Long character;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "character_id")
+    private Character character;
 }
