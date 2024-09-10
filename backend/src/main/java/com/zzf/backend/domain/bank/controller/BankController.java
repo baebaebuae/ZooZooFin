@@ -6,7 +6,6 @@ import com.zzf.backend.global.status.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 @RestController
@@ -34,7 +33,7 @@ public class BankController {
     //예금 해지_내 예금 조회 003
     @GetMapping("/my-deposit")
     public ResponseDto<List<MyDepositResponse>> getMyDeposit(){
-        // Header 에서 userId 얻기
+        // Header에서 userId 얻기
         UUID userId = UUID.fromString("913418af-6b2e-11ef-929f-28c5d21eabf3");
 
         List<MyDepositResponse> myDepositResponseList = null;
@@ -55,8 +54,8 @@ public class BankController {
     @GetMapping("/savings")
     public ResponseDto<List<SavingsResponse>> getSavings(){
 
-        List<SavingsResponse> savingsDepositList = null;
-        return ResponseDto.success(SuccessCode.READ_SUCCESS, savingsDepositList);
+        List<SavingsResponse> savingsResponseList = null;
+        return ResponseDto.success(SuccessCode.READ_SUCCESS, savingsResponseList);
     }
 
     //적금 등록 005
@@ -122,16 +121,24 @@ public class BankController {
 
     //대출금 상환_내 대출 조회 010
     @GetMapping("/my-loan")
-    public ResponseDto<MyLoanListRequest> getMyLoan(){
+    public ResponseDto<MyLoanListResponse> getMyLoan(){
         // Header에서 userId 얻기
         UUID userId = UUID.fromString("913418af-6b2e-11ef-929f-28c5d21eabf3");
 
-        MyLoanListRequest myLoanListRequest = null;
-        return ResponseDto.success(SuccessCode.READ_SUCCESS, myLoanListRequest);
+        MyLoanListResponse myLoanListResponse = null;
+        return ResponseDto.success(SuccessCode.READ_SUCCESS, myLoanListResponse);
     }
 
     //대출금 상환_내 대출 상세 조회 010_1
+    @GetMapping("/my-loan/detail")
+    public ResponseDto<MyLoanResponse> getMyLoanDetail(@RequestBody Map<String, Long> mapRequest){
+        // Header에서 userId 얻기
+        UUID userId = UUID.fromString("913418af-6b2e-11ef-929f-28c5d21eabf3");
+        Long loanId = mapRequest.get("loanId");
 
+        MyLoanResponse myLoanResponse = null;
+        return ResponseDto.success(SuccessCode.READ_SUCCESS, myLoanResponse);
+    }
 
     //대출금 상환 010_2
     @PatchMapping("/my-loan")
@@ -139,6 +146,45 @@ public class BankController {
         // Header에서 userId 얻기
         UUID userId = UUID.fromString("913418af-6b2e-11ef-929f-28c5d21eabf3");
         Long loanId = mapRequest.get("loanId");
+
+        return ResponseDto.success(SuccessCode.UPDATE_SUCCESS);
+    }
+
+    //파산 신청 011
+    @PatchMapping("/bankrupt")
+    public ResponseDto<Void> gameover(){
+        // Header에서 userId 얻기
+        UUID userId = UUID.fromString("913418af-6b2e-11ef-929f-28c5d21eabf3");
+
+        return ResponseDto.success(SuccessCode.UPDATE_SUCCESS);
+    }
+
+    //사채 있는지 확인 012
+    @GetMapping("/capital")
+    public ResponseDto<Map<String, Boolean>> getCapital(){
+        // Header에서 userId 얻기
+        UUID userId = UUID.fromString("913418af-6b2e-11ef-929f-28c5d21eabf3");
+
+        Map<String, Boolean> mapResponse = new HashMap<>();
+
+        return ResponseDto.success(SuccessCode.READ_SUCCESS, mapResponse);
+    }
+
+    //사채 등록 013
+    @PostMapping("/capital")
+    public ResponseDto<Void> postCapital(@RequestBody CapitalRequest capitalRequest){
+        // Header에서 userId 얻기
+        UUID userId = UUID.fromString("913418af-6b2e-11ef-929f-28c5d21eabf3");
+
+        return ResponseDto.success(SuccessCode.CREATE_SUCCESS);
+    }
+
+    //사채 상환 014
+    @PatchMapping("/capital")
+    public ResponseDto<Void> patchCapital(@RequestBody Map<String, Long> mapRequest){
+        // Header에서 userId 얻기
+        UUID userId = UUID.fromString("913418af-6b2e-11ef-929f-28c5d21eabf3");
+        Long money = mapRequest.get("money");
 
         return ResponseDto.success(SuccessCode.UPDATE_SUCCESS);
     }
