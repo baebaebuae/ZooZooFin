@@ -1,5 +1,5 @@
 ## Title
-- 제목 : feat(${JIRA_ISSUE}): 기능명
+- 제목 : feat(JIRA_ISSUE): 기능명
 
 ## Part
 
@@ -21,4 +21,4 @@
 
 ## 지라 링크
 
-- [Related JIRA issue: ${JIRA_ISSUE}](https://ssafy.atlassian.net/browse/${JIRA_ISSUE})
+- [JIRA_ISSUE](https://ssafy.atlassian.net/browse/JIRA_ISSUE)
