@@ -14,15 +14,15 @@ public class DepositType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "deposit_type_id")
     @NotNull
-    private Integer depositTypeId;
+    private Long depositTypeId;
 
     @Column(name = "deposit_period")
     @NotNull
-    private Integer depositPeriod;
+    private Long depositPeriod;
 
     @Column(name = "deposit_rate")
     @NotNull
-    private Integer depositRate;
+    private Long depositRate;
 
     @Column(name = "deposit_name")
     @NotNull

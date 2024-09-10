@@ -15,31 +15,35 @@ public class Loan extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "loan_id")
     @NotNull
-    private Integer loanId;
+    private Long loanId;
 
     @Column(name = "loan_type")
     @NotNull
-    private Integer loanType;
+    private Long loanType;
 
     @Column(name = "loan_rate")
     @NotNull
-    private Integer loanRate;
+    private Long loanRate;
 
     @Column(name = "loan_amount")
     @NotNull
-    private Integer loanAmount;
+    private Long loanAmount;
+
+    @Column(name = "loan_remain")
+    @NotNull
+    private Long loanRemain;
 
     @Column(name = "loan_start_turn")
     @NotNull
-    private Integer loanStartTurn;
+    private Long loanStartTurn;
 
     @Column(name = "loan_period")
     @NotNull
-    private Integer loanPeriod;
+    private Long loanPeriod;
 
     @Column(name = "loan_to_end")
     @NotNull
-    private Integer loanToEnd;
+    private Long loanToEnd;
 
     @Column(name = "loan_warning")
     @NotNull
@@ -50,5 +54,5 @@ public class Loan extends BaseEntity {
     private Boolean loanIsEnd;
 
     // FK
-    private Integer character;
+    private Long character;
 }

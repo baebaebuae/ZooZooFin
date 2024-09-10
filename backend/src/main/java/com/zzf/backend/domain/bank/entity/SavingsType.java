@@ -14,15 +14,15 @@ public class SavingsType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "savings_type_id")
     @NotNull
-    private Integer savingsTypeId;
+    private Long savingsTypeId;
 
     @Column(name = "savings_period")
     @NotNull
-    private Integer savingsPeriod;
+    private Long savingsPeriod;
 
     @Column(name = "savings_rate")
     @NotNull
-    private Integer savingsRate;
+    private Long savingsRate;
 
     @Column(name = "savings_name")
     @NotNull

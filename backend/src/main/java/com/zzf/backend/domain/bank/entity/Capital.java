@@ -15,28 +15,28 @@ public class Capital extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "capital_id")
     @NotNull
-    private Integer capitalId;
+    private Long capitalId;
 
     @Column(name = "capital_amount")
     @NotNull
-    private Integer capitalAmount;
+    private Long capitalAmount;
 
     @Column(name = "capital_start_turn")
     @NotNull
-    private Integer capitalStartTurn;
+    private Long capitalStartTurn;
 
     @Column(name = "capital_end_turn")
     @NotNull
-    private Integer capitalEndTurn;
+    private Long capitalEndTurn;
 
     @Column(name = "capital_warning")
     @NotNull
-    private Boolean capitalWarning;
+    private Long capitalWarning;
 
     @Column(name = "capital_is_end")
     @NotNull
-    private Boolean capitalIsEnd;
+    private Long capitalIsEnd;
 
     // FK
-    private Integer character;
+    private Long character;
 }

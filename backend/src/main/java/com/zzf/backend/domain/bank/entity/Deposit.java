@@ -15,26 +15,26 @@ public class Deposit extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "deposit_id")
     @NotNull
-    private Integer depositId;
+    private Long depositId;
 
     @Column(name = "deposit_amount")
     @NotNull
-    private Integer depositAmount;
+    private Long depositAmount;
 
     @Column(name = "deposit_start_turn")
     @NotNull
-    private Integer depositStartTurn;
+    private Long depositStartTurn;
 
     @Column(name = "deposit_end_turn")
     @NotNull
-    private Integer depositEndTurn;
+    private Long depositEndTurn;
 
     @Column(name = "deposit_is_end")
     @NotNull
     private Boolean depositIsEnd;
 
     // FK
-    private Integer character;
+    private Long character;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "deposit_type_id")

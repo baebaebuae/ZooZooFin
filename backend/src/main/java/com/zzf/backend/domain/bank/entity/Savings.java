@@ -15,23 +15,23 @@ public class Savings extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "savings_id")
     @NotNull
-    private Integer savingsId;
+    private Long savingsId;
 
     @Column(name = "savings_payment")
     @NotNull
-    private Integer savingsPayment;
+    private Long savingsPayment;
 
     @Column(name = "savings_amount")
     @NotNull
-    private Integer savingsAmount;
+    private Long savingsAmount;
 
     @Column(name = "savings_start_turn")
     @NotNull
-    private Integer savingsStartTurn;
+    private Long savingsStartTurn;
 
     @Column(name = "savings_end_turn")
     @NotNull
-    private Integer savingsEndTurn;
+    private Long savingsEndTurn;
 
     @Column(name = "savings_warning")
     @NotNull
@@ -42,7 +42,7 @@ public class Savings extends BaseEntity {
     private Boolean savingsIsEnd;
 
     // FK
-    private Integer character;
+    private Long character;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "savings_type_id")
