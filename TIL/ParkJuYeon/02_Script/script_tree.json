@@ -1,0 +1,24 @@
+{
+  "id": 1,
+  "content": "안녕? 주주시티에 온 걸 환영해.",
+  "responses": {
+    "next": 2
+  },
+  "children": [
+    {
+      "id": 2,
+      "content": "난 주주시티 안내를 도와줄 뭉뭉이야.",
+      "responses": {
+        "next": 3
+      },
+      "children": [
+        {
+          "id": 3,
+          "content": "너는 이름이 뭐야?",
+          "responses": {},
+          "children": []
+        }
+      ]
+    }
+  ]
+}
