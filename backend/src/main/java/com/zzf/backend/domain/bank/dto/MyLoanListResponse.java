@@ -5,8 +5,8 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class MyLoanListRequest {
+public class MyLoanListResponse {
     private Long totalLoan;
     private Long restLoan;
-    private List<MyLoanRequest> myLoanList;
+    private List<MyLoanResponse> myLoanList;
 }
