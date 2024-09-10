@@ -7,10 +7,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class BankServiceImpl implements BankService{
+public class DepositServiceImpl implements DepositService {
     private final DepositRepository depositRepository;
-    private final SavingsRepository savingsRepository;
-    private final LoanRepository loanRepository;
-    private final CapitalRepository capitalRepository;
+
+
 
 }
