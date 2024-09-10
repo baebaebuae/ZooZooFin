@@ -21,6 +21,10 @@ public class Capital extends BaseEntity {
     @NotNull
     private Long capitalAmount;
 
+    @Column(name = "capital_remain")
+    @NotNull
+    private Long capitalRemain;
+
     @Column(name = "capital_start_turn")
     @NotNull
     private Long capitalStartTurn;
@@ -29,13 +33,9 @@ public class Capital extends BaseEntity {
     @NotNull
     private Long capitalEndTurn;
 
-    @Column(name = "capital_warning")
-    @NotNull
-    private Long capitalWarning;
-
     @Column(name = "capital_is_end")
     @NotNull
-    private Long capitalIsEnd;
+    private Boolean capitalIsEnd;
 
     // FK
     private Long character;
