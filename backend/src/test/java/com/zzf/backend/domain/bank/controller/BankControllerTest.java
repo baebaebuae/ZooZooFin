@@ -1,5 +1,6 @@
 package com.zzf.backend.domain.bank.controller;
 
+import com.zzf.backend.domain.bank.dto.DepositRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -38,5 +39,28 @@ public class BankControllerTest {
         //then
         actions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(3));
+    }
+
+    @Test
+    public void 예금_등록_성공() throws Exception {
+        // given
+        DepositRequest depositRequest = new DepositRequest();
+
+        depositRequest.setDepositTypeId(1L);
+        depositRequest.setDepositAmount(1000000L);
+
+        // when
+        ResultActions actions = mockMvc.perform(
+                post("/api/v1/bank/deposit")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON));
+
+        // then
+        actions.andExpect(status().isCreated())  // 201 Created
+                .andExpect(jsonPath("$.success").value(true));
+
+        // 나중에 Repository랑 Service 생기면
+        // List<Deposit> depositList = depositRepository.findAll();
+        // assertThat(deposits.size()).isEqualTo(1); // DB에 저장되었는지 확인
     }
 }
