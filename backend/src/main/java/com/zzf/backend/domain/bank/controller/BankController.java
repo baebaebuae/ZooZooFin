@@ -24,11 +24,11 @@ public class BankController {
 
     //예금 조회 001
     @GetMapping("/deposit")
-    public ResponseDto<List<DepositResponse>> getDeposit(){
+    public ResponseDto<List<DepositTypeResponse>> getDeposit(){
 
-        List<DepositResponse> depositResponseList = depositService.getDeposit();
+        List<DepositTypeResponse> depositTypeResponseList = depositService.getDeposit();
 
-        return ResponseDto.success(SuccessCode.READ_SUCCESS, depositResponseList);
+        return ResponseDto.success(SuccessCode.READ_SUCCESS, depositTypeResponseList);
     }
 
     //예금 등록 002
@@ -58,7 +58,6 @@ public class BankController {
     public ResponseDto<Void> deleteMyDeposit(@RequestBody Map<String, Long> mapRequest){
         // Header에서 memberId 얻기
         String memberId = "913418af-6b2e-11ef-929f-28c5d21eabf3";
-
         Long depositId = mapRequest.get("depositId");
 
         depositService.deleteMyDeposit(memberId, depositId);
@@ -68,10 +67,10 @@ public class BankController {
 
     //적금 조회 004
     @GetMapping("/savings")
-    public ResponseDto<List<SavingsResponse>> getSavings(){
+    public ResponseDto<List<SavingsTypeResponse>> getSavings(){
 
-        List<SavingsResponse> savingsResponseList = null;
-        return ResponseDto.success(SuccessCode.READ_SUCCESS, savingsResponseList);
+        List<SavingsTypeResponse> savingsTypeResponseList = savingsService.getSavings();
+        return ResponseDto.success(SuccessCode.READ_SUCCESS, savingsTypeResponseList);
     }
 
     //적금 등록 005
@@ -79,6 +78,8 @@ public class BankController {
     public ResponseDto<Void> postSavings(@RequestBody SavingsRequest savingsRequest){
         // Header에서 memberId 얻기
         String memberId = "913418af-6b2e-11ef-929f-28c5d21eabf3";
+
+        savingsService.postSavings(savingsRequest, memberId);
 
         return ResponseDto.success(SuccessCode.CREATE_SUCCESS);
     }
@@ -90,7 +91,7 @@ public class BankController {
         // Header에서 memberId 얻기
         String memberId = "913418af-6b2e-11ef-929f-28c5d21eabf3";
 
-        List<MySavingsResponse> mySavingsResponseList = null;
+        List<MySavingsResponse> mySavingsResponseList = savingsService.getMySavings(memberId);
         return ResponseDto.success(SuccessCode.READ_SUCCESS, mySavingsResponseList);
     }
 
@@ -100,6 +101,8 @@ public class BankController {
         // Header에서 memberId 얻기
         String memberId = "913418af-6b2e-11ef-929f-28c5d21eabf3";
         Long savingsId = mapRequest.get("savingsId");
+
+        savingsService.deleteMySavings(memberId, savingsId);
 
         return ResponseDto.success(SuccessCode.UPDATE_SUCCESS);
     }

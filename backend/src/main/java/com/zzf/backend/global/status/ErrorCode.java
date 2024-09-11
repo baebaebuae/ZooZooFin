@@ -18,8 +18,11 @@ public enum ErrorCode {
     SAVINGS_NOT_FOUND_EXCEPTION(404, "존재하지 않는 적금입니다."),
     LOAN_NOT_FOUND_EXCEPTION(404, "존재하지 않는 대출입니다."),
     CAPITAL_NOT_FOUND_EXCEPTION(404, "존재하지 않는 사채입니다."),
+    DEPOSIT_TYPE_NOT_FOUND_EXCEPTION(404, "존재하지 않는 예금상품입니다."),
+    SAVINGS_TYPE_NOT_FOUND_EXCEPTION(404, "존재하지 않는 적금상품입니다."),
 
     ACCOUNT_BALANCE_INSUFFICIENT_EXCEPTION(409, "통장 잔고가 부족합니다.");
+
 
 
     private final int httpStatus;

@@ -14,4 +14,7 @@ public class MySavingsResponse {
     private Long finalReturn;
     private Long restTurn;
     private Long endTurn;
+    private Boolean warning;
+    private String savingsName;
+    private String savingsImgUrl;
 }

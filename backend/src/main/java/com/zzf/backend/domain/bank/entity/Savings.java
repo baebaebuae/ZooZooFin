@@ -52,4 +52,8 @@ public class Savings extends BaseEntity {
     @JoinColumn(name = "savings_type_id")
     @NotNull
     private SavingsType savingsType;
+
+    public void changeSavingsIsEnd(Boolean isEnd){
+        this.savingsIsEnd = isEnd;
+    }
 }

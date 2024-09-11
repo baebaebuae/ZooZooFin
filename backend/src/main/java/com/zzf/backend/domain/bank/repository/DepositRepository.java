@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface DepositRepository extends JpaRepository<Deposit, Long> {
-    List<Deposit> findByCharacterAndDepositIsEndFalse(Character character);
+    List<Deposit> findByCharacterAndDepositIsEndFalseOrderByDepositEndTurnAsc(Character character);
 }
