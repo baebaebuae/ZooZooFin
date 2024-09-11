@@ -12,11 +12,15 @@ public enum ErrorCode {
     KAKAO_PARAMETER_ERROR(400, "유효하지 않은 카카오 로그인 요청입니다."),
     KAKAO_SERVER_ERROR(500, "카카오 서버 오류입니다."),
 
-    USER_NOT_FOUND_EXCEPTION(404, "존재하지않는 사용자입니다."),
-    CHARACTER_NOT_FOUND_EXCEPTION(404, "존재하지않는 캐릭터입니다."),
+    USER_NOT_FOUND_EXCEPTION(404, "존재하지 않는 사용자입니다."),
+    CHARACTER_NOT_FOUND_EXCEPTION(404, "존재하지 않는 캐릭터입니다."),
+    DEPOSIT_NOT_FOUND_EXCEPTION(404, "존재하지 않는 예금입니다."),
+    SAVINGS_NOT_FOUND_EXCEPTION(404, "존재하지 않는 적금입니다."),
+    LOAN_NOT_FOUND_EXCEPTION(404, "존재하지 않는 대출입니다."),
+    CAPITAL_NOT_FOUND_EXCEPTION(404, "존재하지 않는 사채입니다."),
 
-    ACCOUNT_BALANCE_INSUFFICIENT_EXCEPTION(409, "통장 잔고가 부족합니다."),
-    ;
+    ACCOUNT_BALANCE_INSUFFICIENT_EXCEPTION(409, "통장 잔고가 부족합니다.");
+
 
     private final int httpStatus;
     private final String message;

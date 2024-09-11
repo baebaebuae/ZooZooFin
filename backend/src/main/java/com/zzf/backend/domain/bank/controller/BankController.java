@@ -56,9 +56,12 @@ public class BankController {
     //예금 해지 003_1
     @PatchMapping("/my-deposit")
     public ResponseDto<Void> deleteMyDeposit(@RequestBody Map<String, Long> mapRequest){
+        // Header에서 memberId 얻기
+        String memberId = "913418af-6b2e-11ef-929f-28c5d21eabf3";
+
         Long depositId = mapRequest.get("depositId");
 
-        depositService.deleteMyDeposit(depositId);
+        depositService.deleteMyDeposit(memberId, depositId);
 
         return ResponseDto.success(SuccessCode.UPDATE_SUCCESS);
     }

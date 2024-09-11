@@ -86,13 +86,44 @@ public class DepositServiceImpl implements DepositService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<MyDepositResponse> getMyDeposit(String memberId) {
+        // 빈 리스트 생성
+        List<MyDepositResponse> myDepositResponseList = new ArrayList<>();
 
-        return List.of();
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(USER_NOT_FOUND_EXCEPTION));
+        Character character = characterRepository.findByMemberAndCharacterIsEndFalse(member);
+
+        List<Deposit> depositList = depositRepository.findByCharacterAndDepositIsEndFalse(character);
+
+        for (Deposit deposit : depositList){
+            DepositType depositType = deposit.getDepositType();
+
+            MyDepositResponse myDepositResponse = MyDepositResponse.builder()
+                    .depositId(deposit.getDepositId())
+                    .name(depositType.getDepositName())
+                    .period(depositType.getDepositPeriod())
+                    .amount(deposit.getDepositAmount())
+                    .finalReturn(deposit.getDepositAmount() + deposit.getDepositAmount() * depositType.getDepositRate() / 100) // (현재 보유 자금) + (현재 보유 자금) * (이율)
+                    .restTurn(deposit.getDepositEndTurn() - character.getCharacterTurn()) // (마감 턴) - (캐릭터 현재 턴)
+                    .endTurn(deposit.getDepositEndTurn())
+                    .build();
+
+            myDepositResponseList.add(myDepositResponse);
+        }
+
+        return myDepositResponseList;
     }
 
     @Override
-    public void deleteMyDeposit(Long depositId) {
+    @Transactional
+    public void deleteMyDeposit(String memberId, Long depositId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(USER_NOT_FOUND_EXCEPTION));
+        Character character = characterRepository.findByMemberAndCharacterIsEndFalse(member);
 
+        Deposit deposit = depositRepository.findById(depositId).orElseThrow(() -> new CustomException(DEPOSIT_NOT_FOUND_EXCEPTION));
+
+        deposit.changeDepositIsEnd(true);
+        character.changeCharacterAssets(character.getCharacterAssets() + deposit.getDepositAmount() / 200);
     }
 }
