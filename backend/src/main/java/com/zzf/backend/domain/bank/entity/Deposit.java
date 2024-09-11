@@ -44,4 +44,8 @@ public class Deposit extends BaseEntity {
     @JoinColumn(name = "deposit_type_id")
     @NotNull
     private DepositType depositType;
+
+    public void changeDepositIsEnd(Boolean isEnd){
+        this.depositIsEnd = isEnd;
+    }
 }

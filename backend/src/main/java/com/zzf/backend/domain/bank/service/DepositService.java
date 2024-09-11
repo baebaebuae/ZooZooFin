@@ -13,5 +13,5 @@ public interface DepositService {
 
     List<MyDepositResponse> getMyDeposit(String memberId);
 
-    void deleteMyDeposit(Long depositId);
+    void deleteMyDeposit(String memberId, Long depositId);
 }
