@@ -13,4 +13,6 @@ public class MyDepositResponse {
     private Long finalReturn;
     private Long restTurn;
     private Long endTurn;
+    private String depositName;
+    private String depositImgUrl;
 }

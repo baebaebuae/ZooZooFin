@@ -5,7 +5,10 @@ import com.zzf.backend.domain.character.entity.Character;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface CharacterRepository extends JpaRepository<Character, Long> {
-    Character findByMemberAndCharacterIsEndFalse(Member member);
+    // member로 플레이중인 캐릭터 찾기
+    Optional<Character> findByMemberAndCharacterIsEndFalse(Member member);
 }

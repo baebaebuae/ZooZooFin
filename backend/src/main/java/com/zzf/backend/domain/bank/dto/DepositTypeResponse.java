@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class DepositResponse {
+public class DepositTypeResponse {
     private Long depositTypeId;
     private Long depositPeriod;
     private Long depositRate;

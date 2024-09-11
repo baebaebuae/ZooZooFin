@@ -3,7 +3,7 @@ package com.zzf.backend.domain.bank.service;
 import com.zzf.backend.domain.auth.entity.Member;
 import com.zzf.backend.domain.auth.repository.MemberRepository;
 import com.zzf.backend.domain.bank.dto.DepositRequest;
-import com.zzf.backend.domain.bank.dto.DepositResponse;
+import com.zzf.backend.domain.bank.dto.DepositTypeResponse;
 import com.zzf.backend.domain.bank.dto.MyDepositResponse;
 import com.zzf.backend.domain.bank.entity.Deposit;
 import com.zzf.backend.domain.bank.entity.DepositType;
@@ -30,14 +30,14 @@ public class DepositServiceImpl implements DepositService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<DepositResponse> getDeposit() {
+    public List<DepositTypeResponse> getDeposit() {
         // 빈 리스트 생성
-        List<DepositResponse> depositResponseList = new ArrayList<>();
+        List<DepositTypeResponse> depositTypeResponseList = new ArrayList<>();
 
         List<DepositType> depositTypeList = depositTypeRepository.findAll();
 
         for (DepositType depositType : depositTypeList){
-            DepositResponse depositResponse = DepositResponse.builder()
+            DepositTypeResponse depositTypeResponse = DepositTypeResponse.builder()
                     .depositTypeId(depositType.getDepositTypeId())
                     .depositPeriod(depositType.getDepositPeriod())
                     .depositRate(depositType.getDepositRate())
@@ -45,22 +45,17 @@ public class DepositServiceImpl implements DepositService {
                     .depositImgUrl(depositType.getDepositImgUrl())
                     .build();
 
-            depositResponseList.add(depositResponse);
+            depositTypeResponseList.add(depositTypeResponse);
         }
-        return depositResponseList;
+        return depositTypeResponseList;
     }
 
     @Override
     @Transactional
     public void postDeposit(DepositRequest depositRequest, String memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(USER_NOT_FOUND_EXCEPTION));
-        Character character = characterRepository.findByMemberAndCharacterIsEndFalse(member);
-        DepositType depositType = depositTypeRepository.findById(depositRequest.getDepositTypeId()).orElseThrow();
-
-        // 캐릭터가 없을때
-        if (character == null){
-            throw new CustomException(CHARACTER_NOT_FOUND_EXCEPTION);
-        }
+        Character character = characterRepository.findByMemberAndCharacterIsEndFalse(member).orElseThrow(() -> new CustomException(CHARACTER_NOT_FOUND_EXCEPTION));
+        DepositType depositType = depositTypeRepository.findById(depositRequest.getDepositTypeId()).orElseThrow(() -> new CustomException(DEPOSIT_TYPE_NOT_FOUND_EXCEPTION));
 
         long money = character.getCharacterAssets() - depositRequest.getDepositAmount();
 
@@ -92,21 +87,27 @@ public class DepositServiceImpl implements DepositService {
         List<MyDepositResponse> myDepositResponseList = new ArrayList<>();
 
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(USER_NOT_FOUND_EXCEPTION));
-        Character character = characterRepository.findByMemberAndCharacterIsEndFalse(member);
+        Character character = characterRepository.findByMemberAndCharacterIsEndFalse(member).orElseThrow(() -> new CustomException(CHARACTER_NOT_FOUND_EXCEPTION));
 
-        List<Deposit> depositList = depositRepository.findByCharacterAndDepositIsEndFalse(character);
+        List<Deposit> depositList = depositRepository.findByCharacterAndDepositIsEndFalseOrderByDepositEndTurnAsc(character);
 
         for (Deposit deposit : depositList){
             DepositType depositType = deposit.getDepositType();
+
+            // 만기 시 금액 계산
+            long finalReturn = deposit.getDepositAmount();
+            finalReturn += finalReturn * depositType.getDepositRate() / 100;
 
             MyDepositResponse myDepositResponse = MyDepositResponse.builder()
                     .depositId(deposit.getDepositId())
                     .name(depositType.getDepositName())
                     .period(depositType.getDepositPeriod())
                     .amount(deposit.getDepositAmount())
-                    .finalReturn(deposit.getDepositAmount() + deposit.getDepositAmount() * depositType.getDepositRate() / 100) // (현재 보유 자금) + (현재 보유 자금) * (이율)
+                    .finalReturn(finalReturn) // 만기 시 금액
                     .restTurn(deposit.getDepositEndTurn() - character.getCharacterTurn()) // (마감 턴) - (캐릭터 현재 턴)
                     .endTurn(deposit.getDepositEndTurn())
+                    .depositName(depositType.getDepositName())
+                    .depositImgUrl(depositType.getDepositImgUrl())
                     .build();
 
             myDepositResponseList.add(myDepositResponse);
@@ -119,7 +120,7 @@ public class DepositServiceImpl implements DepositService {
     @Transactional
     public void deleteMyDeposit(String memberId, Long depositId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(USER_NOT_FOUND_EXCEPTION));
-        Character character = characterRepository.findByMemberAndCharacterIsEndFalse(member);
+        Character character = characterRepository.findByMemberAndCharacterIsEndFalse(member).orElseThrow(() -> new CustomException(CHARACTER_NOT_FOUND_EXCEPTION));
 
         Deposit deposit = depositRepository.findById(depositId).orElseThrow(() -> new CustomException(DEPOSIT_NOT_FOUND_EXCEPTION));
 
