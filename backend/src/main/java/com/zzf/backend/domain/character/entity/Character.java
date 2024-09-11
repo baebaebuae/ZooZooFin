@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "`character`")
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -17,7 +18,6 @@ public class Character extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "character_id")
-    @NotNull
     private Long characterId;
 
     @Column(name = "character_name")
@@ -38,7 +38,7 @@ public class Character extends BaseEntity {
 
     @Column(name = "character_hierarchy")
     @NotNull
-    private Long character_hierarchy;
+    private Long characterHierarchy;
 
     @Column(name = "character_is_end")
     @NotNull
@@ -59,4 +59,16 @@ public class Character extends BaseEntity {
     @JoinColumn(name = "character_type_id")
     @NotNull
     private CharacterType characterType;
+
+    public void changeCharacterAssets(Long money){
+        this.characterAssets = money;
+    }
+
+    public void changeCharacterCredit(Long credit){
+        this.characterCredit = credit;
+    }
+
+    public void changeCharacterHierarchy(Long hierarchy){
+        this.characterHierarchy = hierarchy;
+    }
 }

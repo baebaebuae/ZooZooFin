@@ -12,7 +12,6 @@ public class SavingsType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "savings_type_id")
-    @NotNull
     private Long savingsTypeId;
 
     @Column(name = "savings_period")

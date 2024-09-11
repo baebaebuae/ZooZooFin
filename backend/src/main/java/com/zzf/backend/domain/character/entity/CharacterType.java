@@ -15,7 +15,6 @@ public class CharacterType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "character_type_id")
-    @NotNull
     private Long characterTypeId;
 
     @Column(name = "character_type_name")

@@ -15,7 +15,6 @@ public class Deposit extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "deposit_id")
-    @NotNull
     private Long depositId;
 
     @Column(name = "deposit_amount")
