@@ -15,7 +15,6 @@ public class Capital extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "capital_id")
-    @NotNull
     private Long capitalId;
 
     @Column(name = "capital_amount")

@@ -14,6 +14,8 @@ public enum ErrorCode {
 
     USER_NOT_FOUND_EXCEPTION(404, "존재하지않는 사용자입니다."),
     CHARACTER_NOT_FOUND_EXCEPTION(404, "존재하지않는 캐릭터입니다."),
+
+    ACCOUNT_BALANCE_INSUFFICIENT_EXCEPTION(409, "통장 잔고가 부족합니다."),
     ;
 
     private final int httpStatus;

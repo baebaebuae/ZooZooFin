@@ -18,8 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.zzf.backend.global.status.ErrorCode.CHARACTER_NOT_FOUND_EXCEPTION;
-import static com.zzf.backend.global.status.ErrorCode.USER_NOT_FOUND_EXCEPTION;
+import static com.zzf.backend.global.status.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -58,24 +57,37 @@ public class DepositServiceImpl implements DepositService {
         Character character = characterRepository.findByMemberAndCharacterIsEndFalse(member);
         DepositType depositType = depositTypeRepository.findById(depositRequest.getDepositTypeId()).orElseThrow();
 
+        // 캐릭터가 없을때
         if (character == null){
             throw new CustomException(CHARACTER_NOT_FOUND_EXCEPTION);
         }
 
+        long money = character.getCharacterAssets() - depositRequest.getDepositAmount();
+
+        // 통장 잔고 부족
+        if (money < 0){
+            throw new CustomException(ACCOUNT_BALANCE_INSUFFICIENT_EXCEPTION);
+        }
+
+        // 예금 만들기
         Deposit deposit = Deposit.builder()
-                .character(character)
-                .depositType(depositType)
                 .depositAmount(depositRequest.getDepositAmount())
                 .depositStartTurn(character.getCharacterTurn()) // ex) 시작턴 3턴
                 .depositEndTurn(character.getCharacterTurn() + depositType.getDepositPeriod()) // ex) 끝턴 3턴 + 10턴 = 13턴
                 .depositIsEnd(false)
+                .character(character)
+                .depositType(depositType)
                 .build();
 
         depositRepository.save(deposit);
+
+        // 캐릭터 가용 자산 감소
+        character.changeCharacterAssets(money);
     }
 
     @Override
     public List<MyDepositResponse> getMyDeposit(String memberId) {
+
         return List.of();
     }
 

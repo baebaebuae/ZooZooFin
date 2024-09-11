@@ -12,7 +12,6 @@ public class DepositType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "deposit_type_id")
-    @NotNull
     private Long depositTypeId;
 
     @Column(name = "deposit_period")
