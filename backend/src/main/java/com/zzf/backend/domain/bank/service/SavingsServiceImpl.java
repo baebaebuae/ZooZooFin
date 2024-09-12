@@ -30,6 +30,7 @@ public class SavingsServiceImpl implements SavingsService{
     private final CharacterRepository characterRepository;
     private final MemberRepository memberRepository;
 
+    // 적금 상품 목록 조회
     @Override
     @Transactional(readOnly = true)
     public List<SavingsTypeResponse> getSavings() {
@@ -53,6 +54,7 @@ public class SavingsServiceImpl implements SavingsService{
         return savingsTypeResponseList;
     }
 
+    // 적금 신규 등록
     @Override
     @Transactional
     public void postSavings(SavingsRequest savingsRequest, String memberId) {
@@ -60,10 +62,8 @@ public class SavingsServiceImpl implements SavingsService{
         Character character = characterRepository.findByMemberAndCharacterIsEndFalse(member).orElseThrow(() -> new CustomException(CHARACTER_NOT_FOUND_EXCEPTION));
         SavingsType savingsType = savingsTypeRepository.findById(savingsRequest.getSavingsTypeId()).orElseThrow(() -> new CustomException(SAVINGS_TYPE_NOT_FOUND_EXCEPTION));
 
-        long money = character.getCharacterAssets() - savingsRequest.getSavingsPayment();
-
         // 통장 잔고 부족
-        if (money < 0){
+        if (character.getCharacterAssets() < savingsRequest.getSavingsPayment()){
             throw new CustomException(ACCOUNT_BALANCE_INSUFFICIENT_EXCEPTION);
         }
 
@@ -75,14 +75,17 @@ public class SavingsServiceImpl implements SavingsService{
                 .savingsEndTurn(character.getCharacterTurn() + savingsType.getSavingsPeriod())
                 .savingsWarning(false)
                 .savingsIsEnd(false)
+                .character(character)
+                .savingsType(savingsType)
                 .build();
 
         savingsRepository.save(savings);
 
         // 캐릭터 가용 자산 감소
-        character.changeCharacterAssets(money);
+        character.decreaseCharacterAssets(savingsRequest.getSavingsPayment());
     }
 
+    // 내 적금 확인
     @Override
     @Transactional(readOnly = true)
     public List<MySavingsResponse> getMySavings(String memberId) {
@@ -92,7 +95,7 @@ public class SavingsServiceImpl implements SavingsService{
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(USER_NOT_FOUND_EXCEPTION));
         Character character = characterRepository.findByMemberAndCharacterIsEndFalse(member).orElseThrow(() -> new CustomException(CHARACTER_NOT_FOUND_EXCEPTION));
 
-        List<Savings> savingsList = savingsRepository.findByCharacterAndSavingsIsEndFalseOrderBySavingsEndTurnAsc(character);
+        List<Savings> savingsList = savingsRepository.findAllByCharacterAndSavingsIsEndFalseOrderBySavingsEndTurnAsc(character);
 
         for (Savings savings : savingsList){
             SavingsType savingsType = savings.getSavingsType();
@@ -122,14 +125,60 @@ public class SavingsServiceImpl implements SavingsService{
         return mySavingsResponseList;
     }
 
+    // 적금 중도 해지
     @Override
+    @Transactional
     public void deleteMySavings(String memberId, Long savingsId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(USER_NOT_FOUND_EXCEPTION));
         Character character = characterRepository.findByMemberAndCharacterIsEndFalse(member).orElseThrow(() -> new CustomException(CHARACTER_NOT_FOUND_EXCEPTION));
 
         Savings savings = savingsRepository.findById(savingsId).orElseThrow(() -> new CustomException(SAVINGS_NOT_FOUND_EXCEPTION));
 
+        // 당일 취소 불가능
+        if (savings.getSavingsStartTurn().equals(character.getCharacterTurn())){
+            throw new CustomException(SAME_DAY_CANCELLATION_NOT_ALLOWED);
+        }
+
         savings.changeSavingsIsEnd(true);
-        character.changeCharacterAssets(character.getCharacterAssets() + savings.getSavingsAmount() / 200);
+        character.increaseCharacterAssets( savings.getSavingsAmount() + savings.getSavingsAmount() / 200);
+    }
+
+    // 적금 만기
+    @Override
+    @Transactional
+    public void savingsMature(Long characterId){
+        Character character = characterRepository.findById(characterId).orElseThrow(() -> new CustomException(CHARACTER_NOT_FOUND_EXCEPTION));
+
+        // 만기인 적금 모두 조회
+        List<Savings> savingsList = savingsRepository.findAllByCharacterAndSavingsEndTurn(character, character.getCharacterTurn());
+
+        for (Savings savings : savingsList){
+            savings.changeSavingsIsEnd(true);
+
+            long money = savings.getSavingsAmount() + savings.getSavingsAmount() * savings.getSavingsType().getSavingsRate() / 100;
+
+            // 예적금형 캐릭터인 경우 최종 수익 5% 추가 증가
+            if (character.getCharacterType().getCharacterTypeId() == 2) {
+                money += money * 5 / 100;
+            }
+            character.increaseCharacterAssets(money);
+        }
+    }
+
+    // 전체 적금액 구하기
+    @Override
+    @Transactional(readOnly = true)
+    public long getMyTotalSavings(Long characterId){
+        long money = 0L;
+        Character character = characterRepository.findById(characterId).orElseThrow(() -> new CustomException(CHARACTER_NOT_FOUND_EXCEPTION));
+
+        // 만기 안된 적금 모두 조회
+        List<Savings> savingsList = savingsRepository.findAllByCharacterAndSavingsIsEndFalse(character);
+
+        for (Savings savings : savingsList){
+            money += savings.getSavingsAmount();
+        }
+
+        return money;
     }
 }

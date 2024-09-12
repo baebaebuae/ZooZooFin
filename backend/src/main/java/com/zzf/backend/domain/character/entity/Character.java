@@ -64,6 +64,14 @@ public class Character extends BaseEntity {
         this.characterAssets = money;
     }
 
+    public void increaseCharacterAssets(Long money){
+        this.characterAssets += money;
+    }
+
+    public void decreaseCharacterAssets(Long money){
+        this.characterAssets -= money;
+    }
+
     public void changeCharacterCredit(Long credit){
         this.characterCredit = credit;
     }
