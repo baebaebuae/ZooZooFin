@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
     EnterButton,
     LoginButtonBlock,
@@ -29,6 +30,8 @@ const Start = () => {
                     <GoogleButton />
                 </LoginButtonBlock>
             )}
+            <Link to="/tutorial">튜토리얼</Link>
+            <Link to="/myroom">내 방</Link>
         </>
     );
 };
