@@ -1,9 +1,0 @@
-package com.zzf.backend.domain.bank.repository;
-
-import com.zzf.backend.domain.bank.entity.DepositType;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
-@Repository
-public interface DepositTypeRepository extends JpaRepository<DepositType, Long> {
-}
