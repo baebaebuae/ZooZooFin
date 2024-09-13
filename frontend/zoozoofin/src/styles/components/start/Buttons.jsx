@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 // 이런 버튼도 전체 Button이라는 공통 Component Style을 지정한 후 적용!
 export const EnterButton = styled.button`
+    font-family: OneMobilePop;
     border-radius: 26px;
     border: 5px solid #fff;
     background: var(--Primary---deep, #0069c3);

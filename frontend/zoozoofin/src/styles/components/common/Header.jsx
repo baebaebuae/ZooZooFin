@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const WorkingAreas = styled.div`
   height: 50px;
