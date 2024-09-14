@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import example from '../scripts/example.json';
+import example from '@scripts/example.json';
 
 const Tutorial = () => {
     const [currentId, setCurrentId] = useState(1);

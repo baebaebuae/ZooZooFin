@@ -1,5 +1,5 @@
-import { Badge } from '../../components/root/badge';
-import { Bubble } from '../../components/root/bubble';
+import { Badge } from '@components/root/badge';
+import { Bubble } from '@components/root/bubble';
 import {
     // Button,
     TinyButton,
@@ -8,20 +8,20 @@ import {
     SmallButtonBorder,
     NormalButton,
     NormalButtonBorder,
-} from '../../components/root/buttons';
-import { CreditBar } from '../../components/root/creditBar';
-import { HeaderButton } from '../../components/root/headerButton';
-import { Icon } from '../../components/root/Icon';
-import { InfoBox } from '../../components/root/infoBox';
-import { Input } from '../../components/root/input';
-import { InputBox } from '../../components/inputBox';
-import { MessageBox } from '../../components/root/messageBox';
-import { ProductDetailInfo } from '../../components/root/productDetailInfo';
-import { ProgressBar } from '../../components/root/progessBar';
-import { Slider } from '../../components/root/slider';
-import { Toggle } from '../../components/root/toggle';
+} from '@components/root/buttons';
+import { CreditBar } from '@components/root/creditBar';
+import { HeaderButton } from '@components/root/headerButton';
+import { Icon } from '@components/root/Icon';
+import { InfoBox } from '@components/root/infoBox';
+import { Input } from '@components/root/input';
+import { InputBox } from '@components/inputBox';
+import { MessageBox } from '@components/root/messageBox';
+import { ProductDetailInfo } from '@components/root/productDetailInfo';
+import { ProgressBar } from '@components/root/progessBar';
+import { Slider } from '@components/root/slider';
+import { Toggle } from '@components/root/toggle';
 
-import { Modal } from '../../components/root/modal';
+import { Modal } from '@components/root/modal';
 import styled from 'styled-components';
 
 const Working = styled.div`

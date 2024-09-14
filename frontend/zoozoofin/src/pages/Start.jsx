@@ -6,7 +6,7 @@ import {
     KakaoButton,
     NaverButton,
     GoogleButton,
-} from '../styles/components/start/Buttons';
+} from '@styles/components/start/Buttons';
 
 const Start = () => {
     const [isEntered, setIsEntered] = useState(false);

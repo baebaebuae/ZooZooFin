@@ -5,7 +5,7 @@ import {
     StockAppIcon,
     LenderAppIcon,
     LeaderBoardAppIcon,
-} from '../styles/components/laptop/AppIcons';
+} from '@styles/components/laptop/AppIcons';
 
 const Laptop = () => {
     return (

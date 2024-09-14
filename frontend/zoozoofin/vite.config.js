@@ -4,4 +4,15 @@ import react from '@vitejs/plugin-react';
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [react()],
+    resolve: {
+        alias: [
+            { find: '@', replacement: '/src' },
+            { find: '@assets', replacement: '/src/assets' },
+            { find: '@components', replacement: '/src/components' },
+            { find: '@pages', replacement: '/src/pages' },
+            { find: '@routers', replacement: '/src/routers' },
+            { find: '@scripts', replacement: '/src/scripts' },
+            { find: '@styles', replacement: '/src/styles' },
+        ],
+    },
 });
