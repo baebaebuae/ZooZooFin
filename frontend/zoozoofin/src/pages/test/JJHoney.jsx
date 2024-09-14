@@ -9,7 +9,7 @@ import {
     NormalButton,
     NormalButtonBorder,
 } from '@components/root/buttons';
-import { CreditBar } from '@components/root/creditBar';
+import CreditBox from '@components/root/creditBox';
 import { HeaderButton } from '@components/root/headerButton';
 import { Icon } from '@components/root/Icon';
 import { InfoBox } from '@components/root/infoBox';
@@ -47,7 +47,7 @@ const JJHoney = () => {
             </Working>
             <Working>
                 <h2>Bubble</h2>
-                <BubbleBubble></BubbleBubble>
+                <BubbleBubble />
             </Working>
             <Working>
                 <h2>Buttons</h2>
@@ -69,7 +69,7 @@ const JJHoney = () => {
             </Working>
             <Working>
                 <h2>CreditBar</h2>
-                <CreditBar></CreditBar>
+                <CreditBox grade={7} />
             </Working>
             <Working>
                 <h2>HeaderButtons</h2>
