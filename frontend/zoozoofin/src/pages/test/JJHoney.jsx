@@ -1,5 +1,5 @@
-import { Badge } from '@components/root/badge';
-import { Bubble } from '@components/root/bubble';
+import { BadgeNormal, BadgeStroke } from '@components/root/badge';
+import BubbleBubble from '@components/root/bubble';
 import {
     // Button,
     TinyButton,
@@ -42,11 +42,12 @@ const JJHoney = () => {
 
             <Working>
                 <h2>Badges</h2>
-                <Badge></Badge>
+                <BadgeNormal>BadgeNormal</BadgeNormal>
+                <BadgeStroke>BadgeStroke</BadgeStroke>
             </Working>
             <Working>
                 <h2>Bubble</h2>
-                <Bubble></Bubble>
+                <BubbleBubble></BubbleBubble>
             </Working>
             <Working>
                 <h2>Buttons</h2>
