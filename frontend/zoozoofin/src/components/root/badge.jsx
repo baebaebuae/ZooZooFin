@@ -6,7 +6,8 @@ const Badge = styled.div`
     justify-content: center;
     align-items: center;
     border-radius: 20px;
-    background: var(--LightGreen, #80c67f);
+    background-color: ${({ theme }) => theme.colors.tertiary};
+
     color: white;
 `;
 

@@ -11,8 +11,12 @@ import {
 } from '@components/root/buttons';
 import CreditBox from '@components/root/creditBox';
 import { HeaderButton } from '@components/root/headerButton';
-import { Icon } from '@components/root/Icon';
-import { InfoBox } from '@components/root/infoBox';
+import { LargeIcon, NormalIcon } from '@components/root/Icon';
+import IconChick from '@assets/images/icons/icon_chick.svg?react';
+import IconFrog from '@assets/images/icons/icon_frog.svg?react';
+import IconChicken from '@assets/images/icons/icon_chicken.svg?react';
+
+import { InfoBoxPrimary, InfoBoxWarn } from '@components/root/infoBox';
 import { Input } from '@components/root/input';
 import { InputBox } from '@components/inputBox';
 import { MessageBox } from '@components/root/messageBox';
@@ -51,7 +55,6 @@ const JJHoney = () => {
             </Working>
             <Working>
                 <h2>Buttons</h2>
-                {/* <Button>버튼</Button> */}
                 <div>
                     <TinyButton>Tiny</TinyButton>
                     <TinyButtonBorderBlank>TinyBlank</TinyButtonBorderBlank>
@@ -77,11 +80,24 @@ const JJHoney = () => {
             </Working>
             <Working>
                 <h2>Icons</h2>
-                <Icon></Icon>
+                <div>
+                    <NormalIcon icon={IconChick} />
+                    <LargeIcon icon={IconChick} />
+                    <NormalIcon icon={IconChicken} />
+                    <LargeIcon icon={IconChicken} />
+                    <NormalIcon icon={IconFrog} />
+                    <LargeIcon icon={IconFrog} />
+                </div>
             </Working>
             <Working>
                 <h2>InfoBox</h2>
-                <InfoBox></InfoBox>
+                <InfoBoxPrimary>
+                    <div>Title</div>
+                    <div>0,000,000원</div>
+                </InfoBoxPrimary>
+                <InfoBoxWarn>
+                    <div>대출 불가</div>
+                </InfoBoxWarn>
             </Working>
             <Working>
                 <h2>Input</h2>
@@ -92,7 +108,14 @@ const JJHoney = () => {
             </Working>
             <Working>
                 <h2>MessageBox</h2>
-                <MessageBox></MessageBox>
+                <MessageBox>
+                    <NormalIcon icon={IconFrog} />
+                    <div>화면별 안내 멘트</div>
+                </MessageBox>
+                <MessageBox>
+                    <NormalIcon icon={IconChick} />
+                    <div>화면별 안내 멘트</div>
+                </MessageBox>
             </Working>
             <Working>
                 <h2>Modal</h2>
