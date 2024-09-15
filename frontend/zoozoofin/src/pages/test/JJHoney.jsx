@@ -10,7 +10,7 @@ import {
     NormalButtonBorder,
 } from '@components/root/buttons';
 import CreditBox from '@components/root/creditBox';
-import { HeaderButton } from '@components/root/headerButton';
+import { HeaderButtons } from '@components/root/headerButton';
 import { LargeIcon, NormalIcon } from '@components/root/Icon';
 import IconChick from '@assets/images/icons/icon_chick.svg?react';
 import IconFrog from '@assets/images/icons/icon_frog.svg?react';
@@ -76,7 +76,7 @@ const JJHoney = () => {
             </Working>
             <Working>
                 <h2>HeaderButtons</h2>
-                <HeaderButton></HeaderButton>
+                <HeaderButtons currentTurn={32}></HeaderButtons>
             </Working>
             <Working>
                 <h2>Icons</h2>

@@ -2,7 +2,7 @@
 import styled from 'styled-components';
 
 const ProgressBoxStyle = styled.div`
-    width: 260px;
+    width: 250px;
     color: gray;
 `;
 
@@ -19,7 +19,7 @@ const ProgressBarBack = styled.div`
 
 const ProgressBarFront = styled.div`
     border-radius: 10px;
-    width: ${(props) => (props.$rate ? `${props.$rate}px` : '0px')};
+    width: ${(props) => (props.$rate ? `${props.$rate * 2.5}px` : '0px')};
     height: 20px;
     background-color: ${({ theme }) => theme.colors.tertiary};
 `;

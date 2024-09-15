@@ -1,5 +1,5 @@
 // 말풍선
-import Bubble from '@assets/images/bubble.svg?react';
+import Bubble from '@assets/images/components/bubble.svg?react';
 import styled from 'styled-components';
 
 export const BubbleBox = styled.div`

@@ -1,7 +1,7 @@
 // 신용 등급
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import CreditArrow from '@assets/images/credit_arrow.svg?react';
+import CreditArrow from '@assets/images/components/credit_arrow.svg?react';
 
 const CreditBoxStyle = styled.div`
     font-family: 'OneMobilePop';
