@@ -21,9 +21,9 @@ import { Input } from '@components/root/input';
 import { InputBox } from '@components/inputBox';
 import { MessageBox } from '@components/root/messageBox';
 import { ProductDetailInfo } from '@components/root/productDetailInfo';
-import { ProgressBar } from '@components/root/progessBar';
+import ProgressBox from '@components/root/progessBar';
 import { Slider } from '@components/root/slider';
-import { Toggle } from '@components/root/toggle';
+import { Switch } from '@components/root/switch';
 
 import { Modal } from '@components/root/modal';
 import styled from 'styled-components';
@@ -72,7 +72,7 @@ const JJHoney = () => {
             </Working>
             <Working>
                 <h2>CreditBar</h2>
-                <CreditBox grade={7} />
+                <CreditBox grade={9} />
             </Working>
             <Working>
                 <h2>HeaderButtons</h2>
@@ -127,15 +127,15 @@ const JJHoney = () => {
             </Working>
             <Working>
                 <h2>ProgressBar</h2>
-                <ProgressBar></ProgressBar>
+                <ProgressBox rate={77} restTurn={8}></ProgressBox>
             </Working>
             <Working>
                 <h2>Slider</h2>
                 <Slider></Slider>
             </Working>
             <Working>
-                <h2>Toggle</h2>
-                <Toggle></Toggle>
+                <h2>Switch</h2>
+                <Switch></Switch>
             </Working>
         </>
     );

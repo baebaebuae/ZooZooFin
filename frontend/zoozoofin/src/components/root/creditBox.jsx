@@ -17,7 +17,7 @@ const CreditTitle = styled.div`
 const CreditRateBox = styled.div`
     position: relative;
     width: 40px;
-    left: ${(props) => (props.grade ? `${(props.grade - 1) * 20}px` : '0px')};
+    left: ${(props) => (props.$grade ? `${(props.$grade - 1) * 20}px` : '0px')};
 `;
 
 // width는 임의로 20 * 10값으로 지정(10등급)
@@ -38,9 +38,9 @@ export default function CreditBox({ grade }) {
         <CreditBoxStyle>
             <CreditTitle>신용 등급</CreditTitle>
             <CreditBar></CreditBar>
-            <CreditRateBox grade={grade}>
+            <CreditRateBox $grade={grade}>
                 <CreditArrow />
-                <CreditRate grade={grade}>{grade}등급</CreditRate>
+                <CreditRate>{grade}등급</CreditRate>
             </CreditRateBox>
         </CreditBoxStyle>
     );
