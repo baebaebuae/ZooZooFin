@@ -122,7 +122,33 @@ const JJHoney = () => {
             </Working>
             <Working>
                 <h2>ProductDetailInfo</h2>
-                <ProductDetailInfo></ProductDetailInfo>
+                <ProductDetailInfo
+                    infoTitle1={'기간'}
+                    infoContent1={'5턴'}
+                    infoTitle2={'이율'}
+                    infoContent2={'3%'}
+                    isLoan={false}
+                ></ProductDetailInfo>
+                <ProductDetailInfo
+                    infoTitle1={'기간'}
+                    infoContent1={'10턴'}
+                    infoTitle2={'이율'}
+                    infoContent2={'10%'}
+                ></ProductDetailInfo>
+                <ProductDetailInfo
+                    infoTitle1={'만기 예상 회차'}
+                    infoContent1={'26턴'}
+                    infoTitle2={'예상 금액'}
+                    infoContent2={'3,000,000원'}
+                    isLoan={true}
+                ></ProductDetailInfo>
+                <ProductDetailInfo
+                    infoTitle1={'이자율'}
+                    infoContent1={'복리 10%'}
+                    infoTitle2={'상환 방식'}
+                    infoContent2={'만기 일시 상환'}
+                    isLoan={true}
+                ></ProductDetailInfo>
             </Working>
             <Working>
                 <h2>ProgressBar</h2>

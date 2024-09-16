@@ -7,6 +7,7 @@ export const theme = {
         tertiary: '#80C67F',
         tertiaryDeep: '#147952',
         background: '#EBF0F4',
+        gray: '6C7377',
         warn: '#FF3E3E',
         inactive: '#CED1D3',
     },
