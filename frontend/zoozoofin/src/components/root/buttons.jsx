@@ -8,6 +8,7 @@ export const Button = styled.div`
     justify-content: center;
     align-items: center;
     border-radius: 28px;
+    cursor: pointer;
     background-color: ${({ theme }) => theme.colors.primaryDeep};
 `;
 
@@ -37,6 +38,7 @@ export const NormalButtonBorder = styled(NormalButton)`
 export const TinyButton = styled(Button)`
     font-size: 10px;
     padding: 6px 10px;
+    cursor: pointer;
 `;
 export const TinyButtonBorderBlank = styled(Button)`
     font-size: 10px;

@@ -10,6 +10,12 @@ export const SliderBox = styled.div`
     justify-content: center;
     align-items: center;
     width: 250px;
+    gap: 8px;
+`;
+
+const BlockTitle = styled.div`
+    font-size: 16px;
+    color: gray;
 `;
 
 const marks = [
@@ -31,8 +37,8 @@ function valuetext(value) {
     return `${value}턴`;
 }
 
-export const TurnSlider = () => {
-    const [value, setValue] = useState(0);
+export const TurnSliderLoan = ({ title }) => {
+    const [value, setValue] = useState(25);
 
     const handleSliderChange = (event, newValue) => {
         setValue(newValue);
@@ -44,7 +50,7 @@ export const TurnSlider = () => {
 
     return (
         <SliderBox>
-            <Input value={value} unit={'턴'} hasValue={true} onChange={handleInputChange}></Input>
+            <Input title={'대출 기간'} value={`${value} 턴`} onChange={handleInputChange}></Input>
             <Slider
                 aria-label="Turn Slider"
                 defaultValue={25}
@@ -60,3 +66,5 @@ export const TurnSlider = () => {
         </SliderBox>
     );
 };
+
+// [TurnSliderCalc] 대출 이자 계산기에서 사용될 대출기간&대출금리 Slider 생성 예정

@@ -13,13 +13,19 @@ const InputBox = styled.div`
     color: ${({ theme }) => theme.colors.primaryShadow};
 `;
 
-export const Input = ({ value, unit, hasValue }) => {
+const BlockTitle = styled.div`
+    font-size: 16px;
+    color: gray;
+`;
+
+export const Input = ({ title, value, unit, hasValue, onDelete }) => {
     return (
         <>
+            <BlockTitle>{title}</BlockTitle>
             <InputBox>
                 {value}
-                {unit}
-                {hasValue ? null : <Delete />}
+                {hasValue ? unit : null}
+                {hasValue ? <Delete onClick={onDelete} /> : null}
             </InputBox>
         </>
     );

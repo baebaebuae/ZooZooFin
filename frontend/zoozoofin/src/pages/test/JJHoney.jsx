@@ -22,7 +22,7 @@ import { InputBox } from '@components/inputBox';
 import { MessageBox } from '@components/root/messageBox';
 import { ProductDetailInfo } from '@components/root/productDetailInfo';
 import ProgressBox from '@components/root/progessBar';
-import { TurnSlider } from '@components/root/slider';
+import { TurnSliderLoan } from '@components/root/slider';
 import { Switch } from '@components/root/switch';
 
 import { Modal } from '@components/root/modal';
@@ -103,7 +103,7 @@ const JJHoney = () => {
                 <h3>Input</h3>
                 <Input value={'금액을 입력해줘.'}></Input>
                 <h3>InputBox</h3>
-                <InputBox></InputBox>
+                <InputBox title={'대출할 금액'} maxAmount={30000000}></InputBox>
             </Working>
             <Working>
                 <h2>MessageBox</h2>
@@ -130,7 +130,7 @@ const JJHoney = () => {
             </Working>
             <Working>
                 <h2>Slider</h2>
-                <TurnSlider></TurnSlider>
+                <TurnSliderLoan title={'대출 기간'}></TurnSliderLoan>
             </Working>
             <Working>
                 <h2>Switch</h2>

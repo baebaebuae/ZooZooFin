@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import { Input } from './root/input';
 import { TinyButton } from './root/buttons';
@@ -15,24 +16,33 @@ const ButtonBlock = styled.div`
     gap: 4px;
 `;
 
-const BlockTitle = styled.div`
-    font-size: 16px;
-    color: gray;
-`;
+export const InputBox = ({ title, maxAmount }) => {
+    const [savingsAmount, setSavingsAmount] = useState(0);
 
-export const InputBox = () => {
-    // const hasValue = inputValue.length > 0;
+    const addAmount = (value) =>
+        setSavingsAmount((prev) => {
+            const newAmount = prev + value;
+            return newAmount > maxAmount ? maxAmount : newAmount;
+        });
+
+    const handleDelete = () => setSavingsAmount(0);
+    const handleMaxAmount = () => setSavingsAmount(maxAmount);
 
     return (
         <InputBlock>
-            <BlockTitle>저축할 금액</BlockTitle>
-            <Input value={'value'} unit={'원'}></Input>
+            <Input
+                title={title}
+                value={savingsAmount === 0 ? '금액을 입력해줘.' : savingsAmount}
+                unit={' 원'}
+                hasValue={savingsAmount !== 0}
+                onDelete={handleDelete}
+            ></Input>
             <ButtonBlock>
-                <TinyButton>1만</TinyButton>
-                <TinyButton>5만</TinyButton>
-                <TinyButton>10만</TinyButton>
-                <TinyButton>50만</TinyButton>
-                <TinyButton>Max</TinyButton>
+                <TinyButton onClick={() => addAmount(500000)}>50만</TinyButton>
+                <TinyButton onClick={() => addAmount(1000000)}>100만</TinyButton>
+                <TinyButton onClick={() => addAmount(5000000)}>500만</TinyButton>
+                <TinyButton onClick={() => addAmount(10000000)}>1000만</TinyButton>
+                <TinyButton onClick={handleMaxAmount}>MAX</TinyButton>
             </ButtonBlock>
         </InputBlock>
     );
