@@ -130,7 +130,7 @@ const JJHoney = () => {
             </Working>
             <Working>
                 <h2>Slider</h2>
-                <TurnSliderLoan title={'대출 기간'}></TurnSliderLoan>
+                <TurnSliderLoan title={'대출 기간'} min={1} max={30}></TurnSliderLoan>
             </Working>
             <Working>
                 <h2>Switch</h2>
