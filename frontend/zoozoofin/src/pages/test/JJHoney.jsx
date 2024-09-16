@@ -22,7 +22,7 @@ import { InputBox } from '@components/inputBox';
 import { MessageBox } from '@components/root/messageBox';
 import { ProductDetailInfo } from '@components/root/productDetailInfo';
 import ProgressBox from '@components/root/progessBar';
-import { Slider } from '@components/root/slider';
+import { TurnSlider } from '@components/root/slider';
 import { Switch } from '@components/root/switch';
 
 import { Modal } from '@components/root/modal';
@@ -100,9 +100,8 @@ const JJHoney = () => {
                 </InfoBoxWarn>
             </Working>
             <Working>
-                <h2>Input</h2>
                 <h3>Input</h3>
-                <Input></Input>
+                <Input value={'금액을 입력해줘.'}></Input>
                 <h3>InputBox</h3>
                 <InputBox></InputBox>
             </Working>
@@ -131,7 +130,7 @@ const JJHoney = () => {
             </Working>
             <Working>
                 <h2>Slider</h2>
-                <Slider></Slider>
+                <TurnSlider></TurnSlider>
             </Working>
             <Working>
                 <h2>Switch</h2>

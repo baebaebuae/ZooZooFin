@@ -21,10 +21,12 @@ const BlockTitle = styled.div`
 `;
 
 export const InputBox = () => {
+    // const hasValue = inputValue.length > 0;
+
     return (
         <InputBlock>
             <BlockTitle>저축할 금액</BlockTitle>
-            <Input></Input>
+            <Input value={'value'} unit={'원'}></Input>
             <ButtonBlock>
                 <TinyButton>1만</TinyButton>
                 <TinyButton>5만</TinyButton>
