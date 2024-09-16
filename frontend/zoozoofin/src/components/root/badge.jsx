@@ -1,13 +1,12 @@
 import styled from 'styled-components';
 
 const Badge = styled.div`
-    font-size: 14px;
+    font-size: 12px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
     border-radius: 20px;
     background-color: ${({ theme }) => theme.colors.tertiary};
-
     color: white;
 `;
 

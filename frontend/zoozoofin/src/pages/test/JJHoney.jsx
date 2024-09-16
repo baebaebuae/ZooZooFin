@@ -1,5 +1,5 @@
 import { BadgeNormal, BadgeStroke } from '@components/root/badge';
-import BubbleBubble from '@components/root/bubble';
+import Bubble from '@components/root/bubble';
 import {
     // Button,
     TinyButton,
@@ -46,12 +46,25 @@ const JJHoney = () => {
 
             <Working>
                 <h2>Badges</h2>
-                <BadgeNormal>BadgeNormal</BadgeNormal>
-                <BadgeStroke>BadgeStroke</BadgeStroke>
+                <BadgeNormal>Normal</BadgeNormal>
+                <BadgeStroke>Stroke</BadgeStroke>
             </Working>
             <Working>
                 <h2>Bubble</h2>
-                <BubbleBubble />
+                <Bubble
+                    npc={'뭉뭉'}
+                    content={
+                        '대사길이체크대사길이체크대사길이체크대사길이체크대사길이체크대사길이체크대사길이체크'
+                    }
+                    response1={'선택지 1'}
+                    response2={'선택지 2'}
+                />
+                <Bubble
+                    npc={'뭉뭉'}
+                    content={'여긴 네가 지낼 방이야. 어때?'}
+                    response1={'예쁘다!'}
+                    response2={'별로야..'}
+                />
             </Working>
             <Working>
                 <h2>Buttons</h2>
