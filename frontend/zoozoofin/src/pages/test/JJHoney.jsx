@@ -1,14 +1,6 @@
 import { BadgeNormal, BadgeStroke } from '@components/root/badge';
 import Bubble from '@components/root/bubble';
-import {
-    // Button,
-    TinyButton,
-    TinyButtonBorderBlank,
-    SmallButton,
-    SmallButtonBorder,
-    NormalButton,
-    NormalButtonBorder,
-} from '@components/root/buttons';
+import { ButtonBase } from '@components/root/buttons';
 import CreditBox from '@components/root/creditBox';
 import { HeaderButtons } from '@components/root/headerButton';
 import { LargeIcon, NormalIcon } from '@components/root/Icon';
@@ -68,20 +60,35 @@ const JJHoney = () => {
             </Working>
             <Working>
                 <h2>Buttons</h2>
-                <div>
-                    <TinyButton>Tiny</TinyButton>
-                    <TinyButtonBorderBlank>TinyBlank</TinyButtonBorderBlank>
-                </div>
+                <ButtonBase size={'small'} border={false} color={'primaryDeep'}>
+                    Small
+                </ButtonBase>
 
-                <div>
-                    <SmallButton>Small</SmallButton>
-                    <SmallButtonBorder>SmallBorder</SmallButtonBorder>
-                </div>
+                <ButtonBase size={'normal'} border={false} color={'primaryDeep'}>
+                    Normal
+                </ButtonBase>
+                <ButtonBase size={'normal'} border={false} color={'inactive'}>
+                    Inactive
+                </ButtonBase>
+                <ButtonBase size={'normal'} border={false} color={'warn'}>
+                    Warn
+                </ButtonBase>
+                <ButtonBase size={'normal'} border={false} color={'tertiary'}>
+                    Tertiary
+                </ButtonBase>
+                <ButtonBase size={'normal'} border={true} color={'primaryDeep'}>
+                    N.Stroke
+                </ButtonBase>
+                <ButtonBase size={'normal'} border={true} color={'inactive'}>
+                    N.Stroke
+                </ButtonBase>
 
-                <div>
-                    <NormalButton>Normal</NormalButton>
-                    <NormalButtonBorder>NormalBorder</NormalButtonBorder>
-                </div>
+                <ButtonBase size={'large'} border={false} color={'primaryDeep'}>
+                    Large
+                </ButtonBase>
+                <ButtonBase size={'large'} border={true} color={'primaryDeep'}>
+                    L.Stroke
+                </ButtonBase>
             </Working>
             <Working>
                 <h2>CreditBar</h2>

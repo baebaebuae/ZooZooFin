@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { Input } from './root/input';
-import { TinyButton } from './root/buttons';
+import { ButtonBase } from './root/buttons';
 
 const InputBlock = styled.div`
     display: flex;
@@ -38,11 +38,25 @@ export const InputBox = ({ title, maxAmount }) => {
                 onDelete={handleDelete}
             ></Input>
             <ButtonBlock>
-                <TinyButton onClick={() => addAmount(500000)}>50만</TinyButton>
-                <TinyButton onClick={() => addAmount(1000000)}>100만</TinyButton>
-                <TinyButton onClick={() => addAmount(5000000)}>500만</TinyButton>
-                <TinyButton onClick={() => addAmount(10000000)}>1000만</TinyButton>
-                <TinyButton onClick={handleMaxAmount}>MAX</TinyButton>
+                <ButtonBase size={'small'} color={'primaryDeep'} onClick={() => addAmount(500000)}>
+                    50만
+                </ButtonBase>
+                <ButtonBase size={'small'} color={'primaryDeep'} onClick={() => addAmount(1000000)}>
+                    100만
+                </ButtonBase>
+                <ButtonBase size={'small'} color={'primaryDeep'} onClick={() => addAmount(5000000)}>
+                    500만
+                </ButtonBase>
+                <ButtonBase
+                    size={'small'}
+                    color={'primaryDeep'}
+                    onClick={() => addAmount(10000000)}
+                >
+                    1000만
+                </ButtonBase>
+                <ButtonBase size={'small'} color={'tertiary'} onClick={handleMaxAmount}>
+                    MAX
+                </ButtonBase>
             </ButtonBlock>
         </InputBlock>
     );

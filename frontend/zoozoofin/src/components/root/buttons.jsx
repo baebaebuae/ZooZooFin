@@ -12,27 +12,23 @@ export const Button = styled.div`
     background-color: ${({ theme }) => theme.colors.primaryDeep};
 `;
 
+export const ButtonBase = styled.button`
+    color: white;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 28px;
+    cursor: pointer;
+    font-family: ${({ size }) => (size === 'small' ? 'OneMobile' : 'OneMobilePop')};
+    background-color: ${({ theme, color }) => theme.colors[color]};
+    padding: ${({ size }) =>
+        size === 'small' ? '6px 10px' : size === 'large' ? '12px 20px' : '8px 12px'};
+    font-size: ${({ size }) => (size === 'small' ? '10px' : size === 'large' ? '24px' : '14px')};
+    border: ${({ border }) => (border ? `5px solid white` : 'none')};
+`;
+
 export const BasicButton = styled(Button)`
     font-family: 'OneMobilePop';
-`;
-
-export const SmallButton = styled(BasicButton)`
-    font-size: 14px;
-    height: 20px;
-    padding: 10px 20px;
-`;
-
-export const SmallButtonBorder = styled(SmallButton)`
-    border: 5px solid white;
-`;
-
-export const NormalButton = styled(BasicButton)`
-    font-size: 24px;
-    padding: 14px 28px;
-`;
-
-export const NormalButtonBorder = styled(NormalButton)`
-    border: 5px solid white;
 `;
 
 export const TinyButton = styled(Button)`
@@ -40,6 +36,7 @@ export const TinyButton = styled(Button)`
     padding: 6px 10px;
     cursor: pointer;
 `;
+
 export const TinyButtonBorderBlank = styled(Button)`
     font-size: 10px;
     padding: 6px 10px;
