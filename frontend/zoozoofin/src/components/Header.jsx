@@ -2,6 +2,37 @@
 import { Link } from 'react-router-dom';
 import { WorkingAreas } from '@styles/components/common/Header';
 
+import styled from 'styled-components';
+import {
+    HeaderHamburgerButton,
+    HeaderMapButton,
+    HeaderWalletButton,
+    HeaderTurnButton,
+} from './root/headerButton';
+import { PropInfo, CharInfo } from './root/headerCharInfo';
+
+const HeaderBlock = styled.div`
+    width: 340px;
+    display: flex;
+    justify-content: space-between;
+`;
+
+const HeaderButtonBlock = styled.div`
+    display: flex;
+`;
+
+const HeaderUserBlock = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+`;
+
+const TempWidthLine = styled.div`
+    width: 360px;
+    height: 10px;
+    background-color: black;
+`;
+
 const Header = () => {
     return (
         <nav>
@@ -11,11 +42,6 @@ const Header = () => {
                 <Link to="/jignonne">진영 작업실</Link>
                 <Link to="/jjhoney">지현 작업실</Link>
             </WorkingAreas>
-            <div>
-                <Link to="/wallet">지갑</Link>
-                <Link to="/map">지도</Link>
-                <>현재 턴</>
-            </div>
             <WorkingAreas>
                 각 화면 임시 링크
                 <Link to="/start">시작화면</Link>
@@ -29,6 +55,24 @@ const Header = () => {
                 <Link to="/work">당근게임</Link>
                 <Link to="/ending">엔딩</Link>
             </WorkingAreas>
+            <div>360px</div>
+            <TempWidthLine />
+            <HeaderBlock>
+                <HeaderButtonBlock>
+                    <HeaderHamburgerButton />
+                    <Link to="/map">
+                        <HeaderMapButton />
+                    </Link>
+                    <Link to="/wallet">
+                        <HeaderWalletButton />
+                    </Link>
+                    <HeaderTurnButton currentTurn={30} />
+                </HeaderButtonBlock>
+                <HeaderUserBlock>
+                    <CharInfo />
+                    <PropInfo />
+                </HeaderUserBlock>
+            </HeaderBlock>
         </nav>
     );
 };

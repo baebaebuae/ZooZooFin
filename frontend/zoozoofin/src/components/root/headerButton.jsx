@@ -42,15 +42,53 @@ export const HeaderButtons = ({ currentTurn }) => {
     return (
         <div>
             <HeaderButton1>
-                <HeaderMenu />
+                <HeaderMenu width={20} height={20} />
             </HeaderButton1>
             <HeaderButton2>
-                <HeaderWallet />
+                <HeaderWallet width={30} height={30} />
             </HeaderButton2>
             <HeaderButton3>
-                <HeaderMap />
+                <HeaderMap width={30} height={30} />
             </HeaderButton3>
             <HeaderButton4>{currentTurn}</HeaderButton4>
         </div>
+    );
+};
+
+export const HeaderHamburgerButton = () => {
+    return (
+        <>
+            <HeaderButton1>
+                <HeaderMenu width={20} height={20} />
+            </HeaderButton1>
+        </>
+    );
+};
+
+export const HeaderMapButton = () => {
+    return (
+        <>
+            <HeaderButton3>
+                <HeaderMap width={30} height={30} />
+            </HeaderButton3>
+        </>
+    );
+};
+
+export const HeaderWalletButton = () => {
+    return (
+        <>
+            <HeaderButton2>
+                <HeaderWallet width={30} height={30} />
+            </HeaderButton2>
+        </>
+    );
+};
+
+export const HeaderTurnButton = ({ currentTurn }) => {
+    return (
+        <>
+            <HeaderButton4>{currentTurn}</HeaderButton4>
+        </>
     );
 };

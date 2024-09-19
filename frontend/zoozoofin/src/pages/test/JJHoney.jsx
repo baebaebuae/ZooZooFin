@@ -3,7 +3,7 @@ import Bubble from '@components/root/bubble';
 import { ButtonBase } from '@components/root/buttons';
 import CreditBox from '@components/root/creditBox';
 import { HeaderButtons } from '@components/root/headerButton';
-import { LargeIcon, NormalIcon } from '@components/root/Icon';
+import { LargeIcon, NormalIcon } from '@components/root/icon';
 import IconChick from '@assets/images/icons/icon_chick.svg?react';
 import IconFrog from '@assets/images/icons/icon_frog.svg?react';
 import IconChicken from '@assets/images/icons/icon_chicken.svg?react';
