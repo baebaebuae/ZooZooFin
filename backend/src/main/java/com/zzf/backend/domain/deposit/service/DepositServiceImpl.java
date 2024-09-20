@@ -57,7 +57,7 @@ public class DepositServiceImpl implements DepositService {
     @Transactional
     public void postDeposit(DepositRequest depositRequest, String memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(USER_NOT_FOUND_EXCEPTION));
-        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(CHARACTER_NOT_FOUND_EXCEPTION));
+        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
         DepositType depositType = depositTypeRepository.findById(depositRequest.getDepositTypeId()).orElseThrow(() -> new CustomException(DEPOSIT_TYPE_NOT_FOUND_EXCEPTION));
 
         // 현금 부족
@@ -89,7 +89,7 @@ public class DepositServiceImpl implements DepositService {
         List<MyDepositResponse> myDepositResponseList = new ArrayList<>();
 
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(USER_NOT_FOUND_EXCEPTION));
-        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(CHARACTER_NOT_FOUND_EXCEPTION));
+        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
         List<Deposit> depositList = depositRepository.findAllByAnimalAndDepositIsEndFalseOrderByDepositEndTurnAsc(animal);
 
@@ -123,7 +123,7 @@ public class DepositServiceImpl implements DepositService {
     @Transactional
     public void deleteMyDeposit(String memberId, Long depositId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(USER_NOT_FOUND_EXCEPTION));
-        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(CHARACTER_NOT_FOUND_EXCEPTION));
+        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
         Deposit deposit = depositRepository.findById(depositId).orElseThrow(() -> new CustomException(DEPOSIT_NOT_FOUND_EXCEPTION));
 

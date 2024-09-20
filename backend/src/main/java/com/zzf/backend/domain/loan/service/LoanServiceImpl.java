@@ -35,7 +35,7 @@ public class LoanServiceImpl implements LoanService{
     @Transactional(readOnly = true)
     public LoanAvailableResponse checkLoanAvailable(String memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(USER_NOT_FOUND_EXCEPTION));
-        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(CHARACTER_NOT_FOUND_EXCEPTION));
+        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
         // 신용 등급이 7등급보다 낮은 경우
         if (animal.getAnimalCredit() > 6){
@@ -76,7 +76,7 @@ public class LoanServiceImpl implements LoanService{
     @Transactional
     public void postLoan(LoanRequest loanRequest, String memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(USER_NOT_FOUND_EXCEPTION));
-        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(CHARACTER_NOT_FOUND_EXCEPTION));
+        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
         // 신용 등급이 낮을 경우 대출 불가
         if (animal.getAnimalCredit() > 6){
@@ -105,7 +105,7 @@ public class LoanServiceImpl implements LoanService{
         List<MyLoanResponse> myLoanResponseList = new ArrayList<>();
 
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(USER_NOT_FOUND_EXCEPTION));
-        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(CHARACTER_NOT_FOUND_EXCEPTION));
+        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
         // 진행 중인 대출 모두 조회, 마감 턴 빠른 순으로 정렬
         List<Loan> loanList = loanRepository.findAllByAnimalAndLoanIsEndFalseOrderByLoanToEndAsc(animal);
@@ -145,7 +145,7 @@ public class LoanServiceImpl implements LoanService{
     @Transactional
     public void patchLoan(Long loanId, String memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(USER_NOT_FOUND_EXCEPTION));
-        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(CHARACTER_NOT_FOUND_EXCEPTION));
+        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
         Loan loan = loanRepository.findById(loanId).orElseThrow(() -> new CustomException(LOAN_NOT_FOUND_EXCEPTION));
 
         // 남은 금액에 1% 수수료 추가

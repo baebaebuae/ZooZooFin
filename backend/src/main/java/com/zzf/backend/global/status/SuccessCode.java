@@ -13,7 +13,10 @@ public enum SuccessCode {
     CREATE_SUCCESS(201, "등록 성공"),
     UPDATE_SUCCESS(200, "수정 성공"),
     DELETE_SUCCESS(200, "삭제 성공"),
-    SCRIPT_SUCCESS(200, "스크립트 조회 성공")
+    SCRIPT_SUCCESS(200, "스크립트 조회 성공"),
+    TODAY_QUIZ_SUCCESS(200, "오늘의 퀴즈 조회 성공"),
+    QUIZ_SUCCESS(200, "퀴즈 조회 성공"),
+    QUIZ_GRADING_SUCCESS(200, "퀴즈 채점 성공"),
     ;
 
     private final int httpStatus;

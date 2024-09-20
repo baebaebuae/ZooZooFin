@@ -2,20 +2,16 @@ package com.zzf.backend.domain.script.controller;
 
 import com.zzf.backend.domain.script.dto.ScriptDto;
 import com.zzf.backend.domain.script.dto.ScriptResponse;
-import com.zzf.backend.domain.script.service.ScriptService;
+import com.zzf.backend.domain.script.service.ScriptServiceImpl;
 import com.zzf.backend.domain.script.document.Script;
 import com.zzf.backend.global.dto.ResponseDto;
 import com.zzf.backend.global.status.SuccessCode;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,7 +24,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/scripts")
 public class ScriptController {
 
-    private final ScriptService scriptService;
+    private final ScriptServiceImpl scriptServiceImpl;
 
     // 모든 스크립트 조회
 //    @GetMapping
@@ -45,7 +41,7 @@ public class ScriptController {
     public ResponseDto<ScriptResponse> getScriptsByCategory(
             @Parameter(name = "category", description = "스크립트 장소명", example = "tutorial", required = true)
             @RequestParam(name = "category") String category) {
-        List<Script> scripts = scriptService.findScriptByCategory(category);
+        List<Script> scripts = scriptServiceImpl.findScriptByCategory(category);
         List<ScriptDto> scriptDtoList = scripts.stream()
                 .map(ScriptDto::new)
                 .collect(Collectors.toList());

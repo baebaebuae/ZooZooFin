@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: ${PROFILE}
+    active: ${PROFILE:local}
 
   application:
     name: backend
@@ -12,11 +12,11 @@ spring:
 
 oauth:
   google:
-    secret: ${OAUTH_GOOGLE_SECRET}
+    secret: ${OAUTH_GOOGLE_SECRET:}
   naver:
-    secret: ${OAUTH_NAVER_SECRET}
+    secret: ${OAUTH_NAVER_SECRET:}
   kakao:
-    secret: ${OAUTH_KAKAO_SECRET}
+    secret: ${OAUTH_KAKAO_SECRET:}
 
 
 
@@ -35,7 +35,7 @@ spring:
       host: localhost
       port: 6379
     mongodb:
-      uri: ${MONGO_URI}
+      uri: ${MONGO_LOCAL_URI}
 
   jpa:
     hibernate:
@@ -51,6 +51,7 @@ spring:
     init:
       mode: always
       data-locations: classpath:sql/data-zoozoofin.sql
+      encoding: utf-8
   #      schema-locations: classpath:sql/schema-zoozoofin.sql
 
 base-url: http://localhost:8080
