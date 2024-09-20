@@ -1,4 +1,4 @@
-package com.zzf.backend.domain.bank.controller;
+package com.zzf.backend.domain.deposit.controller;
 
 import com.zzf.backend.global.dto.ResponseDto;
 import com.zzf.backend.global.status.SuccessCode;

@@ -1,10 +1,7 @@
 package com.zzf.backend.domain.auth.entity;
 
 import com.zzf.backend.global.base.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,12 +15,15 @@ public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "member_id")
     private String memberId;
 
     @NotNull
+    @Column(name = "member_gold_bar")
     private Long memberGoldBar;
 
     @NotNull
+    @Column(name = "member_bank_count")
     private Long memberBankCount;
 
 }

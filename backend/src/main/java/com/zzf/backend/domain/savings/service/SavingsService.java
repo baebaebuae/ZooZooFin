@@ -1,8 +1,10 @@
 package com.zzf.backend.domain.savings.service;
 
+import com.zzf.backend.domain.animal.entity.Animal;
 import com.zzf.backend.domain.savings.dto.MySavingsResponse;
 import com.zzf.backend.domain.savings.dto.SavingsRequest;
 import com.zzf.backend.domain.savings.dto.SavingsTypeResponse;
+import com.zzf.backend.domain.savings.entity.Savings;
 
 import java.util.List;
 
@@ -15,7 +17,7 @@ public interface SavingsService {
 
     void deleteMySavings(String memberId, Long savingsId);
 
-    void savingsMature(Long characterId);
+    void savingsGoToNextTurn(Animal animal);
 
-    long getMyTotalSavings(Long characterId);
+    void savingsMature(Savings savings, Animal animal);
 }

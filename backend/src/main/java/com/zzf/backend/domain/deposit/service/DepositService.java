@@ -1,5 +1,6 @@
 package com.zzf.backend.domain.deposit.service;
 
+import com.zzf.backend.domain.animal.entity.Animal;
 import com.zzf.backend.domain.deposit.dto.DepositRequest;
 import com.zzf.backend.domain.deposit.dto.DepositTypeResponse;
 import com.zzf.backend.domain.deposit.dto.MyDepositResponse;
@@ -15,7 +16,7 @@ public interface DepositService {
 
     void deleteMyDeposit(String memberId, Long depositId);
 
-    void depositMature(Long characterId);
+    void depositGoToNextTurn(Animal animal);
 
-    long getMyTotalDeposit(Long characterId);
+    void depositMature(Animal animal);
 }

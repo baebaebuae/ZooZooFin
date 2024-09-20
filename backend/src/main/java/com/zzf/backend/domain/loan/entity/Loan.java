@@ -1,6 +1,6 @@
 package com.zzf.backend.domain.loan.entity;
 
-import com.zzf.backend.domain.character.entity.Character;
+import com.zzf.backend.domain.animal.entity.Animal;
 import com.zzf.backend.global.base.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -56,5 +56,9 @@ public class Loan extends BaseEntity {
     // FK
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "character_id")
-    private Character character;
+    private Animal animal;
+
+    public void changeLoanIsEnd(boolean isEnd){
+        this.loanIsEnd = isEnd;
+    }
 }

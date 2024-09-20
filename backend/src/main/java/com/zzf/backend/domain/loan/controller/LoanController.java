@@ -1,9 +1,6 @@
 package com.zzf.backend.domain.loan.controller;
 
-import com.zzf.backend.domain.loan.dto.LoanDetailResponse;
-import com.zzf.backend.domain.loan.dto.LoanRequest;
-import com.zzf.backend.domain.loan.dto.MyLoanListResponse;
-import com.zzf.backend.domain.loan.dto.MyLoanResponse;
+import com.zzf.backend.domain.loan.dto.*;
 import com.zzf.backend.domain.loan.service.LoanService;
 import com.zzf.backend.global.dto.ResponseDto;
 import com.zzf.backend.global.status.SuccessCode;
@@ -12,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.zzf.backend.global.status.SuccessCode.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,25 +21,25 @@ public class LoanController {
 
     //대출 가능 조회 007
     @GetMapping("/check")
-    public ResponseDto<Map<String, Boolean>> checkLoanAvailable(){
+    public ResponseDto<LoanAvailableResponse> checkLoanAvailable(){
         // Header에서 memberId 얻기
         String memberId = "913418af-6b2e-11ef-929f-28c5d21eabf3";
 
-        Map<String, Boolean> response = new HashMap<>();
+        LoanAvailableResponse loanAvailableResponse = loanService.checkLoanAvailable(memberId);
 
-        return ResponseDto.success(SuccessCode.READ_SUCCESS, response);
+        return ResponseDto.success(READ_SUCCESS, loanAvailableResponse);
     }
 
-    //대출 조회 상세 008
-    @GetMapping
-    public ResponseDto<LoanDetailResponse> getLoanDetail(){
-        // Header에서 memberId 얻기
-        String memberId = "913418af-6b2e-11ef-929f-28c5d21eabf3";
-
-        LoanDetailResponse loanDetailResponse = null;
-
-        return ResponseDto.success(SuccessCode.READ_SUCCESS, loanDetailResponse);
-    }
+//    //대출 조회 상세 008
+//    @GetMapping
+//    public ResponseDto<LoanDetailResponse> getLoanDetail(){
+//        // Header에서 memberId 얻기
+//        String memberId = "913418af-6b2e-11ef-929f-28c5d21eabf3";
+//
+//        LoanDetailResponse loanDetailResponse = null;
+//
+//        return ResponseDto.success(READ_SUCCESS, loanDetailResponse);
+//    }
 
     //대출 등록 009
     @PostMapping
@@ -48,7 +47,9 @@ public class LoanController {
         // Header에서 memberId 얻기
         String memberId = "913418af-6b2e-11ef-929f-28c5d21eabf3";
 
-        return ResponseDto.success(SuccessCode.CREATE_SUCCESS);
+        loanService.postLoan(loanRequest, memberId);
+
+        return ResponseDto.success(CREATE_SUCCESS);
     }
 
     //대출금 상환_내 대출 조회 010
@@ -57,28 +58,29 @@ public class LoanController {
         // Header에서 memberId 얻기
         String memberId = "913418af-6b2e-11ef-929f-28c5d21eabf3";
 
-        MyLoanListResponse myLoanListResponse = null;
-        return ResponseDto.success(SuccessCode.READ_SUCCESS, myLoanListResponse);
+        MyLoanListResponse myLoanListResponse = loanService.getMyLoan(memberId);
+        return ResponseDto.success(READ_SUCCESS, myLoanListResponse);
     }
 
-    //대출금 상환_내 대출 상세 조회 010_1
-    @GetMapping("/my/detail")
-    public ResponseDto<MyLoanResponse> getMyLoanDetail(@RequestBody Map<String, Long> mapRequest){
-        // Header에서 memberId 얻기
-        String memberId = "913418af-6b2e-11ef-929f-28c5d21eabf3";
-        Long loanId = mapRequest.get("loanId");
+//    //대출금 상환_내 대출 상세 조회 010_1
+//    @GetMapping("/my/detail")
+//    public ResponseDto<MyLoanResponse> getMyLoanDetail(@RequestBody Map<String, Long> mapRequest){
+//        // Header에서 memberId 얻기
+//        String memberId = "913418af-6b2e-11ef-929f-28c5d21eabf3";
+//        Long loanId = mapRequest.get("loanId");
+//
+//        MyLoanResponse myLoanResponse = null;
+//        return ResponseDto.success(READ_SUCCESS, myLoanResponse);
+//    }
 
-        MyLoanResponse myLoanResponse = null;
-        return ResponseDto.success(SuccessCode.READ_SUCCESS, myLoanResponse);
-    }
-
-    //대출금 상환 010_2
+    //대출금 중도상환 010_2
     @PatchMapping("/my")
     public ResponseDto<Void> patchLoan(@RequestBody Map<String, Long> mapRequest){
         // Header에서 memberId 얻기
         String memberId = "913418af-6b2e-11ef-929f-28c5d21eabf3";
         Long loanId = mapRequest.get("loanId");
 
-        return ResponseDto.success(SuccessCode.UPDATE_SUCCESS);
+        loanService.patchLoan(loanId, memberId);
+        return ResponseDto.success(UPDATE_SUCCESS);
     }
 }

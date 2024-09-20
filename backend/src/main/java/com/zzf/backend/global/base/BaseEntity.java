@@ -18,11 +18,12 @@ public abstract class BaseEntity {
 
     @NotNull
     @CreatedDate
-    @Column(updatable = false)
+    @Column(name = "created_date", updatable = false)
     private Instant createdDate;
 
     @NotNull
     @LastModifiedDate
+    @Column(name = "modified_date")
     private Instant modifiedDate;
 
 }

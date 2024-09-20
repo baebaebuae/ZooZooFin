@@ -21,10 +21,12 @@ public enum ErrorCode {
     DEPOSIT_TYPE_NOT_FOUND_EXCEPTION(404, "존재하지 않는 예금상품입니다."),
     SAVINGS_TYPE_NOT_FOUND_EXCEPTION(404, "존재하지 않는 적금상품입니다."),
 
-    ACCOUNT_BALANCE_INSUFFICIENT_EXCEPTION(409, "통장 잔고가 부족합니다."),
+    CASH_SHORTAGE_EXCEPTION(409, "현금이 부족합니다."),
 
-    SAME_DAY_CANCELLATION_NOT_ALLOWED(400, "당일 취소는 불가능합니다.");
-
+    SAME_DAY_CANCELLATION_NOT_ALLOWED(400, "당일 취소는 불가능합니다."),
+    CREDIT_LOW(400, "신용 등급이 낮습니다."),
+    NO_SUCH_LOAN_TYPE_EXCEPTION(404, "존재하지 않는 대출 타입입니다."),
+    NO_SUCH_CREDIT_EXCEPTION(404, "존재하지 않는 대출 등급입니다.");
 
     private final int httpStatus;
     private final String message;

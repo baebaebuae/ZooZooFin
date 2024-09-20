@@ -7,8 +7,8 @@ import com.zzf.backend.domain.deposit.dto.DepositTypeResponse;
 import com.zzf.backend.domain.deposit.dto.MyDepositResponse;
 import com.zzf.backend.domain.deposit.entity.Deposit;
 import com.zzf.backend.domain.deposit.entity.DepositType;
-import com.zzf.backend.domain.character.entity.Character;
-import com.zzf.backend.domain.character.repository.CharacterRepository;
+import com.zzf.backend.domain.animal.entity.Animal;
+import com.zzf.backend.domain.animal.repository.AnimalRepository;
 import com.zzf.backend.domain.deposit.repository.DepositRepository;
 import com.zzf.backend.domain.deposit.repository.DepositTypeRepository;
 import com.zzf.backend.global.exception.CustomException;
@@ -26,7 +26,7 @@ import static com.zzf.backend.global.status.ErrorCode.*;
 public class DepositServiceImpl implements DepositService {
     private final DepositRepository depositRepository;
     private final DepositTypeRepository depositTypeRepository;
-    private final CharacterRepository characterRepository;
+    private final AnimalRepository animalRepository;
     private final MemberRepository memberRepository;
 
     // 예금 상품 목록 조회
@@ -57,28 +57,28 @@ public class DepositServiceImpl implements DepositService {
     @Transactional
     public void postDeposit(DepositRequest depositRequest, String memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(USER_NOT_FOUND_EXCEPTION));
-        Character character = characterRepository.findByMemberAndCharacterIsEndFalse(member).orElseThrow(() -> new CustomException(CHARACTER_NOT_FOUND_EXCEPTION));
+        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(CHARACTER_NOT_FOUND_EXCEPTION));
         DepositType depositType = depositTypeRepository.findById(depositRequest.getDepositTypeId()).orElseThrow(() -> new CustomException(DEPOSIT_TYPE_NOT_FOUND_EXCEPTION));
 
-        // 통장 잔고 부족
-        if (character.getCharacterAssets() < depositRequest.getDepositAmount()){
-            throw new CustomException(ACCOUNT_BALANCE_INSUFFICIENT_EXCEPTION);
+        // 현금 부족
+        if (animal.getAnimalAssets() < depositRequest.getDepositAmount()){
+            throw new CustomException(CASH_SHORTAGE_EXCEPTION);
         }
 
         // 예금 만들기
         Deposit deposit = Deposit.builder()
                 .depositAmount(depositRequest.getDepositAmount())
-                .depositStartTurn(character.getCharacterTurn()) // ex) 시작턴 3턴
-                .depositEndTurn(character.getCharacterTurn() + depositType.getDepositPeriod()) // ex) 끝턴 3턴 + 10턴 = 13턴
+                .depositStartTurn(animal.getAnimalTurn()) // ex) 시작턴 3턴
+                .depositEndTurn(animal.getAnimalTurn() + depositType.getDepositPeriod()) // ex) 끝턴 3턴 + 10턴 = 13턴
                 .depositIsEnd(false)
-                .character(character)
+                .animal(animal)
                 .depositType(depositType)
                 .build();
 
         depositRepository.save(deposit);
 
         // 캐릭터 가용 자산 감소
-        character.decreaseCharacterAssets(depositRequest.getDepositAmount());
+        animal.decreaseAnimalAssets(depositRequest.getDepositAmount());
     }
 
     // 내 예금 조회
@@ -89,9 +89,9 @@ public class DepositServiceImpl implements DepositService {
         List<MyDepositResponse> myDepositResponseList = new ArrayList<>();
 
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(USER_NOT_FOUND_EXCEPTION));
-        Character character = characterRepository.findByMemberAndCharacterIsEndFalse(member).orElseThrow(() -> new CustomException(CHARACTER_NOT_FOUND_EXCEPTION));
+        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(CHARACTER_NOT_FOUND_EXCEPTION));
 
-        List<Deposit> depositList = depositRepository.findAllByCharacterAndDepositIsEndFalseOrderByDepositEndTurnAsc(character);
+        List<Deposit> depositList = depositRepository.findAllByAnimalAndDepositIsEndFalseOrderByDepositEndTurnAsc(animal);
 
         for (Deposit deposit : depositList){
             DepositType depositType = deposit.getDepositType();
@@ -106,7 +106,7 @@ public class DepositServiceImpl implements DepositService {
                     .period(depositType.getDepositPeriod())
                     .amount(deposit.getDepositAmount())
                     .finalReturn(finalReturn) // 만기 시 금액
-                    .restTurn(deposit.getDepositEndTurn() - character.getCharacterTurn()) // (마감 턴) - (캐릭터 현재 턴)
+                    .restTurn(deposit.getDepositEndTurn() - animal.getAnimalTurn()) // (마감 턴) - (캐릭터 현재 턴)
                     .endTurn(deposit.getDepositEndTurn())
                     .depositName(depositType.getDepositName())
                     .depositImgUrl(depositType.getDepositImgUrl())
@@ -123,53 +123,50 @@ public class DepositServiceImpl implements DepositService {
     @Transactional
     public void deleteMyDeposit(String memberId, Long depositId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(USER_NOT_FOUND_EXCEPTION));
-        Character character = characterRepository.findByMemberAndCharacterIsEndFalse(member).orElseThrow(() -> new CustomException(CHARACTER_NOT_FOUND_EXCEPTION));
+        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(CHARACTER_NOT_FOUND_EXCEPTION));
 
         Deposit deposit = depositRepository.findById(depositId).orElseThrow(() -> new CustomException(DEPOSIT_NOT_FOUND_EXCEPTION));
 
         // 당일 취소 불가능
-        if (deposit.getDepositStartTurn().equals(character.getCharacterTurn())){
+        if (deposit.getDepositStartTurn().equals(animal.getAnimalTurn())){
             throw new CustomException(SAME_DAY_CANCELLATION_NOT_ALLOWED);
         }
 
+        // 예금 완료 처리
         deposit.changeDepositIsEnd(true);
-        character.increaseCharacterAssets( deposit.getDepositAmount() + deposit.getDepositAmount() / 200);
+        animal.increaseAnimalAssets( deposit.getDepositAmount() + deposit.getDepositAmount() / 200);
+    }
+
+    // 예금은 다음날로 넘어가기
+    @Override
+    @Transactional
+    public void depositGoToNextTurn(Animal animal){
+        depositMature(animal);
     }
 
     // 예금 만기
     @Override
     @Transactional
-    public void depositMature(Long characterId) {
-        Character character = characterRepository.findById(characterId).orElseThrow(() -> new CustomException(CHARACTER_NOT_FOUND_EXCEPTION));
-
+    public void depositMature(Animal animal) {
         // 만기인 예금 모두 조회
-        List<Deposit> depositList = depositRepository.findAllByCharacterAndDepositEndTurn(character, character.getCharacterTurn());
+        List<Deposit> depositList = depositRepository.findAllByAnimalAndDepositEndTurn(animal, animal.getAnimalTurn());
 
         for (Deposit deposit : depositList){
             deposit.changeDepositIsEnd(true);
             long money = deposit.getDepositAmount() + deposit.getDepositAmount() * deposit.getDepositType().getDepositRate() / 100;
 
             // 예적금형 캐릭터인 경우 최종 수익 5% 추가 증가
-            if (character.getCharacterType().getCharacterTypeId() == 2){
+            if (animal.getAnimalType().getAnimalTypeId() == 2){
                 money += money * 5 / 100;
             }
-            character.increaseCharacterAssets(money);
+            animal.increaseAnimalAssets(money);
+
+            // 예치금액 5천만원 이상이면 신용도 1 증가
+            if (deposit.getDepositAmount() >= 50000000){
+                if (animal.getAnimalCredit() > 1){
+                    animal.changeAnimalCredit(animal.getAnimalCredit() + 1);
+                }
+            }
         }
-    }
-
-    // 전체 예금액 구하기
-    @Override
-    @Transactional(readOnly = true)
-    public long getMyTotalDeposit(Long characterId){
-        long money = 0L;
-        Character character = characterRepository.findById(characterId).orElseThrow(() -> new CustomException(CHARACTER_NOT_FOUND_EXCEPTION));
-
-        List<Deposit> depositList = depositRepository.findAllByCharacterAndDepositIsEndFalse(character);
-
-        for (Deposit deposit : depositList){
-            money += deposit.getDepositAmount();
-        }
-
-        return money;
     }
 }
