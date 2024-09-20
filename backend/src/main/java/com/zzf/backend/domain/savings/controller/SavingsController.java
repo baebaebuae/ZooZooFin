@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+import static com.zzf.backend.global.status.SuccessCode.*;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/savings")
@@ -24,7 +26,7 @@ public class SavingsController {
     public ResponseDto<List<SavingsTypeResponse>> getSavings(){
 
         List<SavingsTypeResponse> savingsTypeResponseList = savingsService.getSavings();
-        return ResponseDto.success(SuccessCode.READ_SUCCESS, savingsTypeResponseList);
+        return ResponseDto.success(READ_SUCCESS, savingsTypeResponseList);
     }
 
     //적금 등록 005
@@ -35,7 +37,7 @@ public class SavingsController {
 
         savingsService.postSavings(savingsRequest, memberId);
 
-        return ResponseDto.success(SuccessCode.CREATE_SUCCESS);
+        return ResponseDto.success(CREATE_SUCCESS);
     }
 
 
@@ -46,7 +48,7 @@ public class SavingsController {
         String memberId = "913418af-6b2e-11ef-929f-28c5d21eabf3";
 
         List<MySavingsResponse> mySavingsResponseList = savingsService.getMySavings(memberId);
-        return ResponseDto.success(SuccessCode.READ_SUCCESS, mySavingsResponseList);
+        return ResponseDto.success(READ_SUCCESS, mySavingsResponseList);
     }
 
     //적금 해지 006_1
@@ -58,6 +60,6 @@ public class SavingsController {
 
         savingsService.deleteMySavings(memberId, savingsId);
 
-        return ResponseDto.success(SuccessCode.UPDATE_SUCCESS);
+        return ResponseDto.success(UPDATE_SUCCESS);
     }
 }

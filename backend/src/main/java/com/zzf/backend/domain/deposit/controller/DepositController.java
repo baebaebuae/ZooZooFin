@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+import static com.zzf.backend.global.status.SuccessCode.*;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/deposit")
@@ -25,7 +27,7 @@ public class DepositController {
 
         List<DepositTypeResponse> depositTypeResponseList = depositService.getDeposit();
 
-        return ResponseDto.success(SuccessCode.READ_SUCCESS, depositTypeResponseList);
+        return ResponseDto.success(READ_SUCCESS, depositTypeResponseList);
     }
 
     //예금 등록 002
@@ -36,7 +38,7 @@ public class DepositController {
 
         depositService.postDeposit(depositRequest, memberId);
 
-        return ResponseDto.success(SuccessCode.CREATE_SUCCESS);
+        return ResponseDto.success(CREATE_SUCCESS);
     }
 
     //예금 해지_내 예금 조회 003
@@ -47,7 +49,7 @@ public class DepositController {
 
         List<MyDepositResponse> myDepositResponseList = depositService.getMyDeposit(memberId);
 
-        return ResponseDto.success(SuccessCode.READ_SUCCESS, myDepositResponseList);
+        return ResponseDto.success(READ_SUCCESS, myDepositResponseList);
     }
 
     //예금 해지 003_1
@@ -59,6 +61,6 @@ public class DepositController {
 
         depositService.deleteMyDeposit(memberId, depositId);
 
-        return ResponseDto.success(SuccessCode.UPDATE_SUCCESS);
+        return ResponseDto.success(UPDATE_SUCCESS);
     }
 }

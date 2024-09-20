@@ -1,4 +1,4 @@
-package com.zzf.backend.domain.character.entity;
+package com.zzf.backend.domain.animal.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -11,21 +11,21 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CharacterType {
+public class AnimalType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "character_type_id")
-    private Long characterTypeId;
+    @Column(name = "animal_type_id")
+    private Long animalTypeId;
 
-    @Column(name = "character_type_name")
+    @Column(name = "animal_type_name")
     @NotNull
-    private String characterTypeName;
+    private String animalTypeName;
 
-    @Column(name = "character_ability")
+    @Column(name = "animal_ability")
     @NotNull
-    private Long characterAbility;
+    private Long animalAbility;
 
-    @Column(name = "character_img_url")
+    @Column(name = "animal_img_url")
     @NotNull
-    private String characterImgUrl;
+    private String animalImgUrl;
 }
