@@ -13,13 +13,15 @@ public enum ErrorCode {
     KAKAO_SERVER_ERROR(500, "카카오 서버 오류입니다."),
 
     USER_NOT_FOUND_EXCEPTION(404, "존재하지 않는 사용자입니다."),
-    CHARACTER_NOT_FOUND_EXCEPTION(404, "존재하지 않는 캐릭터입니다."),
+    ANIMAL_NOT_FOUND_EXCEPTION(404, "존재하지 않는 캐릭터입니다."),
     DEPOSIT_NOT_FOUND_EXCEPTION(404, "존재하지 않는 예금입니다."),
     SAVINGS_NOT_FOUND_EXCEPTION(404, "존재하지 않는 적금입니다."),
     LOAN_NOT_FOUND_EXCEPTION(404, "존재하지 않는 대출입니다."),
     CAPITAL_NOT_FOUND_EXCEPTION(404, "존재하지 않는 사채입니다."),
     DEPOSIT_TYPE_NOT_FOUND_EXCEPTION(404, "존재하지 않는 예금상품입니다."),
     SAVINGS_TYPE_NOT_FOUND_EXCEPTION(404, "존재하지 않는 적금상품입니다."),
+    QUIZ_NOT_FOUND_EXCEPTION(404, "존재하지 않는 퀴즈지롱~!"),
+    QUIZ_RESULT_NOT_FOUND_EXCEPTION(404, "존재하지 않는 퀴즈 결과지롱~!"),
 
     CASH_SHORTAGE_EXCEPTION(409, "현금이 부족합니다."),
 

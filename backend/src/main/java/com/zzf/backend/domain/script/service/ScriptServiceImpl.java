@@ -9,20 +9,23 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ScriptService {
+public class ScriptServiceImpl implements ScriptService {
     private final ScriptRepository scriptRepository;
 
+    @Override
     public List<Script> findAllScripts() {
 
         return scriptRepository.findAll();
     }
 
-    public List<Script> findScriptByCategory(String category) {
+    @Override
+    public List<Script> findScriptByCategory(String category)
+    {
         return scriptRepository.findByCategory(category);
     }
 
-    public Script findScriptById(long id) {
-        return scriptRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("not found: " + id));
-    }
+//    public Script findScriptById(long id) {
+//        return scriptRepository.findById(id)
+//                .orElseThrow(() -> new IllegalArgumentException("not found: " + id));
+//    }
 }

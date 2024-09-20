@@ -59,7 +59,7 @@ public class SavingsServiceImpl implements SavingsService{
     @Transactional
     public void postSavings(SavingsRequest savingsRequest, String memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(USER_NOT_FOUND_EXCEPTION));
-        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(CHARACTER_NOT_FOUND_EXCEPTION));
+        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
         SavingsType savingsType = savingsTypeRepository.findById(savingsRequest.getSavingsTypeId()).orElseThrow(() -> new CustomException(SAVINGS_TYPE_NOT_FOUND_EXCEPTION));
 
         // 현금 부족
@@ -93,7 +93,7 @@ public class SavingsServiceImpl implements SavingsService{
         List<MySavingsResponse> mySavingsResponseList = new ArrayList<>();
 
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(USER_NOT_FOUND_EXCEPTION));
-        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(CHARACTER_NOT_FOUND_EXCEPTION));
+        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
         List<Savings> savingsList = savingsRepository.findAllByAnimalAndSavingsIsEndFalseOrderBySavingsEndTurnAsc(animal);
 
@@ -130,7 +130,7 @@ public class SavingsServiceImpl implements SavingsService{
     @Transactional
     public void deleteMySavings(String memberId, Long savingsId) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(USER_NOT_FOUND_EXCEPTION));
-        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(CHARACTER_NOT_FOUND_EXCEPTION));
+        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
         Savings savings = savingsRepository.findById(savingsId).orElseThrow(() -> new CustomException(SAVINGS_NOT_FOUND_EXCEPTION));
 
