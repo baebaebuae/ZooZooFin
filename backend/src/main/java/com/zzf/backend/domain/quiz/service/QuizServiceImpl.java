@@ -13,9 +13,13 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+<<<<<<< HEAD
+import java.util.*;
+=======
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+>>>>>>> bad2886b8c3eae2c17e20f336c56733423e4201e
 
 import static com.zzf.backend.global.status.ErrorCode.*;
 
@@ -45,13 +49,30 @@ public class QuizServiceImpl implements QuizService {
     @Transactional
     public QuizResponse gradeQuizzes(Long animalId, QuizRequest quizRequest)
     {
+<<<<<<< HEAD
+        // quiz validator 필요 - 중복 확인
+        Set<Long> setQuizIds = new HashSet<>();
+        for (QuizRequest.AnswerDto answerDto : quizRequest.getAnswerList()) {
+            Long quizId = answerDto.getQuizId();
+            if (setQuizIds.contains(quizId)) {
+                throw new CustomException(DUPLICATE_QUIZ_ID_EXCEPTION);
+            }
+            setQuizIds.add(quizId);
+        }
+
+=======
+>>>>>>> bad2886b8c3eae2c17e20f336c56733423e4201e
         // animal ID 필요함
         Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
         QuizResponse quizResponse = new QuizResponse();
         List<QuizResponse.QuizGrading> quizGradingList = new ArrayList<>();
         int score = 0;
+<<<<<<< HEAD
+
+=======
         // quiz validator 필요 - 중복 확인
+>>>>>>> bad2886b8c3eae2c17e20f336c56733423e4201e
         for (QuizRequest.AnswerDto answerDto : quizRequest.getAnswerList()) {
             Quiz quiz = quizRepository.findByQuizId(answerDto.getQuizId()).orElseThrow(() -> new CustomException(QUIZ_NOT_FOUND_EXCEPTION));
             QuizResult quizResult = quizResultRepository.findAllByAnimalAndQuiz(animal, quiz).orElseThrow(() -> new CustomException(QUIZ_RESULT_NOT_FOUND_EXCEPTION));
