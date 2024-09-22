@@ -10,11 +10,11 @@ import java.util.List;
 public interface DepositService {
     List<DepositTypeResponse> getDeposit();
 
-    void postDeposit(DepositRequest depositRequest, String memberId);
+    void postDeposit(DepositRequest depositRequest, Long animalId);
 
-    List<MyDepositResponse> getMyDeposit(String memberId);
+    List<MyDepositResponse> getMyDeposit(Long animalId);
 
-    void deleteMyDeposit(String memberId, Long depositId);
+    void deleteMyDeposit(Long animalId, Long depositId);
 
     void depositGoToNextTurn(Animal animal);
 

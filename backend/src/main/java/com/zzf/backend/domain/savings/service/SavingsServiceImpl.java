@@ -1,7 +1,7 @@
 package com.zzf.backend.domain.savings.service;
 
-import com.zzf.backend.domain.auth.entity.Member;
-import com.zzf.backend.domain.auth.repository.MemberRepository;
+import com.zzf.backend.domain.member.entity.Member;
+import com.zzf.backend.domain.member.repository.MemberRepository;
 import com.zzf.backend.domain.savings.dto.MySavingsResponse;
 import com.zzf.backend.domain.savings.dto.SavingsRequest;
 import com.zzf.backend.domain.savings.dto.SavingsTypeResponse;
@@ -58,7 +58,7 @@ public class SavingsServiceImpl implements SavingsService{
     @Override
     @Transactional
     public void postSavings(SavingsRequest savingsRequest, String memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(USER_NOT_FOUND_EXCEPTION));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND_EXCEPTION));
         Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
         SavingsType savingsType = savingsTypeRepository.findById(savingsRequest.getSavingsTypeId()).orElseThrow(() -> new CustomException(SAVINGS_TYPE_NOT_FOUND_EXCEPTION));
 
@@ -92,7 +92,7 @@ public class SavingsServiceImpl implements SavingsService{
         // 빈 리스트 생성
         List<MySavingsResponse> mySavingsResponseList = new ArrayList<>();
 
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(USER_NOT_FOUND_EXCEPTION));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND_EXCEPTION));
         Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
         List<Savings> savingsList = savingsRepository.findAllByAnimalAndSavingsIsEndFalseOrderBySavingsEndTurnAsc(animal);
@@ -129,7 +129,7 @@ public class SavingsServiceImpl implements SavingsService{
     @Override
     @Transactional
     public void deleteMySavings(String memberId, Long savingsId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(USER_NOT_FOUND_EXCEPTION));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND_EXCEPTION));
         Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
         Savings savings = savingsRepository.findById(savingsId).orElseThrow(() -> new CustomException(SAVINGS_NOT_FOUND_EXCEPTION));

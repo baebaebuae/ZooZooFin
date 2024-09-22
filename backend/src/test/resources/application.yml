@@ -1,30 +1,18 @@
 spring:
-  profiles:
-    active: ${PROFILE:local}
-
   application:
     name: backend
-  config:
-    import: optional:file:.env[.properties]
-
-oauth:
-  google:
-    secret: ${OAUTH_GOOGLE_SECRET:}
-  naver:
-    secret: ${OAUTH_NAVER_SECRET:}
-  kakao:
-    secret: ${OAUTH_KAKAO_SECRET:}
-
---- # 로컬 설정
-spring:
-  config:
-    activate:
-      on-profile: local
 
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:zzfDB
+    url: jdbc:h2:mem:test
     username: sa
+
+  data:
+    redis:
+      host: ${LOCAL_REDIS_HOST}
+      port: ${LOCAL_REDIS_PORT}
+    mongodb:
+      uri: ${LOCAL_MONGO_URI}
 
   jpa:
     hibernate:
@@ -36,32 +24,23 @@ spring:
     init:
       mode: always
       data-locations: classpath:sql/data-zoozoofin.sql
-#      schema-locations: classpath:sql/schema-zoozoofin.sql
+      encoding: utf-8
 
-base-url: http://localhost:8080
+oauth:
+  google:
+    secret: ${OAUTH_GOOGLE_SECRET}
+  naver:
+    secret: ${OAUTH_NAVER_SECRET}
+  kakao:
+    secret: ${OAUTH_KAKAO_SECRET}
+
+jwt:
+  access-expiration: ${ACCESS_EXPIRATION}
+  refresh-expiration: ${REFRESH_EXPIRATION}
+  secret-key: ${SECRET_KEY}
+
+base-url: ${BASE_URL}
 
 logging:
   level:
     root: info
-
---- # 개발 서버 설정
-spring:
-  config:
-    activate:
-      on-profile: dev
-
-  datasource:
-    driver-class-name: ${RDB_DRIVER}
-    url: ${RDB_URL}
-    username: ${RDB_USERNAME}
-    password: ${RDB_PASSWORD}
-
-  jpa:
-    hibernate:
-      ddl-auto: none
-
-base-url: https://i11a705.p.ssafy.io
-
-logging:
-  level:
-    root: warn

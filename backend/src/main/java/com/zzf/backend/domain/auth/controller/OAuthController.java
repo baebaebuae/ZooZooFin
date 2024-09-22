@@ -1,7 +1,7 @@
 package com.zzf.backend.domain.auth.controller;
 
 import com.zzf.backend.domain.auth.dto.LoginResponse;
-import com.zzf.backend.domain.auth.service.AuthService;
+import com.zzf.backend.domain.auth.service.OAuthService;
 import com.zzf.backend.global.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,15 +12,15 @@ import static com.zzf.backend.global.status.SuccessCode.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-public class AuthController {
+@RequestMapping("/api/v1/oauth")
+public class OAuthController {
 
-    private final AuthService authService;
+    private final OAuthService OAuthService;
 
     @GetMapping("/{provider}")
     public RedirectView loginRedirect(@PathVariable String provider) {
-        String redirectUrl = authService.getRedirectUrl(provider);
+        String redirectUrl = OAuthService.getRedirectUrl(provider);
 
         return new RedirectView(redirectUrl);
     }
@@ -28,8 +28,9 @@ public class AuthController {
     @GetMapping("/callback/{provider}")
     public ResponseDto<LoginResponse> callback(@PathVariable String provider,
                                                @RequestParam String code) {
-        LoginResponse loginResp = authService.loginOAuth(provider, code);
+        LoginResponse loginResp = OAuthService.loginOAuth(provider, code);
 
         return ResponseDto.success(LOGIN_SUCCESS, loginResp);
     }
 }
+

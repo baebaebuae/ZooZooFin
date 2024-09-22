@@ -1,4 +1,4 @@
-package com.zzf.backend.domain.auth.entity;
+package com.zzf.backend.domain.member.entity;
 
 import com.zzf.backend.global.base.BaseEntity;
 import jakarta.persistence.*;

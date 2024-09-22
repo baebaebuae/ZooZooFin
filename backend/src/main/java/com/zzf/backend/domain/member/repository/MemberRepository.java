@@ -1,6 +1,6 @@
-package com.zzf.backend.domain.auth.repository;
+package com.zzf.backend.domain.member.repository;
 
-import com.zzf.backend.domain.auth.entity.Member;
+import com.zzf.backend.domain.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
