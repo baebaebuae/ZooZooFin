@@ -1,7 +1,7 @@
 package com.zzf.backend.domain.loan.service;
 
-import com.zzf.backend.domain.auth.entity.Member;
-import com.zzf.backend.domain.auth.repository.MemberRepository;
+import com.zzf.backend.domain.member.entity.Member;
+import com.zzf.backend.domain.member.repository.MemberRepository;
 import com.zzf.backend.domain.animal.entity.Animal;
 import com.zzf.backend.domain.animal.repository.AnimalRepository;
 import com.zzf.backend.domain.home.service.HomeService;
@@ -34,7 +34,7 @@ public class LoanServiceImpl implements LoanService{
     @Override
     @Transactional(readOnly = true)
     public LoanAvailableResponse checkLoanAvailable(String memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(USER_NOT_FOUND_EXCEPTION));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND_EXCEPTION));
         Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
         // 신용 등급이 7등급보다 낮은 경우
@@ -75,7 +75,7 @@ public class LoanServiceImpl implements LoanService{
     @Override
     @Transactional
     public void postLoan(LoanRequest loanRequest, String memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(USER_NOT_FOUND_EXCEPTION));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND_EXCEPTION));
         Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
         // 신용 등급이 낮을 경우 대출 불가
@@ -104,7 +104,7 @@ public class LoanServiceImpl implements LoanService{
         // 빈 리스트 생성
         List<MyLoanResponse> myLoanResponseList = new ArrayList<>();
 
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(USER_NOT_FOUND_EXCEPTION));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND_EXCEPTION));
         Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
         // 진행 중인 대출 모두 조회, 마감 턴 빠른 순으로 정렬
@@ -144,7 +144,7 @@ public class LoanServiceImpl implements LoanService{
     @Override
     @Transactional
     public void patchLoan(Long loanId, String memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(USER_NOT_FOUND_EXCEPTION));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND_EXCEPTION));
         Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
         Loan loan = loanRepository.findById(loanId).orElseThrow(() -> new CustomException(LOAN_NOT_FOUND_EXCEPTION));
 

@@ -1,24 +1,24 @@
 spring:
-  profiles:
-    active: ${PROFILE:local}
-
   application:
     name: backend
-  config:
-    import: optional:file:.env[.properties]
   web:
     resources:
       add-mappings: false
 
 oauth:
   google:
-    secret: ${OAUTH_GOOGLE_SECRET:}
+    secret: ${OAUTH_GOOGLE_SECRET}
   naver:
-    secret: ${OAUTH_NAVER_SECRET:}
+    secret: ${OAUTH_NAVER_SECRET}
   kakao:
-    secret: ${OAUTH_KAKAO_SECRET:}
+    secret: ${OAUTH_KAKAO_SECRET}
 
+jwt:
+  access-expiration: ${ACCESS_EXPIRATION}
+  refresh-expiration: ${REFRESH_EXPIRATION}
+  secret-key: ${SECRET_KEY}
 
+base-url: ${BASE_URL}
 
 --- # 로컬 설정
 spring:
@@ -30,36 +30,29 @@ spring:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:test
     username: sa
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
   data:
     redis:
-      host: localhost
-      port: 6379
+      host: ${LOCAL_REDIS_HOST}
+      port: ${LOCAL_REDIS_PORT}
     mongodb:
-      uri: ${MONGO_LOCAL_URI}
+      uri: ${LOCAL_MONGO_URI}
 
   jpa:
     hibernate:
       ddl-auto: create-drop
     defer-datasource-initialization: true
     show-sql: true
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
 
   sql:
     init:
       mode: always
       data-locations: classpath:sql/data-zoozoofin.sql
       encoding: utf-8
-  #      schema-locations: classpath:sql/schema-zoozoofin.sql
-
-base-url: http://localhost:8080
-
-redis:
-  ttl:
-    access: 18000
-    refresh: 180000
 
 logging:
   level:
@@ -103,14 +96,15 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create-drop
+    defer-datasource-initialization: true
 
-base-url: ${BASE_URL}
-
-redis:
-  ttl:
-    access: ${ACCESS_EXPIRE}
-    refresh: ${REFRESH_EXPIRE}
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:sql/data-zoozoofin.sql
+#      schema-locations: classpath:sql/schema-zoozoofin.sql
+      encoding: utf-8
 
 logging:
   level:

@@ -1,6 +1,6 @@
 package com.zzf.backend.domain.animal.entity;
 
-import com.zzf.backend.domain.auth.entity.Member;
+import com.zzf.backend.domain.member.entity.Member;
 import com.zzf.backend.global.base.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

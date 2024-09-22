@@ -1,6 +1,6 @@
 package com.zzf.backend.domain.animal.repository;
 
-import com.zzf.backend.domain.auth.entity.Member;
+import com.zzf.backend.domain.member.entity.Member;
 import com.zzf.backend.domain.animal.entity.Animal;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

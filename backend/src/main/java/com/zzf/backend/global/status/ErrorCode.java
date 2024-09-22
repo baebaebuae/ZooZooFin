@@ -7,13 +7,32 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorCode {
 
+    // Global
     BAD_REQUEST(400, "실패"),
+    INTERNAL_SERVER_ERROR(500, "서버 에러"),
+
+    // JWT
+    JWT_ERROR(401, "토큰 에러가 발생했습니다."),
+    EXPIRED_JWT(401, "만료된 JWT 토큰입니다."),
+    MALFORMED_JWT(401, "유효하지 않은 JWT 토큰입니다."),
+    UNSUPPORTED_JWT(401, "허용되지 않은 토큰입니다."),
+
+    // Auth
+    AUTHORIZATION_HEADER_NOT_EXIST(401, "인증 헤더가 존재하지 않습니다."),
+    ACCESS_DENIED(403, "허용되지 않는 접근입니다."),
+    AUTHENTICATION_REQUIRED(401, "올바르지 않은 권한입니다."),
+
+    // OAuth
     WRONG_PROVIDER(404, "지원하지 않는 소셜 로그인입니다."),
     KAKAO_PARAMETER_ERROR(400, "유효하지 않은 카카오 로그인 요청입니다."),
     KAKAO_SERVER_ERROR(500, "카카오 서버 오류입니다."),
 
-    USER_NOT_FOUND_EXCEPTION(404, "존재하지 않는 사용자입니다."),
+    // Member
+    MEMBER_NOT_FOUND_EXCEPTION(404, "존재하지 않는 사용자입니다."),
+
+    // Animal
     ANIMAL_NOT_FOUND_EXCEPTION(404, "존재하지 않는 캐릭터입니다."),
+
     DEPOSIT_NOT_FOUND_EXCEPTION(404, "존재하지 않는 예금입니다."),
     SAVINGS_NOT_FOUND_EXCEPTION(404, "존재하지 않는 적금입니다."),
     LOAN_NOT_FOUND_EXCEPTION(404, "존재하지 않는 대출입니다."),
@@ -30,7 +49,7 @@ public enum ErrorCode {
     NO_SUCH_LOAN_TYPE_EXCEPTION(404, "존재하지 않는 대출 타입입니다."),
     NO_SUCH_CREDIT_EXCEPTION(404, "존재하지 않는 대출 등급입니다."),
 
-    DUPLICATE_QUIZ_ID_EXCEPTION(400, "중복된 퀴즈 아이디가 존재합니다.")
+    DUPLICATE_QUIZ_ID_EXCEPTION(400, "중복된 퀴즈 아이디가 존재합니다."),
 
     ;
     private final int httpStatus;

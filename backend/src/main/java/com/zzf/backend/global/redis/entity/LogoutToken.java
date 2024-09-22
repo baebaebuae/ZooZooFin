@@ -23,7 +23,7 @@ public class LogoutToken {
     private final String accessToken;
 
     @TimeToLive
-    @Value("${redis.ttl.access}")
+    @Value("${jwt.access-expiration}")
     private Long expiresIn;
 
 }

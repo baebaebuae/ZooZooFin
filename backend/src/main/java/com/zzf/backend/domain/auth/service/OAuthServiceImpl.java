@@ -19,7 +19,7 @@ import static com.zzf.backend.global.status.ErrorCode.*;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AuthServiceImpl implements AuthService {
+public class OAuthServiceImpl implements OAuthService {
 
     @Value("${oauth.google.secret}")
     private String googleClientId;
@@ -42,15 +42,15 @@ public class AuthServiceImpl implements AuthService {
         return switch (provider) {
             case "google" -> "https://accounts.google.com/o/oauth2/auth" +
                     "client_id=" + googleClientId +
-                    "&redirect_uri=" + baseUrl + "/api/v1/auth/callback/google" +
+                    "&redirect_uri=" + baseUrl + "/api/v1/oauth/callback/google" +
                     "&response_type=code";
             case "naver" -> NAVER_TOKEN_HOST + "/oauth2.0/authorize" +
                     "?client_id=" + naverClientId +
-                    "&redirect_uri=" + baseUrl + "/api/v1/auth/callback/naver" +
+                    "&redirect_uri=" + baseUrl + "/api/v1/oauth/callback/naver" +
                     "&response_type=code";
             case "kakao" -> KAKAO_TOKEN_HOST + "/oauth/authorize" +
                     "?client_id=" + kakaoClientId +
-                    "&redirect_uri=" + baseUrl + "/api/v1/auth/callback/kakao" +
+                    "&redirect_uri=" + baseUrl + "/api/v1/oauth/callback/kakao" +
                     "&response_type=code";
 
             default -> throw new CustomException(WRONG_PROVIDER);
