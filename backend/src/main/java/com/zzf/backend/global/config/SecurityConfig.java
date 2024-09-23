@@ -38,7 +38,8 @@ public class SecurityConfig {
                         CorsConfiguration config = new CorsConfiguration();
                         config.setAllowCredentials(true);
                         config.setAllowedOrigins(List.of("http://localhost:5173", "zoozoofin.site"));
-                        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+                        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
+                        config.addAllowedHeader("*");
                         return config;
                     };
                     corsConfigurer.configurationSource(source);
