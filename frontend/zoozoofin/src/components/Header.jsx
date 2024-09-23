@@ -57,6 +57,9 @@ const Header = () => {
             </WorkingAreas>
             <div>360px</div>
             <TempWidthLine />
+            {/*  */}
+            {/* 진짜 헤더 */}
+            {/*  */}
             <HeaderBlock>
                 <HeaderButtonBlock>
                     <HeaderHamburgerButton />
