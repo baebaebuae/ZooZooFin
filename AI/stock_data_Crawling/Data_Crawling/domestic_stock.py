@@ -14,7 +14,7 @@ for sector in domestic_stock:
         print(name, code)
         
         # 하루 단위 데이터 다운로드
-        df = fdr.DataReader(code, '2022-01-01', '2023-12-31')
+        df = fdr.DataReader(code, '2013-01-01', '2023-12-31')
 
         # 데이터가 비어있는지 확인
         if df.empty:
@@ -54,7 +54,7 @@ for sector in domestic_stock:
         })
 
         # CSV 파일로 저장 (하루 단위 데이터)
-        csv_filename = f'S11P21A705/AI/daily_stock_data/domestic/daily_stock_data_{code}.csv'
+        csv_filename = f'S11P21A705/AI/daily_stock_data_10/domestic/daily_stock_data_{code}.csv'
         df_daily.to_csv(csv_filename, encoding='utf-8-sig')  # df_daily 사용하여 'Change' 없이 저장
         print(f"{code} 종목의 일별 CSV 파일 저장 완료!")
 
