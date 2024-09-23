@@ -4,6 +4,8 @@ import com.zzf.backend.global.redis.entity.LogoutToken;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
-public interface RedisLogoutRepository extends CrudRepository<LogoutToken, String> {
+public interface LogoutRepository extends CrudRepository<LogoutToken, String> {
 }

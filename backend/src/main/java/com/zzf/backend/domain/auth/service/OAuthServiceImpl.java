@@ -4,6 +4,9 @@ import com.zzf.backend.domain.auth.dto.KakaoTokenDto;
 import com.zzf.backend.domain.auth.dto.KakaoUserDto;
 import com.zzf.backend.domain.auth.dto.LoginResponse;
 import com.zzf.backend.global.exception.CustomException;
+import com.zzf.backend.global.jwt.JwtProvider;
+import com.zzf.backend.global.redis.entity.RefreshToken;
+import com.zzf.backend.global.redis.repository.RefreshTokenRepository;
 import io.netty.handler.codec.http.HttpHeaderValues;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +24,9 @@ import static com.zzf.backend.global.status.ErrorCode.*;
 @RequiredArgsConstructor
 public class OAuthServiceImpl implements OAuthService {
 
+    private final JwtProvider jwtProvider;
+    private final RefreshTokenRepository refreshTokenRepository;
+
     @Value("${oauth.google.secret}")
     private String googleClientId;
     @Value("${oauth.naver.secret}")
@@ -29,13 +35,14 @@ public class OAuthServiceImpl implements OAuthService {
     private String kakaoClientId;
 
     private final String NAVER_TOKEN_HOST = "https://nid.naver.com";
-
-
     private final String KAKAO_TOKEN_HOST = "https://kauth.kakao.com";
     private final String KAKAO_USER_HOST = "https://kapi.kakao.com";
 
-    @Value("${base-url}")
+    @Value("${oauth.base-url}")
     private String baseUrl;
+
+    @Value("${jwt.refresh-expiration}")
+    private Long refreshExpiration;
 
     @Override
     public String getRedirectUrl(String provider) {
@@ -91,15 +98,24 @@ public class OAuthServiceImpl implements OAuthService {
                         .bodyToMono(KakaoUserDto.class)
                         .block();
 
-                Long userId = userDto.id;
+                String memberId = userDto.id.toString();
+                String accessToken = jwtProvider.createAccessToken(memberId);
+                String refreshToken = jwtProvider.createRefreshToken();
 
-                log.info("userId: {}", userId);
+                refreshTokenRepository.save(RefreshToken.builder()
+                        .refreshToken(refreshToken)
+                        .accessToken(accessToken)
+                        .memberId(memberId)
+                        .expiresIn(refreshExpiration)
+                        .build());
 
-                return null;
-
+                return LoginResponse.builder()
+                        .accessToken(accessToken)
+                        .refreshToken(refreshToken)
+                        .build();
             }
         }
 
-        return new LoginResponse(null, null, null);
+        throw new CustomException(BAD_REQUEST);
     }
 }

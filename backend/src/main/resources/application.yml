@@ -4,6 +4,15 @@ spring:
   web:
     resources:
       add-mappings: false
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:sql/data-zoozoofin.sql
+      #      schema-locations: classpath:sql/schema-zoozoofin.sql
+      encoding: utf-8
+  jpa:
+    show-sql: ${SHOW_SQL}
+    defer-datasource-initialization: true
 
 oauth:
   google:
@@ -17,8 +26,6 @@ jwt:
   access-expiration: ${ACCESS_EXPIRATION}
   refresh-expiration: ${REFRESH_EXPIRATION}
   secret-key: ${SECRET_KEY}
-
-base-url: ${BASE_URL}
 
 --- # 로컬 설정
 spring:
@@ -44,19 +51,14 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
-    defer-datasource-initialization: true
-    show-sql: true
+      ddl-auto: ${LOCAL_DDL_AUTO}
 
-  sql:
-    init:
-      mode: always
-      data-locations: classpath:sql/data-zoozoofin.sql
-      encoding: utf-8
+oauth:
+  base-url: http://localhost:8080
 
 logging:
   level:
-    root: info
+    root: ${LOCAL_LOGGING_LEVEL}
 
 springdoc:
   swagger-ui:
@@ -76,6 +78,7 @@ springdoc:
   model-and-view-allowed: true
   paths-to-match:
     - /api/v1/**
+
 --- # 개발 서버 설정
 spring:
   config:
@@ -96,16 +99,11 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
-    defer-datasource-initialization: true
+      ddl-auto: ${LOCAL_DDL_AUTO}
 
-  sql:
-    init:
-      mode: always
-      data-locations: classpath:sql/data-zoozoofin.sql
-#      schema-locations: classpath:sql/schema-zoozoofin.sql
-      encoding: utf-8
+oauth:
+  base-url: ${BASE_URL}
 
 logging:
   level:
-    root: warn
+    root: ${LOGGING_LEVEL}

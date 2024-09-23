@@ -1,6 +1,7 @@
 package com.zzf.backend.domain.Deposit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.zzf.backend.domain.deposit.entity.Deposit;
 import com.zzf.backend.domain.member.repository.MemberRepository;
 import com.zzf.backend.domain.animal.repository.AnimalRepository;
@@ -48,19 +49,21 @@ public class DepositControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private final String test_token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6IjkxMzQxOGFmLTZiMmUtMTFlZi05MjlmLTI4YzVkMjFlYWJmMyIsImV4cCI6MTgxMzMzMDU4Nn0.ZgnLrGNNi9xt-jlJAgyNOAn6-_yw4m5C9SOUkk5zyPY";
+    @Autowired
+    private Gson gson;
+
+    private final String jwtToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6IjkxMzQxOGFmLTZiMmUtMTFlZi05MjlmLTI4YzVkMjFlYWJmMyIsImV4cCI6MTgxMzMzMDU4Nn0.ZgnLrGNNi9xt-jlJAgyNOAn6-_yw4m5C9SOUkk5zyPY";
 
     @Test
     public void 예금_조회_성공() throws Exception {
         //given
-        String provider = "deposit";
 
         //when
         ResultActions actions = mockMvc.perform(
-                get("/api/v1/bank/" + provider)
+                get("/api/v1/deposit")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header(HttpHeaders.AUTHORIZATION, test_token));
+                        .header("Authorization", "Bearer " + jwtToken));
 
         //then
         actions.andExpect(status().isOk())
@@ -74,14 +77,15 @@ public class DepositControllerTest {
 
         depositRequest.setDepositTypeId(1L);
         depositRequest.setDepositAmount(1000000L);
+        String content = gson.toJson(depositRequest);
 
         // when
         ResultActions actions = mockMvc.perform(
                 post("/api/v1/deposit", depositRequest)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(depositRequest))
-                        .header(HttpHeaders.AUTHORIZATION, test_token));
+                        .content(content)
+                        .header("Authorization", "Bearer " + jwtToken));
 
         // then
         actions.andExpect(status().isOk())  // (status().isCreated()) 라고 하면 오류나옴 나 return ResponseDto.success(SuccessCode.CREATE_SUCCESS); 했는데 왜?????

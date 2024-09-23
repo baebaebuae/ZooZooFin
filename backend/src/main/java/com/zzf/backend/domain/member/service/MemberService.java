@@ -4,7 +4,7 @@ import com.zzf.backend.domain.member.dto.MyAnimalResponse;
 import com.zzf.backend.domain.member.dto.ProfileResponse;
 
 public interface MemberService {
-    ProfileResponse getProfile(Long animalId);
+    ProfileResponse getProfile(String memberId);
 
-    MyAnimalResponse getMyAnimalList(Long animalId);
+    MyAnimalResponse getMyAnimalList(String memberId);
 }

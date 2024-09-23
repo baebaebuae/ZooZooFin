@@ -19,17 +19,17 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/profile")
-    public ResponseDto<ProfileResponse> getMyProfile(@RequestHeader Long animalId) {
-        ProfileResponse profile = memberService.getProfile(animalId);
+    public ResponseDto<ProfileResponse> getMyProfile(@RequestHeader String memberId) {
+        ProfileResponse profile = memberService.getProfile(memberId);
 
-        return ResponseDto.success(GET_PROFILE_OK, profile);
+        return ResponseDto.success(PROFILE_SUCCESS, profile);
     }
 
     @GetMapping("/animal")
-    public ResponseDto<MyAnimalResponse> getMyAnimalList(@RequestHeader Long animalId) {
-        MyAnimalResponse myAnimal = memberService.getMyAnimalList(animalId);
+    public ResponseDto<MyAnimalResponse> getMyAnimalList(@RequestHeader String memberId) {
+        MyAnimalResponse myAnimal = memberService.getMyAnimalList(memberId);
 
-        return ResponseDto.success(GET_MY_ANIMAL_OK, myAnimal);
+        return ResponseDto.success(MY_ANIMAL_SUCCESS, myAnimal);
     }
 
 }
