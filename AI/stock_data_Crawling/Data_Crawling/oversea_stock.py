@@ -5,12 +5,12 @@ import os
 from stock import oversea_stock
 
 # 데이터 저장 폴더 설정
-save_folder = 'S11P21A705/AI/daily_stock_data/oversea/'
+save_folder = 'S11P21A705/AI/daily_stock_data_10/oversea/'
 if not os.path.exists(save_folder):
     os.makedirs(save_folder)
 
 # 데이터 수집 기간 설정
-start_date = '2022-01-01'
+start_date = '2013-01-01'
 end_date = '2023-12-31'
 
 # 해외 주식 데이터 수집 리스트

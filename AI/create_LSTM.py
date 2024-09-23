@@ -1,32 +1,74 @@
 import os
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
-from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Input, LSTM, Dense
-from tensorflow.keras.optimizers import Adam
+from sklearn.model_selection import train_test_split
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+from LSTM_model_definition import create_multitask_lstm_model
+
+# RSI 계산 함수
+def compute_RSI(series, period=14):
+    delta = series.diff()
+    gain = np.where(delta > 0, delta, 0)
+    loss = np.where(delta < 0, -delta, 0)
+    avg_gain = pd.Series(gain).rolling(window=period, min_periods=1).mean()
+    avg_loss = pd.Series(loss).rolling(window=period, min_periods=1).mean()
+    rs = avg_gain / avg_loss
+    return 100 - (100 / (1 + rs))
+
+# MACD 계산 함수
+def compute_MACD(series, short_window=12, long_window=26, signal_window=9):
+    short_ema = series.ewm(span=short_window, adjust=False).mean()
+    long_ema = series.ewm(span=long_window, adjust=False).mean()
+    macd = short_ema - long_ema
+    signal = macd.ewm(span=signal_window, adjust=False).mean()
+    return macd - signal
 
 # 데이터 경로 설정
 base_dirs = [
-    "S11P21A705/AI/stock_data/domestic",
-    "S11P21A705/AI/stock_data/oversea",
-    "S11P21A705/AI/stock_data/etf"
+    "S11P21A705/AI/daily_stock_data_10/domestic",
+    "S11P21A705/AI/daily_stock_data_10/oversea",
+    "S11P21A705/AI/daily_stock_data_10/etf"
 ]
 
-# 산업 분야별 주식 코드 분류 (예시)
-manufacturing_codes = ["000660", "005930", "005380", "010140", "329180", "042660", "BA", "NKE", "RACE", "102960", "117700", "139230"]
-it_codes = ["035420", "035720", "018260", "AMAT", "NVDA", "INTC", "MSFT", "AAPL", "META", "411420", "139260", "363580", "091160", "395160", "091230"]
-entertainment_codes = ["079160", "352820", "035900", "NFLX", "DIS", "MAR"]
-bio_codes = ["019170", "196170", "128940", "AZN", "NVO", "SNY", "266420", "244580", "185680"]
-food_codes = ["004370", "005180", "005440", "KO", "MCD", "KHC"]
-chemical_codes = ["051910", "298020", "161000", "XOM", "CVX", "DOW", "385510", "117460", "139250"]
-finance_codes = ["105560", "023760", "323410", "JPM", "GS", "BAC", "140700", "102970", "091170"]
-misc_etf_codes = ["352560", "352540", "329220", "396510", "256750", "217780"]
+# 산업 분야별 주식 코드 분류
+manufacturing_codes_do1 = ["000660", "005930", "005380"]
+manufacturing_codes_do2 = ["010140", "329180", "042660"]
+manufacturing_codes_ov = ["BA", "NKE", "RACE"]
+manufacturing_codes_etf = ["102960", "117700", "139230"]
+it_codes_do = ["035420", "035720", "018260"]
+it_codes_ov1 = ["AMAT", "NVDA", "INTC"]
+it_codes_ov2 = ["MSFT", "AAPL", "META"]
+it_codes_etf1 = ["411420", "139260", "363580"]
+it_codes_etf2 = ["091160", "395160", "091230"]
+entertainment_codes_do = ["079160", "352820", "035900"]
+entertainment_codes_ov = ["NFLX", "DIS", "MAR"]
+bio_codes_do = ["019170", "196170", "128940"]
+bio_codes_ov = ["AZN", "NVO", "SNY"]
+bio_codes_etf = ["266420", "244580", "185680"]
+food_codes_do = ["004370", "005180", "005440"]
+food_codes_ov = ["KO", "MCD", "KHC"]
+chemical_codes_do = ["051910", "298020", "161000"]
+chemical_codes_ov = ["XOM", "CVX", "DOW"]
+chemical_codes_etf = ["385510", "117460", "139250"]
+finance_codes_do = ["105560", "023760", "323410"]
+finance_codes_ov = ["JPM", "GS", "BAC"]
+finance_codes_etf = ["140700", "102970", "091170"]
+misc_etf_codes1 = ["352560", "352540", "329220"]
+misc_etf_codes2 = ["396510", "256750", "217780"]
 
 # 산업 분야 코드 리스트
-sector_codes = [manufacturing_codes, it_codes, entertainment_codes, bio_codes, 
-                food_codes, chemical_codes, finance_codes, misc_etf_codes]
+sector_codes = [
+    manufacturing_codes_do1,manufacturing_codes_do2, manufacturing_codes_ov, manufacturing_codes_etf,
+    it_codes_do, it_codes_ov1,it_codes_ov2, it_codes_etf1,it_codes_etf2,
+    entertainment_codes_do, entertainment_codes_ov,
+    bio_codes_do, bio_codes_ov, bio_codes_etf,
+    food_codes_do, food_codes_ov,
+    chemical_codes_do, chemical_codes_ov, chemical_codes_etf,
+    finance_codes_do, finance_codes_ov, finance_codes_etf,
+    misc_etf_codes1,misc_etf_codes2
+]
 
 # 각 주식 코드에 대한 산업 분야를 매핑하는 함수
 def get_sector(code):
@@ -35,8 +77,8 @@ def get_sector(code):
             return i
     return None
 
-# 데이터 스케일러 정의 (0~1 사이 값으로 정규화)
-scaler = MinMaxScaler()
+# 데이터 스케일러 정의 (Standard Scaler 사용)
+scaler = StandardScaler()
 
 # 모든 데이터 파일을 읽고 주식 코드에 따라 데이터를 산업 분야로 분류
 data_by_sector = [[] for _ in range(len(sector_codes))]
@@ -55,97 +97,103 @@ for base_dir in base_dirs:
                     df = pd.read_csv(file_path)
                     
                     # 필요한 컬럼만 선택
-                    df = df[['Date', 'Open', 'High', 'Low', 'Close']]
+                    df = df[['Date', 'Open', 'High', 'Low', 'Close', 'Volume']]
                     
                     # 날짜를 기준으로 정렬
                     df = df.sort_values('Date')
+                    
+                    # 데이터 타입을 숫자형으로 변환 (문자열을 숫자로)
+                    for col in ['Open', 'High', 'Low', 'Close', 'Volume']:
+                        df[col] = pd.to_numeric(df[col], errors='coerce')
+                    
+                    # NaN 및 Inf 값을 0으로 대체
+                    df.replace([np.inf, -np.inf], np.nan, inplace=True)
+                    df.fillna(0, inplace=True)
+                    
+                    # 로그 변환 (Volume) - 0 이하 값은 1로 변환하여 로그 적용
+                    df['Volume'] = df['Volume'].apply(lambda x: np.log1p(max(x, 1)))
 
-                    # 'Open', 'High', 'Low', 'Close' 컬럼을 정규화
-                    scaled_data = scaler.fit_transform(df[['Open', 'High', 'Low', 'Close']])
+                    # 추가 피처 생성
+                    df['변동률'] = (df['High'] - df['Low']) / df['Open']
+                    df['MA5'] = df['Close'].rolling(window=5).mean().fillna(0)
+                    df['MA20'] = df['Close'].rolling(window=20).mean().fillna(0)
+                    
+                    # 기술적 지표 추가
+                    df['RSI'] = compute_RSI(df['Close'], 14)  # RSI 계산
+                    df['MACD'] = compute_MACD(df['Close'])    # MACD 계산
+
+                    # NaN 및 Inf 값을 0으로 대체
+                    df.replace([np.inf, -np.inf], np.nan, inplace=True)
+                    df.fillna(0, inplace=True)
+
+                    # 정규화 및 피처 확장
+                    numeric_cols = ['Open', 'High', 'Low', 'Close', 'Volume', '변동률', 'MA5', 'MA20']
+                    scaled_data = scaler.fit_transform(df[numeric_cols])
                     
                     # 시계열 데이터 형태로 변환하여 저장
                     data_by_sector[sector_idx].append(scaled_data)
 
-# 2. LSTM 모델 설계
-input_shape = (None, 4)  # (시간 스텝, 피처 수)
+# LSTM 모델 생성 및 학습을 위한 함수
+def create_and_train_model_for_sector(sector_data, input_shape, sector_idx):
+    # 데이터 준비
+    train_x = []
+    train_y = []
+    sequence_length = input_shape[0]
 
-# 입력 레이어 생성
-inputs = Input(shape=input_shape)
-
-# 공유 LSTM 레이어
-shared_lstm = LSTM(64, return_sequences=False, name='shared_lstm')(inputs)
-
-# 각 산업 분야별 분리된 출력 레이어
-outputs = []
-for i, sector in enumerate(sector_codes):
-    sector_output = Dense(1, activation='linear', name=f'sector_{i}_output')(shared_lstm)
-    outputs.append(sector_output)
-
-# 멀티 태스크 모델 생성
-model = Model(inputs=inputs, outputs=outputs)
-model.compile(optimizer=Adam(learning_rate=0.001), loss='mse')
-
-# 모델 요약 출력
-model.summary()
-
-# 3. 멀티 태스크 학습 데이터 준비
-train_x = []  # 모든 산업 분야의 데이터를 통합하여 입력으로 사용
-train_y = [[] for _ in range(len(sector_codes))]  # 각 산업 분야별 타겟 값 리스트
-
-for sector_idx, sector_data in enumerate(data_by_sector):
     for stock_data in sector_data:
-        sequence_length = 5  # 시계열 데이터 길이 설정
-        if len(stock_data) >= sequence_length:
-            for i in range(len(stock_data) - sequence_length):
-                # 전체 학습 데이터 입력으로 추가
+        if len(stock_data) >= sequence_length + 5:
+            for i in range(len(stock_data) - sequence_length - 5):
                 train_x.append(stock_data[i:i + sequence_length])
-                # 각 산업 분야별 출력 값을 별도로 저장
-                train_y[sector_idx].append(stock_data[i + sequence_length][-1])  # Close 가격
+                train_y.append(stock_data[i + sequence_length + 5][3])  # Close 값
 
-# 학습 데이터 numpy 배열로 변환
-train_x = np.array(train_x)
-train_y = [np.array(y) for y in train_y]
+    train_x = np.array(train_x)
+    train_y = np.array(train_y)
+    min_samples = min(len(train_y), len(train_x))
 
-# 4. 모델 학습
-# 멀티 태스크 모델은 여러 출력값을 동시에 학습
-# 학습 시 모든 분야의 타겟 값이 동일한 개수를 유지해야 함
-min_samples = min([len(y) for y in train_y])  # 모든 섹터에서 최소 샘플 수 찾기
-train_x = train_x[:min_samples]  # 최소 샘플 수에 맞춰 입력 데이터 자르기
-train_y = [y[:min_samples] for y in train_y]  # 출력 데이터도 동일하게 자르기
+    train_x = train_x[:min_samples]
+    train_y = train_y[:min_samples]
 
-# 모델 학습
-model.fit(train_x, train_y, epochs=10, batch_size=32)
+    # train_test_split
+    train_x, test_x, train_y, test_y = train_test_split(
+        train_x, train_y, test_size=0.2, random_state=42
+    )
 
-# 5. 모델 평가 및 예측
-# 예시로 더미 테스트 데이터를 사용하여 모델을 평가
-test_x = np.random.rand(20, 5, 4)  # (테스트 샘플 수, 시계열 길이, 피처 수)
-test_y = [np.random.rand(20, 1) for _ in sector_codes]  # 더미 타겟 값
+    # 모델 생성
+    model = create_multitask_lstm_model(input_shape, 1)  # num_sectors를 1로 설정
 
-# 모델 평가
-model.evaluate(test_x, test_y)
+    # EarlyStopping 및 ModelCheckpoint 추가
+    early_stopping = EarlyStopping(monitor='val_loss', patience=10)
+    checkpoint = ModelCheckpoint(f'model_sector_{sector_idx}.keras', monitor='val_loss', save_best_only=True)
 
-# 예측
-predictions = model.predict(test_x)
+    # 모델 학습
+    model.fit(train_x, train_y, epochs=50, batch_size=32, validation_split=0.2, callbacks=[early_stopping, checkpoint])
 
-# 예측 결과 출력
-for i, pred in enumerate(predictions):
-    print(f"섹터 {i}의 예측값:\n", pred)
+    # 모델 평가
+    evaluation = model.evaluate(test_x, test_y)
+    print(f"섹터 {sector_idx}의 모델 평가 결과: {evaluation}")
 
-# 6. 정확도 계산
-# 실제 데이터가 필요하며, test_y를 실제 데이터로 설정해야 합니다.
-for i, pred in enumerate(predictions):
-    actual = test_y[i]
+    # 모델 저장
+    model.save(f"model_sector_{sector_idx}.keras")
+    print(f"섹터 {sector_idx}의 모델이 model_sector_{sector_idx}.keras로 저장되었습니다.")
+
+    # 예측
+    predictions = model.predict(test_x)
     
-    # RMSE (Root Mean Squared Error)
-    rmse = np.sqrt(mean_squared_error(actual, pred))
-    
-    # MAE (Mean Absolute Error)
-    mae = mean_absolute_error(actual, pred)
-    
-    # R^2 (Coefficient of Determination)
-    r2 = r2_score(actual, pred)
-    
-    print(f"섹터 {i}의 평가 지표:")
+    # RMSE, MAE, R^2 계산 및 출력
+    rmse = np.sqrt(mean_squared_error(test_y, predictions))
+    mae = mean_absolute_error(test_y, predictions)
+    r2 = r2_score(test_y, predictions)
+
+    print(f"섹터 {sector_idx}의 평가 지표:")
     print(f"  RMSE: {rmse}")
     print(f"  MAE: {mae}")
     print(f"  R^2: {r2}")
+
+# 24개 섹터에 대한 모델 생성 및 학습
+sequence_length = 30
+input_shape = (sequence_length, 8)
+
+for sector_idx, sector_data in enumerate(data_by_sector):
+    print(f"섹터 {sector_idx}에 대한 모델 생성 및 학습 시작")
+    create_and_train_model_for_sector(sector_data, input_shape, sector_idx)
+    print(f"섹터 {sector_idx}에 대한 모델 생성 및 학습 완료\n")
