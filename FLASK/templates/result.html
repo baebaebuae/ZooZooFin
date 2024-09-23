@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>예측 결과</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>예측 결과</h2>
+        <table class="table table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th>산업 분야</th>
+                    <th>주식 분야</th>
+                    <th>주식 코드</th>
+                    <th>예측 가격</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ industry_field }}</td>
+                    <td>{{ stock_field }}</td>
+                    <td>{{ stock_code }}</td>
+                    <td>{{ predicted_price | round(2) }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <a href="/" class="btn btn-primary">처음으로 돌아가기</a>
+    </div>
+</body>
+</html>
