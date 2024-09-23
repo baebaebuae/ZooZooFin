@@ -3,14 +3,19 @@ import BubbleBlock from '@assets/images/components/bubbleBlock.svg?react';
 import styled from 'styled-components';
 import { BadgeNormal } from './badge';
 
+const BubbleContainer2 = styled.div`
+    position: fixed;
+    bottom: 0;
+`;
+
 const BubbleContainer = styled.div`
     position: relative;
-    width: 320px;
-    margin: 20px 0px; // 삭제 예정
+    /* width: 320px; */
+    margin: 20px 0px;
 `;
 
 const BubbleBlockStyle = styled(BubbleBlock)`
-    width: 320px;
+    width: 380px;
     height: auto;
     position: relative;
 `;
@@ -24,15 +29,16 @@ const BadgeNormalStyle = styled(BadgeNormal)`
 
 const BubbleBox = styled.div`
     position: absolute;
-    top: 24px;
+    top: 30px;
     left: 50px;
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    width: 220px;
+    width: 260px;
 `;
 
-const BubbleLine = styled.div`
+const LineBlock = styled.div`
+    margin-bottom: 12px;
+`;
+
+const BubbleLine = styled.span`
     text-align: left;
     margin-bottom: 8px;
     line-height: 1.4;
@@ -40,25 +46,71 @@ const BubbleLine = styled.div`
     color: black;
 `;
 
-const BubbleLineHighLight = styled.span`
+const HighlightBlock = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 6px;
+`;
+
+const BubbleLineHighlight = styled.span`
+    font-size: 14px;
     font-weight: bold;
     color: ${({ theme }) => theme.colors.tertiary};
 `;
 
-export const Bubble = ({ npc, content, response1, response2 }) => {
+const ResponseButton = styled.button`
+    font-family: 'OneMobile';
+    font-size: 14px;
+    background-color: transparent;
+    border: none;
+`;
+
+export const Bubble = ({ npc, type, content, responses, onClick }) => {
+    const parseContent = (content) => {
+        const parts = content.split(/(\*\*.*?\*\*)/); // 정규식
+        // console.log(parts);
+        return parts.map((part, index) => {
+            if (part.startsWith('**') && part.endsWith('**')) {
+                return <BubbleLineHighlight key={index}>{part.slice(2, -2)}</BubbleLineHighlight>;
+            } else {
+                return <BubbleLine key={index}>{part}</BubbleLine>;
+            }
+        });
+    };
+
+    // responses의 length가 1이면
+    // 전체 클릭으로 넘어갈 수 있도록 설정
+    // responseKey만 넘겨주기
+    // Object.keys(responses)[0]
+    // BubbleContainer에만 설정
+
+    const handleContainerClick = (responses) => {
+        const currentKey = Object.keys(responses)[0];
+        if (Object.keys(responses).length === 1 && currentKey === 'next') {
+            onClick(currentKey);
+        }
+    };
+
+    // console.log(Object.keys(responses).length);
+
     return (
-        <BubbleContainer>
-            <BadgeNormalStyle>{npc}</BadgeNormalStyle>
-            <BubbleBlockStyle />
-            <BubbleBox>
-                <BubbleLine>
-                    <BubbleLineHighLight>강조내용: Script 형식과 맞출 예정</BubbleLineHighLight>
-                </BubbleLine>
-                <BubbleLine>{content}</BubbleLine>
-                <BubbleLine>▶ {response1}</BubbleLine>
-                <BubbleLine>▶ {response2}</BubbleLine>
-            </BubbleBox>
-        </BubbleContainer>
+        <BubbleContainer2>
+            <BubbleContainer onClick={() => handleContainerClick(responses)}>
+                <BadgeNormalStyle>{npc}</BadgeNormalStyle>
+                <BubbleBlockStyle />
+                <BubbleBox>
+                    <LineBlock>{parseContent(content)}</LineBlock>
+                    <HighlightBlock>
+                        {Object.keys(responses).map((responseKey, index) => (
+                            <ResponseButton key={index} onClick={() => onClick(responseKey)}>
+                                ▶ {responseKey}
+                            </ResponseButton>
+                        ))}
+                    </HighlightBlock>
+                </BubbleBox>
+            </BubbleContainer>
+        </BubbleContainer2>
     );
 };
 

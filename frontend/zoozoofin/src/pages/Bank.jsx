@@ -7,9 +7,7 @@ const SampleText = styled.h1`
 const BankPage = () => {
     return (
         <>
-            {/* <Background> */}
             <SampleText>은행은행</SampleText>
-            {/* </Background> */}
         </>
     );
 };

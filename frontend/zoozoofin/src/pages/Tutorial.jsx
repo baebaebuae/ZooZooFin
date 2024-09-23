@@ -1,5 +1,20 @@
 import { useState } from 'react';
 import example from '@scripts/example.json';
+import Bubble from '@components/root/bubble';
+import styled from 'styled-components';
+
+const TutorialContainer = styled.div`
+    display: flex;
+    justify-content: start;
+    width: 360px;
+    height: 640px;
+`;
+
+const BubbleBlock = styled(Bubble)`
+    position: fixed;
+    bottom: 0;
+    right: 0;
+`;
 
 const Tutorial = () => {
     const [currentId, setCurrentId] = useState(1);
@@ -7,19 +22,21 @@ const Tutorial = () => {
 
     const handleResponseClick = (responseKey) => {
         const nextId = currentScript.responses[responseKey];
-        setCurrentId(nextId);
+        if (nextId) {
+            setCurrentId(nextId);
+        }
     };
 
     return (
-        <>
-            <h1>Tutorial</h1>
-            <p>{currentScript.content}</p>
-            {Object.keys(currentScript.responses).map((responseKey, index) => (
-                <button key={index} onClick={() => handleResponseClick(responseKey)}>
-                    {responseKey}
-                </button>
-            ))}
-        </>
+        <TutorialContainer>
+            <BubbleBlock
+                npc={'뭉뭉'}
+                type={currentScript.type}
+                content={currentScript.content}
+                responses={currentScript.responses}
+                onClick={handleResponseClick}
+            />
+        </TutorialContainer>
     );
 };
 

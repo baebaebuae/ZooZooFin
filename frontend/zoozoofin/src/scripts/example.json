@@ -11,7 +11,7 @@
             {
                 "id": 1,
                 "type": "script",
-                "content": "안녕? 주주시티에 온 걸 환영해.",
+                "content": "안녕? **주주시티**에 온 걸 환영해.",
                 "responses": {
                     "next": 2
                 }
