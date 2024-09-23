@@ -10,6 +10,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -37,12 +38,18 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
         } catch (AuthenticationException e) {
             errorResponse(response, AUTHENTICATION_REQUIRED);
         } catch (Exception e) {
-            errorResponse(response, INTERNAL_SERVER_ERROR);
+            errorResponse(response, e.getMessage());
+//            errorResponse(response, INTERNAL_SERVER_ERROR);
         }
     }
 
     private void errorResponse(HttpServletResponse response, ErrorCode code) throws IOException {
         ResponseDto<?> dto = ResponseDto.fail(code);
+        writeResponse(response, dto);
+    }
+
+    private void errorResponse(HttpServletResponse response, String message) throws IOException {
+        ResponseDto<?> dto = ResponseDto.fail(HttpStatus.INTERNAL_SERVER_ERROR, message);
         writeResponse(response, dto);
     }
 

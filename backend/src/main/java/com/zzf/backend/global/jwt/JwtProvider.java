@@ -16,6 +16,7 @@ import java.security.Key;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.UUID;
 
 import static com.zzf.backend.global.status.ErrorCode.*;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -31,21 +32,26 @@ public class JwtProvider {
     private final AnimalRepository animalRepository;
 
     public JwtProvider(@Value("${jwt.secret-key}") String secretKey,
-                       @Value("${jwt.access-expiration}") Duration accessExpiration,
+                       @Value("${jwt.access-expiration}") Long accessExpiration,
                        AnimalRepository animalRepository,
                        MemberRepository memberRepository) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
-        this.accessExpiration = accessExpiration;
+        this.accessExpiration = Duration.ofSeconds(accessExpiration);
         this.memberRepository = memberRepository;
         this.animalRepository = animalRepository;
     }
 
-    public String getAccessTokenFromHeader(HttpServletRequest request) {
+    public String getAccessTokenFromRequest(HttpServletRequest request) {
         String header = request.getHeader(AUTHORIZATION);
+
+        return getAccessTokenFromHeader(header);
+    }
+
+    public String getAccessTokenFromHeader(String header) {
         if (header != null) {
             if (!header.toLowerCase().startsWith(BEARER_PREFIX)) {
-                throw new CustomException(MALFORMED_JWT);
+                throw new CustomException(MALFORMED_TOKEN);
             }
             return header.substring(7);
         }
@@ -53,10 +59,13 @@ public class JwtProvider {
         throw new CustomException(AUTHORIZATION_HEADER_NOT_EXIST);
     }
 
-    private String getMemberIdFromAccessToken(String accessToken) {
-        Jws<Claims> claimsJws = validateAccessToken(accessToken);
-
-        return (String) claimsJws.getBody().get("memberId");
+    public String getMemberIdFromAccessToken(String accessToken) {
+        return (String) Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(accessToken)
+                .getBody()
+                .get("memberId");
     }
 
     public Long getAnimalIdFromAccessToken(String accessToken) {
@@ -81,18 +90,22 @@ public class JwtProvider {
                 .compact();
     }
 
-    private Jws<Claims> validateAccessToken(String accessToken) {
+    public String createRefreshToken() {
+        return UUID.randomUUID().toString();
+    }
+
+    public void validateAccessToken(String accessToken) {
         try {
-            return Jwts.parserBuilder()
+            Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(accessToken);
         } catch (ExpiredJwtException e) {
-            throw new CustomException(EXPIRED_JWT);
+            throw new CustomException(EXPIRED_TOKEN);
         } catch (MalformedJwtException e) {
-            throw new CustomException(MALFORMED_JWT);
+            throw new CustomException(MALFORMED_TOKEN);
         } catch (UnsupportedJwtException e) {
-            throw new CustomException(UNSUPPORTED_JWT);
+            throw new CustomException(UNSUPPORTED_TOKEN);
         } catch (JwtException e) {
             throw new CustomException(JWT_ERROR);
         }

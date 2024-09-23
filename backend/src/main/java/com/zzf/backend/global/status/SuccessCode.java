@@ -10,9 +10,16 @@ public enum SuccessCode {
     OK(200, "성공"),
 
     LOGIN_SUCCESS(200, "로그인 성공"),
+    LOGOUT_SUCCESS(204, "로그아웃 성공"),
+    REISSUE_SUCCESS(201, "토큰 재발급 성공"),
 
-    GET_PROFILE_OK(200, "프로필 조회 성공"),
-    GET_MY_ANIMAL_OK(200, "나의 동물 리스트 조회 성공"),
+    PROFILE_SUCCESS(200, "프로필 조회 성공"),
+
+    MY_ANIMAL_SUCCESS(200, "나의 동물 리스트 조회 성공"),
+
+    ANIMAL_TYPES_SUCCESS(200, "동물 타입 조회 성공"),
+    ANIMAL_CREATE_SUCCESS(201, "동물 생성 성공"),
+    PORTFOLIO_SUCCESS(200, "포트폴리오 조회 성공"),
 
     READ_SUCCESS(200, "조회 성공"),
     CREATE_SUCCESS(201, "등록 성공"),

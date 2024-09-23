@@ -1,11 +1,10 @@
 package com.zzf.backend.domain.member.dto;
 
-import lombok.RequiredArgsConstructor;
+import lombok.Builder;
 
-@RequiredArgsConstructor
-public class ProfileResponse {
+@Builder
+public record ProfileResponse(String animalImg,
+                              Long animalAssets,
+                              Long memberGoldBar) {
 
-    private final String animalImg;
-    private final Long animalAssets;
-    private final Long memberGoldBar;
 }
