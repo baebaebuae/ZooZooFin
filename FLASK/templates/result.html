@@ -27,6 +27,29 @@
                 </tr>
             </tbody>
         </table>
+
+        <h3>뉴스 분석 결과</h3>
+        <p><strong>긍정 비율:</strong> {{ positive_ratio }}%</p>
+        <p><strong>부정 비율:</strong> {{ negative_ratio }}%</p>
+        <p><strong>중립 비율:</strong> {{ neutral_ratio }}%</p>
+
+        <h4>요약:</h4>
+        <p>{{ summary }}</p>
+
+        <h4>긍정적인 문장:</h4>
+        <ul>
+            {% for sentence in positive_sentences %}
+                <li>{{ sentence }}</li>
+            {% endfor %}
+        </ul>
+
+        <h4>부정적인 문장:</h4>
+        <ul>
+            {% for sentence in negative_sentences %}
+                <li>{{ sentence }}</li>
+            {% endfor %}
+        </ul>
+
         <a href="/" class="btn btn-primary">처음으로 돌아가기</a>
     </div>
 </body>
