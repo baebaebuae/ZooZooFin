@@ -41,7 +41,7 @@ const LineBlock = styled.div`
 const BubbleLine = styled.span`
     text-align: left;
     margin-bottom: 8px;
-    line-height: 1.4;
+    line-height: 1.8;
     font-size: 14px;
     color: black;
 `;
@@ -68,14 +68,27 @@ const ResponseButton = styled.button`
 
 export const Bubble = ({ npc, type, content, responses, onClick }) => {
     const parseContent = (content) => {
-        const parts = content.split(/(\*\*.*?\*\*)/); // 정규식
-        // console.log(parts);
-        return parts.map((part, index) => {
-            if (part.startsWith('**') && part.endsWith('**')) {
-                return <BubbleLineHighlight key={index}>{part.slice(2, -2)}</BubbleLineHighlight>;
-            } else {
-                return <BubbleLine key={index}>{part}</BubbleLine>;
-            }
+        const splitLines = content.split(/\n/);
+        // const parts = splitLines.split(/(\*\*.*?\*\*)/); // 정규식
+
+        return splitLines.map((line, lineIndex) => {
+            const parts = line.split(/(\*\*.*?\*\*)/);
+            return (
+                <div key={lineIndex}>
+                    {' '}
+                    {parts.map((part, index) => {
+                        if (part.startsWith('**') && part.endsWith('**')) {
+                            return (
+                                <BubbleLineHighlight key={index}>
+                                    {part.slice(2, -2)}
+                                </BubbleLineHighlight>
+                            );
+                        } else {
+                            return <BubbleLine key={index}>{part}</BubbleLine>;
+                        }
+                    })}{' '}
+                </div>
+            );
         });
     };
 
