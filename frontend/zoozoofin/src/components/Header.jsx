@@ -1,6 +1,8 @@
-// import React from "react";
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { WorkingAreas } from '@styles/components/common/Header';
+import { LargeIcon } from '@components/root/icon';
+import CharRabbit from '@assets/images/characters/rabbit.svg?react';
 
 import styled from 'styled-components';
 import {
@@ -9,7 +11,7 @@ import {
     HeaderWalletButton,
     HeaderTurnButton,
 } from './root/headerButton';
-import { PropInfo, CharInfo } from './root/headerCharInfo';
+import { PropInfo } from './root/headerCharInfo';
 
 const HeaderBlock = styled.div`
     width: 340px;
@@ -34,6 +36,13 @@ const TempWidthLine = styled.div`
 `;
 
 const Header = () => {
+    const [isCharOpen, setIsCharOpen] = useState(false);
+
+    const openCharInfo = () => {
+        console.log('캐릭터 클릭됨');
+        setIsCharOpen(!isCharOpen);
+    };
+
     return (
         <nav>
             <WorkingAreas>
@@ -57,9 +66,11 @@ const Header = () => {
             </WorkingAreas>
             <div>360px</div>
             <TempWidthLine />
+
             {/*  */}
             {/* 진짜 헤더 */}
             {/*  */}
+
             <HeaderBlock>
                 <HeaderButtonBlock>
                     <HeaderHamburgerButton />
@@ -72,10 +83,15 @@ const Header = () => {
                     <HeaderTurnButton currentTurn={30} />
                 </HeaderButtonBlock>
                 <HeaderUserBlock>
-                    <CharInfo />
-                    <PropInfo />
+                    <LargeIcon icon={CharRabbit} onClick={openCharInfo} />
+                    {isCharOpen && <div>캐릭터 정보창</div>}
+                    <PropInfo propMoney={'10,000,000'} propGold={'4,230'} />
                 </HeaderUserBlock>
             </HeaderBlock>
+
+            {/*  */}
+            {/* 진짜 헤더 */}
+            {/*  */}
         </nav>
     );
 };

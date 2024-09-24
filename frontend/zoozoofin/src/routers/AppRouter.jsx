@@ -69,9 +69,9 @@ const AppRouter = () => {
                     <Route path="/lender" element={<Lender />} />
                     <Route path="/school" element={<School />} />
                     <Route path="/stock" element={<Stock />} />
-                    <Route path="/work" element={<Work />} />
                     <Route path="/myroom" element={<MyRoom />} />
                 </Route>
+                <Route path="/work" element={<Work />} />
                 <Route path="/ending" element={<Ending />} />
                 <Route path="/wallet" element={<WalletPage />} />
 

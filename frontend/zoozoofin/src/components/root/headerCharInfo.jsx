@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 import IconGold from '@assets/images/icons/icon_gold.svg?react';
 import IconMoney from '@assets/images/icons/icon_money.svg?react';
-import { LargeIcon } from '@components/root/icon';
-import CharRabbit from '@assets/images/characters/rabbit.svg?react';
 
 const PropInfoBox = styled.div``;
 
@@ -30,16 +28,17 @@ const PropGold = styled(PropValue)`
     -webkit-text-fill-color: transparent;
     /* -webkit-text-stroke: 1px brown; */
 `;
-export const PropInfo = () => {
+export const PropInfo = ({ propMoney, propGold }) => {
     return (
         <>
             <PropInfoBox>
                 <PropMoney>
-                    10,000,000
+                    {propMoney}
+                    {/* 형식 문제로(10,000,000) 문자열 처리되어있음 */}
                     <IconMoney width={30} height={20} />
                 </PropMoney>
                 <PropGold>
-                    4,230
+                    {propGold}
                     <IconGold width={30} height={20} />
                 </PropGold>
             </PropInfoBox>
@@ -47,10 +46,4 @@ export const PropInfo = () => {
     );
 };
 
-export const CharInfo = () => {
-    return (
-        <>
-            <LargeIcon icon={CharRabbit} />
-        </>
-    );
-};
+// CharIcon : Header에서 관리(Char 정보 받아오기)

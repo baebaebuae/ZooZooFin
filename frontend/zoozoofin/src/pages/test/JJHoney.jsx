@@ -43,20 +43,7 @@ const JJHoney = () => {
             </Working>
             <Working>
                 <h2>Bubble</h2>
-                <Bubble
-                    npc={'뭉뭉'}
-                    content={
-                        '대사길이체크대사길이체크대사길이체크대사길이체크대사길이체크대사길이체크대사길이체크'
-                    }
-                    response1={'선택지 1'}
-                    response2={'선택지 2'}
-                />
-                <Bubble
-                    npc={'뭉뭉'}
-                    content={'여긴 네가 지낼 방이야. 어때?'}
-                    response1={'예쁘다!'}
-                    response2={'별로야..'}
-                />
+                <h4>말풍선은 Tutorial에서 사용방법 확인</h4>
             </Working>
             <Working>
                 <h2>Buttons</h2>

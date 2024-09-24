@@ -3,14 +3,14 @@
 
 // 최상위 wrapper로 IconWrapper 생성
 
-const IconWrapper = ({ icon: Icon, width, height }) => {
-    return <Icon width={width} height={height} />;
+const IconWrapper = ({ icon: Icon, width, height, onClick }) => {
+    return <Icon width={width} height={height} onClick={onClick} />;
 };
 
 // 아이콘 크기에 따라 LargeIcon, NormalIcon으로 세분화
 
-export const LargeIcon = ({ icon }) => {
-    return <IconWrapper icon={icon} width={30} height={30} />;
+export const LargeIcon = ({ icon, onClick }) => {
+    return <IconWrapper icon={icon} width={30} height={30} onClick={onClick} />;
 };
 
 export const NormalIcon = ({ icon }) => {
