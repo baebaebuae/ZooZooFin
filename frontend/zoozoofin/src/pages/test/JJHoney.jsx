@@ -1,6 +1,7 @@
 import { BadgeNormal, BadgeStroke } from '@components/root/badge';
-import Bubble from '@components/root/bubble';
+// import Bubble from '@components/root/bubble';
 import { ButtonBase } from '@components/root/buttons';
+import { Card } from '@components/root/card';
 import CreditBox from '@components/root/creditBox';
 import { HeaderButtons } from '@components/root/headerButton';
 import { LargeIcon, NormalIcon } from '@components/root/icon';
@@ -80,6 +81,10 @@ const JJHoney = () => {
             <Working>
                 <h2>CreditBar</h2>
                 <CreditBox grade={9} />
+            </Working>
+            <Working>
+                <h2>Card</h2>
+                <Card />
             </Working>
             <Working>
                 <h2>HeaderButtons</h2>

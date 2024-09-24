@@ -11,19 +11,20 @@ const InfoBlock = styled.div`
 const InfoBox = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: center;
     gap: 8px;
 `;
 
 const InfoTitle = styled.div`
-    color: ${({ theme }) => theme.colors.gray};
     font-size: 12px;
+    text-align: center;
+    color: ${({ theme }) => theme.colors.gray};
 `;
 
 const InfoContent = styled.div`
-    color: ${({ theme }) => theme.colors.primaryDeep};
-    font-weight: bold;
     font-size: ${({ isLoan }) => (isLoan ? '16px' : '20px')};
+    text-align: center;
+    font-weight: bold;
+    color: ${({ theme }) => theme.colors.primaryDeep};
 `;
 
 export const ProductDetailInfo = ({
