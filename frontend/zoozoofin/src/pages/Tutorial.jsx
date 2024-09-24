@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
-import example from '@scripts/example.json';
 import Bubble from '@components/root/bubble';
 import styled from 'styled-components';
-import axios from 'axios';
 import { useStore } from '../store.js';
 
 const TutorialContainer = styled.div`
@@ -18,32 +16,13 @@ const BubbleBlock = styled(Bubble)`
     right: 0;
 `;
 
-const getTutorial = async () => {
-    try {
-        const res = await axios({
-            method: 'get',
-            url: `${import.meta.env.VITE_URL}/scripts/category`,
-            params: { category: 'tutorial' },
-            headers: {
-                Authorization: `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`,
-                'Access-Control-Allow-Origin': `http://localhost:5173`,
-                'Access-Control-Allow-Credentials': 'true',
-            },
-        });
-        if (res.status === 200) {
-            console.log('byby', res.data.body.scripts);
-            return '$OK';
-        }
-    } catch (error) {
-        console.error('error: ', error);
-        return error;
-    }
-};
-
 const Tutorial = () => {
     const { scripts, fetchTutorialScript } = useStore();
+    const [currentId, setCurrentId] = useState(1);
+    const [currentScript, setCurrentScript] = useState(null);
+
+    // scripts 가져오기(비동기)
     useEffect(() => {
-        // getTutorial();
         if (!scripts || scripts.length === 0) {
             const realScript = async () => {
                 fetchTutorialScript();
@@ -52,22 +31,31 @@ const Tutorial = () => {
         }
     }, [fetchTutorialScript, scripts]);
 
-    const [currentId, setCurrentId] = useState(1);
-    const currentScript = example[0].scripts.find((script) => script.id === currentId);
-    // const currentScript = scripts.find((script) => script.id === currentId);
-    console.log(currentScript);
-
-    // useEffect +
-
-    const handleResponseClick = (responseKey) => {
-        const nextId = currentScript.responses[responseKey];
-        if (nextId) {
-            setCurrentId(nextId);
+    // currentScript 설정
+    useEffect(() => {
+        if (scripts.length > 0) {
+            const script = scripts.find((script) => script.scriptId === currentId);
+            setCurrentScript(script);
+            console.log(script);
         }
+    }, [scripts, currentId]);
+
+    const handleResponseClick = (nextScript) => {
+        setCurrentId(nextScript);
     };
 
-    // // 로딩 중일 때 Loader 컴포넌트 렌더링
-    // if (isLoading) return <Loader />;
+    // 로딩 중일 때 Loader 컴포넌트 렌더링
+    if (!currentScript) return <div>주주시티에 입장하는 중...</div>;
+
+    if (currentScript.type === 'action' && currentScript.content === 'INPUT_NAME')
+        return (
+            <div>
+                이름 입력 모달
+                <button onClick={() => handleResponseClick(currentScript.responses[0].nextScript)}>
+                    next
+                </button>
+            </div>
+        );
 
     return (
         <TutorialContainer>

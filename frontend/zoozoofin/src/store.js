@@ -19,7 +19,6 @@ export const useStore = create((set) => ({
                 scripts: res.data.body.scripts,
             });
             if (res.status === 200) {
-                console.log('hihi', res.data.body.scripts);
                 return res.data.body.scripts;
             }
         } catch (error) {

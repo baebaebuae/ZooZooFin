@@ -46,7 +46,7 @@ const BubbleLine = styled.span`
     color: black;
 `;
 
-const HighlightBlock = styled.div`
+const ResponseBlock = styled.div`
     display: flex;
     flex-direction: column;
     align-items: start;
@@ -79,20 +79,11 @@ export const Bubble = ({ npc, type, content, responses, onClick }) => {
         });
     };
 
-    // responses의 length가 1이면
-    // 전체 클릭으로 넘어갈 수 있도록 설정
-    // responseKey만 넘겨주기
-    // Object.keys(responses)[0]
-    // BubbleContainer에만 설정
-
     const handleContainerClick = (responses) => {
-        const currentKey = Object.keys(responses)[0];
-        if (Object.keys(responses).length === 1 && currentKey === 'next') {
-            onClick(currentKey);
+        if (responses.length === 1 && responses[0].selection === null) {
+            onClick(responses[0].nextScript);
         }
     };
-
-    // console.log(Object.keys(responses).length);
 
     return (
         <BubbleContainer2>
@@ -101,13 +92,16 @@ export const Bubble = ({ npc, type, content, responses, onClick }) => {
                 <BubbleBlockStyle />
                 <BubbleBox>
                     <LineBlock>{parseContent(content)}</LineBlock>
-                    <HighlightBlock>
-                        {Object.keys(responses).map((responseKey, index) => (
-                            <ResponseButton key={index} onClick={() => onClick(responseKey)}>
-                                ▶ {responseKey}
+                    <ResponseBlock>
+                        {responses.map((response, index) => (
+                            <ResponseButton
+                                key={index}
+                                onClick={() => onClick(response.nextScript)}
+                            >
+                                {response.selection && `▶ ${response.selection}`}
                             </ResponseButton>
                         ))}
-                    </HighlightBlock>
+                    </ResponseBlock>
                 </BubbleBox>
             </BubbleContainer>
         </BubbleContainer2>
