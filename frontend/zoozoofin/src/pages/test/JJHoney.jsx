@@ -47,33 +47,33 @@ const JJHoney = () => {
             </Working>
             <Working>
                 <h2>Buttons</h2>
-                <ButtonBase size={'small'} border={false} color={'primaryDeep'}>
+                <ButtonBase size={'small'} $isBorder={false} color={'primaryDeep'}>
                     Small
                 </ButtonBase>
 
-                <ButtonBase size={'normal'} border={false} color={'primaryDeep'}>
+                <ButtonBase size={'normal'} $isBorder={false} color={'primaryDeep'}>
                     Normal
                 </ButtonBase>
-                <ButtonBase size={'normal'} border={false} color={'inactive'}>
+                <ButtonBase size={'normal'} $isBorder={false} color={'inactive'}>
                     Inactive
                 </ButtonBase>
-                <ButtonBase size={'normal'} border={false} color={'warn'}>
+                <ButtonBase size={'normal'} $isBorder={false} color={'warn'}>
                     Warn
                 </ButtonBase>
-                <ButtonBase size={'normal'} border={false} color={'tertiary'}>
+                <ButtonBase size={'normal'} $isBorder={false} color={'tertiary'}>
                     Tertiary
                 </ButtonBase>
-                <ButtonBase size={'normal'} border={true} color={'primaryDeep'}>
+                <ButtonBase size={'normal'} $isBorder={true} color={'primaryDeep'}>
                     N.Stroke
                 </ButtonBase>
-                <ButtonBase size={'normal'} border={true} color={'inactive'}>
+                <ButtonBase size={'normal'} $isBorder={true} color={'inactive'}>
                     N.Stroke
                 </ButtonBase>
 
-                <ButtonBase size={'large'} border={false} color={'primaryDeep'}>
+                <ButtonBase size={'large'} $isBorder={false} color={'primaryDeep'}>
                     Large
                 </ButtonBase>
-                <ButtonBase size={'large'} border={true} color={'primaryDeep'}>
+                <ButtonBase size={'large'} $isBorder={true} color={'primaryDeep'}>
                     L.Stroke
                 </ButtonBase>
             </Working>
@@ -110,7 +110,14 @@ const JJHoney = () => {
                 <h3>Input</h3>
                 <Input value={'금액을 입력해줘.'}></Input>
                 <h3>InputBox</h3>
-                <InputBox title={'대출할 금액'} maxAmount={30000000}></InputBox>
+                <InputBox
+                    title={'대출할 금액'}
+                    amount1={500000}
+                    amount2={1000000}
+                    amount3={5000000}
+                    amount4={10000000}
+                    maxAmount={300000000}
+                ></InputBox>
             </Working>
             <Working>
                 <h2>MessageBox</h2>
@@ -134,27 +141,28 @@ const JJHoney = () => {
                     infoContent1={'5턴'}
                     infoTitle2={'이율'}
                     infoContent2={'3%'}
-                    isLoan={false}
+                    $isLoan={false}
                 ></ProductDetailInfo>
                 <ProductDetailInfo
                     infoTitle1={'기간'}
                     infoContent1={'10턴'}
                     infoTitle2={'이율'}
                     infoContent2={'10%'}
+                    $isLoan={false}
                 ></ProductDetailInfo>
                 <ProductDetailInfo
                     infoTitle1={'만기 예상 회차'}
                     infoContent1={'26턴'}
                     infoTitle2={'예상 금액'}
                     infoContent2={'3,000,000원'}
-                    isLoan={true}
+                    $isLoan={true}
                 ></ProductDetailInfo>
                 <ProductDetailInfo
                     infoTitle1={'이자율'}
                     infoContent1={'복리 10%'}
                     infoTitle2={'상환 방식'}
                     infoContent2={'만기 일시 상환'}
-                    isLoan={true}
+                    $isLoan={true}
                 ></ProductDetailInfo>
             </Working>
             <Working>

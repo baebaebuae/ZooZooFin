@@ -24,7 +24,7 @@ export const ButtonBase = styled.button`
     padding: ${({ size }) =>
         size === 'small' ? '6px 10px' : size === 'large' ? '12px 20px' : '8px 12px'};
     font-size: ${({ size }) => (size === 'small' ? '10px' : size === 'large' ? '24px' : '14px')};
-    border: ${({ border }) => (border ? `5px solid white` : 'none')};
+    border: ${({ isBorder }) => (isBorder ? `5px solid white` : 'none')};
 `;
 
 export const BasicButton = styled(Button)`

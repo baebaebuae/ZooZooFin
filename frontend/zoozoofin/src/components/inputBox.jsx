@@ -16,7 +16,7 @@ const ButtonBlock = styled.div`
     gap: 4px;
 `;
 
-export const InputBox = ({ title, maxAmount }) => {
+export const InputBox = ({ title, amount1, amount2, amount3, amount4, maxAmount }) => {
     const [savingsAmount, setSavingsAmount] = useState(0);
 
     const addAmount = (value) =>
@@ -38,21 +38,17 @@ export const InputBox = ({ title, maxAmount }) => {
                 onDelete={handleDelete}
             ></Input>
             <ButtonBlock>
-                <ButtonBase size={'small'} color={'primaryDeep'} onClick={() => addAmount(500000)}>
-                    50만
+                <ButtonBase size={'small'} color={'primaryDeep'} onClick={() => addAmount(amount1)}>
+                    {`${amount1 / 10000}만`}
                 </ButtonBase>
-                <ButtonBase size={'small'} color={'primaryDeep'} onClick={() => addAmount(1000000)}>
-                    100만
+                <ButtonBase size={'small'} color={'primaryDeep'} onClick={() => addAmount(amount2)}>
+                    {`${amount2 / 10000}만`}
                 </ButtonBase>
-                <ButtonBase size={'small'} color={'primaryDeep'} onClick={() => addAmount(5000000)}>
-                    500만
+                <ButtonBase size={'small'} color={'primaryDeep'} onClick={() => addAmount(amount3)}>
+                    {`${amount3 / 10000}만`}
                 </ButtonBase>
-                <ButtonBase
-                    size={'small'}
-                    color={'primaryDeep'}
-                    onClick={() => addAmount(10000000)}
-                >
-                    1000만
+                <ButtonBase size={'small'} color={'primaryDeep'} onClick={() => addAmount(amount4)}>
+                    {`${amount4 / 10000}만`}
                 </ButtonBase>
                 <ButtonBase size={'small'} color={'tertiary'} onClick={handleMaxAmount}>
                     MAX
