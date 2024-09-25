@@ -87,12 +87,11 @@ public class SavingsServiceImpl implements SavingsService{
     // 내 적금 확인
     @Override
     @Transactional(readOnly = true)
-    public List<MySavingsResponse> getMySavings(String memberId) {
+    public List<MySavingsResponse> getMySavings(Long animalId) {
         // 빈 리스트 생성
         List<MySavingsResponse> mySavingsResponseList = new ArrayList<>();
 
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND_EXCEPTION));
-        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
+        Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
         List<Savings> savingsList = savingsRepository.findAllByAnimalAndSavingsIsEndFalseOrderBySavingsEndTurnAsc(animal);
 

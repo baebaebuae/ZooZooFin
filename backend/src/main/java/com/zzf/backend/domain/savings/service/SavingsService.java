@@ -13,7 +13,7 @@ public interface SavingsService {
 
     void postSavings(Long animalId, SavingsRequest savingsRequest);
 
-    List<MySavingsResponse> getMySavings(String memberId);
+    List<MySavingsResponse> getMySavings(Long animalId);
 
     void deleteMySavings(Long animalId, Long savingsId);
 }
