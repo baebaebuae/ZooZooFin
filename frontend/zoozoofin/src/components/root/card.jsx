@@ -12,3 +12,10 @@ export const Card = styled.div`
     border: 6px solid ${({ theme }) => theme.colors.primary};
     background: white;
 `;
+
+export const Divider = styled.div`
+    width: 100%;
+    height: 1px;
+    margin: ${({ isLine }) => (isLine ? '4px' : '0px')};
+    background-color: ${({ isLine, theme }) => (isLine ? theme.colors.background : 'transparent')};
+`;

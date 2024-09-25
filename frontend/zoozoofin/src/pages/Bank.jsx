@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ProductCard, ProductJoinCard } from '@components/bank/DepositCards';
+import { ProductCard, ProductJoinCard, ProductCheckCard } from '@components/bank/DepositCards';
 import { Card } from '@components/root/card';
 
 const SampleText = styled.h1`
@@ -47,6 +47,31 @@ const BankPage = () => {
             </Card>
 
             <h2>ProductCheckCard</h2>
+            <h3>예금</h3>
+            <Card>
+                <ProductCheckCard
+                    productName={'주주예금'}
+                    turn={5}
+                    rate={3}
+                    currentTurn={10}
+                    savingsAmount={3000000}
+                    finalSavingsAmount={15000000}
+                    ifSpecial={true}
+
+                />
+            </Card>
+            <h3>적금</h3>
+            <Card>
+                <ProductCheckCard
+                    productName={'주주적금'}
+                    turn={5}
+                    rate={3}
+                    currentTurn={10}
+                    savingsAmount={3000000}
+                    finalSavingsAmount={15000000}
+                    ifSpecial={false}
+                />
+            </Card>
         </SampleBlock>
     );
 };

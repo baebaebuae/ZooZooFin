@@ -2,7 +2,7 @@
 import styled from 'styled-components';
 
 const InfoBlock = styled.div`
-    width: 270px;
+    width: 100%;
     display: flex;
     justify-content: space-around;
     margin: 8px 0px;
@@ -55,4 +55,65 @@ ProductDetailInfo.propTypes = {
     infoTitle2: PropTypes.string.isRequired,
     infoContent2: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     isLoan: PropTypes.bool.isRequired,
+};
+
+const JoinBox = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin: 4px 0px;
+`;
+
+const JoinTitle = styled.div`
+    font-size: 14px;
+    text-align: center;
+    color: ${({ theme }) => theme.colors.gray};
+`;
+
+const JoinContent = styled.div`
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+    color: ${({ theme }) => theme.colors.primaryDeep};
+`;
+
+export const ProductJoinInfo = ({ infoTitle, infoContent }) => {
+    return (
+        <JoinBox>
+            <JoinTitle>{infoTitle}</JoinTitle>
+            <JoinContent>{infoContent}</JoinContent>
+        </JoinBox>
+    );
+};
+
+const ExtraBox = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 4px 0;
+`;
+
+const ExtraTitle = styled.div`
+    font-size: 12px;
+    text-align: center;
+    color: ${({ theme }) => theme.colors.gray};
+`;
+
+const ExtraContent = styled.div`
+    font-size: 14px;
+    text-align: center;
+    font-weight: bold;
+    color: ${({ theme }) => theme.colors.warn};
+`;
+
+export const ExtraInfo = ({ extraRate, savingsAmount }) => {
+    return (
+        <>
+            <ExtraBox>
+                <ExtraTitle>캐릭터 능력: 추가 +{extraRate}%</ExtraTitle>
+                <ExtraContent>{savingsAmount * extraRate / 100}원</ExtraContent>
+            </ExtraBox>
+        </>
+    );
 };

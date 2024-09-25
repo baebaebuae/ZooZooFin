@@ -1,6 +1,6 @@
 import { BadgeNormal, BadgeStroke } from '@components/root/badge';
 // import Bubble from '@components/root/bubble';
-import { ButtonBase } from '@components/root/buttons';
+import { Button } from '@components/root/buttons';
 import { Card } from '@components/root/card';
 import CreditBox from '@components/root/creditBox';
 import { HeaderButtons } from '@components/root/headerButton';
@@ -13,7 +13,7 @@ import { InfoBoxPrimary, InfoBoxWarn } from '@components/root/infoBox';
 import { Input } from '@components/root/input';
 import { InputBox } from '@components/inputBox';
 import { MessageBox } from '@components/root/messageBox';
-import { ProductDetailInfo } from '@components/root/productDetailInfo';
+import { ProductDetailInfo, ProductJoinInfo } from '@components/root/productDetailInfo';
 import ProgressBox from '@components/root/progessBar';
 import { TurnSliderLoan } from '@components/root/slider';
 import { Switch } from '@components/root/switch';
@@ -48,35 +48,35 @@ const JJHoney = () => {
             </Working>
             <Working>
                 <h2>Buttons</h2>
-                <ButtonBase size={'small'} $isBorder={false} color={'primaryDeep'}>
+                <Button size={'small'} $isBorder={false} color={'primaryDeep'}>
                     Small
-                </ButtonBase>
+                </Button>
 
-                <ButtonBase size={'normal'} $isBorder={false} color={'primaryDeep'}>
+                <Button size={'normal'} $isBorder={false} color={'primaryDeep'}>
                     Normal
-                </ButtonBase>
-                <ButtonBase size={'normal'} $isBorder={false} color={'inactive'}>
+                </Button>
+                <Button size={'normal'} $isBorder={false} color={'inactive'}>
                     Inactive
-                </ButtonBase>
-                <ButtonBase size={'normal'} $isBorder={false} color={'warn'}>
+                </Button>
+                <Button size={'normal'} $isBorder={false} color={'warn'}>
                     Warn
-                </ButtonBase>
-                <ButtonBase size={'normal'} $isBorder={false} color={'tertiary'}>
+                </Button>
+                <Button size={'normal'} $isBorder={false} color={'tertiary'}>
                     Tertiary
-                </ButtonBase>
-                <ButtonBase size={'normal'} $isBorder={true} color={'primaryDeep'}>
+                </Button>
+                <Button size={'normal'} $isBorder={true} color={'primaryDeep'}>
                     N.Stroke
-                </ButtonBase>
-                <ButtonBase size={'normal'} $isBorder={true} color={'inactive'}>
+                </Button>
+                <Button size={'normal'} $isBorder={true} color={'inactive'}>
                     N.Stroke
-                </ButtonBase>
+                </Button>
 
-                <ButtonBase size={'large'} $isBorder={false} color={'primaryDeep'}>
+                <Button size={'large'} $isBorder={false} color={'primaryDeep'}>
                     Large
-                </ButtonBase>
-                <ButtonBase size={'large'} $isBorder={true} color={'primaryDeep'}>
+                </Button>
+                <Button size={'large'} $isBorder={true} color={'primaryDeep'}>
                     L.Stroke
-                </ButtonBase>
+                </Button>
             </Working>
             <Working>
                 <h2>CreditBar</h2>
@@ -122,6 +122,8 @@ const JJHoney = () => {
                     amount3={5000000}
                     amount4={10000000}
                     maxAmount={300000000}
+                    onSavingsAmountChange={() => {}}
+                    isSavings={true}
                 ></InputBox>
             </Working>
             <Working>
@@ -169,6 +171,10 @@ const JJHoney = () => {
                     infoContent2={'만기 일시 상환'}
                     $isLoan={true}
                 ></ProductDetailInfo>
+                <h3>ProductJoinInfo</h3>
+                <ProductJoinInfo infoTitle={'가입 금액'} infoContent={'3,000,000원'} />
+                <ProductJoinInfo infoTitle={'만기 회차'} infoContent={'15턴'} />
+                <ProductJoinInfo infoTitle={'예상 지급액'} infoContent={'15,000,000원'} />
             </Working>
             <Working>
                 <h2>ProgressBar</h2>

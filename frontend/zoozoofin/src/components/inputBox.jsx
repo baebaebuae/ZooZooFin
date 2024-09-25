@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Input } from './root/input';
-import { ButtonBase } from './root/buttons';
+import { Button } from './root/buttons';
 
 const InputBlock = styled.div`
     display: flex;
@@ -51,21 +51,21 @@ export const InputBox = ({
                 onDelete={handleDelete}
             ></Input>
             <ButtonBlock>
-                <ButtonBase size={'small'} color={'primaryDeep'} onClick={() => addAmount(amount1)}>
+                <Button size={'small'} color={'primaryDeep'} onClick={() => addAmount(amount1)}>
                     {`${amount1 / 10000}만`}
-                </ButtonBase>
-                <ButtonBase size={'small'} color={'primaryDeep'} onClick={() => addAmount(amount2)}>
+                </Button>
+                <Button size={'small'} color={'primaryDeep'} onClick={() => addAmount(amount2)}>
                     {`${amount2 / 10000}만`}
-                </ButtonBase>
-                <ButtonBase size={'small'} color={'primaryDeep'} onClick={() => addAmount(amount3)}>
+                </Button>
+                <Button size={'small'} color={'primaryDeep'} onClick={() => addAmount(amount3)}>
                     {`${amount3 / 10000}만`}
-                </ButtonBase>
-                <ButtonBase size={'small'} color={'primaryDeep'} onClick={() => addAmount(amount4)}>
+                </Button>
+                <Button size={'small'} color={'primaryDeep'} onClick={() => addAmount(amount4)}>
                     {`${amount4 / 10000}만`}
-                </ButtonBase>
-                <ButtonBase size={'small'} color={'tertiary'} onClick={handleMaxAmount}>
+                </Button>
+                <Button size={'small'} color={'tertiary'} onClick={handleMaxAmount}>
                     MAX
-                </ButtonBase>
+                </Button>
             </ButtonBlock>
         </InputBlock>
     );
