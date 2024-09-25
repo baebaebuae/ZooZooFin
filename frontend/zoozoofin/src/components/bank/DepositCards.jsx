@@ -4,7 +4,7 @@ import { NormalIcon } from '@components/root/icon';
 import IconChicken from '@assets/images/icons/icon_chicken.svg?react';
 import { ProductDetailInfo } from '@components/root/productDetailInfo';
 import { InputBox } from '@components/inputBox';
-import { ButtonBase } from '@components/root/buttons';
+// import { ButtonBase } from '@components/root/buttons';
 
 const ProductName = styled.div`
     font-size: 14px;
@@ -27,10 +27,19 @@ export const ProductCard = ({ productName, turn, rate, isLoan }) => {
     );
 };
 
-export const ProductJoinCard = ({ productName, turn, rate, isLoan, currentTurn, maxAmount }) => {
+export const ProductJoinCard = ({
+    productName,
+    turn,
+    rate,
+    isLoan,
+    currentTurn,
+    maxAmount,
+    isSavings,
+}) => {
     const [savingsAmount, setSavingsAmount] = useState(0);
-    function onSetSavingsAmount() {
-        setSavingsAmount(savingsAmount);
+
+    function handleSavingsAmountChange(newAmount) {
+        setSavingsAmount(newAmount);
     }
 
     return (
@@ -52,19 +61,19 @@ export const ProductJoinCard = ({ productName, turn, rate, isLoan, currentTurn, 
                 amount3={100000}
                 amount4={500000}
                 maxAmount={maxAmount}
+                onSavingsAmountChange={handleSavingsAmountChange}
+                isSavings={isSavings}
             ></InputBox>
-            {/* InputBox가 savingsAmount 넘겨줘야함 */}
             <ProductDetailInfo
                 infoTitle1={'만기 예상 회차'}
                 infoContent1={`${turn + currentTurn}턴`}
                 infoTitle2={'예상 금액'}
-                infoContent2={`${0}원`}
+                infoContent2={
+                    isSavings ? `${savingsAmount * 1.03}원` : `${savingsAmount * turn * 1.03}`
+                }
+                // 백엔드 계산 로직 받아와서 적용
                 $isLoan={isLoan}
             ></ProductDetailInfo>
-            <ButtonBase size={'normal'} $isBorder={false} color={'primary'}>
-                다음
-            </ButtonBase>
-            {/* Button onClick시 받아온 최종 savingsAmount 넘겨주기 위해서? */}
         </>
     );
 };
