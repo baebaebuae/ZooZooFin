@@ -4,79 +4,92 @@ import com.zzf.backend.domain.member.entity.Member;
 import com.zzf.backend.global.base.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "animal")
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Animal extends BaseEntity {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "animal_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long animalId;
 
-    @Column(name = "animal_name")
-    @NotNull
-    private String animalName;
-
-    @Column(name = "animal_turn")
-    @NotNull
-    private Long animalTurn;
-
-    @Column(name = "animal_assets")
-    @NotNull
-    private Long animalAssets;
-
-    @Column(name = "animal_credit")
-    @NotNull
-    private Long animalCredit;
-
-    @Column(name = "animal_hierarchy")
-    @NotNull
-    private Long animalHierarchy;
-
-    @Column(name = "animal_is_end")
-    @NotNull
-    private Boolean animalIsEnd;
-
-    @Column(name = "animal_quest_cleared")
-    @NotNull
-    private Boolean animalQuestCleared;
-
-    // FK
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     @NotNull
     private Member member;
 
-    // FK
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "animal_type_id")
     @NotNull
     private AnimalType animalType;
 
-    public void changeAnimalAssets(Long money){
+    @NotNull
+    @Column(name = "animal_name")
+    private String animalName;
+
+    @NotNull
+    @Column(name = "animal_turn")
+    private Long animalTurn;
+
+    @NotNull
+    @Column(name = "animal_assets")
+    private Long animalAssets;
+
+    @NotNull
+    @Column(name = "animal_credit")
+    private Long animalCredit;
+
+    @NotNull
+    @Column(name = "animal_hierarchy")
+    private Long animalHierarchy;
+
+    @NotNull
+    @Column(name = "animal_is_work")
+    private Boolean animalIsWork;
+
+    @NotNull
+    @Column(name = "animal_is_end")
+    private Boolean animalIsEnd;
+
+    @NotNull
+    @Column(name = "animal_quest_cleared")
+    private Boolean animalQuestCleared;
+
+    @Builder
+    public Animal(Member member, AnimalType animalType, String animalName, Long animalTurn, Long animalAssets, Long animalCredit, Long animalHierarchy, Boolean animalIsWork, Boolean animalIsEnd, Boolean animalQuestCleared) {
+        this.member = member;
+        this.animalType = animalType;
+        this.animalName = animalName;
+        this.animalTurn = animalTurn;
+        this.animalAssets = animalAssets;
+        this.animalCredit = animalCredit;
+        this.animalHierarchy = animalHierarchy;
+        this.animalIsWork = animalIsWork;
+        this.animalIsEnd = animalIsEnd;
+        this.animalQuestCleared = animalQuestCleared;
+    }
+
+    public void changeAnimalAssets(Long money) {
         this.animalAssets = money;
     }
 
-    public void increaseAnimalAssets(Long money){
+    public void increaseAnimalAssets(Long money) {
         this.animalAssets += money;
     }
 
-    public void decreaseAnimalAssets(Long money){
+    public void decreaseAnimalAssets(Long money) {
         this.animalAssets -= money;
     }
 
-    public void changeAnimalCredit(Long credit){
+    public void changeAnimalCredit(Long credit) {
         this.animalCredit = credit;
     }
 
-    public void changeAnimalHierarchy(Long hierarchy){
+    public void changeAnimalHierarchy(Long hierarchy) {
         this.animalHierarchy = hierarchy;
     }
 }
