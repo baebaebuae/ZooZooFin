@@ -26,7 +26,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
 
     private final String[] EXCLUDE_URI = {
-            "/api/v1/oauth", "/api/v1/auth/reissue", "/swagger-ui", "/api-docs"
+            "/api/v1/oauth", "/api/v1/auth/reissue", "/swagger-ui", "/api-docs", "/v3/api-docs",
     };
 
     private final String[] ACCESS_TOKEN_URI = {
