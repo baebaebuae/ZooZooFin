@@ -8,6 +8,7 @@ import com.zzf.backend.domain.capital.repository.CapitalRepository;
 import com.zzf.backend.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class CapitalServiceImpl implements CapitalService{
 
     // 사채 대출 가능한지 확인
     @Override
+    @Transactional(readOnly = true)
     public Boolean getCapitalExist(Long animalId) {
         Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
@@ -30,6 +32,7 @@ public class CapitalServiceImpl implements CapitalService{
 
     // 신규 사채 등록
     @Override
+    @Transactional
     public void postCapital(Long animalId, CapitalRequest capitalRequest) {
         Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
@@ -53,6 +56,7 @@ public class CapitalServiceImpl implements CapitalService{
 
     // 사채 상환
     @Override
+    @Transactional
     public void patchCapital(Long animalId, Long money) {
         Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
