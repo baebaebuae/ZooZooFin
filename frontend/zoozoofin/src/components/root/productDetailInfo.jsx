@@ -24,7 +24,8 @@ const InfoContent = styled.div`
     font-size: ${({ isLoan }) => (isLoan ? '16px' : '20px')};
     text-align: center;
     font-weight: bold;
-    color: ${({ theme }) => theme.colors.primaryDeep};
+    color: ${({ theme, isEarlyTermination }) =>
+        isEarlyTermination ? theme.colors.warn : theme.colors.primaryDeep};
 `;
 
 export const ProductDetailInfo = ({
@@ -33,6 +34,7 @@ export const ProductDetailInfo = ({
     infoTitle2,
     infoContent2,
     isLoan,
+    isEarlyTermination,
 }) => {
     return (
         <InfoBlock>
@@ -42,7 +44,9 @@ export const ProductDetailInfo = ({
             </InfoBox>
             <InfoBox>
                 <InfoTitle>{infoTitle2}</InfoTitle>
-                <InfoContent isLoan={isLoan}>{infoContent2}</InfoContent>
+                <InfoContent isLoan={isLoan} isEarlyTermination={isEarlyTermination}>
+                    {infoContent2}
+                </InfoContent>
             </InfoBox>
         </InfoBlock>
     );
@@ -112,7 +116,9 @@ export const ExtraInfo = ({ extraRate, savingsAmount }) => {
         <>
             <ExtraBox>
                 <ExtraTitle>캐릭터 능력: 추가 +{extraRate}%</ExtraTitle>
-                <ExtraContent>{savingsAmount * extraRate / 100}원</ExtraContent>
+                <ExtraContent>
+                    {((savingsAmount * extraRate) / 100).toLocaleString()}원
+                </ExtraContent>
             </ExtraBox>
         </>
     );

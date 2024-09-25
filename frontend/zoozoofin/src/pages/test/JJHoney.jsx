@@ -9,7 +9,7 @@ import IconChick from '@assets/images/icons/icon_chick.svg?react';
 import IconFrog from '@assets/images/icons/icon_frog.svg?react';
 import IconChicken from '@assets/images/icons/icon_chicken.svg?react';
 
-import { InfoBoxPrimary, InfoBoxWarn } from '@components/root/infoBox';
+import { InfoBox } from '@components/root/infoBox';
 import { Input } from '@components/root/input';
 import { InputBox } from '@components/inputBox';
 import { MessageBox } from '@components/root/messageBox';
@@ -103,13 +103,16 @@ const JJHoney = () => {
             </Working>
             <Working>
                 <h2>InfoBox</h2>
-                <InfoBoxPrimary>
+                <InfoBox color={'primary'}>
+                    <div>동적버튼</div>
+                </InfoBox>
+                <InfoBox color={'primaryDeep'}>
                     <div>Title</div>
                     <div>0,000,000원</div>
-                </InfoBoxPrimary>
-                <InfoBoxWarn>
+                </InfoBox>
+                <InfoBox color={'warn'}>
                     <div>대출 불가</div>
-                </InfoBoxWarn>
+                </InfoBox>
             </Working>
             <Working>
                 <h3>Input</h3>
@@ -149,6 +152,7 @@ const JJHoney = () => {
                     infoTitle2={'이율'}
                     infoContent2={'3%'}
                     $isLoan={false}
+                    isEarlyTermination={false}
                 ></ProductDetailInfo>
                 <ProductDetailInfo
                     infoTitle1={'기간'}
@@ -156,6 +160,7 @@ const JJHoney = () => {
                     infoTitle2={'이율'}
                     infoContent2={'10%'}
                     $isLoan={false}
+                    isEarlyTermination={false}
                 ></ProductDetailInfo>
                 <ProductDetailInfo
                     infoTitle1={'만기 예상 회차'}
@@ -163,6 +168,7 @@ const JJHoney = () => {
                     infoTitle2={'예상 금액'}
                     infoContent2={'3,000,000원'}
                     $isLoan={true}
+                    isEarlyTermination={false}
                 ></ProductDetailInfo>
                 <ProductDetailInfo
                     infoTitle1={'이자율'}
@@ -170,6 +176,7 @@ const JJHoney = () => {
                     infoTitle2={'상환 방식'}
                     infoContent2={'만기 일시 상환'}
                     $isLoan={true}
+                    isEarlyTermination={false}
                 ></ProductDetailInfo>
                 <h3>ProductJoinInfo</h3>
                 <ProductJoinInfo infoTitle={'가입 금액'} infoContent={'3,000,000원'} />

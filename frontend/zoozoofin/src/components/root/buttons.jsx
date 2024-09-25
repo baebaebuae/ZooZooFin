@@ -14,3 +14,13 @@ export const Button = styled.button`
     font-size: ${({ size }) => (size === 'small' ? '10px' : size === 'large' ? '24px' : '14px')};
     border: ${({ isBorder }) => (isBorder ? `5px solid white` : 'none')};
 `;
+
+export const StampButton = () => {
+    return (
+        <>
+            <Button size={'normal'} $isBorder={true} color={'primary'}>
+                도장 찍기
+            </Button>
+        </>
+    );
+};
