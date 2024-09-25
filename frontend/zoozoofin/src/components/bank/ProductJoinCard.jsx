@@ -13,8 +13,8 @@ const ProductName = styled.div`
 
 export const ProductJoinCard = ({
     productName,
-    turn,
-    rate,
+    productPeriod,
+    productRate,
     isLoan,
     currentTurn,
     maxAmount,
@@ -32,9 +32,9 @@ export const ProductJoinCard = ({
             <ProductName>{productName}</ProductName>
             <ProductDetailInfo
                 infoTitle1={'기간'}
-                infoContent1={`${turn}턴`}
+                infoContent1={`${productRate}턴`}
                 infoTitle2={'이율'}
-                infoContent2={`${rate}%`}
+                infoContent2={`${productPeriod}%`}
                 $isLoan={isLoan}
             ></ProductDetailInfo>
             <InputBox
@@ -49,12 +49,12 @@ export const ProductJoinCard = ({
             ></InputBox>
             <ProductDetailInfo
                 infoTitle1={'만기 예상 회차'}
-                infoContent1={`${turn + currentTurn}턴`}
+                infoContent1={`${productRate + currentTurn}턴`}
                 infoTitle2={'예상 금액'}
                 infoContent2={
                     isSavings
-                        ? `${(savingsAmount * 1.03).toLocaleString()}원`
-                        : `${(savingsAmount * turn * 1.03).toLocaleString()}원`
+                        ? `${(savingsAmount * productPeriod * (1 + productRate / 100)).toLocaleString()}원`
+                        : `${(savingsAmount * (1 + productRate / 100)).toLocaleString()}원`
                 }
                 // 백엔드 계산 로직 받아와서 적용
                 $isLoan={isLoan}
