@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import { ProductCard } from '@components/bank/ProductCard';
+import { ProductCards } from '@components/bank/ProductCards';
 import { ProductJoinCard } from '@components/bank/ProductJoinCard';
 import { ProductCheckCard } from '@components/bank/ProductCheckCard';
 
@@ -17,24 +17,32 @@ const Block = styled.div`
 `;
 
 const JoinDeposit = () => {
-    const [currentCard, setCurrentCard] = useState(1);
-
-    const joinDepositActions = {
-        1: ProductCard,
-        2: ProductJoinCard,
-        3: ProductCheckCard,
-        4: 'Stamp',
+    const handleClick = () => {
+        console.log('클릭됨');
+        setCurrentCard(currentCard + 1);
     };
+
+    const renderComponent = () => {
+        switch (currentCard) {
+            case 1:
+                return <ProductCards handleClick={handleClick} />;
+            case 2:
+                return <ProductJoinCard />;
+            case 3:
+                return <ProductCheckCard />;
+            case 4:
+                return <div>Stamp 모달</div>;
+
+            default:
+                return <div>해당하는 페이지가 없어요. 현재 Action을 확인해주세요.</div>;
+        }
+    };
+    const [currentCard, setCurrentCard] = useState(1);
 
     const joinGuideMessages = {
         1: '가입할 상품을 골라봐.',
         2: '얼마를 저축할거야?',
         3: '가입 정보를 확인하고 서명해줘.',
-    };
-
-    const handleClick = () => {
-        console.log('클릭됨');
-        setCurrentCard(currentCard + 1);
     };
 
     return (
@@ -43,29 +51,11 @@ const JoinDeposit = () => {
                 <NormalIcon icon={IconChick} />
                 <div>{joinGuideMessages[currentCard]}</div>
             </MessageBox>
-
             <button onClick={handleClick}>다음</button>
 
-            <ProductCard
-                productName={'주주예금'}
-                turn={5}
-                rate={3}
-                isLoan={false}
-                handleClick={handleClick}
-            />
+            {renderComponent()}
         </Block>
     );
 };
 
 export default JoinDeposit;
-
-// 데이터 이런 식으로 들어옴
-//   "body": [
-//     {
-//       "savingsTypeId": 0,
-//       "savingsPeriod": 0,
-//       "savingsRate": 0,
-//       "savingsName": "string",
-//       "savingsImgUrl": "string"
-//     }
-//   ]
