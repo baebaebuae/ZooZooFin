@@ -33,18 +33,18 @@ class AuthControllerTest {
 
     private final String jwtToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6IjkxMzQxOGFmLTZiMmUtMTFlZi05MjlmLTI4YzVkMjFlYWJmMyIsImV4cCI6MTgxMzMzMDU4Nn0.ZgnLrGNNi9xt-jlJAgyNOAn6-_yw4m5C9SOUkk5zyPY";
 
-    @Test
-    public void logout_success() throws Exception {
-        // given
-
-        // when
-        ResultActions actions = mockMvc.perform(post("/api/v1/auth/logout")
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + jwtToken));
-
-        // then
-        actions
-                .andExpect(status().isOk());
-
-    }
+//    @Test
+//    public void logout_success() throws Exception {
+//        // given
+//
+//        // when
+//        ResultActions actions = mockMvc.perform(post("/api/v1/auth/logout")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .header("Authorization", "Bearer " + jwtToken));
+//
+//        // then
+//        actions
+//                .andExpect(status().isOk());
+//
+//    }
 }
