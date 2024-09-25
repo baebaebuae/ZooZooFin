@@ -131,17 +131,13 @@ def create_and_train_model_for_sector(sector_data, input_shape, model_name):
     sequence_length = input_shape[0]
 
     for stock_data in sector_data:
-        if len(stock_data) >= sequence_length + 7:  # 7일 후 예측을 위해 데이터 길이 조정
+        if len(stock_data) >= sequence_length + 7:
             for i in range(len(stock_data) - sequence_length - 7):
                 train_x.append(stock_data[i:i + sequence_length])
                 train_y.append(stock_data[i + sequence_length + 7][3])  # 7일 후 Close 값
 
     train_x = np.array(train_x)
     train_y = np.array(train_y)
-    min_samples = min(len(train_y), len(train_x))
-
-    train_x = train_x[:min_samples]
-    train_y = train_y[:min_samples]
 
     # train_test_split
     train_x, test_x, train_y, test_y = train_test_split(
@@ -149,22 +145,25 @@ def create_and_train_model_for_sector(sector_data, input_shape, model_name):
     )
 
     # 모델 생성
-    model = create_multitask_lstm_model(input_shape, 1)  # num_sectors를 1로 설정
+    model = create_multitask_lstm_model(input_shape, 1)  # 단일 태스크이므로 1로 설정
 
     # EarlyStopping 및 ModelCheckpoint 추가
     early_stopping = EarlyStopping(monitor='val_loss', patience=10)
-    checkpoint = ModelCheckpoint(f'S11P21A705/FLASK/LSTM_MODELS/{model_name}.keras', monitor='val_loss', save_best_only=True)
+    checkpoint = ModelCheckpoint(f'S11P21A705/FLASK/LSTM_MODELS/{model_name}.h5', 
+                                 monitor='val_loss', 
+                                 save_best_only=True)
 
     # 모델 학습
-    model.fit(train_x, train_y, epochs=50, batch_size=32, validation_split=0.2, callbacks=[early_stopping, checkpoint])
+    history = model.fit(train_x, train_y, epochs=50, batch_size=32, validation_split=0.2, 
+                        callbacks=[early_stopping, checkpoint])
 
     # 모델 평가
     evaluation = model.evaluate(test_x, test_y)
     print(f"{model_name}의 모델 평가 결과: {evaluation}")
 
     # 모델 저장
-    model.save(f"{model_name}.keras")
-    print(f"{model_name}의 모델이 {model_name}.keras로 저장되었습니다.")
+    model.save(f"{model_name}.h5")
+    print(f"{model_name}의 모델이 {model_name}.h5로 저장되었습니다.")
 
     # 예측
     predictions = model.predict(test_x)
@@ -174,11 +173,12 @@ def create_and_train_model_for_sector(sector_data, input_shape, model_name):
     mae = mean_absolute_error(test_y, predictions)
     r2 = r2_score(test_y, predictions)
 
-    print(f"{model_name}의 평가 지표:")
+    print(f"{model_name}의 7일 후 예측 평가 지표:")
     print(f"  RMSE: {rmse}")
     print(f"  MAE: {mae}")
     print(f"  R^2: {r2}")
 
+    return history, model
 # 24개 섹터에 대한 모델 생성 및 학습
 sequence_length = 30
 input_shape = (sequence_length, 8)

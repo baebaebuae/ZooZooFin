@@ -134,7 +134,7 @@ def predict():
         "manufacturing", "joseon", "machinery_construction", 
         "it", "semiconductor", "entertainment", 
         "bio", "food", "chemical", 
-        "finance", "reit", "china"
+        "finance", "REITs", "China"
     ]
     valid_stock_fields = ["domestic", "oversea", "etf"]
 
@@ -173,16 +173,11 @@ def predict():
     except Exception as e:
         return f"예측 중 오류가 발생했습니다: {str(e)}"
     
-    news_result = None
     print("news_data: ", news_data)
     if news_data:
-        news_result = analyze_news(news_data)
         positive_sentences,negative_sentences, positive_ratio,negative_ratio,neutral_ratio,summary = analyze_news(news_data)
     
     return render_template('result.html', 
-                           industry_field=industry_field, 
-                           stock_field=stock_field, 
-                           stock_code=stock_code, 
                            predicted_price=predicted_price,
                            positive_sentences = positive_sentences,
                            negative_sentences = negative_sentences,
