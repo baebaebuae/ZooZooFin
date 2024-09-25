@@ -41,4 +41,17 @@ public class Capital extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "character_id")
     private Animal animal;
+
+    public void changeCapitalRemain(Long money){
+        this.capitalRemain = money;
+    }
+
+    // 복리 10%
+    public void compoundInterest(){
+        this.capitalRemain += this.capitalRemain / 10;
+    }
+
+    public void changeCapitalIsEnd(boolean isEnd){
+        this.capitalIsEnd = isEnd;
+    }
 }
