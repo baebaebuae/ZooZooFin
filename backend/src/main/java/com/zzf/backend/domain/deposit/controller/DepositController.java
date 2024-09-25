@@ -34,7 +34,7 @@ public class DepositController {
     @PostMapping
     public ResponseDto<Void> postDeposit(@RequestHeader Long animalId,
                                          @RequestBody DepositRequest depositRequest){
-        depositService.postDeposit(depositRequest, animalId);
+        depositService.postDeposit(animalId, depositRequest);
 
         return ResponseDto.success(CREATE_SUCCESS);
     }

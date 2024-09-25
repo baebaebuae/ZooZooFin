@@ -11,4 +11,6 @@ import java.util.List;
 public interface CapitalRepository extends JpaRepository<Capital, Long> {
 
     List<Capital> findAllByAnimalAndCapitalIsEndFalse(Animal animal);
+
+    Boolean existsByAnimalAndCapitalIsEndFalse(Animal animal);
 }

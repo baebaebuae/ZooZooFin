@@ -24,10 +24,10 @@ import static com.zzf.backend.global.status.ErrorCode.*;
 @Service
 @RequiredArgsConstructor
 public class DepositServiceImpl implements DepositService {
+
     private final DepositRepository depositRepository;
     private final DepositTypeRepository depositTypeRepository;
     private final AnimalRepository animalRepository;
-    private final MemberRepository memberRepository;
 
     // 예금 상품 목록 조회
     @Override
@@ -55,7 +55,7 @@ public class DepositServiceImpl implements DepositService {
     // 예금 신규 등록
     @Override
     @Transactional
-    public void postDeposit(DepositRequest depositRequest, Long animalId) {
+    public void postDeposit(Long animalId, DepositRequest depositRequest) {
         Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
         DepositType depositType = depositTypeRepository.findById(depositRequest.getDepositTypeId()).orElseThrow(() -> new CustomException(DEPOSIT_TYPE_NOT_FOUND_EXCEPTION));
 
@@ -130,38 +130,5 @@ public class DepositServiceImpl implements DepositService {
         // 예금 완료 처리
         deposit.changeDepositIsEnd(true);
         animal.increaseAnimalAssets(deposit.getDepositAmount() + deposit.getDepositAmount() / 200);
-    }
-
-    // 예금은 다음날로 넘어가기
-    @Override
-    @Transactional
-    public void depositGoToNextTurn(Animal animal) {
-        depositMature(animal);
-    }
-
-    // 예금 만기
-    @Override
-    @Transactional
-    public void depositMature(Animal animal) {
-        // 만기인 예금 모두 조회
-        List<Deposit> depositList = depositRepository.findAllByAnimalAndDepositEndTurn(animal, animal.getAnimalTurn());
-
-        for (Deposit deposit : depositList) {
-            deposit.changeDepositIsEnd(true);
-            long money = deposit.getDepositAmount() + deposit.getDepositAmount() * deposit.getDepositType().getDepositRate() / 100;
-
-            // 예적금형 캐릭터인 경우 최종 수익 5% 추가 증가
-            if (animal.getAnimalType().getAnimalTypeId() == 2) {
-                money += money * 5 / 100;
-            }
-            animal.increaseAnimalAssets(money);
-
-            // 예치금액 5천만원 이상이면 신용도 1 증가
-            if (deposit.getDepositAmount() >= 50000000) {
-                if (animal.getAnimalCredit() > 1) {
-                    animal.changeAnimalCredit(animal.getAnimalCredit() + 1);
-                }
-            }
-        }
     }
 }

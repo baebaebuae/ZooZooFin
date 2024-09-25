@@ -11,13 +11,9 @@ import java.util.List;
 public interface SavingsService {
     List<SavingsTypeResponse> getSavings();
 
-    void postSavings(SavingsRequest savingsRequest, String memberId);
+    void postSavings(Long animalId, SavingsRequest savingsRequest);
 
     List<MySavingsResponse> getMySavings(String memberId);
 
-    void deleteMySavings(String memberId, Long savingsId);
-
-    void savingsGoToNextTurn(Animal animal);
-
-    void savingsMature(Savings savings, Animal animal);
+    void deleteMySavings(Long animalId, Long savingsId);
 }

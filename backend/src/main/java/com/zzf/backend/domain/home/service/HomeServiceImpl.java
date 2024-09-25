@@ -102,6 +102,22 @@ public class HomeServiceImpl implements HomeService{
         return money;
     }
 
+    // 전체 대출액 계산
+    @Override
+    @Transactional(readOnly = true)
+    public long getMyTotalLoans(Animal animal) {
+        long money = 0L;
+
+        // 진행중인 대출 모두 조회
+        List<Loan> loanList = loanRepository.findAllByAnimalAndLoanIsEndFalse(animal);
+
+        for(Loan loan : loanList){
+            money += loan.getLoanAmount();
+        }
+
+        return money;
+    }
+
     // 남은 사채 조회
     @Override
     @Transactional(readOnly = true)
