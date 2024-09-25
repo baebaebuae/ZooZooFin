@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 
-// SmallButton,LargeButton으로 파일 분리 예정 - 이유: color 분리
-
 export const Button = styled.div`
     color: white;
     display: inline-flex;
