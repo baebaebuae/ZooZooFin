@@ -9,7 +9,7 @@ public enum ErrorCode {
 
     // Global
     BAD_REQUEST(400, "실패"),
-    METHOD_NOT_ALLOWED(405,"유효하지 않은 요청입니다."),
+    METHOD_NOT_ALLOWED(405, "유효하지 않은 요청입니다."),
     INTERNAL_SERVER_ERROR(500, "서버 에러"),
 
     // JWT
@@ -33,7 +33,10 @@ public enum ErrorCode {
     MEMBER_NOT_FOUND_EXCEPTION(404, "존재하지 않는 사용자입니다."),
 
     // Animal
-    ANIMAL_NOT_FOUND_EXCEPTION(404, "존재하지 않는 캐릭터입니다."),
+    ANIMAL_NOT_FOUND_EXCEPTION(404, "존재하지 않는 동물입니다."),
+    ANIMAL_UNAVAILABLE_EXCEPTION(404, "접근할 수 없는 동물입니다."),
+    ANIMAL_ALL_END_EXCEPTION(404, "게임을 진행중인 동물이 없습니다."),
+    ANIMAL_TYPE_NOT_FOUND_EXCEPTION(404, "존재하지 않는 동물 타입입니다."),
 
     DEPOSIT_NOT_FOUND_EXCEPTION(404, "존재하지 않는 예금입니다."),
     SAVINGS_NOT_FOUND_EXCEPTION(404, "존재하지 않는 적금입니다."),
@@ -53,6 +56,12 @@ public enum ErrorCode {
     NO_SUCH_CREDIT_EXCEPTION(404, "존재하지 않는 대출 등급입니다."),
 
     DUPLICATE_QUIZ_ID_EXCEPTION(400, "중복된 퀴즈 아이디가 존재합니다."),
+
+    // Ending
+    ENDING_STATUS_NOT_FOUND_EXCEPTION(404, "해당 코드의 엔딩을 찾을 수 없습니다."),
+
+    // Portfolio
+    PORTFOLIO_NOT_FOUND_EXCEPTION(404, "포트폴리오를 찾을 수 없습니다."),
 
     ;
     private final int httpStatus;

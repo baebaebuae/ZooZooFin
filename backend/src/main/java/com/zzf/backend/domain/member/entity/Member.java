@@ -3,14 +3,12 @@ package com.zzf.backend.domain.member.entity;
 import com.zzf.backend.global.base.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "member")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
 
     @Id
@@ -23,7 +21,17 @@ public class Member extends BaseEntity {
     private Long memberGoldBar;
 
     @NotNull
+    @Column(name = "member_is_solve_quiz")
+    private Boolean memberIsSolveQuiz;
+
+    @NotNull
     @Column(name = "member_bank_count")
     private Long memberBankCount;
 
+    @Builder
+    public Member(Long memberGoldBar, Boolean memberIsSolveQuiz, Long memberBankCount) {
+        this.memberGoldBar = memberGoldBar;
+        this.memberIsSolveQuiz = memberIsSolveQuiz;
+        this.memberBankCount = memberBankCount;
+    }
 }

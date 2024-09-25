@@ -2,14 +2,10 @@ package com.zzf.backend.domain.animal.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AnimalType {
     @Id
@@ -28,4 +24,12 @@ public class AnimalType {
     @Column(name = "animal_img_url")
     @NotNull
     private String animalImgUrl;
+
+    @Builder
+    public AnimalType(String animalTypeName, Long animalAbility, String animalImgUrl) {
+        this.animalTypeName = animalTypeName;
+        this.animalAbility = animalAbility;
+        this.animalImgUrl = animalImgUrl;
+    }
+
 }
