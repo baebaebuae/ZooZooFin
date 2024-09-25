@@ -23,7 +23,7 @@ export const Input = ({ title, value, unit, hasValue, onDelete }) => {
         <>
             <BlockTitle>{title}</BlockTitle>
             <InputBox>
-                {value}
+                {value.toLocaleString()}
                 {hasValue ? unit : null}
                 {hasValue ? <Delete onClick={onDelete} /> : null}
             </InputBox>

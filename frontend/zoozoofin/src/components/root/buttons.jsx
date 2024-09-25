@@ -1,16 +1,6 @@
 import styled from 'styled-components';
 
-export const Button = styled.div`
-    color: white;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 28px;
-    cursor: pointer;
-    background-color: ${({ theme }) => theme.colors.primaryDeep};
-`;
-
-export const ButtonBase = styled.button`
+export const Button = styled.button`
     color: white;
     display: inline-flex;
     justify-content: center;
@@ -25,20 +15,12 @@ export const ButtonBase = styled.button`
     border: ${({ isBorder }) => (isBorder ? `5px solid white` : 'none')};
 `;
 
-export const BasicButton = styled(Button)`
-    font-family: 'OneMobilePop';
-`;
-
-export const TinyButton = styled(Button)`
-    font-size: 10px;
-    padding: 6px 10px;
-    cursor: pointer;
-`;
-
-export const TinyButtonBorderBlank = styled(Button)`
-    font-size: 10px;
-    padding: 6px 10px;
-    border: 1px solid #0069c3;
-    background: white;
-    color: gray;
-`;
+export const StampButton = () => {
+    return (
+        <>
+            <Button size={'normal'} $isBorder={true} color={'primary'}>
+                도장 찍기
+            </Button>
+        </>
+    );
+};
