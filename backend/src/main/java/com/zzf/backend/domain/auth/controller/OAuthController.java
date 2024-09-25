@@ -34,7 +34,7 @@ public class OAuthController {
         LoginResponse loginResp = OAuthService.loginOAuth(provider, code);
 
         response.setStatus(LOGIN_SUCCESS.getHttpStatus());
-        response.sendRedirect("http://localhost:5173" + "?accessToken=" + loginResp.accessToken() +
+        response.sendRedirect("http://localhost:5173/callback" + "?accessToken=" + loginResp.accessToken() +
                 "&refreshToken=" + loginResp.refreshToken());
     }
 }
