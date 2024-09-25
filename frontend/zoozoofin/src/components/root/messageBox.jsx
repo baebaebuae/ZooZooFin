@@ -2,10 +2,11 @@
 import styled from 'styled-components';
 
 export const MessageBox = styled.div`
+    width: 240px;
     font-weight: bold;
     font-size: 14px;
     display: inline-flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 12px 36px;
 

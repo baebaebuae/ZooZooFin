@@ -2,25 +2,26 @@ import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 
-import Juju from '../pages/test/Juju';
-import JJHoney from '../pages/test/JJHoney';
-import Sinijini from '../pages/test/Sinijini';
-import Jignonne from '../pages/test/Jignonne';
+import Juju from '@pages/test/Juju';
+import JJHoney from '@pages/test/JJHoney';
+import Sinijini from '@pages/test/Sinijini';
+import Jignonne from '@pages/test/Jignonne';
 
-import Start from '../pages/Start';
-import LayoutInGame from '../components/LayoutInGame';
+import Start from '@pages/Start';
+import LayoutInGame from '@components/LayoutInGame';
 
-import Bank from '../pages/Bank';
-import Ending from '../pages/Ending';
-import MyRoom from '../pages/MyRoom';
-import Map from '../pages/Map';
-import Laptop from '../pages/Laptop';
-import Lender from '../pages/Lender';
-import School from '../pages/School';
-import Stock from '../pages/Stock';
-import Tutorial from '../pages/Tutorial';
-import Work from '../pages/Work';
-import WalletPage from '../pages/test/WalletPage';
+import Bank from '@pages/Bank';
+import Ending from '@pages/Ending';
+import MyRoom from '@pages/MyRoom';
+import Map from '@pages/Map';
+import Laptop from '@pages/Laptop';
+import Lender from '@pages/Lender';
+import School from '@pages/School';
+import Stock from '@pages/Stock';
+import Tutorial from '@pages/Tutorial';
+import Work from '@pages/Work';
+import WalletPage from '@pages/test/WalletPage';
+import ComponentsBank from '@pages/test/ComponentsBank';
 
 const Background = styled.div`
     width: 360px;
@@ -65,6 +66,7 @@ const AppRouter = () => {
                 <Route path="/map" element={<Map />} />
                 <Route element={<LayoutInGame />}>
                     <Route path="/bank" element={<Bank />} />
+                    <Route path="/bankcomp" element={<ComponentsBank />} />
                     <Route path="/laptop" element={<Laptop />} />
                     <Route path="/lender" element={<Lender />} />
                     <Route path="/school" element={<School />} />
