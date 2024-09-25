@@ -2,11 +2,13 @@ package com.zzf.backend.domain.auth.controller;
 
 import com.zzf.backend.domain.auth.dto.LoginResponse;
 import com.zzf.backend.domain.auth.service.OAuthService;
-import com.zzf.backend.global.dto.ResponseDto;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
+
+import java.io.IOException;
 
 import static com.zzf.backend.global.status.SuccessCode.*;
 
@@ -26,11 +28,14 @@ public class OAuthController {
     }
 
     @GetMapping("/callback/{provider}")
-    public ResponseDto<LoginResponse> callback(@PathVariable String provider,
-                                               @RequestParam String code) {
+    public void callback(@PathVariable String provider,
+                         @RequestParam String code,
+                         HttpServletResponse response) throws IOException {
         LoginResponse loginResp = OAuthService.loginOAuth(provider, code);
 
-        return ResponseDto.success(LOGIN_SUCCESS, loginResp);
+        response.setStatus(LOGIN_SUCCESS.getHttpStatus());
+        response.sendRedirect("http://localhost:5173" + "?accessToken=" + loginResp.accessToken() +
+                "&refreshToken=" + loginResp.refreshToken());
     }
 }
 
