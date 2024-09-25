@@ -20,6 +20,7 @@ public class CapitalServiceImpl implements CapitalService{
     private final AnimalRepository animalRepository;
     private final CapitalRepository capitalRepository;
 
+    // 사채 대출 가능한지 확인
     @Override
     public Boolean getCapitalExist(Long animalId) {
         Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
@@ -27,6 +28,7 @@ public class CapitalServiceImpl implements CapitalService{
         return capitalRepository.existsByAnimalAndCapitalIsEndFalse(animal);
     }
 
+    // 신규 사채 등록
     @Override
     public void postCapital(Long animalId, CapitalRequest capitalRequest) {
         Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
@@ -49,8 +51,29 @@ public class CapitalServiceImpl implements CapitalService{
         animal.increaseAnimalAssets(capitalRequest.getCapitalAmounts() * 9 / 10);
     }
 
+    // 사채 상환
     @Override
     public void patchCapital(Long animalId, Long money) {
+        Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
+        List<Capital> capitalList = capitalRepository.findAllByAnimalAndCapitalIsEndFalse(animal);
+
+        for (Capital capital : capitalList){
+
+            if (animal.getAnimalAssets() < money){
+                // 현금 없는 경우
+                throw new CustomException(CASH_SHORTAGE_EXCEPTION);
+            }
+
+            if (!capital.getCapitalRemain().equals(money)){
+                // 대출금과 다른 경우
+                throw new CustomException(EARLY_REPAYMENT_NOT_ALLOWED_EXCEPTION);
+            }
+
+            capital.changeCapitalRemain(0L);
+            capital.changeCapitalIsEnd(true);
+
+            animal.decreaseAnimalAssets(money);
+        }
     }
 }
