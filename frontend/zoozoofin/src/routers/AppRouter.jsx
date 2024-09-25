@@ -21,7 +21,7 @@ import Stock from '../pages/Stock';
 import Tutorial from '../pages/Tutorial';
 import Work from '../pages/Work';
 import WalletPage from '../pages/test/WalletPage';
-
+import Auth from '../pages/Auth';
 const Background = styled.div`
     width: 360px;
     height: 640px;
@@ -79,6 +79,8 @@ const AppRouter = () => {
                 <Route path="/jjhoney" element={<JJHoney />} />
                 <Route path="/sinijini" element={<Sinijini />} />
                 <Route path="/jignonne" element={<Jignonne />} />
+                {/* social login */}
+                <Route path="/callback" element={<Auth />} />
             </Routes>
         </>
     );

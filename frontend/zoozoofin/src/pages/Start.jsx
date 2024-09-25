@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
     EnterButton,
@@ -8,26 +8,43 @@ import {
     GoogleButton,
 } from '@styles/components/start/Buttons';
 
+const API_URI = import.meta.env.VITE_URL;
+
 const Start = () => {
-    const [isEntered, setIsEntered] = useState(false);
+    const [isEntered, setIsEntered] = useState(false); // API
+    // const apiClient = getApiClient();
 
     const handleEnter = () => {
         setIsEntered(true);
     };
 
+    const handleSocialLogin = async (domain) => {
+        window.location.href = `${API_URI}/oauth/${domain}`;
+    };
+
+    // const test = async () => {
+    //     console.log('test');
+    //     try {
+    //         const res = await apiClient.get('/member/profile');
+    //         console.log(res);
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    // };
     return (
         <>
             <h1>시작화면</h1>
-            {!isEntered ? (
+            {isEntered ? (
                 <div style={{ backgroundColor: 'black' }}>
                     <EnterButton onClick={handleEnter}>입장 버튼</EnterButton>
                 </div>
             ) : (
                 <LoginButtonBlock>
                     소셜 로그인 버튼 Block
-                    <KakaoButton />
-                    <NaverButton />
-                    <GoogleButton />
+                    <KakaoButton onClick={() => handleSocialLogin('kakao')} />
+                    <NaverButton onClick={test} />
+                    {/* <NaverButton onClick={() => handleSocialLogin('naver')} /> */}
+                    <GoogleButton onClick={() => handleSocialLogin('google')} />
                 </LoginButtonBlock>
             )}
             <Link to="/tutorial">튜토리얼</Link>
