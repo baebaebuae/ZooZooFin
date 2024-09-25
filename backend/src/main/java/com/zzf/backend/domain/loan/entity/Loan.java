@@ -61,4 +61,10 @@ public class Loan extends BaseEntity {
     public void changeLoanIsEnd(boolean isEnd){
         this.loanIsEnd = isEnd;
     }
+
+    public void changeLoanWarning(boolean warn) { this.loanWarning = warn; }
+
+    public void decreaseLoanRemain(long money) { this.loanRemain -= money; }
+
+    public void decreaseLoanToEnd(long decrease) { this.loanToEnd -= decrease; }
 }

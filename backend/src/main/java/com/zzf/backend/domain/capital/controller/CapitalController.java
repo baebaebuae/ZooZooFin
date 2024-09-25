@@ -19,30 +19,30 @@ public class CapitalController {
 
     //사채 있는지 확인 012
     @GetMapping
-    public ResponseDto<Map<String, Boolean>> getCapital(){
-        // Header에서 memberId 얻기
-        String memberId = "913418af-6b2e-11ef-929f-28c5d21eabf3";
+    public ResponseDto<Map<String, Boolean>> getCapital(@RequestHeader Long animalId){
 
         Map<String, Boolean> mapResponse = new HashMap<>();
+        mapResponse.put("capitalExist", capitalService.getCapitalExist(animalId));
 
         return ResponseDto.success(SuccessCode.READ_SUCCESS, mapResponse);
     }
 
     //사채 등록 013
     @PostMapping
-    public ResponseDto<Void> postCapital(@RequestBody CapitalRequest capitalRequest){
-        // Header에서 memberId 얻기
-        String memberId = "913418af-6b2e-11ef-929f-28c5d21eabf3";
+    public ResponseDto<Void> postCapital(@RequestHeader Long animalId, @RequestBody CapitalRequest capitalRequest){
+
+        capitalService.postCapital(animalId, capitalRequest);
 
         return ResponseDto.success(SuccessCode.CREATE_SUCCESS);
     }
 
     //사채 상환 014
     @PatchMapping
-    public ResponseDto<Void> patchCapital(@RequestBody Map<String, Long> mapRequest){
-        // Header에서 memberId 얻기
-        String memberId = "913418af-6b2e-11ef-929f-28c5d21eabf3";
+    public ResponseDto<Void> patchCapital(@RequestHeader Long animalId, @RequestBody Map<String, Long> mapRequest){
+
         Long money = mapRequest.get("money");
+
+        capitalService.patchCapital(animalId, money);
 
         return ResponseDto.success(SuccessCode.UPDATE_SUCCESS);
     }

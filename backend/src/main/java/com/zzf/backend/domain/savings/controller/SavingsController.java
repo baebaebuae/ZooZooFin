@@ -31,11 +31,10 @@ public class SavingsController {
 
     //적금 등록 005
     @PostMapping
-    public ResponseDto<Void> postSavings(@RequestBody SavingsRequest savingsRequest){
-        // Header에서 memberId 얻기
-        String memberId = "913418af-6b2e-11ef-929f-28c5d21eabf3";
+    public ResponseDto<Void> postSavings(@RequestHeader Long animalId,
+                                         @RequestBody SavingsRequest savingsRequest){
 
-        savingsService.postSavings(savingsRequest, memberId);
+        savingsService.postSavings(animalId, savingsRequest);
 
         return ResponseDto.success(CREATE_SUCCESS);
     }
@@ -53,12 +52,11 @@ public class SavingsController {
 
     //적금 해지 006_1
     @PatchMapping("/my")
-    public ResponseDto<Void> deleteMySavings(@RequestBody Map<String, Long> mapRequest){
-        // Header에서 memberId 얻기
-        String memberId = "913418af-6b2e-11ef-929f-28c5d21eabf3";
+    public ResponseDto<Void> deleteMySavings(@RequestHeader Long animalId,
+                                             @RequestBody Map<String, Long> mapRequest){
         Long savingsId = mapRequest.get("savingsId");
 
-        savingsService.deleteMySavings(memberId, savingsId);
+        savingsService.deleteMySavings(animalId, savingsId);
 
         return ResponseDto.success(UPDATE_SUCCESS);
     }

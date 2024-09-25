@@ -1,20 +1,17 @@
 package com.zzf.backend.domain.loan.service;
 
 import com.zzf.backend.domain.animal.entity.Animal;
+import com.zzf.backend.domain.home.DTO.LoanWarningDTO;
 import com.zzf.backend.domain.loan.dto.LoanAvailableResponse;
 import com.zzf.backend.domain.loan.dto.LoanRequest;
 import com.zzf.backend.domain.loan.dto.MyLoanListResponse;
 
 public interface LoanService {
-    LoanAvailableResponse checkLoanAvailable(String memberId);
+    LoanAvailableResponse checkLoanAvailable(Long animalId);
 
-    void postLoan(LoanRequest loanRequest, String memberId);
+    void postLoan(Long animalId, LoanRequest loanRequest);
 
-    MyLoanListResponse getMyLoan(String memberId);
+    MyLoanListResponse getMyLoan(Long animalId);
 
-    void patchLoan(Long loanId, String memberId);
-
-    void loanGoToNextTurn(Animal animal);
-
-    long getMyTotalLoans(Animal animal);
+    void patchLoan(Long animalId, Long loanId);
 }

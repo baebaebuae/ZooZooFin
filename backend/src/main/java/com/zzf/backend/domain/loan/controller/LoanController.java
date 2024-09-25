@@ -21,11 +21,9 @@ public class LoanController {
 
     //대출 가능 조회 007
     @GetMapping("/check")
-    public ResponseDto<LoanAvailableResponse> checkLoanAvailable(){
-        // Header에서 memberId 얻기
-        String memberId = "913418af-6b2e-11ef-929f-28c5d21eabf3";
+    public ResponseDto<LoanAvailableResponse> checkLoanAvailable(@RequestHeader Long animalId){
 
-        LoanAvailableResponse loanAvailableResponse = loanService.checkLoanAvailable(memberId);
+        LoanAvailableResponse loanAvailableResponse = loanService.checkLoanAvailable(animalId);
 
         return ResponseDto.success(READ_SUCCESS, loanAvailableResponse);
     }
@@ -43,22 +41,19 @@ public class LoanController {
 
     //대출 등록 009
     @PostMapping
-    public ResponseDto<Void> postLoan(@RequestBody LoanRequest loanRequest){
-        // Header에서 memberId 얻기
-        String memberId = "913418af-6b2e-11ef-929f-28c5d21eabf3";
+    public ResponseDto<Void> postLoan(@RequestHeader Long animalId,
+                                      @RequestBody LoanRequest loanRequest){
 
-        loanService.postLoan(loanRequest, memberId);
+        loanService.postLoan(animalId, loanRequest);
 
         return ResponseDto.success(CREATE_SUCCESS);
     }
 
     //대출금 상환_내 대출 조회 010
     @GetMapping("/my")
-    public ResponseDto<MyLoanListResponse> getMyLoan(){
-        // Header에서 memberId 얻기
-        String memberId = "913418af-6b2e-11ef-929f-28c5d21eabf3";
+    public ResponseDto<MyLoanListResponse> getMyLoan(@RequestHeader Long animalId){
 
-        MyLoanListResponse myLoanListResponse = loanService.getMyLoan(memberId);
+        MyLoanListResponse myLoanListResponse = loanService.getMyLoan(animalId);
         return ResponseDto.success(READ_SUCCESS, myLoanListResponse);
     }
 
@@ -75,12 +70,11 @@ public class LoanController {
 
     //대출금 중도상환 010_2
     @PatchMapping("/my")
-    public ResponseDto<Void> patchLoan(@RequestBody Map<String, Long> mapRequest){
-        // Header에서 memberId 얻기
-        String memberId = "913418af-6b2e-11ef-929f-28c5d21eabf3";
+    public ResponseDto<Void> patchLoan(@RequestHeader Long animalId,
+                                       @RequestBody Map<String, Long> mapRequest){
         Long loanId = mapRequest.get("loanId");
 
-        loanService.patchLoan(loanId, memberId);
+        loanService.patchLoan(animalId, loanId);
         return ResponseDto.success(UPDATE_SUCCESS);
     }
 }

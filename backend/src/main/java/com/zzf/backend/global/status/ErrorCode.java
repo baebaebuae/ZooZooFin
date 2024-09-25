@@ -39,6 +39,7 @@ public enum ErrorCode {
     SAVINGS_NOT_FOUND_EXCEPTION(404, "존재하지 않는 적금입니다."),
     LOAN_NOT_FOUND_EXCEPTION(404, "존재하지 않는 대출입니다."),
     CAPITAL_NOT_FOUND_EXCEPTION(404, "존재하지 않는 사채입니다."),
+    CAPITAL_DUPLICATE_NOT_ALLOWED_EXCEPTION(400, "사채는 중복 대출이 불가능합니다."),
     DEPOSIT_TYPE_NOT_FOUND_EXCEPTION(404, "존재하지 않는 예금상품입니다."),
     SAVINGS_TYPE_NOT_FOUND_EXCEPTION(404, "존재하지 않는 적금상품입니다."),
     QUIZ_NOT_FOUND_EXCEPTION(404, "존재하지 않는 퀴즈지롱~!"),
