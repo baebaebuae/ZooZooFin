@@ -1,13 +1,12 @@
 spring:
   application:
     name: backend
-#  config:
-#    import: optional:file:.env[.properties]
+  config:
+    import: optional:file:.env[.properties]
   sql:
     init:
       mode: always
       data-locations: classpath:sql/data-zoozoofin.sql
-      #      schema-locations: classpath:sql/schema-zoozoofin.sql
       encoding: utf-8
 
   jpa:
@@ -21,10 +20,10 @@ spring:
     username: sa
   data:
     redis:
-      host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
+      host: ${LOCAL_REDIS_HOST}
+      port: ${LOCAL_REDIS_PORT}
     mongodb:
-      uri: ${MONGO_URI}
+      uri: ${LOCAL_MONGO_URI}
 
 oauth:
   google:
