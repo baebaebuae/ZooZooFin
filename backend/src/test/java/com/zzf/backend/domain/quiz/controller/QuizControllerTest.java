@@ -61,7 +61,7 @@ class QuizControllerTest {
     public void read_quiz() throws Exception {
         // given
         final String url = "/api/v1/quiz/{id}";
-        final long quizId = 11;
+        final long quizId = 1;
 
         // when
         ResultActions actions = mockMvc.perform(
