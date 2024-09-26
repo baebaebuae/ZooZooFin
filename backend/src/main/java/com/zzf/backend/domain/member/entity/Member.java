@@ -7,14 +7,19 @@ import lombok.*;
 
 @Entity
 @Getter
+@Builder
 @Table(name = "member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Member extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "member_id")
     private String memberId;
+
+    @NotNull
+    @Column(name = "kakao_member_id")
+    private String kakaoMemberId;
 
     @NotNull
     @Column(name = "member_gold_bar")
@@ -24,14 +29,4 @@ public class Member extends BaseEntity {
     @Column(name = "member_is_solve_quiz")
     private Boolean memberIsSolveQuiz;
 
-    @NotNull
-    @Column(name = "member_bank_count")
-    private Long memberBankCount;
-
-    @Builder
-    public Member(Long memberGoldBar, Boolean memberIsSolveQuiz, Long memberBankCount) {
-        this.memberGoldBar = memberGoldBar;
-        this.memberIsSolveQuiz = memberIsSolveQuiz;
-        this.memberBankCount = memberBankCount;
-    }
 }

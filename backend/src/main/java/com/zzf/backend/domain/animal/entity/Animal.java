@@ -45,7 +45,7 @@ public class Animal extends BaseEntity {
 
     @NotNull
     @Column(name = "animal_hierarchy")
-    private Long animalHierarchy;
+    private String animalHierarchy;
 
     @NotNull
     @Column(name = "animal_is_work")
@@ -60,7 +60,7 @@ public class Animal extends BaseEntity {
     private Boolean animalQuestCleared;
 
     @Builder
-    public Animal(Member member, AnimalType animalType, String animalName, Long animalTurn, Long animalAssets, Long animalCredit, Long animalHierarchy, Boolean animalIsWork, Boolean animalIsEnd, Boolean animalQuestCleared) {
+    public Animal(Member member, AnimalType animalType, String animalName, Long animalTurn, Long animalAssets, Long animalCredit, String animalHierarchy, Boolean animalIsWork, Boolean animalIsEnd, Boolean animalQuestCleared) {
         this.member = member;
         this.animalType = animalType;
         this.animalName = animalName;
@@ -89,7 +89,7 @@ public class Animal extends BaseEntity {
         this.animalCredit = credit;
     }
 
-    public void changeAnimalHierarchy(Long hierarchy) {
+    public void changeAnimalHierarchy(String hierarchy) {
         this.animalHierarchy = hierarchy;
     }
 }

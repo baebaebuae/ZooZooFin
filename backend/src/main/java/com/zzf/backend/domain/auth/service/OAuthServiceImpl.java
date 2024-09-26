@@ -3,6 +3,8 @@ package com.zzf.backend.domain.auth.service;
 import com.zzf.backend.domain.auth.dto.KakaoTokenDto;
 import com.zzf.backend.domain.auth.dto.KakaoUserDto;
 import com.zzf.backend.domain.auth.dto.LoginResponse;
+import com.zzf.backend.domain.member.entity.Member;
+import com.zzf.backend.domain.member.repository.MemberRepository;
 import com.zzf.backend.global.exception.CustomException;
 import com.zzf.backend.global.jwt.JwtProvider;
 import com.zzf.backend.global.redis.entity.RefreshToken;
@@ -17,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.UUID;
+
 import static com.zzf.backend.global.status.ErrorCode.*;
 
 @Slf4j
@@ -25,6 +29,7 @@ import static com.zzf.backend.global.status.ErrorCode.*;
 public class OAuthServiceImpl implements OAuthService {
 
     private final JwtProvider jwtProvider;
+    private final MemberRepository memberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
 
     @Value("${oauth.google.secret}")
@@ -98,14 +103,29 @@ public class OAuthServiceImpl implements OAuthService {
                         .bodyToMono(KakaoUserDto.class)
                         .block();
 
-                String memberId = userDto.id.toString();
-                String accessToken = jwtProvider.createAccessToken(memberId);
+                String kakaoMemberId = userDto.id.toString();
+
+                Member member = memberRepository.findByKakaoMemberId(kakaoMemberId)
+                        .orElseGet(() -> {
+                            String memberId = UUID.randomUUID().toString();
+                            Member newMember = Member.builder()
+                                    .memberId(memberId)
+                                    .kakaoMemberId(kakaoMemberId)
+                                    .memberGoldBar(0L)
+                                    .memberIsSolveQuiz(false)
+                                    .build();
+                            memberRepository.save(newMember);
+                            return newMember;
+                        });
+
+
+                String accessToken = jwtProvider.createAccessToken(member.getMemberId());
                 String refreshToken = jwtProvider.createRefreshToken();
 
                 refreshTokenRepository.save(RefreshToken.builder()
                         .refreshToken(refreshToken)
                         .accessToken(accessToken)
-                        .memberId(memberId)
+                        .memberId(member.getMemberId())
                         .expiresIn(refreshExpiration)
                         .build());
 
