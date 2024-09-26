@@ -62,7 +62,12 @@ export const ProductCheckCard = ({
             {/* 임의로 캐릭터 능력 추가 금액을 가입 금액을 기준으로 계산해놓음. 실제 추가 금액 얼마인지 확인 */}
             <StampButton onClick={() => setIsModalOpen(true)} />
 
-            {isModalOpen && <StampModal goToScript={goToScript} />}
+            {isModalOpen && (
+                <StampModal
+                    goToScript={goToScript}
+                    handleCloseModal={() => setIsModalOpen(false)}
+                />
+            )}
         </Card>
     );
 };

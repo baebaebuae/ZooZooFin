@@ -19,7 +19,7 @@ export const StampButton = ({ onClick }) => {
     return (
         <>
             <Button size={'normal'} $isBorder={true} color={'primary'} onClick={onClick}>
-                도장 찍기
+                서명하기
             </Button>
         </>
     );

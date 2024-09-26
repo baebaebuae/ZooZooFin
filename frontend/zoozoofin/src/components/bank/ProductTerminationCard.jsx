@@ -11,13 +11,14 @@ const ProductName = styled.div`
 `;
 
 export const ProductTerminationCard = ({
+    productType,
     productName,
     period,
     rate,
-    savingsAmount,
+    payment,
+    amount,
     restTurn,
     endTurn,
-    isLoan,
     handleClick,
 }) => {
     return (
@@ -29,12 +30,16 @@ export const ProductTerminationCard = ({
                 infoContent1={`${period.toLocaleString()}턴`}
                 infoTitle2={'이율'}
                 infoContent2={`${rate}%`}
-                $isLoan={isLoan}
+                $isLoan={productType === 'loan'}
             />
             <Divider isLine={true} />
             <ProductJoinInfo
                 infoTitle={'가입 금액'}
-                infoContent={`${savingsAmount.toLocaleString()}원`}
+                infoContent={
+                    productType === 'deposit'
+                        ? `${amount.toLocaleString()}원`
+                        : `${payment.toLocaleString()}원 / 턴`
+                }
             />
             <ProductJoinInfo infoTitle={'만기 회차'} infoContent={`${endTurn}턴`} />
             <ProductJoinInfo infoTitle={'남은 회차'} infoContent={`${restTurn}턴`} />

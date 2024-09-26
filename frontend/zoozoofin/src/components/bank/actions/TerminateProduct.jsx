@@ -64,43 +64,47 @@ const TerminateProduct = ({ productType }) => {
         goToNextCard();
     };
 
-    // selectedProduct로 그대로 바꿔질것
-
     // 임시 예금 데이터
-    // const tempProduct = {
-    //     productId: 1,
-    //     name: '예금이름',
-    //     period: 5,
-    //     rate: 3,
-    //     amount: 3000000,
-    //     finalReturn: 1600000,
-    //     restTurn: 2,
-    //     endTurn: 13,
-    // };
+    // const tempProducts = [
+    //     {
+    //         productId: 1,
+    //         name: '예금이름',
+    //         period: 5,
+    //         rate: 3,
+    //         amount: 3000000,
+    //         finalReturn: 3100000,
+    //         restTurn: 2,
+    //         endTurn: 13,
+    //     },
+    // ];
 
     // 임시 적금 데이터
-    const tempProduct = {
-        productId: 1,
-        name: '적금이름',
-        period: 5,
-        rate: 3,
-        amount: 100000,
-        payment: 300000, // 이게 뭐지?
-        finalReturn: 1600000,
-        restTurn: 2,
-        endTurn: 13,
-        warning: false,
-    };
-
-    // "savingsId": 0,
-    // "name": "string",
-    // "period": 0,
-    // "amount": 0,
-    // "payment": 0,
-    // "finalReturn": 0,
-    // "restTurn": 0,
-    // "endTurn": 0,
-    // "warning": true,
+    const tempProducts = [
+        {
+            productId: 1,
+            name: '적금이름1',
+            period: 5,
+            rate: 3,
+            amount: 180000,
+            payment: 60000,
+            finalReturn: 187290,
+            restTurn: 2,
+            endTurn: 13,
+            warning: false,
+        },
+        {
+            productId: 2,
+            name: '적금이름2',
+            period: 10,
+            rate: 10,
+            amount: 450000,
+            payment: 90000, // 적금에만 있는 변수
+            finalReturn: 451240,
+            restTurn: 5,
+            endTurn: 13,
+            warning: true, // 적금에만 있는 변수
+        },
+    ];
 
     return (
         <Block>
@@ -116,33 +120,47 @@ const TerminateProduct = ({ productType }) => {
             {(() => {
                 if (!selectedProduct && currentCard === 1) {
                     return (
-                        <div>
-                            {/* {products.map((product) => ( */}
+                        <Block>
+                            {tempProducts.map((product) => {
+                                const commonProps = {
+                                    productType: productType,
+                                    productName: product.name,
+                                    period: product.period,
+                                    rate: product.rate,
+                                    amount: product.amount,
+                                    savingsAmount: product.amount,
+                                    restTurn: product.restTurn,
+                                    endTurn: product.endTurn,
+                                    handleClick: () => handleClick(product),
+                                };
 
-                            <ProductTerminationCard
-                                // key={tempProduct.savingsId}
-                                productName={tempProduct.name}
-                                period={tempProduct.period}
-                                rate={tempProduct.rate}
-                                savingsAmount={tempProduct.amount}
-                                restTurn={tempProduct.restTurn}
-                                endTurn={tempProduct.endTurn}
-                                // handleClick={handleClick(product)}
-                                handleClick={() => handleClick(tempProduct)}
-                            />
-                            {/* ))} */}
-                        </div>
+                                return (
+                                    <ProductTerminationCard
+                                        key={product.productId}
+                                        {...commonProps} // 공통 props 스프레드
+                                        {...(productType === 'savings' && {
+                                            payment: product.payment,
+                                        })} // savings인 경우에만 payment 추가
+                                    />
+                                );
+                            })}
+                        </Block>
                     );
                 } else if (currentCard === 2) {
                     return (
                         <ProductTerminationDetailCard
+                            productType={productType}
                             productName={selectedProduct.name}
                             period={selectedProduct.period}
-                            savingsAmount={selectedProduct.amount}
+                            amount={selectedProduct.amount}
                             finalReturn={selectedProduct.finalReturn}
                             restTurn={selectedProduct.restTurn}
                             endTurn={selectedProduct.endTurn}
                             goToNextCard={goToNextCard}
+                            {...(productType === 'savings' && {
+                                payment: selectedProduct.payment,
+                                warning: selectedProduct.warning,
+                            })}
                         />
                     );
                 }

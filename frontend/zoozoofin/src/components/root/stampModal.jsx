@@ -22,7 +22,7 @@ const StampBox = styled.div`
     background-color: white;
 `;
 
-export const StampModal = ({ goToScript }) => {
+export const StampModal = ({ goToScript, handleCloseModal }) => {
     const [isClicked, setIsClicked] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(true);
 
@@ -32,13 +32,18 @@ export const StampModal = ({ goToScript }) => {
         setTimeout(() => {
             // setIsClicked(false); // 잘 작동됨
             goToScript();
-        }, 2000);
+        }, 1500);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        handleCloseModal();
     };
 
     return (
         <>
             {isModalOpen && (
-                <Modal onClose={() => setIsModalOpen(false)}>
+                <Modal onClose={closeModal}>
                     <BlockTitle>박스를 눌러서</BlockTitle>
                     <BlockTitle>도장을 찍어주세요</BlockTitle>
                     <StampBox onClick={applyStamp}>
