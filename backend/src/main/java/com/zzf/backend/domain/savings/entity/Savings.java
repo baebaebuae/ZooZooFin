@@ -25,6 +25,10 @@ public class Savings extends BaseEntity {
     @NotNull
     private Long savingsAmount;
 
+    @Column(name = "savings_interest")
+    @NotNull
+    private Long savingsInterest;
+
     @Column(name = "savings_start_turn")
     @NotNull
     private Long savingsStartTurn;
@@ -63,5 +67,9 @@ public class Savings extends BaseEntity {
 
     public void increaseSavingsAmount(Long money){
         this.savingsAmount += money;
+    }
+
+    public void increaseSavingsInterest(Long money){
+        this.savingsInterest += money;
     }
 }

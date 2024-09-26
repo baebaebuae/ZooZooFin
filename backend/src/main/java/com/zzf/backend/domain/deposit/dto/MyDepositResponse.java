@@ -10,9 +10,9 @@ public class MyDepositResponse {
     private String name;
     private Long period;
     private Long amount;
+    private Long rate;
     private Long finalReturn;
     private Long restTurn;
     private Long endTurn;
-    private String depositName;
     private String depositImgUrl;
 }

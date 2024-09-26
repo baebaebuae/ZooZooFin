@@ -41,11 +41,11 @@ public class SavingsServiceImpl implements SavingsService{
 
         for(SavingsType savingsType : savingsTypeList){
             SavingsTypeResponse savingsTypeResponse = SavingsTypeResponse.builder()
-                    .savingsTypeId(savingsType.getSavingsTypeId())
-                    .savingsPeriod(savingsType.getSavingsPeriod())
-                    .savingsRate(savingsType.getSavingsRate())
-                    .savingsName(savingsType.getSavingsName())
-                    .SavingsImgUrl(savingsType.getSavingsImgUrl())
+                    .typeId(savingsType.getSavingsTypeId())
+                    .period(savingsType.getSavingsPeriod())
+                    .rate(savingsType.getSavingsRate())
+                    .name(savingsType.getSavingsName())
+                    .imgUrl(savingsType.getSavingsImgUrl())
                     .build();
 
             savingsTypeResponseList.add(savingsTypeResponse);
@@ -70,6 +70,7 @@ public class SavingsServiceImpl implements SavingsService{
         Savings savings = Savings.builder()
                 .savingsPayment(savingsRequest.getSavingsPayment())
                 .savingsAmount(savingsRequest.getSavingsPayment())
+                .savingsInterest(0L)
                 .savingsStartTurn(animal.getAnimalTurn())
                 .savingsEndTurn(animal.getAnimalTurn() + savingsType.getSavingsPeriod())
                 .savingsWarning(false)
@@ -98,22 +99,22 @@ public class SavingsServiceImpl implements SavingsService{
         for (Savings savings : savingsList){
             SavingsType savingsType = savings.getSavingsType();
 
-            // 만기 시 금액 계산
-            long finalReturn = savings.getSavingsPayment() * savingsType.getSavingsPeriod();
-            finalReturn = (savings.getSavingsWarning() ? finalReturn - savings.getSavingsPayment() : finalReturn);
-            finalReturn += finalReturn * savingsType.getSavingsRate() / 100;
+            // 만기 시 예상 금액 계산
+            double rate = Math.ceil((double) savingsType.getSavingsRate() / savingsType.getSavingsPeriod() / 100.0);
+            long a = (savingsType.getSavingsPeriod()) * (savingsType.getSavingsPeriod() + 1) / 2;
+            long finalReturn = savings.getSavingsPayment() * savingsType.getSavingsPeriod() + (long) Math.ceil(savings.getSavingsPayment() * a * rate);
 
             MySavingsResponse mySavingsResponse = MySavingsResponse.builder()
                     .savingsId(savings.getSavingsId())
                     .name(savingsType.getSavingsName())
                     .period(savingsType.getSavingsPeriod())
                     .amount(savings.getSavingsAmount())
+                    .rate(savingsType.getSavingsRate())
                     .payment(savings.getSavingsPayment())
                     .finalReturn(finalReturn) // 만기 시 금액
                     .restTurn(savings.getSavingsEndTurn() - animal.getAnimalTurn()) // (마감 턴) - (캐릭터 현재 턴)
                     .endTurn(savings.getSavingsEndTurn())
                     .warning(savings.getSavingsWarning())
-                    .savingsName(savingsType.getSavingsName())
                     .savingsImgUrl(savingsType.getSavingsImgUrl())
                     .build();
 

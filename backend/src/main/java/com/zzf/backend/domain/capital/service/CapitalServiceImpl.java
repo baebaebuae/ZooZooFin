@@ -52,6 +52,14 @@ public class CapitalServiceImpl implements CapitalService{
 
         // 캐릭터 가용 자산 증가. 선이자 제외.
         animal.increaseAnimalAssets(capitalRequest.getCapitalAmounts() * 9 / 10);
+
+        // 캐릭터 신용도 3단계 감소
+        if (animal.getAnimalCredit() < 8){
+            animal.changeAnimalCredit(animal.getAnimalCredit() + 3);
+        }else{
+            animal.changeAnimalCredit(10L);
+        }
+
     }
 
     // 사채 상환
@@ -70,7 +78,7 @@ public class CapitalServiceImpl implements CapitalService{
             }
 
             if (!capital.getCapitalRemain().equals(money)){
-                // 대출금과 다른 경우
+                // 입력값이 대출금과 다른 경우
                 throw new CustomException(EARLY_REPAYMENT_NOT_ALLOWED_EXCEPTION);
             }
 

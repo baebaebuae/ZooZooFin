@@ -40,11 +40,11 @@ public class DepositServiceImpl implements DepositService {
 
         for (DepositType depositType : depositTypeList) {
             DepositTypeResponse depositTypeResponse = DepositTypeResponse.builder()
-                    .depositTypeId(depositType.getDepositTypeId())
-                    .depositPeriod(depositType.getDepositPeriod())
-                    .depositRate(depositType.getDepositRate())
-                    .depositName(depositType.getDepositName())
-                    .depositImgUrl(depositType.getDepositImgUrl())
+                    .typeId(depositType.getDepositTypeId())
+                    .period(depositType.getDepositPeriod())
+                    .rate(depositType.getDepositRate())
+                    .name(depositType.getDepositName())
+                    .imgUrl(depositType.getDepositImgUrl())
                     .build();
 
             depositTypeResponseList.add(depositTypeResponse);
@@ -102,10 +102,10 @@ public class DepositServiceImpl implements DepositService {
                     .name(depositType.getDepositName())
                     .period(depositType.getDepositPeriod())
                     .amount(deposit.getDepositAmount())
+                    .rate(depositType.getDepositRate())
                     .finalReturn(finalReturn) // 만기 시 금액
                     .restTurn(deposit.getDepositEndTurn() - animal.getAnimalTurn()) // (마감 턴) - (캐릭터 현재 턴)
                     .endTurn(deposit.getDepositEndTurn())
-                    .depositName(depositType.getDepositName())
                     .depositImgUrl(depositType.getDepositImgUrl())
                     .build();
 
