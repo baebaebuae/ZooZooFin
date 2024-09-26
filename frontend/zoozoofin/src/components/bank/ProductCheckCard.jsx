@@ -19,9 +19,9 @@ import axios from 'axios';
 const URL = import.meta.env.VITE_URL;
 // 상품 가입하기(POST)
 const joinProducts = async (productType, typeId, money) => {
-    // console.log('joinProducts - productType:', productType);
-    // console.log('joinProducts - typeId:', typeId);
-    // console.log('joinProducts - money:', money);
+    console.log('joinProducts - productType:', productType);
+    console.log('joinProducts - typeId:', typeId);
+    console.log('joinProducts - money:', money);
     try {
         const res = await axios({
             method: 'post',

@@ -14,6 +14,7 @@ export default defineConfig({
             { find: '@routers', replacement: '/src/routers' },
             { find: '@scripts', replacement: '/src/scripts' },
             { find: '@styles', replacement: '/src/styles' },
+            { find: '@stores', replacement: '/src/stores' },
         ],
     },
 });

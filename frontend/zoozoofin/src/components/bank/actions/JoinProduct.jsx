@@ -6,10 +6,13 @@ import axios from 'axios';
 import { ProductCard } from '@components/bank/ProductCard';
 import { ProductJoinCard } from '@components/bank/ProductJoinCard';
 import { ProductCheckCard } from '@components/bank/ProductCheckCard';
+import { Loading } from '@components/root/loading';
 
 import { MessageBox } from '@components/root/messageBox';
 import { NormalIcon } from '@components/root/icon';
 import IconChick from '@assets/images/icons/icon_chick.svg?react';
+
+import { getApiClient } from '@stores/apiClient';
 
 const Block = styled.div`
     display: flex;
@@ -49,6 +52,20 @@ const JoinProduct = ({ productType }) => {
             return error;
         }
     };
+
+    // // 상품 정보 받아오기 - store 데려옴 - - animal 안만들어서 오류
+    // const fetchProducts = async () => {
+    //     const apiClient = getApiClient();
+
+    //     try {
+    //         const res = await apiClient.get(`/${productType}`);
+    //         console.log(res.data.body);
+    //         setProducts(res.data.body);
+    //     } catch (error) {
+    //         // console.error('error: ', error);
+    //         return error;
+    //     }
+    // };
 
     useEffect(() => {
         fetchProducts();
@@ -141,7 +158,7 @@ const JoinProduct = ({ productType }) => {
                         />
                     );
                 } else if (currentCard === 4) {
-                    return <div>로딩중</div>;
+                    return <Loading content={'로딩중'} />;
                 }
             })()}
         </Block>
