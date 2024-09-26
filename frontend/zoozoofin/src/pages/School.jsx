@@ -1,7 +1,7 @@
-import { useRef, useState, Suspense } from 'react';
+import React, { useRef, useState, Suspense, useEffect } from 'react';
 import Bubble from '@components/root/bubble';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useGLTF, OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 
@@ -35,29 +35,45 @@ const NPCModel = () => {
 
 const School = () => {
     const [name, setName] = useState('토토');
-    const [score, setScore] = useState(0);
+    const [score, setScore] = useState(null);
     const [dialogue, setDialogue] = useState({
         content: `${name}, 시험을 보러 온거니?`,
         responses: [
-            { selection: '네! 시험보고싶어요!', nextScript: 'START_QUIZ' }, // selection 추가
-            { selection: '아니요.. 더 공부하고 올게요', nextScript: 'EXIT' } // selection 추가
+            { selection: '네! 시험보고싶어요!', nextScript: 'START_QUIZ' },
+            { selection: '아니요.. 더 공부하고 올게요', nextScript: 'EXIT' }
         ]
     });
     const navigate = useNavigate();
+    const location = useLocation();
 
-    // 응답 클릭 핸들러
+    useEffect(() => {
+        if (location.state && location.state.score) {
+            setScore(location.state.score);
+            if (parseInt(location.state.score) >= 80) {
+                setDialogue({
+                    content: `와우! ${location.state.score}점이나 받았구나! 정말 잘했어!`,
+                    responses: [{ selection: '감사합니다!', nextScript: 'END' }]
+                });
+            } else {
+                setDialogue({
+                    content: `${location.state.score}점이구나. 다음에는 더 잘할 수 있을 거야!`,
+                    responses: [{ selection: '네, 더 열심히 공부할게요.', nextScript: 'END' }]
+                });
+            }
+        }
+    }, [location]);
+
     const handleResponseClick = (nextScript) => {
         if (nextScript === 'START_QUIZ') {
-            navigate('/testpaper'); // TestPaper 페이지로 이동
+            navigate('/testpaper');
         } else if (nextScript === 'EXIT') {
-            navigate(-1); // 이전 페이지로 이동
+            navigate(-1);
         } else if (nextScript === 'END') {
-            alert("시험이 종료되었습니다.");
+            // 시험 종료
             navigate('/');
         }
     };
 
-    // 디버깅용 로그 추가
     console.log('현재 대화 내용:', dialogue.content);
     console.log('현재 응답 옵션:', dialogue.responses);
 
