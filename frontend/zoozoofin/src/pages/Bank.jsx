@@ -19,7 +19,7 @@ const Bank = () => {
             {/* script id 더하는 함수 작동 예정 */}
 
             {/* type==='action'일 때 */}
-            <ActionContainer currentAction={'terminateSavings'} />
+            <ActionContainer currentAction={'joinDeposit'} />
             {/* 해당 action명 받아서 ActionContainer의 content 전환 */}
             {/* 단일 id */}
         </BankBlock>

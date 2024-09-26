@@ -21,17 +21,6 @@ const Start = () => {
         window.location.href = `${API_URI}/oauth/${domain}`;
     };
 
-    const test = async () => {
-        const apiClient = getApiClient();
-        try {
-            const res = await apiClient.get('/member/profile');
-            console.log(res.data.message);
-            console.log(res.data.body);
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
     return (
         <>
             <h1>시작화면</h1>
@@ -43,8 +32,7 @@ const Start = () => {
                 <LoginButtonBlock>
                     소셜 로그인 버튼 Block
                     <KakaoButton onClick={() => handleSocialLogin('kakao')} />
-                    <NaverButton onClick={test} />
-                    {/* <NaverButton onClick={() => handleSocialLogin('naver')} /> */}
+                    <NaverButton onClick={() => handleSocialLogin('naver')} />
                     <GoogleButton onClick={() => handleSocialLogin('google')} />
                 </LoginButtonBlock>
             )}
