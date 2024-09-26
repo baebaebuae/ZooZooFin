@@ -66,15 +66,19 @@ public class QuizServiceImpl implements QuizService {
         // quiz validator 필요 - 중복 확인
         for (QuizRequest.AnswerDto answerDto : quizRequest.getAnswerList()) {
             Quiz quiz = quizRepository.findByQuizId(answerDto.getQuizId()).orElseThrow(() -> new CustomException(QUIZ_NOT_FOUND_EXCEPTION));
-            QuizResult quizResult = quizResultRepository.findAllByAnimalAndQuiz(animal, quiz).orElseThrow(() -> new CustomException(QUIZ_RESULT_NOT_FOUND_EXCEPTION));
-            QuizResponse.QuizGrading quizGrading = new QuizResponse.QuizGrading();
-            String animalAnswer = answerDto.getAnimalAnswer();
 
+            String animalAnswer = answerDto.getAnimalAnswer();
             boolean isCorrect = quiz.getQuizAnswer()
                     .equals(animalAnswer);
 
-            // 채점 결과 업데이트
-            quizResult.updateQuizResult(isCorrect, animalAnswer);
+            QuizResult quizResult = QuizResult.builder()
+                    .animal(animal)
+                    .quiz(quiz)
+                    .isCorrect(isCorrect)
+                    .animalAnswer(animalAnswer)
+                    .build();
+
+            quizResultRepository.save(quizResult);
 
             // 점수 계산
             if (isCorrect) {
@@ -82,6 +86,7 @@ public class QuizServiceImpl implements QuizService {
             }
 
             // 정리
+            QuizResponse.QuizGrading quizGrading = new QuizResponse.QuizGrading();
             quizGrading.setQuizId(quiz.getQuizId());
             quizGrading.setQuizAnswer(quiz.getQuizAnswer());
             quizGrading.setAnimalAnswer(animalAnswer);

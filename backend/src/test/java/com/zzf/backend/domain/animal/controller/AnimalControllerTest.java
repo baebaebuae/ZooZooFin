@@ -37,7 +37,7 @@ class AnimalControllerTest {
     @Autowired
     private Gson gson;
 
-    private final String jwtToken = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6IjkxMzQxOGFmLTZiMmUtMTFlZi05MjlmLTI4YzVkMjFlYWJmMyIsImV4cCI6MTgxMzMzMDU4Nn0.ZgnLrGNNi9xt-jlJAgyNOAn6-_yw4m5C9SOUkk5zyPY";
+    private final String token = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6IjkxMzQxOGFmLTZiMmUtMTFlZi05MjlmLTI4YzVkMjFlYWJmMyIsImV4cCI6MTgxMzMzMDU4Nn0.ZgnLrGNNi9xt-jlJAgyNOAn6-_yw4m5C9SOUkk5zyPY";
 
     @Test
     public void animal_type_success() throws Exception {
@@ -46,7 +46,7 @@ class AnimalControllerTest {
         // when
         ResultActions actions = mockMvc.perform(
                 get("/api/v1/animal")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
         );
 
@@ -73,7 +73,7 @@ class AnimalControllerTest {
         // when
         ResultActions actions = mockMvc.perform(
                 post("/api/v1/animal")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content));
 
@@ -94,14 +94,14 @@ class AnimalControllerTest {
 
         ResultActions givenActions = mockMvc.perform(
                 post("/api/v1/ending")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content));
 
         // when
         ResultActions actions = mockMvc.perform(
                 get("/api/v1/animal/1")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON));
 
         // then
@@ -118,7 +118,7 @@ class AnimalControllerTest {
         // when
         ResultActions actions = mockMvc.perform(
                 get("/api/v1/animal/1")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON));
 
         // then

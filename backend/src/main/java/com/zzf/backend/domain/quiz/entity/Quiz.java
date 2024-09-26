@@ -29,4 +29,8 @@ public class Quiz extends BaseEntity {
     @Column(name = "quiz_answer")
     @NotNull
     private String quizAnswer;
+
+    @Column(name = "quiz_type")
+    @NotNull
+    private String quizType;
 }

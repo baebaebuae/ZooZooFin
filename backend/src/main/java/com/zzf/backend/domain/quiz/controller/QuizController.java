@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/quiz")
-public class quizController {
+public class QuizController {
 
     private final QuizServiceImpl quizServiceImpl;
 
@@ -53,7 +53,7 @@ public class quizController {
 
     // 퀴즈 ID로 퀴즈 조회
     @GetMapping("/{quizId}")
-    public ResponseDto<QuizDto> getQuizById(@PathVariable("quizId") Long quizId) {
+    public ResponseDto<QuizDto> getQuizById(@PathVariable(name = "quizId") Long quizId) {
         Quiz quiz = quizServiceImpl.findQuizByQuizId(quizId);
         QuizDto quizDto = new QuizDto(quiz);
         return ResponseDto.success(SuccessCode.QUIZ_SUCCESS, quizDto);
