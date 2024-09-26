@@ -7,15 +7,16 @@ import { InputBox } from '@components/inputBox';
 import { StampButton } from '@components/root/buttons';
 import { Divider } from '@components/root/card';
 import { InfoBox } from '@components/root/infoBox';
+import { Card } from '@components/root/card';
 
 const ProductName = styled.div`
     font-size: 14px;
     color: ${({ theme }) => theme.colors.gray};
 `;
 
-export const ProductCard = ({ productName, turn, rate, isLoan }) => {
+export const ProductCard = ({ productName, turn, rate, isLoan, handleClick }) => {
     return (
-        <>
+        <Card onClick={handleClick}>
             <NormalIcon icon={IconChicken}></NormalIcon>
             <ProductName>{productName}</ProductName>
             <ProductDetailInfo
@@ -24,8 +25,9 @@ export const ProductCard = ({ productName, turn, rate, isLoan }) => {
                 infoTitle2={'이율'}
                 infoContent2={`${rate}%`}
                 $isLoan={isLoan}
+                isEarlyTermination={false}
             ></ProductDetailInfo>
-        </>
+        </Card>
     );
 };
 
@@ -45,7 +47,7 @@ export const ProductJoinCard = ({
     }
 
     return (
-        <>
+        <Card>
             <NormalIcon icon={IconChicken}></NormalIcon>
             <ProductName>{productName}</ProductName>
             <ProductDetailInfo
@@ -77,7 +79,7 @@ export const ProductJoinCard = ({
                 // 백엔드 계산 로직 받아와서 적용
                 $isLoan={isLoan}
             ></ProductDetailInfo>
-        </>
+        </Card>
     );
 };
 
@@ -92,7 +94,7 @@ export const ProductCheckCard = ({
     ifSpecial,
 }) => {
     return (
-        <>
+        <Card>
             <NormalIcon icon={IconChicken}></NormalIcon>
             <ProductName>{productName}</ProductName>
             <ProductDetailInfo
@@ -117,7 +119,7 @@ export const ProductCheckCard = ({
             {ifSpecial && <ExtraInfo extraRate={5} savingsAmount={savingsAmount}></ExtraInfo>}
             {/* 임의로 캐릭터 능력 추가 금액을 가입 금액을 기준으로 계산해놓음. 실제 추가 금액 얼마인지 확인 */}
             <StampButton />
-        </>
+        </Card>
     );
 };
 
@@ -131,7 +133,7 @@ export const ProductTerminationCard = ({
     savingsAmount,
 }) => {
     return (
-        <>
+        <Card>
             <NormalIcon icon={IconChicken}></NormalIcon>
             <ProductName>{productName}</ProductName>
             <ProductDetailInfo
@@ -148,7 +150,7 @@ export const ProductTerminationCard = ({
             />
             <ProductJoinInfo infoTitle={'만기 회차'} infoContent={`${turn + currentTurn}턴`} />
             <ProductJoinInfo infoTitle={'남은 회차'} infoContent={`${restTurn}턴`} />
-        </>
+        </Card>
     );
 };
 
@@ -162,7 +164,7 @@ export const ProductTerminationDetailCard = ({
     finalSavingsAmount,
 }) => {
     return (
-        <>
+        <Card>
             <NormalIcon icon={IconChicken}></NormalIcon>
             <ProductName>{productName}</ProductName>
 
@@ -190,6 +192,6 @@ export const ProductTerminationDetailCard = ({
                 infoContent={`${finalSavingsAmount.toLocaleString()}원`}
             />
             <StampButton />
-        </>
+        </Card>
     );
 };
