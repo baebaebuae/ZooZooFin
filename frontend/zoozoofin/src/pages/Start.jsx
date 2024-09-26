@@ -31,6 +31,7 @@ const Start = () => {
     //         console.log(err);
     //     }
     // };
+
     return (
         <>
             <h1>시작화면</h1>
@@ -42,7 +43,7 @@ const Start = () => {
                 <LoginButtonBlock>
                     소셜 로그인 버튼 Block
                     <KakaoButton onClick={() => handleSocialLogin('kakao')} />
-                    <NaverButton onClick={test} />
+                    {/* <NaverButton onClick={test} /> */}
                     {/* <NaverButton onClick={() => handleSocialLogin('naver')} /> */}
                     <GoogleButton onClick={() => handleSocialLogin('google')} />
                 </LoginButtonBlock>
