@@ -9,23 +9,10 @@ insert into savings_type(savings_period, savings_rate, savings_name, savings_img
                                                                                           (5, 4, '주주적금', 'https://ssafy.com'),
                                                                                           (10, 12, '너굴적금', 'https://ssafy.com'),
                                                                                           (25, 50, '곰곰적금', 'https://ssafy.com');
-insert into quiz (QUIZ_ID, QUIZ_DATE, QUIZ_QUESTION, QUIZ_ANSWER, CREATED_DATE, MODIFIED_DATE) VALUES
-                                                                                                   (1, '2024-09-19', 'Question 1', 'Answer 1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                   (2 ,'2024-09-19', 'Question 2', 'Answer 2', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                   (3, '2024-09-19', 'Question 3', 'Answer 3', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                   (4, '2024-09-19', 'Question 4', 'Answer 4', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                   (5, '2024-09-19', 'Question 5', 'Answer 5', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
-insert into quiz (QUIZ_ID, QUIZ_DATE, QUIZ_QUESTION, QUIZ_ANSWER, CREATED_DATE, MODIFIED_DATE) VALUES
-                                                                                                   (6, '2024-09-20', 'Question 6', 'Answer 6', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                   (7, '2024-09-20', 'Question 7', 'Answer 7', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                   (8, '2024-09-20', 'Question 8', 'Answer 8', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                   (9, '2024-09-20', 'Question 9', 'Answer 9', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                   (10, '2024-09-20', 'Question 10', 'Answer 10', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
-insert into quiz_result (ANIMAL_ID, QUIZ_ID, IS_CORRECT, ANIMAL_ANSWER, CREATED_DATE, MODIFIED_DATE) VALUES
-                                                                                                         (1, 6, false, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                         (1, 7, false, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                         (1, 8, false, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                         (1, 9, false, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                         (1, 10, false, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+insert into quiz (QUIZ_ID, QUIZ_DATE, QUIZ_QUESTION, QUIZ_ANSWER, QUIZ_TYPE, CREATED_DATE, MODIFIED_DATE) VALUES
+                                                                                                              (1, '2024-09-26', 'IPO(기업공개)란 개인이나 소수 주주로 구성되어 폐쇄성을 띠고 있는 기업이 그 주식을 법정절차와 방법에 따라 일반 대중에게 분산, 소유토록 하고 재무 내용을 공시하는 것이다.', 'X', 'ox',CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                                              (2 ,'2024-09-26', '상장이란 증권을 발행한 회사의 신청에 의하여 당해 주식을 거래소 시장에서 거래될 수 있도록 자격을 부여하는 행위 또는 그 절차를 말한다.', 'O', 'ox',CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                                              (3, '2024-09-26', 'KOSPI 200과 같이 특정 지수나 특정 자산의 가격 움직임과 수익률이 연동하도록 설계된 펀드는 무엇일까?', 'ETF', 'short',CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                                              (4, '2024-09-26', 'KOSPI 200과 같이 특정 지수나 특정 자산의 가격 움직임과 수익률이 연동하도록 설계된 펀드는 무엇일까?', 'ETF', 'short',CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                                                                                                              (5, '2024-09-26', 'KOSPI 200과 같이 특정 지수나 특정 자산의 가격 움직임과 수익률이 연동하도록 설계된 펀드는 무엇일까?', 'ETF', 'short',CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
