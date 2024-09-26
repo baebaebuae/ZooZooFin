@@ -21,23 +21,19 @@ const Block = styled.div`
 const JoinProduct = ({ productType }) => {
     const [currentCard, setCurrentCard] = useState(1);
 
-    const joinGuideMessages = {
-        1: '가입할 상품을 골라봐.',
-        2: '얼마를 저축할거야?',
-        3: '가입 정보를 확인하고 서명해줘.',
-    };
-
     const [products, setProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [savingsAmount, setSavingsAmount] = useState(null);
     const [expectedFinalAmount, setExpectedFinalAmount] = useState(null);
+
+    const URL = import.meta.env.VITE_URL;
 
     // 상품 정보 받아오기
     const fetchProducts = async () => {
         try {
             const res = await axios({
                 method: 'get',
-                url: `${import.meta.env.VITE_URL}/${productType}`,
+                url: `${URL}/${productType}`,
                 headers: {
                     Authorization: `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`,
                     'Access-Control-Allow-Origin': `http://localhost:5173`,
@@ -45,7 +41,7 @@ const JoinProduct = ({ productType }) => {
                 },
             });
             if (res.status === 200) {
-                // console.log(res.data.body);
+                console.log(res.data.body);
                 setProducts(res.data.body);
             }
         } catch (error) {
@@ -59,6 +55,16 @@ const JoinProduct = ({ productType }) => {
     }, []);
 
     useEffect(() => {}, [products]);
+
+    useEffect(() => {
+        if (currentCard === 4) {
+            const timer = setTimeout(() => {
+                goToNextCard();
+            }, 2000);
+
+            return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 정리
+        }
+    }, [currentCard]);
 
     const goToNextCard = () => {
         setCurrentCard(currentCard + 1);
@@ -75,6 +81,12 @@ const JoinProduct = ({ productType }) => {
         setExpectedFinalAmount(expectedFinalAmount);
     };
 
+    const joinGuideMessages = {
+        1: '가입할 상품을 골라봐.',
+        2: '얼마를 저축할거야?',
+        3: '가입 정보를 확인하고 서명해줘.',
+    };
+
     return (
         <Block>
             {currentCard < 4 && (
@@ -88,47 +100,39 @@ const JoinProduct = ({ productType }) => {
                 if (!selectedProduct && currentCard === 1) {
                     return (
                         <div>
-                            {products.map((product) =>
-                                // productType 조건 처리 -- 좀 불필요해서 백엔드에 변수명 변경 요청
-                                productType === 'deposit' ? (
-                                    <ProductCard
-                                        key={product.depositTypeId}
-                                        productName={product.depositName}
-                                        productRate={product.depositRate}
-                                        productPeriod={product.depositPeriod}
-                                        handleClick={() => handleClick(product)} // 선택된 상품 저장
-                                    />
-                                ) : (
-                                    <ProductCard
-                                        key={product.savingsTypeId}
-                                        productName={product.savingsName}
-                                        productRate={product.savingsRate}
-                                        productPeriod={product.savingsPeriod}
-                                        handleClick={() => handleClick(product)} // 선택된 상품 저장
-                                    />
-                                )
-                            )}
+                            {products.map((product) => (
+                                <ProductCard
+                                    key={product.typeId}
+                                    productName={product.name}
+                                    productRate={product.rate}
+                                    productPeriod={product.period}
+                                    handleClick={() => handleClick(product)}
+                                />
+                            ))}
                         </div>
                     );
                 } else if (!savingsAmount && currentCard === 2) {
                     return (
                         <ProductJoinCard
-                            productName={selectedProduct.depositName}
-                            productPeriod={selectedProduct.depositPeriod}
-                            productRate={selectedProduct.depositRate}
+                            productType={productType}
+                            productName={selectedProduct.name}
+                            productPeriod={selectedProduct.period}
+                            productRate={selectedProduct.rate}
                             isLoan={false}
                             currentTurn={5}
                             maxAmount={10000000}
-                            isSavings={false} // true=적금, false=예금
+                            isSavings={productType === 'savings'} // true=적금, false=예금
                             saveAmount={saveAmount}
                         />
                     );
                 } else if (savingsAmount && currentCard === 3) {
                     return (
                         <ProductCheckCard
-                            productName={selectedProduct.depositName}
-                            productPeriod={selectedProduct.depositPeriod}
-                            productRate={selectedProduct.depositRate}
+                            productType={productType}
+                            productTypeId={selectedProduct.typeId}
+                            productName={selectedProduct.name}
+                            productPeriod={selectedProduct.period}
+                            productRate={selectedProduct.rate}
                             currentTurn={5}
                             savingsAmount={savingsAmount}
                             expectedFinalAmount={expectedFinalAmount}
@@ -136,6 +140,8 @@ const JoinProduct = ({ productType }) => {
                             goToScript={goToNextCard}
                         />
                     );
+                } else if (currentCard === 4) {
+                    return <div>로딩중</div>;
                 }
             })()}
         </Block>

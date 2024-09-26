@@ -22,15 +22,16 @@ const StampBox = styled.div`
     background-color: white;
 `;
 
-export const StampModal = ({ goToScript, handleCloseModal }) => {
+export const StampModal = ({ action, goToScript, handleCloseModal }) => {
     const [isClicked, setIsClicked] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(true);
 
     const applyStamp = () => {
         setIsClicked(true);
 
+        action();
+
         setTimeout(() => {
-            // setIsClicked(false); // 잘 작동됨
             goToScript();
         }, 1500);
     };

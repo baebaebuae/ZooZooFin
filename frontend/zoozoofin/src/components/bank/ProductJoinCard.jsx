@@ -20,13 +20,13 @@ const ProductName = styled.div`
 `;
 
 export const ProductJoinCard = ({
+    productType,
     productName,
     productPeriod,
     productRate,
     isLoan,
     currentTurn,
     maxAmount,
-    isSavings,
     saveAmount,
 }) => {
     const [savingsAmount, setSavingsAmount] = useState(0);
@@ -34,13 +34,21 @@ export const ProductJoinCard = ({
 
     function handleSavingsAmountChange(newAmount) {
         setSavingsAmount(newAmount);
+
+        const rate = Math.ceil((productRate / 100 / productPeriod) * 1000) / 1000;
+        const a = (productPeriod * (productPeriod + 1)) / 2;
+        const finalReturn = newAmount * productPeriod + newAmount * a * rate;
+
         setExpectedFinalAmount(
             // 백엔드 계산 로직 받아와서 적용
             isSavings
-                ? savingsAmount * productPeriod * (1 + productRate / 100) // 적금
-                : savingsAmount * (1 + productRate / 100) // 예금
+                ? // ? newAmount * productPeriod * (1 + productRate / 100) // 적금
+                  finalReturn
+                : newAmount * (1 + productRate / 100) // 예금
         );
     }
+
+    const isSavings = productType === 'savings';
 
     return (
         <Block>
