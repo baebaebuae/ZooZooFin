@@ -1,7 +1,10 @@
-import { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import CorrectSVG from '@assets/images/school/correct.svg?react';
+import IncorrectSVG from '@assets/images/school/incorrect.svg?react';
 
 // 환경 변수 import
 const VITE_URL = import.meta.env.VITE_URL;
@@ -10,13 +13,14 @@ const VITE_ACCESS_TOKEN = import.meta.env.VITE_ACCESS_TOKEN;
 // 시험지 전체 컨테이너
 const Paper = styled.div`
   background-color: #f9f9f9;
-  height: 700px;
+  min-height: 700px;
   margin: 2px auto;
   border: 1px solid #ccc;
   padding: 20px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   display: flex; 
   flex-direction: column;
+  position: relative;
 `;
 
 // 시험지 헤더 스타일링
@@ -46,7 +50,7 @@ const DateName = styled.div`
   line-height: 0px;
 `;
 
-// 문제 컨테이너 추가
+// 문제 컨테이너 수정
 const QuestionsContainer = styled.div`
   display: flex;
   width: 100%;
@@ -65,15 +69,12 @@ const QuestionSectionStyled = styled.div`
   margin-bottom: 20px;
 `;
 
-// 문제 번호 스타일링
+// 문제 번호 스타일링 수정
 const QuestionNumber = styled.div`
   font-weight: bold;
   margin-bottom: 10px;
-`;
-
-// 문제 텍스트 스타일링
-const QuestionText = styled.div`
-  margin-bottom: 15px;
+  align-items: center;
+  position: relative;
 `;
 
 // 돋보기 아이콘 스타일링
@@ -112,24 +113,122 @@ const ModalContent = styled.div`
   overflow-y: auto;
 `;
 
-// 개별 문제 섹션 컴포넌트
-const QuestionSection = ({ question, index }) => {
+const AnswerInput = styled.input`
+  padding: 5px;
+  width: 80%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+`;
+
+const OXButtonContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+`;
+
+const OXButton = styled.button`
+  padding: 5px 15px;
+  background-color: ${props => props.selected ? '#4CAF50' : '#f0f0f0'};
+  color: ${props => props.selected ? 'white' : 'black'};
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${props => props.selected ? '#45a049' : '#e0e0e0'};
+  }
+`;
+
+const SubmitButton = styled.button`
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 20px;
+
+  &:hover {
+    background-color: #45a049;
+  }
+`;
+
+const ScoreDisplay = styled.div`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 36px;
+  font-weight: bold;
+  color: red;
+`;
+
+const GradeMarker = styled.div`
+  position: absolute;
+  top: -10px;
+  left: -15px;
+`;
+
+const QuestionSection = ({ question, index, onAnswerChange, userAnswer, isSubmitted, isCorrect }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleAnswerChange = (answer) => {
+    onAnswerChange(question.quizId, answer);
+  };
+
+  const renderAnswerInput = () => {
+    if (question.quizType === 'ox') {
+      return (
+        <OXButtonContainer>
+          <OXButton 
+            selected={userAnswer === 'O'}
+            onClick={() => handleAnswerChange('O')}
+            disabled={isSubmitted}
+          >
+            O
+          </OXButton>
+          <OXButton 
+            selected={userAnswer === 'X'}
+            onClick={() => handleAnswerChange('X')}
+            disabled={isSubmitted}
+          >
+            X
+          </OXButton>
+        </OXButtonContainer>
+      );
+    } else if (question.quizType === 'short') {
+      return (
+        <AnswerInput
+          type="text"
+          value={userAnswer || ''}
+          onChange={(e) => handleAnswerChange(e.target.value)}
+          placeholder="답을 입력하세요"
+          disabled={isSubmitted}
+        />
+      );
+    }
+  };
 
   return (
     <QuestionSectionStyled>
       <QuestionNumber>
-        {index}. {question.quizQuestion}
+        {index}.
+        {isSubmitted && (
+          <GradeMarker>
+            {isCorrect ? <CorrectSVG width="50" height="50" /> : <IncorrectSVG width="40" height="40" />}
+          </GradeMarker>
+        )}
+        {question.quizQuestion}
         <MagnifyIcon onClick={() => setIsModalOpen(true)}>🔍</MagnifyIcon>
       </QuestionNumber>
-      <QuestionText>정답: {question.quizAnswer}</QuestionText>
+      {renderAnswerInput()}
 
       {isModalOpen && (
         <ModalBackground onClick={() => setIsModalOpen(false)}>
           <ModalContent onClick={(e) => e.stopPropagation()}>
             <h2>문제 {index}</h2>
             <p><strong>질문:</strong> {question.quizQuestion}</p>
-            <p><strong>정답:</strong> {question.quizAnswer}</p>
+            {renderAnswerInput()}
           </ModalContent>
         </ModalBackground>
       )}
@@ -142,8 +241,13 @@ QuestionSection.propTypes = {
     quizId: PropTypes.number.isRequired,
     quizQuestion: PropTypes.string.isRequired,
     quizAnswer: PropTypes.string.isRequired,
+    quizType: PropTypes.string.isRequired,
   }).isRequired,
   index: PropTypes.number.isRequired,
+  onAnswerChange: PropTypes.func.isRequired,
+  userAnswer: PropTypes.string,
+  isSubmitted: PropTypes.bool.isRequired,
+  isCorrect: PropTypes.bool,
 };
 
 const TestPaper = () => {
@@ -151,6 +255,11 @@ const TestPaper = () => {
   const [user] = useState({ name: '토 토', date: '2024.09.03' });
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [userAnswers, setUserAnswers] = useState({});
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [score, setScore] = useState(null);
+  const [correctAnswers, setCorrectAnswers] = useState({});
+  const navigate = useNavigate();
 
   const fetchQuizData = useCallback(async () => {
     setIsLoading(true);
@@ -181,11 +290,36 @@ const TestPaper = () => {
     fetchQuizData();
   }, [fetchQuizData]);
 
-  const leftQuestions = quizData.slice(0, 3);
-  const rightQuestions = quizData.slice(3, 5);
+  const handleAnswerChange = (quizId, answer) => {
+    setUserAnswers(prev => ({
+      ...prev,
+      [quizId]: answer
+    }));
+  };
+
+  const handleSubmit = () => {
+    let correct = 0;
+    const newCorrectAnswers = {};
+    quizData.forEach(question => {
+      const isCorrect = userAnswers[question.quizId] === question.quizAnswer;
+      newCorrectAnswers[question.quizId] = isCorrect;
+      if (isCorrect) correct++;
+    });
+    const calculatedScore = (correct / quizData.length) * 100;
+    setScore(calculatedScore);
+    setCorrectAnswers(newCorrectAnswers);
+    setIsSubmitted(true);
+  };
+
+  const handleFinish = () => {
+    navigate('/school', { state: { score: score.toFixed(0) } });
+  };
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
+
+  const leftQuestions = quizData.slice(0, Math.ceil(quizData.length / 2));
+  const rightQuestions = quizData.slice(Math.ceil(quizData.length / 2));
 
   return (
     <Paper>
@@ -196,18 +330,39 @@ const TestPaper = () => {
           <p>{user.name}</p>
         </DateName>
       </Header>
+      {isSubmitted && score !== null && (
+        <ScoreDisplay>{score.toFixed(0)}</ScoreDisplay>
+      )}
       <QuestionsContainer>
         <QuestionGroup side="left">
           {leftQuestions.map((question, index) => (
-            <QuestionSection key={question.quizId} question={question} index={index + 1} />
+            <QuestionSection 
+              key={question.quizId} 
+              question={question} 
+              index={index + 1}
+              onAnswerChange={handleAnswerChange}
+              userAnswer={userAnswers[question.quizId]}
+              isSubmitted={isSubmitted}
+              isCorrect={correctAnswers[question.quizId]}
+            />
           ))}
         </QuestionGroup>
         <QuestionGroup side="right">
           {rightQuestions.map((question, index) => (
-            <QuestionSection key={question.quizId} question={question} index={index + 4} />
+            <QuestionSection 
+              key={question.quizId} 
+              question={question} 
+              index={index + leftQuestions.length + 1}
+              onAnswerChange={handleAnswerChange}
+              userAnswer={userAnswers[question.quizId]}
+              isSubmitted={isSubmitted}
+              isCorrect={correctAnswers[question.quizId]}
+            />
           ))}
         </QuestionGroup>
       </QuestionsContainer>
+      {!isSubmitted && <SubmitButton onClick={handleSubmit}>제출하기</SubmitButton>}
+      {isSubmitted && <SubmitButton onClick={handleFinish}>시험 종료</SubmitButton>}
     </Paper>
   );
 };

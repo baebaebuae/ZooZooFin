@@ -13,26 +13,15 @@ export const createApiClient = (accessToken) => {
         },
     });
 };
-export const isLoggedIn = () => {
-    const accessToken = getAccessToken();
-    return !!accessToken; // accessToken이 있으면 true, 없으면 false를 반환
-};
-const getAccessToken = () => {
-    return localStorage.getItem('accessToken');
-};
-const getRefreshToken = () => {
-    return localStorage.getItem('refreshToken');
-};
-export const clearAccessToken = () => {
-    return localStorage.removeItem('accessToken');
-};
-const setAccessToken = (token) => {
-    if (token) {
-        localStorage.setItem('accessToken', token);
-    } else {
-        localStorage.removeItem('accessToken');
-    }
-};
+
+const getAccessToken = () => localStorage.getItem('accessToken');
+const getRefreshToken = () => localStorage.getItem('refreshToken');
+const setAccessToken = (token) => localStorage.setItem('accessToken', token);
+const setRefreshToken = (token) => localStorage.setItem('refreshToken', token);
+const clearAccessToken = () => localStorage.removeItem('accessToken');
+
+export const isLoggedIn = () => !!getAccessToken();
+
 export const getApiClient = () => {
     const accessToken = getAccessToken();
     const refreshToken = getRefreshToken();
@@ -47,20 +36,27 @@ export const getApiClient = () => {
         },
         async (error) => {
             const originalRequest = error.config;
-            console.log(error.response.data.status);
-            if (error.response.data.status === 401 && !originalRequest._retry) {
+            console.log(error.response.data.httpStatus);
+            if (error.response.data.httpStatus === 401 && !originalRequest._retry) {
                 originalRequest._retry = true;
                 try {
                     if (refreshToken) {
-                        setAccessToken(error.response.data.body);
+                        console.log('accessToken을 재발급 받습니다.', refreshToken);
+                        const res = await apiClient.patch('/auth/reissue', {
+                            refreshToken: refreshToken,
+                        });
+                        console.log(res.data.message);
+                        console.log(res.data);
+                        setAccessToken(res.data.body.accessToken);
+                        setRefreshToken(res.data.body.refreshToken);
                     } else {
                         return;
                     }
                     apiClient.defaults.headers.common['Authorization'] =
-                        `Bearer ${error.response.data.body}`;
-                    originalRequest.headers['Authorization'] = `Bearer ${error.response.data.body}`;
+                        `Bearer ${getAccessToken()}`;
+                    originalRequest.headers['Authorization'] = `Bearer ${getAccessToken()}`;
 
-                    return apiClient(originalRequest); // 수정된 인스턴스 사용
+                    return apiClient(originalRequest);
                 } catch (err) {
                     console.error('토큰 재발급 실패:', err);
                     return Promise.reject(err);

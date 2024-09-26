@@ -7,12 +7,11 @@ import {
     NaverButton,
     GoogleButton,
 } from '@styles/components/start/Buttons';
-
+import { getApiClient } from '../stores/apiClient';
 const API_URI = import.meta.env.VITE_URL;
 
 const Start = () => {
     const [isEntered, setIsEntered] = useState(false); // API
-    // const apiClient = getApiClient();
 
     const handleEnter = () => {
         setIsEntered(true);
@@ -22,15 +21,16 @@ const Start = () => {
         window.location.href = `${API_URI}/oauth/${domain}`;
     };
 
-    // const test = async () => {
-    //     console.log('test');
-    //     try {
-    //         const res = await apiClient.get('/member/profile');
-    //         console.log(res);
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // };
+    const test = async () => {
+        const apiClient = getApiClient();
+        try {
+            const res = await apiClient.get('/member/profile');
+            console.log(res.data.message);
+            console.log(res.data.body);
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
     return (
         <>
@@ -43,7 +43,7 @@ const Start = () => {
                 <LoginButtonBlock>
                     소셜 로그인 버튼 Block
                     <KakaoButton onClick={() => handleSocialLogin('kakao')} />
-                    {/* <NaverButton onClick={test} /> */}
+                    <NaverButton onClick={test} />
                     {/* <NaverButton onClick={() => handleSocialLogin('naver')} /> */}
                     <GoogleButton onClick={() => handleSocialLogin('google')} />
                 </LoginButtonBlock>
