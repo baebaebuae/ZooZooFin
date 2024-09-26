@@ -18,7 +18,7 @@ const Block = styled.div`
     gap: 20px;
 `;
 
-const JoinDeposit = () => {
+const JoinProduct = ({ productType }) => {
     const [currentCard, setCurrentCard] = useState(1);
 
     const joinGuideMessages = {
@@ -37,7 +37,7 @@ const JoinDeposit = () => {
         try {
             const res = await axios({
                 method: 'get',
-                url: `${import.meta.env.VITE_URL}/deposit`,
+                url: `${import.meta.env.VITE_URL}/${productType}`,
                 headers: {
                     Authorization: `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`,
                     'Access-Control-Allow-Origin': `http://localhost:5173`,
@@ -88,15 +88,26 @@ const JoinDeposit = () => {
                 if (!selectedProduct && currentCard === 1) {
                     return (
                         <div>
-                            {products.map((product) => (
-                                <ProductCard
-                                    key={product.depositTypeId}
-                                    productName={product.depositName}
-                                    productRate={product.depositRate}
-                                    productPeriod={product.depositPeriod}
-                                    handleClick={() => handleClick(product)} // 선택된 상품 저장
-                                />
-                            ))}
+                            {products.map((product) =>
+                                // productType 조건 처리 -- 좀 불필요해서 백엔드에 변수명 변경 요청
+                                productType === 'deposit' ? (
+                                    <ProductCard
+                                        key={product.depositTypeId}
+                                        productName={product.depositName}
+                                        productRate={product.depositRate}
+                                        productPeriod={product.depositPeriod}
+                                        handleClick={() => handleClick(product)} // 선택된 상품 저장
+                                    />
+                                ) : (
+                                    <ProductCard
+                                        key={product.savingsTypeId}
+                                        productName={product.savingsName}
+                                        productRate={product.savingsRate}
+                                        productPeriod={product.savingsPeriod}
+                                        handleClick={() => handleClick(product)} // 선택된 상품 저장
+                                    />
+                                )
+                            )}
                         </div>
                     );
                 } else if (!savingsAmount && currentCard === 2) {
@@ -131,4 +142,4 @@ const JoinDeposit = () => {
     );
 };
 
-export default JoinDeposit;
+export default JoinProduct;

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import JoinDeposit from '@components/bank/actions/JoinDeposit';
-import TerminateDeposit from '@components/bank/actions/TerminateDeposit';
+import JoinProduct from '@components/bank/actions/JoinProduct';
+import TerminateProduct from '@components/bank/actions/TerminateProduct';
 
 const Block = styled.div`
     display: flex;
@@ -16,10 +16,13 @@ const ActionContainer = ({ currentAction }) => {
     const renderComponent = () => {
         switch (currentAction) {
             case 'joinDeposit':
-                return <JoinDeposit />;
+                return <JoinProduct productType={'deposit'} />;
+            case 'joinSavings':
+                return <JoinProduct productType={'savings'} />;
             case 'terminateDeposit':
-                return <TerminateDeposit />;
-
+                return <TerminateProduct />;
+            case 'terminatSavings':
+                return <TerminateProduct />;
             default:
                 return <div>해당하는 페이지가 없어요. 현재 Action을 확인해주세요.</div>;
         }

@@ -15,7 +15,7 @@ const Block = styled.div`
     gap: 20px;
 `;
 
-const TerminateDeposit = () => {
+const TerminateProduct = () => {
     const [currentCard, setCurrentCard] = useState(1);
 
     const terminateDepositActions = {
@@ -55,4 +55,4 @@ const TerminateDeposit = () => {
     );
 };
 
-export default TerminateDeposit;
+export default TerminateProduct;
