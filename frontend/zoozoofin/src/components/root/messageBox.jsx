@@ -2,7 +2,7 @@
 import styled from 'styled-components';
 
 export const MessageBox = styled.div`
-    width: 240px;
+    /* width: 270px; */
     font-weight: bold;
     font-size: 14px;
     display: inline-flex;

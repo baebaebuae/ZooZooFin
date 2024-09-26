@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 import { useState } from 'react';
+import styled from 'styled-components';
 
 import { NormalIcon } from '@components/root/icon';
 import IconChicken from '@assets/images/icons/icon_chicken.svg?react';
@@ -23,7 +23,7 @@ export const ProductCheckCard = ({
     savingsAmount,
     expectedFinalAmount,
     specialRate,
-    goToNextCard,
+    goToScript,
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -62,7 +62,7 @@ export const ProductCheckCard = ({
             {/* 임의로 캐릭터 능력 추가 금액을 가입 금액을 기준으로 계산해놓음. 실제 추가 금액 얼마인지 확인 */}
             <StampButton onClick={() => setIsModalOpen(true)} />
 
-            {isModalOpen && <StampModal goToScript={goToNextCard} />}
+            {isModalOpen && <StampModal goToScript={goToScript} />}
         </Card>
     );
 };

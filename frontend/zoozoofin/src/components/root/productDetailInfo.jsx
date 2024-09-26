@@ -24,8 +24,8 @@ const InfoContent = styled.div`
     font-size: ${({ isLoan }) => (isLoan ? '16px' : '20px')};
     text-align: center;
     font-weight: bold;
-    color: ${({ theme, isEarlyTermination }) =>
-        isEarlyTermination ? theme.colors.warn : theme.colors.primaryDeep};
+    color: ${({ theme, $isEarlyTermination }) =>
+        $isEarlyTermination ? theme.colors.warn : theme.colors.primaryDeep};
 `;
 
 export const ProductDetailInfo = ({

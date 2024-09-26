@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import { NormalIcon } from '@components/root/icon';
 import IconChicken from '@assets/images/icons/icon_chicken.svg?react';
@@ -6,6 +7,7 @@ import { StampButton } from '@components/root/buttons';
 import { Divider } from '@components/root/card';
 import { InfoBox } from '@components/root/infoBox';
 import { Card } from '@components/root/card';
+import { StampModal } from '@components/root/stampModal';
 
 const ProductName = styled.div`
     font-size: 14px;
@@ -14,13 +16,15 @@ const ProductName = styled.div`
 
 export const ProductTerminationDetailCard = ({
     productName,
-    turn,
-    isLoan,
-    currentTurn,
+    period,
     restTurn,
+    endTurn,
     savingsAmount,
-    finalSavingsAmount,
+    finalReturn,
+    goToNextCard,
 }) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     return (
         <Card>
             <NormalIcon icon={IconChicken}></NormalIcon>
@@ -30,26 +34,27 @@ export const ProductTerminationDetailCard = ({
 
             <ProductDetailInfo
                 infoTitle1={'기간'}
-                infoContent1={`${turn}턴`}
+                infoContent1={`${period}턴`}
                 infoTitle2={'이율'}
-                infoContent2={`0.5%`}
-                $isLoan={isLoan}
+                infoContent2={`0.5%`} // 해지는 이율 고정임
+                isLoan={productName.includes('적금') || productName.includes('예금')}
                 isEarlyTermination={true}
             />
-            <Divider isLine={true} />
+            <Divider $isLine={true} />
             <ProductJoinInfo
                 infoTitle={'가입 금액'}
                 infoContent={`${savingsAmount.toLocaleString()}원`}
             />
-            <ProductJoinInfo infoTitle={'만기 회차'} infoContent={`${turn + currentTurn}턴`} />
+            <ProductJoinInfo infoTitle={'만기 회차'} infoContent={`${endTurn}턴`} />
             <ProductJoinInfo infoTitle={'남은 회차'} infoContent={`${restTurn}턴`} />
 
-            <Divider isLine={false} />
+            <Divider $isLine={false} />
             <ProductJoinInfo
                 infoTitle={'지급액'}
-                infoContent={`${finalSavingsAmount.toLocaleString()}원`}
+                infoContent={`${finalReturn.toLocaleString()}원`}
             />
-            <StampButton />
+            <StampButton onClick={() => setIsModalOpen(true)} />
+            {isModalOpen && <StampModal goToScript={goToNextCard} />}
         </Card>
     );
 };

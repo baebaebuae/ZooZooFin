@@ -20,9 +20,9 @@ const ActionContainer = ({ currentAction }) => {
             case 'joinSavings':
                 return <JoinProduct productType={'savings'} />;
             case 'terminateDeposit':
-                return <TerminateProduct />;
+                return <TerminateProduct productType={'deposit'} />;
             case 'terminatSavings':
-                return <TerminateProduct />;
+                return <TerminateProduct productType={'savings'} />;
             default:
                 return <div>해당하는 페이지가 없어요. 현재 Action을 확인해주세요.</div>;
         }

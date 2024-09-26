@@ -12,20 +12,21 @@ const ProductName = styled.div`
 
 export const ProductTerminationCard = ({
     productName,
-    turn,
+    period,
     rate,
-    isLoan,
-    currentTurn,
-    restTurn,
     savingsAmount,
+    restTurn,
+    endTurn,
+    isLoan,
+    handleClick,
 }) => {
     return (
-        <Card>
+        <Card onClick={handleClick}>
             <NormalIcon icon={IconChicken}></NormalIcon>
             <ProductName>{productName}</ProductName>
             <ProductDetailInfo
                 infoTitle1={'기간'}
-                infoContent1={`${turn.toLocaleString()}턴`}
+                infoContent1={`${period.toLocaleString()}턴`}
                 infoTitle2={'이율'}
                 infoContent2={`${rate}%`}
                 $isLoan={isLoan}
@@ -35,7 +36,7 @@ export const ProductTerminationCard = ({
                 infoTitle={'가입 금액'}
                 infoContent={`${savingsAmount.toLocaleString()}원`}
             />
-            <ProductJoinInfo infoTitle={'만기 회차'} infoContent={`${turn + currentTurn}턴`} />
+            <ProductJoinInfo infoTitle={'만기 회차'} infoContent={`${endTurn}턴`} />
             <ProductJoinInfo infoTitle={'남은 회차'} infoContent={`${restTurn}턴`} />
         </Card>
     );

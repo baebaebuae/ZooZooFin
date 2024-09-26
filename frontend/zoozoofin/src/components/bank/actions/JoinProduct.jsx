@@ -133,7 +133,7 @@ const JoinProduct = ({ productType }) => {
                             savingsAmount={savingsAmount}
                             expectedFinalAmount={expectedFinalAmount}
                             specialRate={6} // 캐릭터 특별 능력 없으면 null이거나 0이거나
-                            goToNextCard={goToNextCard}
+                            goToScript={goToNextCard}
                         />
                     );
                 }
