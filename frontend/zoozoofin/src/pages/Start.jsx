@@ -7,7 +7,6 @@ import {
     NaverButton,
     GoogleButton,
 } from '@styles/components/start/Buttons';
-import { getApiClient } from '../stores/apiClient';
 const API_URI = import.meta.env.VITE_URL;
 
 const Start = () => {
@@ -20,6 +19,17 @@ const Start = () => {
     const handleSocialLogin = async (domain) => {
         window.location.href = `${API_URI}/oauth/${domain}`;
     };
+
+    // const test = async () => {
+    //     const apiClient = getApiClient();
+    //     try {
+    //         const res = await apiClient.get('/member/profile');
+    //         console.log(res.data.message);
+    //         console.log(res.data.body);
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    // };
 
     return (
         <>
