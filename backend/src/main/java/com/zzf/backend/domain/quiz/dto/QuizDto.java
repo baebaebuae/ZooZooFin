@@ -12,10 +12,12 @@ public class QuizDto {
     private final Long quizId;
     private final String quizQuestion;
     private final String quizAnswer;
+    private final String quizType;
 
     public QuizDto(Quiz quiz) {
         this.quizId = quiz.getQuizId();
         this.quizQuestion = quiz.getQuizQuestion();
         this.quizAnswer = quiz.getQuizAnswer();
+        this.quizType = quiz.getQuizType();
     }
 }
