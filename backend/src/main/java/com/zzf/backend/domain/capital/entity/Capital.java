@@ -46,7 +46,9 @@ public class Capital extends BaseEntity {
         this.capitalRemain = money;
     }
 
-    // 복리 10%
+    /**
+     *  복리, capitalRemain을 10% 증가시키는 메소드
+     */
     public void compoundInterest(){
         this.capitalRemain += this.capitalRemain / 10;
     }

@@ -22,4 +22,6 @@ public interface NextTurnService {
     void deleteAllSavings(Animal animal, LoanWarningDTO loanWarningDTO);
 
     void deleteAllStock(Animal animal, LoanWarningDTO loanWarningDTO);
+
+    boolean capitalGoToNextTurn(Animal animal);
 }

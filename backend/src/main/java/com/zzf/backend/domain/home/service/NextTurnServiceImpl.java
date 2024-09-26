@@ -1,6 +1,7 @@
 package com.zzf.backend.domain.home.service;
 
 import com.zzf.backend.domain.animal.entity.Animal;
+import com.zzf.backend.domain.capital.entity.Capital;
 import com.zzf.backend.domain.capital.repository.CapitalRepository;
 import com.zzf.backend.domain.deposit.entity.Deposit;
 import com.zzf.backend.domain.deposit.repository.DepositRepository;
@@ -9,6 +10,7 @@ import com.zzf.backend.domain.home.DTO.LoanWarningDTO;
 import com.zzf.backend.domain.loan.entity.Loan;
 import com.zzf.backend.domain.loan.repository.LoanRepository;
 import com.zzf.backend.domain.savings.entity.Savings;
+import com.zzf.backend.domain.savings.entity.SavingsType;
 import com.zzf.backend.domain.savings.repository.SavingsRepository;
 import com.zzf.backend.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
@@ -74,6 +76,10 @@ public class NextTurnServiceImpl implements NextTurnService{
         List<Savings> savingsList = savingsRepository.findAllByAnimalAndSavingsIsEndFalse(animal);
 
         for (Savings savings : savingsList){
+            // 이자 추가
+            SavingsType savingsType = savings.getSavingsType();
+            double rate = Math.ceil(((double) savingsType.getSavingsRate() / savingsType.getSavingsPeriod()) / 100.0);
+            savings.increaseSavingsInterest((long) Math.ceil((savings.getSavingsAmount() * rate)));
 
             // 적금이 만료된 경우 돈 반환
             if (savings.getSavingsEndTurn().equals(animal.getAnimalTurn())){
@@ -81,9 +87,8 @@ public class NextTurnServiceImpl implements NextTurnService{
                 continue;
             }
 
-            long monthlyPayment = savings.getSavingsPayment();
-
             // 돈이 없는 경우
+            long monthlyPayment = savings.getSavingsPayment();
             if (animal.getAnimalAssets() < monthlyPayment){
                 if (savings.getSavingsWarning()){
                     // 경고 받은 적있는 경우 강제 적금 해지
@@ -112,7 +117,7 @@ public class NextTurnServiceImpl implements NextTurnService{
     public void savingsMature(Savings savings, Animal animal){
         savings.changeSavingsIsEnd(true);
 
-        long money = savings.getSavingsAmount() + savings.getSavingsAmount() * savings.getSavingsType().getSavingsRate() / 100;
+        long money = savings.getSavingsAmount() + savings.getSavingsInterest();
 
         // 예적금형 캐릭터인 경우 최종 수익 5% 추가 증가
         if (animal.getAnimalType().getAnimalTypeId() == 2) {
@@ -129,7 +134,11 @@ public class NextTurnServiceImpl implements NextTurnService{
 
     }
 
-    // 대출 다음날로 넘어가기
+    /**
+     * <h3>대출 다음날로 넘어가기</h3>
+     * @param animal 플레이어블 캐릭터
+     * @return LoanWarningDTO gameOver에 false가 나오면 통과 true가 있으면 파산.
+     */
     @Override
     @Transactional
     public LoanWarningDTO loanGoToNextTurn(Animal animal) {
@@ -308,6 +317,11 @@ public class NextTurnServiceImpl implements NextTurnService{
     @Override
     @Transactional
     public void deleteAllStock(Animal animal, LoanWarningDTO loanWarningDTO) {
+        long money = 0L;
+
+        // 주식 모두 팔고 판 금액 animal.assets와 money에 더하기.
+
+        loanWarningDTO.setSavingsTotal(money);
     }
 
     // 대출금 계산 함수
@@ -364,5 +378,73 @@ public class NextTurnServiceImpl implements NextTurnService{
         double paymentPerTurn = loanAmount * ratePerTurn * temp / (temp - 1);
 
         return (long) Math.floor(paymentPerTurn);
+    }
+
+    /**
+     * <h3>사채 다음날로 넘어가기</h3>
+     * @param animal 플레이어블 캐릭터
+     * @return 사채 기간 됐을때 (못갚은 경우 Gameover true), (갚은 경우 Gameover false)
+     */
+    @Override
+    @Transactional
+    public boolean capitalGoToNextTurn(Animal animal){
+
+        List<Capital> capitalList = capitalRepository.findAllByAnimalAndCapitalIsEndFalse(animal);
+
+        for (Capital capital : capitalList){
+            // 일단 대출액 증가
+            capital.compoundInterest();
+
+            if (animal.getAnimalTurn().equals(capital.getCapitalEndTurn())){
+                // 마감 턴인 경우
+
+                LoanWarningDTO loanWarningDTO = LoanWarningDTO.builder().build();
+                long repayment = capital.getCapitalRemain();
+
+                // 사채 대출액 중, 현금 보유액 제거.
+                repayment -= animal.getAnimalAssets();
+
+                // (갚아야할 금액이 아직 남은 경우) -> 압류
+                if (repayment > 0){
+                    // 예금 압류
+                    deleteAllDeposit(animal, loanWarningDTO);
+
+                    // 경고 받은 진짜 갚아야할 금액중 예금 압류 총액 제거.
+                    repayment -= loanWarningDTO.getDepositTotal();
+
+                    // 예금 압류 했는데도 모자람
+                    if (repayment > 0){
+                        // 적금 압류
+                        deleteAllSavings(animal, loanWarningDTO);
+
+                        repayment -= loanWarningDTO.getSavingsTotal();
+                    }
+
+                    // 적금 압류 했는데도 모자람
+                    if (repayment > 0){
+                        // 주식 압류
+                        deleteAllStock(animal, loanWarningDTO);
+
+                        repayment -= loanWarningDTO.getStockTotal();
+                    }
+
+                    // 주식 압류 했는데도 모자람
+                    if (repayment > 0){
+                        // 게임 끝. 파산.
+                        return true;
+                    }
+                }
+
+                // 사용자 현금 차감, 대출금 0, 대출 종료
+                animal.decreaseAnimalAssets(capital.getCapitalRemain());
+                capital.changeCapitalRemain(0L);
+                capital.changeCapitalIsEnd(true);
+            }
+
+
+        }
+
+        return false;
+
     }
 }

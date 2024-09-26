@@ -6,9 +6,9 @@ import lombok.Getter;
 @Getter
 @Builder
 public class DepositTypeResponse {
-    private Long depositTypeId;
-    private Long depositPeriod;
-    private Long depositRate;
-    private String depositName;
-    private String depositImgUrl;
+    private Long typeId;
+    private Long period;
+    private Long rate;
+    private String name;
+    private String imgUrl;
 }
