@@ -36,11 +36,16 @@ public class StockHoldings extends BaseEntity {
     @Column(name = "stock_average_price")
     private Long stockAveragePrice;
 
+    @NotNull
+    @Column(name = "stock_is_sold")
+    private Boolean stockIsSold;
+
     @Builder
-    public StockHoldings(Stock stock, Animal animal, Long stockCount, Long stockAveragePrice) {
+    public StockHoldings(Stock stock, Animal animal, Long stockCount, Long stockAveragePrice, Boolean stockIsSold) {
         this.stock = stock;
         this.animal = animal;
         this.stockCount = stockCount;
         this.stockAveragePrice = stockAveragePrice;
+        this.stockIsSold = stockIsSold;
     }
 }

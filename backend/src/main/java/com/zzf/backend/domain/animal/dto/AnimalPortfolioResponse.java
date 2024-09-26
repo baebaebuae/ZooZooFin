@@ -9,9 +9,9 @@ public record AnimalPortfolioResponse(String animalName,
                                       Portfolio portfolio) {
 
     @Builder
-    public record Portfolio(Long depositPercent,
-                            Long savingsPercent,
-                            Long stockPercent,
+    public record Portfolio(Double depositPercent,
+                            Double savingsPercent,
+                            Double stockPercent,
                             String investmentStyle,
                             String ending) {
     }

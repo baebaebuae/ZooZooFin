@@ -30,15 +30,15 @@ public class Portfolio extends BaseEntity {
 
     @NotNull
     @Column(name = "portfolio_deposit_percent")
-    private Long portfolioDepositPercent;
+    private Double portfolioDepositPercent;
 
     @NotNull
     @Column(name = "portfolio_savings_percent")
-    private Long portfolioSavingsPercent;
+    private Double portfolioSavingsPercent;
 
     @NotNull
     @Column(name = "portfolio_stock_percent")
-    private Long portfolioStockPercent;
+    private Double portfolioStockPercent;
 
     @NotNull
     @Column(name = "portfolio_invest_style")
@@ -49,7 +49,7 @@ public class Portfolio extends BaseEntity {
     private Long portfolioScore;
 
     @Builder
-    public Portfolio(Animal animal, String portfolioEnding, Long portfolioDepositPercent, Long portfolioSavingsPercent, Long portfolioStockPercent, String portfolioInvestStyle, Long portfolioScore) {
+    public Portfolio(Animal animal, String portfolioEnding, Double portfolioDepositPercent, Double portfolioSavingsPercent, Double portfolioStockPercent, String portfolioInvestStyle, Long portfolioScore) {
         this.animal = animal;
         this.portfolioEnding = portfolioEnding;
         this.portfolioDepositPercent = portfolioDepositPercent;

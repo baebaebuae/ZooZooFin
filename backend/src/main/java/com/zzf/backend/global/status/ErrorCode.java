@@ -45,6 +45,11 @@ public enum ErrorCode {
     CAPITAL_DUPLICATE_NOT_ALLOWED_EXCEPTION(400, "사채는 중복 대출이 불가능합니다."),
     DEPOSIT_TYPE_NOT_FOUND_EXCEPTION(404, "존재하지 않는 예금상품입니다."),
     SAVINGS_TYPE_NOT_FOUND_EXCEPTION(404, "존재하지 않는 적금상품입니다."),
+
+    // Stock
+    STOCK_NOT_FOUND_EXCEPTION(404, "존재하지 않는 주식입니다."),
+    CHART_NOT_FOUND_EXCEPTION(404, "존재하지 않는 주식 차트입니다."),
+
     QUIZ_NOT_FOUND_EXCEPTION(404, "존재하지 않는 퀴즈지롱~!"),
     QUIZ_RESULT_NOT_FOUND_EXCEPTION(404, "존재하지 않는 퀴즈 결과지롱~!"),
 
@@ -63,6 +68,8 @@ public enum ErrorCode {
 
     // Portfolio
     PORTFOLIO_NOT_FOUND_EXCEPTION(404, "포트폴리오를 찾을 수 없습니다."),
+    PORTFOLIO_ALREADY_EXIST_EXCEPTION(400, "이미 포트폴리오가 존재합니다."),
+    STOCK_PERCENT_EXCEPTION(400, "주식 비율이 비정상적입니다."),
 
     ;
     private final int httpStatus;

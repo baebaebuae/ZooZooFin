@@ -8,6 +8,7 @@ import com.zzf.backend.domain.animal.entity.Animal;
 import com.zzf.backend.domain.animal.entity.AnimalType;
 import com.zzf.backend.domain.animal.repository.AnimalRepository;
 import com.zzf.backend.domain.animal.repository.AnimalTypeRepository;
+import com.zzf.backend.domain.animal.status.HierarchyStatus;
 import com.zzf.backend.domain.capital.entity.Capital;
 import com.zzf.backend.domain.capital.repository.CapitalRepository;
 import com.zzf.backend.domain.deposit.entity.Deposit;
@@ -70,7 +71,7 @@ public class AnimalServiceImpl implements AnimalService {
                 .animalTurn(0L)
                 .animalAssets(0L)
                 .animalCredit(0L)
-                .animalHierarchy(0L)
+                .animalHierarchy(HierarchyStatus.PART_TIME.getHierarchyName())
                 .animalIsWork(false)
                 .animalIsEnd(false)
                 .animalQuestCleared(false)
