@@ -37,8 +37,4 @@ public class QuizResult extends BaseEntity {
     @NotNull
     private Quiz quiz;
 
-    public void updateQuizResult(boolean correct, String animalAnswer) {
-        this.isCorrect = correct;
-        this.animalAnswer = animalAnswer;
-    }
 }
