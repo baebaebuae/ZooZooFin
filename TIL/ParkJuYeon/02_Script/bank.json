@@ -1,0 +1,13 @@
+[
+    {
+        "category": "bank",
+        "scripts": [
+            {
+                "id": 0,
+                "type": "action",
+                "content": "END",
+                "responses": {}
+            }
+        ]
+    }
+]
