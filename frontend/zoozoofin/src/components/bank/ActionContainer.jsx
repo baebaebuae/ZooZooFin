@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import JoinDeposit from '@components/bank/actions/JoinDeposit';
 import TerminateDeposit from '@components/bank/actions/TerminateDeposit';
-import { Link } from 'react-router-dom';
 
 const Block = styled.div`
     display: flex;
@@ -28,8 +27,6 @@ const ActionContainer = ({ currentAction }) => {
 
     return (
         <Block>
-            <Link to="/bank">BankMain</Link>
-
             {/* currentAction에 따라 Component 렌더링 */}
             {renderComponent()}
         </Block>

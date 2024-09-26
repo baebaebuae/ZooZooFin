@@ -12,6 +12,7 @@ const Bank = () => {
     return (
         <BankBlock>
             <Link to="/bankcomp">ComponentsBank</Link>
+            <Link to="/bank">BankMain</Link>
 
             {/* type==='script'일 때 */}
             {/* <BubbleBlock /> 렌더링 */}

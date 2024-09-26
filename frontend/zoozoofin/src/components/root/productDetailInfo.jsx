@@ -40,11 +40,11 @@ export const ProductDetailInfo = ({
         <InfoBlock>
             <InfoBox>
                 <InfoTitle>{infoTitle1}</InfoTitle>
-                <InfoContent isLoan={isLoan}>{infoContent1}</InfoContent>
+                <InfoContent $isLoan={isLoan}>{infoContent1}</InfoContent>
             </InfoBox>
             <InfoBox>
                 <InfoTitle>{infoTitle2}</InfoTitle>
-                <InfoContent isLoan={isLoan} isEarlyTermination={isEarlyTermination}>
+                <InfoContent $isLoan={isLoan} $isEarlyTermination={isEarlyTermination}>
                     {infoContent2}
                 </InfoContent>
             </InfoBox>
@@ -58,7 +58,8 @@ ProductDetailInfo.propTypes = {
     infoContent1: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     infoTitle2: PropTypes.string.isRequired,
     infoContent2: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    isLoan: PropTypes.bool.isRequired,
+    isLoan: PropTypes.bool,
+    isEarlyTermination: PropTypes.bool,
 };
 
 const JoinBox = styled.div`
@@ -111,14 +112,12 @@ const ExtraContent = styled.div`
     color: ${({ theme }) => theme.colors.warn};
 `;
 
-export const ExtraInfo = ({ extraRate, savingsAmount }) => {
+export const ExtraInfo = ({ extraRate, extraAmount }) => {
     return (
         <>
             <ExtraBox>
                 <ExtraTitle>캐릭터 능력: 추가 +{extraRate}%</ExtraTitle>
-                <ExtraContent>
-                    {((savingsAmount * extraRate) / 100).toLocaleString()}원
-                </ExtraContent>
+                <ExtraContent>{extraAmount.toLocaleString()}원</ExtraContent>
             </ExtraBox>
         </>
     );

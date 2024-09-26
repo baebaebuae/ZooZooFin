@@ -25,7 +25,7 @@ export const ProductCard = ({
     handleClick,
 }) => {
     return (
-        <Card onClick={handleClick}>
+        <CardBlock onClick={handleClick}>
             <NormalIcon icon={IconChicken}></NormalIcon>
             <ProductName>{productName}</ProductName>
             <ProductDetailInfo
@@ -33,9 +33,9 @@ export const ProductCard = ({
                 infoContent1={`${productPeriod}턴`}
                 infoTitle2={'이율'}
                 infoContent2={`${productRate}%`}
-                $isLoan={false}
+                isLoan={false}
                 isEarlyTermination={false}
             ></ProductDetailInfo>
-        </Card>
+        </CardBlock>
     );
 };

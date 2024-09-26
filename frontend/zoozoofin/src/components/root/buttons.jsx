@@ -15,10 +15,10 @@ export const Button = styled.button`
     border: ${({ isBorder }) => (isBorder ? `5px solid white` : 'none')};
 `;
 
-export const StampButton = () => {
+export const StampButton = ({ onClick }) => {
     return (
         <>
-            <Button size={'normal'} $isBorder={true} color={'primary'}>
+            <Button size={'normal'} $isBorder={true} color={'primary'} onClick={onClick}>
                 도장 찍기
             </Button>
         </>

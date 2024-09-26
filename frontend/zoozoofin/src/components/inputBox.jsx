@@ -46,7 +46,7 @@ export const InputBox = ({
             <Input
                 title={title}
                 value={savingsAmount === 0 ? '금액을 입력해줘.' : savingsAmount}
-                unit={isSavings ? ' 원' : ' 원 / 턴'}
+                unit={isSavings ? ' 원 / 턴' : ' 원'}
                 hasValue={savingsAmount !== 0}
                 onDelete={handleDelete}
             ></Input>

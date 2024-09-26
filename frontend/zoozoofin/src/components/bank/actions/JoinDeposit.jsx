@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+// import { Link } from 'react-router-dom';
 
 import { ProductCard } from '@components/bank/ProductCard';
 import { ProductJoinCard } from '@components/bank/ProductJoinCard';
@@ -28,6 +29,8 @@ const JoinDeposit = () => {
 
     const [products, setProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const [savingsAmount, setSavingsAmount] = useState(null);
+    const [expectedFinalAmount, setExpectedFinalAmount] = useState(null);
 
     // 상품 정보 받아오기
     const fetchProducts = async () => {
@@ -42,11 +45,11 @@ const JoinDeposit = () => {
                 },
             });
             if (res.status === 200) {
-                console.log(res.data.body);
+                // console.log(res.data.body);
                 setProducts(res.data.body);
             }
         } catch (error) {
-            console.error('error: ', error);
+            // console.error('error: ', error);
             return error;
         }
     };
@@ -57,43 +60,73 @@ const JoinDeposit = () => {
 
     useEffect(() => {}, [products]);
 
-    const handleClick = (product) => {
-        console.log('handleClick 클릭됨');
-        setSelectedProduct(product);
+    const goToNextCard = () => {
         setCurrentCard(currentCard + 1);
+    };
+
+    const handleClick = (product) => {
+        setSelectedProduct(product);
+        goToNextCard();
+    };
+
+    const saveAmount = (savingsAmount, expectedFinalAmount) => {
+        goToNextCard();
+        setSavingsAmount(savingsAmount);
+        setExpectedFinalAmount(expectedFinalAmount);
     };
 
     return (
         <Block>
-            <MessageBox>
-                <NormalIcon icon={IconChick} />
-                <div>{joinGuideMessages[currentCard]}</div>
-            </MessageBox>
-            <button onClick={handleClick}>다음</button>
-
-            {!selectedProduct ? (
-                <div>
-                    {products.map((product) => (
-                        <ProductCard
-                            key={product.depositTypeId}
-                            productName={product.depositName}
-                            productRate={product.depositRate}
-                            productPeriod={product.depositPeriod}
-                            handleClick={() => handleClick(product)} // 선택된 상품 저장
-                        />
-                    ))}
-                </div>
-            ) : (
-                <ProductJoinCard
-                    productName={selectedProduct.depositName}
-                    productPeriod={selectedProduct.depositPeriod}
-                    productRate={selectedProduct.depositRate}
-                    isLoan={false}
-                    currentTurn={5}
-                    maxAmount={10000000}
-                    isSavings={false}
-                />
+            {currentCard < 4 && (
+                <MessageBox>
+                    <NormalIcon icon={IconChick} />
+                    <div>{joinGuideMessages[currentCard]}</div>
+                </MessageBox>
             )}
+
+            {(() => {
+                if (!selectedProduct && currentCard === 1) {
+                    return (
+                        <div>
+                            {products.map((product) => (
+                                <ProductCard
+                                    key={product.depositTypeId}
+                                    productName={product.depositName}
+                                    productRate={product.depositRate}
+                                    productPeriod={product.depositPeriod}
+                                    handleClick={() => handleClick(product)} // 선택된 상품 저장
+                                />
+                            ))}
+                        </div>
+                    );
+                } else if (!savingsAmount && currentCard === 2) {
+                    return (
+                        <ProductJoinCard
+                            productName={selectedProduct.depositName}
+                            productPeriod={selectedProduct.depositPeriod}
+                            productRate={selectedProduct.depositRate}
+                            isLoan={false}
+                            currentTurn={5}
+                            maxAmount={10000000}
+                            isSavings={false} // true=적금, false=예금
+                            saveAmount={saveAmount}
+                        />
+                    );
+                } else if (savingsAmount && currentCard === 3) {
+                    return (
+                        <ProductCheckCard
+                            productName={selectedProduct.depositName}
+                            productPeriod={selectedProduct.depositPeriod}
+                            productRate={selectedProduct.depositRate}
+                            currentTurn={5}
+                            savingsAmount={savingsAmount}
+                            expectedFinalAmount={expectedFinalAmount}
+                            specialRate={6} // 캐릭터 특별 능력 없으면 null이거나 0이거나
+                            goToNextCard={goToNextCard}
+                        />
+                    );
+                }
+            })()}
         </Block>
     );
 };
