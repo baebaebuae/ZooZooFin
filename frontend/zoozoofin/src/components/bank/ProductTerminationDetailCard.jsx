@@ -21,7 +21,7 @@ const terminateProduct = async (productType, productId) => {
     const apiClient = getApiClient();
 
     console.log('joinProducts - productType:', productType);
-    console.log('joinProducts - typeId:', productId);
+    console.log('joinProducts - productId:', productId);
 
     const productData = {
         ...(productType === 'deposit' && { depositId: productId }),

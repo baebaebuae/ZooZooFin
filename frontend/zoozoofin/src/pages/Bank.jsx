@@ -71,7 +71,6 @@ const Bank = () => {
     const handleResponseClick = (nextScript) => {
         if (!nextScript) {
             console.error('다음 스크립트 ID가 없습니다');
-            return;
         }
         setCurrentId(nextScript);
     };
@@ -96,15 +95,43 @@ const Bank = () => {
     if (currentScript.type === 'action') {
         switch (currentScript.content) {
             case '예금 상품 조회':
-                return <JoinProduct productType={'deposit'} />;
+                return (
+                    <JoinProduct
+                        productType={'deposit'}
+                        goToScript={() =>
+                            handleResponseClick(currentScript.responses[0].nextScript)
+                        }
+                    />
+                );
             case '적금 상품 조회':
-                return <JoinProduct productType={'savings'} />;
+                return (
+                    <JoinProduct
+                        productType={'savings'}
+                        goToScript={() =>
+                            handleResponseClick(currentScript.responses[0].nextScript)
+                        }
+                    />
+                );
 
             case '예금 상품 해지 조회':
-                return <TerminateProduct productType={'deposit'} />;
+                return (
+                    <TerminateProduct
+                        productType={'deposit'}
+                        goToScript={() =>
+                            handleResponseClick(currentScript.responses[0].nextScript)
+                        }
+                    />
+                );
 
             case '적금 상품 해지 조회':
-                return <TerminateProduct productType={'savings'} />;
+                return (
+                    <TerminateProduct
+                        productType={'savings'}
+                        goToScript={() =>
+                            handleResponseClick(currentScript.responses[0].nextScript)
+                        }
+                    />
+                );
             case '파산 처리':
                 return (
                     <Bankrupt
@@ -117,7 +144,7 @@ const Bank = () => {
                     />
                 );
             case 'END':
-                return <div>스크립트 끝남</div>;
+                return navigate('/myroom');
             default:
                 return <div>해당하는 페이지가 없어요. 현재 Action을 확인해주세요.</div>;
         }

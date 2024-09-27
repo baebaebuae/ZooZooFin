@@ -19,7 +19,7 @@ const Block = styled.div`
     gap: 20px;
 `;
 
-const JoinProduct = ({ productType }) => {
+const JoinProduct = ({ productType, goToScript }) => {
     const [currentCard, setCurrentCard] = useState(1);
 
     const [products, setProducts] = useState([]);
@@ -50,9 +50,10 @@ const JoinProduct = ({ productType }) => {
 
     // 도장 찍은 후 -로딩중- 모달 뜨고 사라지는 함수
     useEffect(() => {
-        if (currentCard === 4) {
+        if (currentCard > 3) {
             const timer = setTimeout(() => {
                 goToNextCard();
+                goToScript();
             }, 2000);
 
             return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 정리
