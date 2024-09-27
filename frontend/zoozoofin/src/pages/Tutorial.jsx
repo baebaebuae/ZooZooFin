@@ -2,6 +2,7 @@ import { useRef, useState, useEffect, Suspense } from 'react';
 import Bubble from '@components/root/bubble';
 import styled from 'styled-components';
 import { useStore } from '../store.js';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import { useGLTF, OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
@@ -37,17 +38,24 @@ const NPCModel = () => {
 };
 
 const Tutorial = () => {
-    const { scripts, fetchTutorialScript } = useStore();
+    const { setScripts, scripts, fetchTutorialScript } = useStore();
     const [currentId, setCurrentId] = useState(1);
     const [currentScript, setCurrentScript] = useState(null);
+
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    useEffect(() => {
+        setScripts([]); // 스크립트 상태 초기화
+    }, [location.pathname, setScripts]);
 
     // scripts 가져오기(비동기)
     useEffect(() => {
         if (!scripts || scripts.length === 0) {
-            const realScript = async () => {
-                fetchTutorialScript();
+            const loadScripts = async () => {
+                await fetchTutorialScript('tutorial');
             };
-            realScript();
+            loadScripts();
         }
     }, [fetchTutorialScript, scripts]);
 
@@ -64,7 +72,7 @@ const Tutorial = () => {
         setCurrentId(nextScript);
     };
 
-    // 로딩 중일 때 Loader 컴포넌트 렌더링
+    // 로딩 중일 때 Loader 컴포넌트 렌더링 - 예정
     if (!currentScript) return <div>주주시티에 입장하는 중...</div>;
 
     if (currentScript.type === 'action' && currentScript.content === 'INPUT_NAME')
@@ -76,6 +84,20 @@ const Tutorial = () => {
                 </button>
             </div>
         );
+
+    // action별로 컴포넌트 렌더링 - 예정
+    // if (currentScript.type === 'action') {
+    //     switch (currentScript.content) {
+    //         case 'END':
+    //             return navigate('/myroom');
+    //         default:
+    //             return <div>해당하는 페이지가 없어요. 현재 Action을 확인해주세요.</div>;
+    //     }
+    // }
+
+    if (currentScript.type === 'action' && currentScript.content === 'END') {
+        return navigate('/myroom');
+    }
 
     return (
         <TutorialContainer>

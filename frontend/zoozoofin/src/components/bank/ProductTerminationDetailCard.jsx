@@ -21,7 +21,7 @@ const terminateProduct = async (productType, productId) => {
     const apiClient = getApiClient();
 
     console.log('joinProducts - productType:', productType);
-    console.log('joinProducts - typeId:', productId);
+    console.log('joinProducts - productId:', productId);
 
     const productData = {
         ...(productType === 'deposit' && { depositId: productId }),
@@ -55,7 +55,7 @@ export const ProductTerminationDetailCard = ({
     amount,
     // 현재 해지시 예상 금액 변수 추가예정
     payment,
-    finalReturn,
+    deleteReturn,
     restTurn,
     endTurn,
     warning,
@@ -108,7 +108,7 @@ export const ProductTerminationDetailCard = ({
             <ProductJoinInfo
                 infoTitle={'지급액'}
                 // finalReturn -> 현재 해지시 예상 금액 변수 추가되면 수정
-                infoContent={`${finalReturn.toLocaleString()}원`}
+                infoContent={`${deleteReturn.toLocaleString()}원`}
             />
             <StampButton onClick={() => setIsModalOpen(true)} />
             {isModalOpen && (

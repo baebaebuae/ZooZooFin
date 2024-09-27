@@ -18,7 +18,7 @@ const Block = styled.div`
     gap: 20px;
 `;
 
-const TerminateProduct = ({ productType }) => {
+const TerminateProduct = ({ productType, goToScript }) => {
     const [currentCard, setCurrentCard] = useState(1);
 
     const [products, setProducts] = useState([]);
@@ -53,9 +53,10 @@ const TerminateProduct = ({ productType }) => {
 
     // 도장 찍은 후 -로딩중- 모달 뜨고 사라지는 함수
     useEffect(() => {
-        if (currentCard === 3) {
+        if (currentCard > 2) {
             const timer = setTimeout(() => {
                 goToNextCard();
+                goToScript();
             }, 2000);
 
             return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 정리
@@ -131,7 +132,7 @@ const TerminateProduct = ({ productType }) => {
                             amount={selectedProduct.amount}
                             payment={selectedProduct.payment}
                             // 현재 턴까지 낸 금액에 0.5% 이율 적용한, 현재 해지시 예상 금액 변수 추가 예정
-                            finalReturn={selectedProduct.finalReturn}
+                            deleteReturn={selectedProduct.deleteReturn}
                             restTurn={selectedProduct.restTurn}
                             endTurn={selectedProduct.endTurn}
                             goToScript={goToNextCard}
