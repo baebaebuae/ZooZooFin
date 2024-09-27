@@ -5,6 +5,7 @@ import com.zzf.backend.domain.auth.service.OAuthService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -20,6 +21,9 @@ public class OAuthController {
 
     private final OAuthService OAuthService;
 
+    @Value("${oauth.token-redirect_url}")
+    private String tokenRedirectUrl;
+
     @GetMapping("/{provider}")
     public RedirectView loginRedirect(@PathVariable String provider) {
         String redirectUrl = OAuthService.getRedirectUrl(provider);
@@ -34,7 +38,7 @@ public class OAuthController {
         LoginResponse loginResp = OAuthService.loginOAuth(provider, code);
 
         response.setStatus(LOGIN_SUCCESS.getHttpStatus());
-        response.sendRedirect("http://localhost:5173/callback" + "?accessToken=" + loginResp.accessToken() +
+        response.sendRedirect(tokenRedirectUrl + "/callback" + "?accessToken=" + loginResp.accessToken() +
                 "&refreshToken=" + loginResp.refreshToken());
     }
 }

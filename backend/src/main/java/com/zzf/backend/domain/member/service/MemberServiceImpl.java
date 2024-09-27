@@ -7,7 +7,6 @@ import com.zzf.backend.domain.member.dto.ProfileResponse;
 import com.zzf.backend.domain.member.entity.Member;
 import com.zzf.backend.domain.member.repository.MemberRepository;
 import com.zzf.backend.global.exception.CustomException;
-import com.zzf.backend.global.status.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +25,15 @@ public class MemberServiceImpl implements MemberService {
     public ProfileResponse getProfile(String memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND_EXCEPTION));
-        animalRepository.findByMemberAndAnimalIsEndFalse(member);
 
-        return ProfileResponse.builder().build();
+        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member)
+                .orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
+
+        return ProfileResponse.builder()
+                .animalImg(animal.getAnimalType().getAnimalImgUrl())
+                .animalAssets(animal.getAnimalAssets())
+                .memberGoldBar(member.getMemberGoldBar())
+                .build();
     }
 
     @Override

@@ -29,7 +29,7 @@ public class Chart extends BaseEntity {
 
     @NotNull
     @Column(name = "chart_rate")
-    private Long chartRate;
+    private Double chartRate;
 
     @NotNull
     @Column(name = "chart_buy")
@@ -56,7 +56,7 @@ public class Chart extends BaseEntity {
     private Long chartEnd;
 
     @Builder
-    public Chart(Stock stock, Long chartTurn, Long chartRate, Long chartBuy, Long chartSell, Long chartHigh, Long chartLow, Long chartStart, Long chartEnd) {
+    public Chart(Stock stock, Long chartTurn, Double chartRate, Long chartBuy, Long chartSell, Long chartHigh, Long chartLow, Long chartStart, Long chartEnd) {
         this.stock = stock;
         this.chartTurn = chartTurn;
         this.chartRate = chartRate;
