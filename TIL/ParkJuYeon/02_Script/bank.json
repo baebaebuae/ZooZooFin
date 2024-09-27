@@ -155,7 +155,7 @@
         "selection": "적금을 해지할거야."
       },
       {
-        "nextScript": 1,
+        "nextScript": 9,
         "selection": "미안, 은행 코너로 돌아갈게."
       }
     ]
@@ -267,7 +267,7 @@
         "selection": "응😂"
       },
       {
-        "nextScript": 0,
+        "nextScript": 1,
         "selection": "아니, 다시 생각해볼게."
       }
     ]
@@ -287,42 +287,29 @@
         "selection": "다시 생각해볼게."
       }
     ]
-  }
-]
-
-  {
-    "scriptId": 0,
-    "category": "bank",
-    "type": "action",
-    "content": "END",
-    "responses": []
   },
   {
-    "scriptId": 1,
+    "scriptId": 21,
     "category": "bank",
-    "type": "script",
-    "content": "안녕, ${name}.\n 은행에는 무슨 일로 왔어, 꿀? ",
+    "type": "action",
+    "content": "파산 처리",
     "responses": [
       {
-        "nextScript": 2,
-        "selection": "예금 코너에 볼 일이 있어!"
-      },
-      {
-        "nextScript": 3,
-        "selection": "적금 코너에 볼 일이 있어!"
-      },
-      {
-        "nextScript": 4,
-        "selection": "대출 코너에 볼 일이 있어!"
+        "nextScript": 22,
+        "selection": null
       }
     ]
   },
   {
-    "scriptId": 0,
+    "scriptId": 22,
     "category": "bank",
-    "type": "action",
-    "content": "END",
-    "responses": []
-  },
-  {}
+    "type": "script",
+    "content": "파산 처리가 완료됐어.\n${name}, 주주시티를 떠난다니 정말 아쉽다.\n투자하러 또 놀러와! 안녕!",
+    "responses": [
+      {
+        "nextScript": 0,
+        "selection": null
+      }
+    ]
+  }
 ]
