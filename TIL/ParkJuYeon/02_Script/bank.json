@@ -1,13 +1,37 @@
 [
-    {
-        "category": "bank",
-        "scripts": [
-            {
-                "id": 0,
-                "type": "action",
-                "content": "END",
-                "responses": {}
-            }
-        ]
-    }
+  {
+    "scriptId": 0,
+    "category": "bank",
+    "type": "action",
+    "content": "END",
+    "responses": []
+  },
+  {
+    "scriptId": 1,
+    "category": "bank",
+    "type": "script",
+    "content": "안녕, ${name}.\n 은행에는 무슨 일로 왔어, 꿀? ",
+    "responses": [
+      {
+        "nextScript": 2,
+        "selection": "예금 코너에 볼 일이 있어!"
+      },
+      {
+        "nextScript": 3,
+        "selection": "적금 코너에 볼 일이 있어!"
+      },
+      {
+        "nextScript": 4,
+        "selection": "대출 코너에 볼 일이 있어!"
+      }
+    ]
+  },
+  {
+    "scriptId": 0,
+    "category": "bank",
+    "type": "action",
+    "content": "END",
+    "responses": []
+  },
+  {}
 ]
