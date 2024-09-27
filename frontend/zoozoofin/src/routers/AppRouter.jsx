@@ -16,6 +16,7 @@ import MyRoom from '@pages/MyRoom';
 import Map from '@pages/Map';
 import Laptop from '@pages/Laptop';
 import Lender from '@pages/Lender';
+import Loan from '@pages/Loan';
 import School from '@pages/School';
 import Stock from '@pages/Stock';
 import Tutorial from '@pages/Tutorial';
@@ -69,6 +70,7 @@ const AppRouter = () => {
                     <Route path="/bank" element={<Bank />} />
                     <Route path="/laptop" element={<Laptop />} />
                     <Route path="/lender" element={<Lender />} />
+                    <Route path="/loan" element={<Loan />} />
                     <Route path="/school" element={<School />} />
                     <Route path="/stock" element={<Stock />} />
                     <Route path="/myroom" element={<MyRoom />} />

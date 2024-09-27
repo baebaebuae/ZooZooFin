@@ -26,5 +26,7 @@
         font-family: 'OneMobile';
         overflow: auto;
         margin: 0;
+        max-width: 360px;
+        max-height: 640px;
     }
 }

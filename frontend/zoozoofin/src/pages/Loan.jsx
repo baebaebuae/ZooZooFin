@@ -1,22 +1,17 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 import ActionContainer from '@components/bank/ActionContainer.jsx';
 import Bubble from '@components/root/bubble';
 import { useStore } from '../store.js';
 
-import { getApiClient } from '@stores/apiClient';
-
-const apiClient = getApiClient();
-
-const BankBlock = styled.div`
+const LoanBlock = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
 `;
 
-const BankContainer = styled.div`
+const LoanContainer = styled.div`
     display: flex;
     justify-content: start;
     width: 360px;
@@ -29,27 +24,16 @@ const BubbleBlock = styled(Bubble)`
     right: 0;
 `;
 
-const Bank = () => {
+const Loan = () => {
     const { scripts, fetchTutorialScript } = useStore();
-
     const [currentId, setCurrentId] = useState(1);
     const [currentScript, setCurrentScript] = useState(null);
-
-    const navigate = useNavigate();
-
-    // 대출 코너로 이동
-    useEffect(() => {
-        if (currentScript && currentScript.content === '대출 코너로 입장') {
-            fetchTutorialScript('loan');
-            navigate('/loan');
-        }
-    }, [currentScript, navigate, fetchTutorialScript]);
 
     // scripts 가져오기(비동기)
     useEffect(() => {
         if (!scripts || scripts.length === 0) {
             const realScript = async () => {
-                fetchTutorialScript('bank');
+                fetchTutorialScript('loan');
             };
             realScript();
         }
@@ -69,48 +53,57 @@ const Bank = () => {
     };
 
     // 로딩 중일 때 Loader 컴포넌트 렌더링
-    if (!currentScript) return <div>은행 입장중...</div>;
+    if (!currentScript) return <div>대출 코너 입장중...</div>;
 
     if (currentScript.type === 'script') {
         return (
-            <BankBlock>
+            <LoanBlock>
                 <BubbleBlock
-                    npc={'꿀찌'}
+                    npc={'너굴맨'}
                     type={currentScript.type}
                     content={currentScript.content}
                     responses={currentScript.responses}
                     onClick={handleResponseClick}
                 />
-            </BankBlock>
+            </LoanBlock>
         );
     }
 
     if (currentScript.type === 'action') {
         switch (currentScript.content) {
-            case '예금 상품 조회':
-                return <ActionContainer currentAction={'joinDeposit'} />;
-            case '적금 상품 조회':
-                return <ActionContainer currentAction={'joinSavings'} />;
-            case '예금 상품 해지 조회':
-                return <ActionContainer currentAction={'terminateDeposit'} />;
-            case '적금 상품 해지 조회':
-                return <ActionContainer currentAction={'terminateSavings'} />;
+            case '대출 가능 여부 조회':
+                return <ActionContainer currentAction={'joinLoan'} />;
+
             case 'END':
                 return <div>스크립트 끝남</div>;
             default:
                 return (
-                    <BankBlock>
+                    <LoanBlock>
                         <BubbleBlock
-                            npc={'꿀찌'}
+                            npc={'너굴맨'}
                             type={currentScript.type}
                             content={currentScript.content}
                             responses={currentScript.responses}
                             onClick={handleResponseClick}
                         />
-                    </BankBlock>
+                    </LoanBlock>
                 );
         }
     }
+
+    return (
+        <LoanBlock>
+            {/* type==='script'일 때 */}
+            {/* <BubbleBlock /> 렌더링 */}
+            {/* script id 더하는 함수 작동중 */}
+
+            {/* type==='action'일 때 */}
+            {/* 해당 action명 받아서 ActionContainer의 content 전환 */}
+            {/* 단일 id */}
+
+            <ActionContainer currentAction={'terminateSavings'} />
+        </LoanBlock>
+    );
 };
 
-export default Bank;
+export default Loan;
