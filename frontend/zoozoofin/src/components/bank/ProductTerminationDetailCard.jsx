@@ -29,6 +29,8 @@ export const ProductTerminationDetailCard = ({
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+
+
     return (
         <Card>
             <NormalIcon icon={IconChicken}></NormalIcon>

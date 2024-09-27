@@ -26,12 +26,14 @@ export const StampModal = ({ action, goToScript, handleCloseModal }) => {
     const [isClicked, setIsClicked] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(true);
 
-    const applyStamp = () => {
+    const applyStamp = async () => {
         setIsClicked(true);
+        console.log('Stamp clicked, action will be called');
 
-        action();
+        await action();
 
         setTimeout(() => {
+            console.log('Moving to the next script');
             goToScript();
         }, 1500);
     };

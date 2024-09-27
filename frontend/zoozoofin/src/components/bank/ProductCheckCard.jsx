@@ -9,39 +9,77 @@ import { Divider } from '@components/root/card';
 import { Card } from '@components/root/card';
 import { StampModal } from '@components/root/stampModal';
 
+import { getApiClient } from '@stores/apiClient';
+
 const ProductName = styled.div`
     font-size: 14px;
     color: ${({ theme }) => theme.colors.gray};
 `;
 
-import axios from 'axios';
+// import axios from 'axios';
 
-const URL = import.meta.env.VITE_URL;
-// 상품 가입하기(POST)
-const joinProducts = async (productType, typeId, money) => {
+// const URL = import.meta.env.VITE_URL;
+// // 상품 가입하기(POST)
+// const joinProducts = async (productType, typeId, money) => {
+//     console.log('joinProducts - productType:', productType);
+//     console.log('joinProducts - typeId:', typeId);
+//     console.log('joinProducts - money:', money);
+//     try {
+//         const res = await axios({
+//             method: 'post',
+//             url: `${URL}/${productType}`,
+//             headers: {
+//                 Authorization: `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`,
+//                 'Content-Type': 'application/json',
+//                 'Access-Control-Allow-Origin': `http://localhost:5173`,
+//                 'Access-Control-Allow-Credentials': 'true',
+//             },
+//             data: {
+//                 typeId: typeId,
+//                 money: money, // Key 이름 확인
+//             },
+//         });
+//         if (res.status === 200) {
+//             console.log(res.data); // POST 잘 갔는지 확인
+//         }
+//     } catch (error) {
+//         // console.error('error: ', error);
+//         return error;
+//     }
+// };
+
+const joinProduct = async (productType, typeId, money) => {
+    const apiClient = getApiClient();
+
     console.log('joinProducts - productType:', productType);
     console.log('joinProducts - typeId:', typeId);
     console.log('joinProducts - money:', money);
+
+    const productData = {
+        typeId: typeId,
+        money: money,
+    };
+
+    // const productData = {
+    //     depositTypeId: typeId,
+    //     depositAmount: money,
+    // };
+
     try {
-        const res = await axios({
-            method: 'post',
-            url: `${URL}/${productType}`,
-            headers: {
-                Authorization: `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`,
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': `http://localhost:5173`,
-                'Access-Control-Allow-Credentials': 'true',
-            },
-            data: {
-                typeId: typeId,
-                money: money, // Key 이름 확인
-            },
+        console.log(`Request URL: /${productType}`);
+        console.log('Request Data:', productData);
+
+        const res = await apiClient.post(`/${productType}`, productData, {
+            headers: { animalId: 1 },
         });
+
         if (res.status === 200) {
             console.log(res.data); // POST 잘 갔는지 확인
+        } else {
+            console.error('Unexpected status code:', res.status);
         }
     } catch (error) {
-        // console.error('error: ', error);
+        console.error('error: ', error);
         return error;
     }
 };
@@ -103,7 +141,7 @@ export const ProductCheckCard = ({
 
             {isModalOpen && (
                 <StampModal
-                    action={() => joinProducts(productType, productTypeId, savingsAmount)}
+                    action={() => joinProduct(productType, productTypeId, savingsAmount)}
                     goToScript={goToScript}
                     handleCloseModal={() => setIsModalOpen(false)}
                 />
