@@ -3,12 +3,12 @@ import axios from 'axios';
 
 export const useStore = create((set) => ({
     scripts: [],
-    fetchTutorialScript: async () => {
+    fetchTutorialScript: async (category) => {
         try {
             const res = await axios({
                 method: 'get',
                 url: `${import.meta.env.VITE_URL}/scripts/category`,
-                params: { category: 'tutorial' },
+                params: { category: category },
                 headers: {
                     Authorization: `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`,
                     'Access-Control-Allow-Origin': `http://localhost:5173`,

@@ -45,7 +45,7 @@ const Tutorial = () => {
     useEffect(() => {
         if (!scripts || scripts.length === 0) {
             const realScript = async () => {
-                fetchTutorialScript();
+                fetchTutorialScript('tutorial');
             };
             realScript();
         }
