@@ -4,6 +4,297 @@
     "category": "bank",
     "type": "action",
     "content": "END",
+    "responses": [
+      {
+        "nextScript": null,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 1,
+    "category": "bank",
+    "type": "script",
+    "content": "안녕, ${name}!\n은행에는 무슨 일로 왔어, 꿀?",
+    "responses": [
+      {
+        "nextScript": 2,
+        "selection": "예금 코너에 볼 일이 있어."
+      },
+      {
+        "nextScript": 10,
+        "selection": "적금 코너에 볼 일이 있어."
+      },
+      {
+        "nextScript": 17,
+        "selection": "대출 코너에 볼 일이 있어."
+      },
+      {
+        "nextScript": 19,
+        "condition": "파산",
+        "selection": "파산 신청하려구😂"
+      }
+    ]
+  },
+  {
+    "scriptId": 2,
+    "category": "bank",
+    "type": "script",
+    "content": "가입, 해지 중 어떤 서비스를 이용할거야, 꿀?",
+    "responses": [
+      {
+        "nextScript": 3,
+        "selection": "예금에 가입할거야."
+      },
+      {
+        "nextScript": 6,
+        "selection": "예금을 해지할거야."
+      },
+      {
+        "nextScript": 9,
+        "selection": "미안, 은행 코너로 돌아갈게."
+      }
+    ]
+  },
+  {
+    "scriptId": 3,
+    "category": "bank",
+    "type": "script",
+    "content": "좋아, 현재 가입 가능한 예금 상품을 보여줄게, 꿀.",
+    "responses": [
+      {
+        "nextScript": 4,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 4,
+    "category": "bank",
+    "type": "action",
+    "content": "예금 상품 조회",
+    "responses": [
+      {
+        "nextScript": 5,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 5,
+    "category": "bank",
+    "type": "script",
+    "content": "가입이 잘 완료됐어!\n주주은행을 이용해줘서 고마워.\n그럼 또 보자, 꿀!",
+    "responses": [
+      {
+        "nextScript": 0,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 6,
+    "category": "bank",
+    "type": "script",
+    "content": "좋아. 현재 가입한 예금 상품을 보여줄게, 꿀",
+    "responses": [
+      {
+        "nextScript": 7,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 7,
+    "category": "bank",
+    "type": "action",
+    "content": "예금 상품 해지 조회",
+    "responses": [
+      {
+        "nextScript": 8,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 8,
+    "category": "bank",
+    "type": "script",
+    "content": "해지가 잘 완료됐어!\n주주은행을 이용해줘서 고마워.\n그럼 또 보자, 꿀!",
+    "responses": [
+      {
+        "nextScript": 0,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 9,
+    "category": "bank",
+    "type": "script",
+    "content": "그래. 잠시만 기다려 줘, 꿀!",
+    "responses": [
+      {
+        "nextScript": 1,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 10,
+    "category": "bank",
+    "type": "script",
+    "content": "가입, 해지 중 어떤 서비스를 이용할거야, 꿀?",
+    "responses": [
+      {
+        "nextScript": 11,
+        "selection": "적금에 가입할거야."
+      },
+      {
+        "nextScript": 14,
+        "selection": "적금을 해지할거야."
+      },
+      {
+        "nextScript": 1,
+        "selection": "미안, 은행 코너로 돌아갈게."
+      }
+    ]
+  },
+  {
+    "scriptId": 11,
+    "category": "bank",
+    "type": "script",
+    "content": "좋아. 현재 가입 가능한 적금 상품을 보여줄게, 꿀.",
+    "responses": [
+      {
+        "nextScript": 12,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 12,
+    "category": "bank",
+    "type": "action",
+    "content": "적금 상품 조회",
+    "responses": [
+      {
+        "nextScript": 13,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 13,
+    "category": "bank",
+    "type": "script",
+    "content": "가입이 잘 완료됐어!\n주주은행을 이용해줘서 고마워.\n그럼 또 보자, 꿀!",
+    "responses": [
+      {
+        "nextScript": 0,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 14,
+    "category": "bank",
+    "type": "script",
+    "content": "좋아, 현재 가입한 적금 상품을 보여줄게, 꿀.",
+    "responses": [
+      {
+        "nextScript": 15,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 15,
+    "category": "bank",
+    "type": "action",
+    "content": "적금 상품 해지 조회",
+    "responses": [
+      {
+        "nextScript": 16,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 16,
+    "category": "bank",
+    "type": "script",
+    "content": "해지가 잘 완료됐어!\n주주은행을 이용해줘서 고마워.",
+    "responses": [
+      {
+        "nextScript": 0,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 17,
+    "category": "bank",
+    "type": "script",
+    "content": "대출은 너굴맨이 처리한다구!\n잠시만 기다려줘.",
+    "responses": [
+      {
+        "nextScript": 18,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 18,
+    "category": "bank",
+    "type": "action",
+    "content": "대출 코너로 입장",
+    "responses": [
+      {
+        "nextScript": null,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 19,
+    "category": "bank",
+    "type": "script",
+    "content": "이런. 자산을 많이 잃었구나.\n정말 파산 신청할거야, 꿀?",
+    "responses": [
+      {
+        "nextScript": 20,
+        "selection": "응😂"
+      },
+      {
+        "nextScript": 0,
+        "selection": "아니, 다시 생각해볼게."
+      }
+    ]
+  },
+  {
+    "scriptId": 20,
+    "category": "bank",
+    "type": "script",
+    "content": "파산 신청을 완료하면 게임이 종료되고, 선택을 되돌릴 수 없어.\n그래도 신청할거야?",
+    "responses": [
+      {
+        "nextScript": 21,
+        "selection": "응!!!!!!!"
+      },
+      {
+        "nextScript": 0,
+        "selection": "다시 생각해볼게."
+      }
+    ]
+  }
+]
+
+  {
+    "scriptId": 0,
+    "category": "bank",
+    "type": "action",
+    "content": "END",
     "responses": []
   },
   {
