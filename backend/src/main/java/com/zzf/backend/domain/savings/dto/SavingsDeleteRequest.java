@@ -4,5 +4,5 @@ import lombok.Getter;
 
 @Getter
 public class SavingsDeleteRequest {
-    private Long SavingsId;
+    private Long savingsId;
 }
