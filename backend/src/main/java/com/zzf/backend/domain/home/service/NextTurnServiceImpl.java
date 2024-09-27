@@ -8,8 +8,10 @@ import com.zzf.backend.domain.deposit.repository.DepositRepository;
 import com.zzf.backend.domain.home.dto.LoanRepayDTO;
 import com.zzf.backend.domain.home.dto.LoanWarningDTO;
 import com.zzf.backend.domain.home.dto.SavingsNextTurnDTO;
+import com.zzf.backend.domain.home.entity.NextTurnRecord;
 import com.zzf.backend.domain.home.entity.TurnRecord;
 import com.zzf.backend.domain.home.entity.WarningRecord;
+import com.zzf.backend.domain.home.repository.NextTurnRecordRepository;
 import com.zzf.backend.domain.home.repository.TurnRecordRepository;
 import com.zzf.backend.domain.home.repository.WarningRecordRepository;
 import com.zzf.backend.domain.loan.entity.Loan;
@@ -38,6 +40,7 @@ public class NextTurnServiceImpl implements NextTurnService {
     private final CapitalRepository capitalRepository;
     // private final StockRepository;
     private final TurnRecordRepository turnRecordRepository;
+    private final NextTurnRecordRepository nextTurnRecordRepository;
     private final WarningRecordRepository warningRecordRepository;
 
     @Override
@@ -61,6 +64,7 @@ public class NextTurnServiceImpl implements NextTurnService {
                 .depositMake(0L)
                 .depositFinish(0L)
                 .savingsMake(0L)
+                .savingsPay(0L)
                 .savingsFinish(0L)
                 .capitalMake(0L)
                 .capitalRepay(0L)
@@ -81,16 +85,17 @@ public class NextTurnServiceImpl implements NextTurnService {
                 .animal(animal)
                 .build();
 
-        // 예금 다음 턴
+        // 예금 다음 턴으로 넘어가기
         long depositMature = depositGoToNextTurn(animal);
         turnRecord.setDepositFinish(depositMature);
 
-        // 적금 다음 턴
+        // 적금 다음 턴으로 넘어가기
         SavingsNextTurnDTO savingsNextTurnDTO = savingsGoToNextTurn(animal);
         turnRecord.setSavingsFinish(savingsNextTurnDTO.getSavingsFinishTotal());
+        turnRecord.setSavingsPay(savingsNextTurnDTO.getSavingsPayTotal());
         warningRecord.setWarningSavingsCount(savingsNextTurnDTO.getWarningSavingsCount());
 
-        // 대출 다음 턴
+        // 대출 다음 턴으로 넘어가기
         LoanWarningDTO loanWarningDTO = loanGoToNextTurn(animal);
         turnRecord.setLoanRepay(-loanWarningDTO.getLoanTotalRepayment());
         warningRecord.setWarningLoanCount(loanWarningDTO.getWarningLoanCount());
@@ -101,12 +106,34 @@ public class NextTurnServiceImpl implements NextTurnService {
         warningRecord.setStockTotal(loanWarningDTO.getStockTotal());
         warningRecord.setStockRepay(loanWarningDTO.getStockRepay());
 
-        // 사채 다음 턴
+        // 사채 다음 턴으로 넘어가기
         long capitalRepay = capitalGoToNextTurn(animal);
         turnRecord.setCapitalRepay(-capitalRepay);
 
         turnRecordRepository.save(turnRecord);
         warningRecordRepository.save(warningRecord);
+
+        NextTurnRecord nextTurnRecord = NextTurnRecord.builder()
+                .nextTurnRecordTurn(animal.getAnimalTurn() + 1)
+                .nextSavingsRepayment(0L)
+                .nextLoanRepayment(0L)
+                .nextCapitalRepayment(0L)
+                .animal(animal)
+                .build();
+
+//        // 적금 지출 예측
+//        long savingsExpect = savingsExpect(animal);
+//        nextTurnRecord.setNextSavingsRepayment(savingsExpect);
+//
+//        // 대출 지출 예측
+//        long loanExpect = loanExpect(animal);
+//        nextTurnRecord.setNextLoanRepayment(loanExpect);
+//
+//        // 사채 지출 예측
+//        long capitalExpect = capitalExpect(animal);
+//        nextTurnRecord.setNextCapitalRepayment(capitalExpect);
+
+        nextTurnRecordRepository.save(nextTurnRecord);
     }
 
     // 예금 다음 턴으로 넘어가기
@@ -150,6 +177,7 @@ public class NextTurnServiceImpl implements NextTurnService {
     public SavingsNextTurnDTO savingsGoToNextTurn(Animal animal) {
         // 캐릭터는 이미 다음턴으로 넘어온 상태
         long savingsWarnCount = 0;
+        long payTotal = 0;
         long total = 0;
 
         // 진행 중인 적금 모두 조회
@@ -185,6 +213,7 @@ public class NextTurnServiceImpl implements NextTurnService {
 
             // 적금에 돈 넣음
             savings.increaseSavingsAmount(monthlyPayment);
+            payTotal += monthlyPayment;
             // 현금 빠져나감
             animal.decreaseAnimalAssets(monthlyPayment);
         }
@@ -192,6 +221,7 @@ public class NextTurnServiceImpl implements NextTurnService {
         return SavingsNextTurnDTO.builder()
                 .savingsFinishTotal(total)
                 .warningSavingsCount(savingsWarnCount)
+                .savingsPayTotal(payTotal)
                 .build();
     }
 
@@ -216,6 +246,13 @@ public class NextTurnServiceImpl implements NextTurnService {
         }
 
         return money;
+    }
+
+    // 적금 지출 예측
+    private long savingsExpect(Animal animal) {
+        // 진행 중인 적금 모두 조회
+        List<Savings> savingsList = savingsRepository.findAllByAnimalAndSavingsIsEndFalse(animal);
+        return 0L;
     }
 
     // 대출 다음 턴으로 넘어가기
@@ -454,6 +491,11 @@ public class NextTurnServiceImpl implements NextTurnService {
         return (long) Math.floor(paymentPerTurn);
     }
 
+    // 대출 지출 예측
+    private long loanExpect(Animal animal) {
+        return 0L;
+    }
+
     // 사채 다음 턴으로 넘어가기
     @Override
     @Transactional
@@ -510,5 +552,10 @@ public class NextTurnServiceImpl implements NextTurnService {
 
         }
         return capitalFinish;
+    }
+
+    // 사채 지출 예측
+    private long capitalExpect(Animal animal) {
+        return 0L;
     }
 }

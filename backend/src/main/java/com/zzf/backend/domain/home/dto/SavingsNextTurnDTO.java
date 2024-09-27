@@ -8,4 +8,5 @@ import lombok.Getter;
 public class SavingsNextTurnDTO {
     long warningSavingsCount; // 경고받은 적금 수
     long savingsFinishTotal; // 만기, 해지한 적금 총액
+    long savingsPayTotal; // 적금 지출 총액
 }
