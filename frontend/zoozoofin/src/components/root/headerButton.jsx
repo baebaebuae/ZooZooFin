@@ -5,6 +5,17 @@ import HeaderMenu from '@assets/images/components/header/header_menu.svg?react';
 import HeaderMap from '@assets/images/components/header/header_map.svg?react';
 // 일단 급하게 사이즈 줄여놨는데, svg파일 용량 줄이는 법 더 찾기
 
+import { useState } from 'react';
+
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+
+import VolumeOffRoundedIcon from '@mui/icons-material/VolumeOffRounded';
+import VolumeUpRoundedIcon from '@mui/icons-material/VolumeUpRounded';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded';
+
 const HeaderButton = styled.div`
     display: flex;
     justify-content: center;
@@ -56,11 +67,50 @@ export const HeaderButtons = ({ currentTurn }) => {
 };
 
 export const HeaderHamburgerButton = () => {
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [isMusicOn, setIsMusicOn] = useState(true);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
     return (
         <>
-            <HeaderButton1>
+            <HeaderButton1 onClick={handleClick}>
                 <HeaderMenu width={20} height={20} />
             </HeaderButton1>
+            <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                }}
+            >
+                {/* UI 구현 예정 */}
+                <MenuItem onClick={handleClose}>
+                    <ListItemIcon>
+                        <HistoryRoundedIcon />
+                    </ListItemIcon>
+                    캐릭터 히스토리
+                </MenuItem>
+                <MenuItem onClick={() => setIsMusicOn(!isMusicOn)}>
+                    <ListItemIcon>
+                        {isMusicOn ? <VolumeUpRoundedIcon /> : <VolumeOffRoundedIcon />}
+                    </ListItemIcon>
+                    BGM ON/OFF
+                </MenuItem>
+                <MenuItem onClick={handleClose}>
+                    <ListItemIcon>
+                        <LogoutRoundedIcon />
+                    </ListItemIcon>
+                    로그아웃
+                </MenuItem>
+            </Menu>
         </>
     );
 };
