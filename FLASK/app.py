@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, jsonify
 import pandas as pd
 import numpy as np
 import os
@@ -118,9 +118,6 @@ def load_custom_model(model_path):
     except Exception as e:
         return None, f"모델을 불러오는 중 예상치 못한 오류가 발생했습니다: {str(e)}"
 
-@app.route('/')
-def index():
-    return render_template('index.html')
 
 @app.route('/lstm-predict', methods=['POST'])
 def predict():
@@ -139,31 +136,31 @@ def predict():
     valid_stock_fields = ["domestic", "oversea", "etf"]
 
     if industry_field not in valid_industry_fields:
-        return f"산업 분야 '{industry_field}'는 유효하지 않습니다. 유효한 값을 입력하세요."
+        return jsonify(error=f"산업 분야 '{industry_field}'는 유효하지 않습니다. 유효한 값을 입력하세요.")
 
     if stock_field not in valid_stock_fields:
-        return f"주식 분야 '{stock_field}'는 유효하지 않습니다. 유효한 값을 입력하세요."
+        return jsonify(error=f"주식 분야 '{stock_field}'는 유효하지 않습니다. 유효한 값을 입력하세요.")
 
     try:
         start_date = datetime.strptime(input_date, "%Y-%m-%d")
     except ValueError:
-        return "날짜 형식이 올바르지 않습니다. YYYY-MM-DD 형식으로 입력하세요."
+        return jsonify(error="날짜 형식이 올바르지 않습니다. YYYY-MM-DD 형식으로 입력하세요.")
 
     model_name = f"model_{industry_field}_{stock_field}"
     model_path = os.path.join(path, MODEL_DIR, f"{model_name}.keras")
     print(model_path)
 
     if not os.path.exists(model_path):
-        return f"{model_name} 모델을 찾을 수 없습니다. 입력된 산업 분야와 주식 분야가 정확한지 확인하세요."
+        return jsonify(error=f"{model_name} 모델을 찾을 수 없습니다. 입력된 산업 분야와 주식 분야가 정확한지 확인하세요.")
 
     sequence_length = 30
     input_data, scaler, error = load_and_preprocess_data(stock_field, stock_code, start_date, sequence_length)
     if error:
-        return error
+        return jsonify(error=error)
 
     model, error = load_custom_model(model_path)
     if error:
-        return error
+        return jsonify(error=error)
 
     try:
         predictions = model.predict(input_data)[0][0]
@@ -171,21 +168,28 @@ def predict():
         predictions_scaled[0, 3] = predictions
         predicted_price = scaler.inverse_transform(predictions_scaled)[0, 3]
     except Exception as e:
-        return f"예측 중 오류가 발생했습니다: {str(e)}"
+        return jsonify(error=f"예측 중 오류가 발생했습니다: {str(e)}")
     
-    print("news_data: ", news_data)
+    response = {
+        "predicted_price": predicted_price
+    }
+
     if news_data:
-        positive_sentences,negative_sentences, positive_ratio,negative_ratio,neutral_ratio,summary = analyze_news(news_data)
-    
-    return render_template('result.html', 
-                           predicted_price=predicted_price,
-                           positive_sentences = positive_sentences,
-                           negative_sentences = negative_sentences,
-                           positive_ratio = positive_ratio,
-                           negative_ratio = negative_ratio,
-                           neutral_ratio = neutral_ratio,
-                           summary = summary
-                           )
+        try:
+            # 뉴스 분석 결과를 response에 추가
+            analysis_result = analyze_news(news_data)
+            response.update({
+                "positive_sentences": analysis_result.get("positive_sentences"),
+                "negative_sentences": analysis_result.get("negative_sentences"),
+                "positive_ratio": analysis_result.get("positive_ratio"),
+                "negative_ratio": analysis_result.get("negative_ratio"),
+                "neutral_ratio": analysis_result.get("neutral_ratio"),
+                "summary": analysis_result.get("summary")
+            })
+        except Exception as e:
+            return jsonify(error=f"뉴스 분석 중 오류가 발생했습니다: {str(e)}")
+
+    return jsonify(response)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=False)
