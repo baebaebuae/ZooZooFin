@@ -57,16 +57,16 @@ public class DepositServiceImpl implements DepositService {
     @Transactional
     public void postDeposit(Long animalId, DepositRequest depositRequest) {
         Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
-        DepositType depositType = depositTypeRepository.findById(depositRequest.getDepositTypeId()).orElseThrow(() -> new CustomException(DEPOSIT_TYPE_NOT_FOUND_EXCEPTION));
+        DepositType depositType = depositTypeRepository.findById(depositRequest.getTypeId()).orElseThrow(() -> new CustomException(DEPOSIT_TYPE_NOT_FOUND_EXCEPTION));
 
         // 현금 부족
-        if (animal.getAnimalAssets() < depositRequest.getDepositAmount()) {
+        if (animal.getAnimalAssets() < depositRequest.getMoney()) {
             throw new CustomException(CASH_SHORTAGE_EXCEPTION);
         }
 
         // 예금 만들기
         Deposit deposit = Deposit.builder()
-                .depositAmount(depositRequest.getDepositAmount())
+                .depositAmount(depositRequest.getMoney())
                 .depositStartTurn(animal.getAnimalTurn()) // ex) 시작턴 3턴
                 .depositEndTurn(animal.getAnimalTurn() + depositType.getDepositPeriod()) // ex) 끝턴 3턴 + 10턴 = 13턴
                 .depositIsEnd(false)
@@ -77,7 +77,7 @@ public class DepositServiceImpl implements DepositService {
         depositRepository.save(deposit);
 
         // 캐릭터 가용 자산 감소
-        animal.decreaseAnimalAssets(depositRequest.getDepositAmount());
+        animal.decreaseAnimalAssets(depositRequest.getMoney());
     }
 
     // 내 예금 조회

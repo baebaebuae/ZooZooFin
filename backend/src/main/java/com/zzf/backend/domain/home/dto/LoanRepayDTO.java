@@ -1,4 +1,4 @@
-package com.zzf.backend.domain.home.DTO;
+package com.zzf.backend.domain.home.dto;
 
 import com.zzf.backend.domain.loan.entity.Loan;
 import lombok.Builder;

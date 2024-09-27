@@ -1,10 +1,5 @@
 package com.zzf.backend.domain.loan.service;
 
-import com.zzf.backend.domain.deposit.entity.Deposit;
-import com.zzf.backend.domain.deposit.repository.DepositRepository;
-import com.zzf.backend.domain.home.DTO.LoanRepayDTO;
-import com.zzf.backend.domain.home.DTO.LoanWarningDTO;
-import com.zzf.backend.domain.member.entity.Member;
 import com.zzf.backend.domain.member.repository.MemberRepository;
 import com.zzf.backend.domain.animal.entity.Animal;
 import com.zzf.backend.domain.animal.repository.AnimalRepository;
@@ -15,8 +10,6 @@ import com.zzf.backend.domain.loan.dto.MyLoanListResponse;
 import com.zzf.backend.domain.loan.dto.MyLoanResponse;
 import com.zzf.backend.domain.loan.entity.Loan;
 import com.zzf.backend.domain.loan.repository.LoanRepository;
-import com.zzf.backend.domain.savings.entity.Savings;
-import com.zzf.backend.domain.savings.repository.SavingsRepository;
 import com.zzf.backend.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

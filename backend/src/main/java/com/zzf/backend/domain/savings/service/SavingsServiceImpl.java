@@ -59,17 +59,17 @@ public class SavingsServiceImpl implements SavingsService{
     @Transactional
     public void postSavings(Long animalId, SavingsRequest savingsRequest) {
         Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
-        SavingsType savingsType = savingsTypeRepository.findById(savingsRequest.getSavingsTypeId()).orElseThrow(() -> new CustomException(SAVINGS_TYPE_NOT_FOUND_EXCEPTION));
+        SavingsType savingsType = savingsTypeRepository.findById(savingsRequest.getTypeId()).orElseThrow(() -> new CustomException(SAVINGS_TYPE_NOT_FOUND_EXCEPTION));
 
         // 현금 부족
-        if (animal.getAnimalAssets() < savingsRequest.getSavingsPayment()){
+        if (animal.getAnimalAssets() < savingsRequest.getMoney()){
             throw new CustomException(CASH_SHORTAGE_EXCEPTION);
         }
 
         // 적금 만들기
         Savings savings = Savings.builder()
-                .savingsPayment(savingsRequest.getSavingsPayment())
-                .savingsAmount(savingsRequest.getSavingsPayment())
+                .savingsPayment(savingsRequest.getMoney())
+                .savingsAmount(savingsRequest.getMoney())
                 .savingsInterest(0L)
                 .savingsStartTurn(animal.getAnimalTurn())
                 .savingsEndTurn(animal.getAnimalTurn() + savingsType.getSavingsPeriod())
@@ -82,7 +82,7 @@ public class SavingsServiceImpl implements SavingsService{
         savingsRepository.save(savings);
 
         // 캐릭터 가용 자산 감소
-        animal.decreaseAnimalAssets(savingsRequest.getSavingsPayment());
+        animal.decreaseAnimalAssets(savingsRequest.getMoney());
     }
 
     // 내 적금 확인

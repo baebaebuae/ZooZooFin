@@ -92,4 +92,11 @@ public class Animal extends BaseEntity {
     public void changeAnimalHierarchy(String hierarchy) {
         this.animalHierarchy = hierarchy;
     }
+
+    /**
+     * <h4>1턴 증가</h4>
+     */
+    public void increaseAnimalTurn(){
+        this.animalTurn++;
+    }
 }

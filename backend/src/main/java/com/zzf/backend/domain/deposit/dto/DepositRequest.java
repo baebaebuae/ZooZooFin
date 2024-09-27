@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class DepositRequest {
-    private Long depositTypeId;
-    private Long depositAmount;
+    private Long typeId;
+    private Long money;
 }

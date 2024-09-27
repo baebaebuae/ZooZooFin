@@ -1,4 +1,4 @@
-package com.zzf.backend.domain.home.DTO;
+package com.zzf.backend.domain.home.dto;
 
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +14,6 @@ public class LoanWarningDTO {
     private Long savingsRepay;
     private Long stockTotal;
     private Long stockRepay;
-    private Boolean gameOver;
 
     public void increaseWarningLoanCount(){
         this.warningLoanCount++;
