@@ -77,6 +77,9 @@ public enum ErrorCode {
     NO_SUCH_CREDIT_EXCEPTION(404, "존재하지 않는 대출 등급입니다."),
     EARLY_REPAYMENT_NOT_ALLOWED_EXCEPTION(400, "중도 상환은 불가능합니다."),
 
+    // Work
+    ALREADY_WORK_TODAY_EXCEPTION(400, "이미 당일 업무를 마쳤습니다."),
+
     // Ending
     ENDING_STATUS_NOT_FOUND_EXCEPTION(404, "해당 코드의 엔딩을 찾을 수 없습니다."),
 

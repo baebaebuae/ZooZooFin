@@ -20,7 +20,12 @@ public class WorkServiceImpl implements WorkService {
         Animal animal = animalRepository.findById(animalId)
                 .orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
+        if (animal.getAnimalIsWork()) {
+            throw new CustomException(ALREADY_WORK_TODAY_EXCEPTION);
+        }
+
         animal.setAnimalAssets(animal.getAnimalAssets() + workRequest.getPaidAmount());
+        animal.setAnimalIsWork(true);
 
         animalRepository.save(animal);
     }

@@ -2,10 +2,10 @@ package com.zzf.backend.domain.auth.controller;
 
 import com.zzf.backend.domain.auth.dto.LoginResponse;
 import com.zzf.backend.domain.auth.service.OAuthService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -21,9 +21,6 @@ public class OAuthController {
 
     private final OAuthService OAuthService;
 
-    @Value("${oauth.token-redirect_url}")
-    private String tokenRedirectUrl;
-
     @GetMapping("/{provider}")
     public RedirectView loginRedirect(@PathVariable String provider) {
         String redirectUrl = OAuthService.getRedirectUrl(provider);
@@ -34,12 +31,20 @@ public class OAuthController {
     @GetMapping("/callback/{provider}")
     public void callback(@PathVariable String provider,
                          @RequestParam String code,
+                         HttpServletRequest request,
                          HttpServletResponse response) throws IOException {
         LoginResponse loginResp = OAuthService.loginOAuth(provider, code);
 
+        String redirectUrl = new StringBuilder()
+                .append(request.getScheme()).append("://")
+                .append(request.getServerName())
+                .append(":").append(request.getServerPort())
+                .append("/callback")
+                .append("?accessToken=").append(loginResp.accessToken())
+                .append("&refreshToken=").append(loginResp.refreshToken())
+                .toString();
+
         response.setStatus(LOGIN_SUCCESS.getHttpStatus());
-        response.sendRedirect(tokenRedirectUrl + "/callback" + "?accessToken=" + loginResp.accessToken() +
-                "&refreshToken=" + loginResp.refreshToken());
+        response.sendRedirect(redirectUrl.toString());
     }
 }
-
