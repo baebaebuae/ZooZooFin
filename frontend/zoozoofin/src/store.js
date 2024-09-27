@@ -26,4 +26,5 @@ export const useStore = create((set) => ({
             return error;
         }
     },
+    setScripts: (newScripts) => set({ scripts: newScripts }),
 }));
