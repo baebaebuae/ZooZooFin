@@ -74,8 +74,8 @@ public class DepositControllerTest {
         // given
         DepositRequest depositRequest = new DepositRequest();
 
-        depositRequest.setDepositTypeId(1L);
-        depositRequest.setDepositAmount(1000000L);
+        depositRequest.setTypeId(1L);
+        depositRequest.setMoney(1000000L);
         String content = gson.toJson(depositRequest);
 
         // when
