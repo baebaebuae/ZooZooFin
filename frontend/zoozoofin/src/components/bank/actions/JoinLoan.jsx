@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-import { ProductCard } from '@components/bank/ProductCard';
-import { ProductJoinCard } from '@components/bank/ProductJoinCard';
-import { ProductCheckCard } from '@components/bank/ProductCheckCard';
 import { Loading } from '@components/root/loading';
 
 import { MessageBox } from '@components/root/messageBox';

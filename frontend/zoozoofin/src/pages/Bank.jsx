@@ -6,6 +6,11 @@ import ActionContainer from '@components/bank/ActionContainer.jsx';
 import Bubble from '@components/root/bubble';
 import { useStore } from '../store.js';
 
+import JoinProduct from '@components/bank/actions/JoinProduct';
+import TerminateProduct from '@components/bank/actions/TerminateProduct';
+import JoinLoan from '@components/bank/actions/JoinLoan';
+import Bankrupt from '@components/bank/actions/Bankrupt';
+
 import { getApiClient } from '@stores/apiClient';
 
 const apiClient = getApiClient();
@@ -65,6 +70,10 @@ const Bank = () => {
     }, [scripts, currentId]);
 
     const handleResponseClick = (nextScript) => {
+        if (!nextScript) {
+            console.error('다음 스크립트 ID가 없습니다');
+            return;
+        }
         setCurrentId(nextScript);
     };
 
@@ -88,27 +97,34 @@ const Bank = () => {
     if (currentScript.type === 'action') {
         switch (currentScript.content) {
             case '예금 상품 조회':
-                return <ActionContainer currentAction={'joinDeposit'} />;
+                // return <ActionContainer currentAction={'joinDeposit'} />;
+                return <JoinProduct productType={'deposit'} />;
             case '적금 상품 조회':
-                return <ActionContainer currentAction={'joinSavings'} />;
+                // return <ActionContainer currentAction={'joinSavings'} />;
+                return <JoinProduct productType={'savings'} />;
+
             case '예금 상품 해지 조회':
-                return <ActionContainer currentAction={'terminateDeposit'} />;
+                // return <ActionContainer currentAction={'terminateDeposit'} />;
+                return <TerminateProduct productType={'deposit'} />;
+
             case '적금 상품 해지 조회':
-                return <ActionContainer currentAction={'terminateSavings'} />;
+                // return <ActionContainer currentAction={'terminateSavings'} />;
+                return <TerminateProduct productType={'savings'} />;
+            case '파산 처리':
+                return (
+                    <Bankrupt
+                        action={() => {}}
+                        // action = 파산 처리하는 함수
+                        // Bankrupt Component 자체에서 처리할 수 있을지 확인
+                        goToScript={() =>
+                            handleResponseClick(currentScript.responses[0].nextScript)
+                        }
+                    />
+                );
             case 'END':
                 return <div>스크립트 끝남</div>;
             default:
-                return (
-                    <BankBlock>
-                        <BubbleBlock
-                            npc={'꿀찌'}
-                            type={currentScript.type}
-                            content={currentScript.content}
-                            responses={currentScript.responses}
-                            onClick={handleResponseClick}
-                        />
-                    </BankBlock>
-                );
+                return <div>해당하는 페이지가 없어요. 현재 Action을 확인해주세요.</div>;
         }
     }
 };

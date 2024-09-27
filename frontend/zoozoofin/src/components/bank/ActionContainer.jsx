@@ -12,7 +12,7 @@ const Block = styled.div`
 `;
 
 // currentAction: script에서 예금 가입/예금 해지/적금 가입/.../대출 가입 등 받아옴
-const ActionContainer = ({ currentAction }) => {
+const ActionContainer = ({ currentAction, goToScript }) => {
     // switch문 말고 currentAction에 'join'이 포함되어 있으면- <Join>으로 이동하는 방식이 더 좋을수도(예/적금 재활용)
     // 예금, 대출 구현하고 결정
     const renderComponent = () => {
@@ -28,7 +28,7 @@ const ActionContainer = ({ currentAction }) => {
             case 'joinLoan':
                 return <JoinLoan productType={'loan'} />;
             case 'bankrupt':
-                return <Bankrupt productType={'bankrupt'} />;
+                return <Bankrupt goToScript={goToScript} />;
             default:
                 return <div>해당하는 페이지가 없어요. 현재 Action을 확인해주세요.</div>;
         }

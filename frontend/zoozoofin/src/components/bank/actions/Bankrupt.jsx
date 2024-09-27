@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import styled from 'styled-components';
+import { StampModal } from '@components/root/stampModal';
 
 const Block = styled.div`
     display: flex;
@@ -7,10 +9,16 @@ const Block = styled.div`
     gap: 20px;
 `;
 
-const Bankrupt = ({ productType }) => {
+const Bankrupt = ({ action, goToScript }) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     return (
         <Block>
-            <div>파산 확인 도장 모달</div>
+            <StampModal
+                action={() => {}}
+                goToScript={goToScript}
+                handleCloseModal={() => setIsModalOpen(false)}
+            />
         </Block>
     );
 };
