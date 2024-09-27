@@ -21,9 +21,8 @@ import Stock from '@pages/Stock';
 import Tutorial from '@pages/Tutorial';
 import Work from '@pages/Work';
 import WalletPage from '@pages/test/WalletPage';
-import Auth from '../pages/Auth'
+import Auth from '../pages/Auth';
 import TestPaper from '../components/school/TestPaper';
-import ComponentsBank from '@pages/test/ComponentsBank';
 
 const Background = styled.div`
     width: 360px;
@@ -68,7 +67,6 @@ const AppRouter = () => {
                 <Route path="/map" element={<Map />} />
                 <Route element={<LayoutInGame />}>
                     <Route path="/bank" element={<Bank />} />
-                    <Route path="/bankcomp" element={<ComponentsBank />} />
                     <Route path="/laptop" element={<Laptop />} />
                     <Route path="/lender" element={<Lender />} />
                     <Route path="/school" element={<School />} />

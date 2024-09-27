@@ -37,15 +37,12 @@ export const ProductJoinCard = ({
 
         const rate = Math.ceil((productRate / 100 / productPeriod) * 1000) / 1000;
         const a = (productPeriod * (productPeriod + 1)) / 2;
-        const finalReturn = newAmount * productPeriod + newAmount * a * rate;
+        const expectedSavingsReturn = newAmount * productPeriod + newAmount * a * rate;
 
-        setExpectedFinalAmount(
-            // 백엔드 계산 로직 받아와서 적용
-            isSavings
-                ? // ? newAmount * productPeriod * (1 + productRate / 100) // 적금
-                  finalReturn
-                : newAmount * (1 + productRate / 100) // 예금
-        );
+        const expectedDepositReturn = newAmount + newAmount * (productRate / 100) * productPeriod;
+        // 예금일 때는 단순 계산(원금+(원금*이율*턴수))
+
+        setExpectedFinalAmount(isSavings ? expectedSavingsReturn : expectedDepositReturn);
     }
 
     const isSavings = productType === 'savings';
