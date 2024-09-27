@@ -13,6 +13,7 @@ public class MySavingsResponse {
     private Long rate;
     private Long payment;
     private Long finalReturn;
+    private Long deleteReturn;
     private Long restTurn;
     private Long endTurn;
     private Boolean warning;

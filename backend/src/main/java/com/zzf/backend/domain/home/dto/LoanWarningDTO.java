@@ -14,6 +14,7 @@ public class LoanWarningDTO {
     private Long savingsRepay;
     private Long stockTotal;
     private Long stockRepay;
+    private Long loanTotalRepayment;
 
     public void increaseWarningLoanCount(){
         this.warningLoanCount++;
