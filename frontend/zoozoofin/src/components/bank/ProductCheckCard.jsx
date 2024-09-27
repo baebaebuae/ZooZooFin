@@ -16,38 +16,6 @@ const ProductName = styled.div`
     color: ${({ theme }) => theme.colors.gray};
 `;
 
-// import axios from 'axios';
-
-// const URL = import.meta.env.VITE_URL;
-// // 상품 가입하기(POST)
-// const joinProducts = async (productType, typeId, money) => {
-//     console.log('joinProducts - productType:', productType);
-//     console.log('joinProducts - typeId:', typeId);
-//     console.log('joinProducts - money:', money);
-//     try {
-//         const res = await axios({
-//             method: 'post',
-//             url: `${URL}/${productType}`,
-//             headers: {
-//                 Authorization: `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`,
-//                 'Content-Type': 'application/json',
-//                 'Access-Control-Allow-Origin': `http://localhost:5173`,
-//                 'Access-Control-Allow-Credentials': 'true',
-//             },
-//             data: {
-//                 typeId: typeId,
-//                 money: money, // Key 이름 확인
-//             },
-//         });
-//         if (res.status === 200) {
-//             console.log(res.data); // POST 잘 갔는지 확인
-//         }
-//     } catch (error) {
-//         // console.error('error: ', error);
-//         return error;
-//     }
-// };
-
 const joinProduct = async (productType, typeId, money) => {
     const apiClient = getApiClient();
 
@@ -60,11 +28,6 @@ const joinProduct = async (productType, typeId, money) => {
         money: money,
     };
 
-    // const productData = {
-    //     depositTypeId: typeId,
-    //     depositAmount: money,
-    // };
-
     try {
         console.log(`Request URL: /${productType}`);
         console.log('Request Data:', productData);
@@ -74,7 +37,7 @@ const joinProduct = async (productType, typeId, money) => {
         });
 
         if (res.status === 200) {
-            console.log(res.data); // POST 잘 갔는지 확인
+            console.log(res.data);
         } else {
             console.error('Unexpected status code:', res.status);
         }
@@ -98,8 +61,6 @@ export const ProductCheckCard = ({
     goToScript,
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-    console.log('productCheckCard에서 productTypeId 출력함: ', productTypeId);
 
     return (
         <Card>
@@ -130,13 +91,13 @@ export const ProductCheckCard = ({
                 infoTitle={'예상 지급액'}
                 infoContent={`${expectedFinalAmount.toLocaleString()}원`}
             />
+            {/* 임의로 캐릭터 능력 추가 금액을 가입 금액을 기준으로 계산해놓음. 실제 추가 금액 얼마인지 확인 */}
             {specialRate > 0 && (
                 <ExtraInfo
                     extraRate={specialRate}
                     extraAmount={(specialRate / 100) * savingsAmount}
                 ></ExtraInfo>
             )}
-            {/* 임의로 캐릭터 능력 추가 금액을 가입 금액을 기준으로 계산해놓음. 실제 추가 금액 얼마인지 확인 */}
             <StampButton onClick={() => setIsModalOpen(true)} />
 
             {isModalOpen && (

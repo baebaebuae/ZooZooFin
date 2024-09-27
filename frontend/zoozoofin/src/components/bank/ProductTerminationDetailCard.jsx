@@ -10,26 +10,58 @@ import { InfoBox } from '@components/root/infoBox';
 import { Card } from '@components/root/card';
 import { StampModal } from '@components/root/stampModal';
 
+import { getApiClient } from '@stores/apiClient';
+
 const ProductName = styled.div`
     font-size: 14px;
     color: ${({ theme }) => theme.colors.gray};
 `;
 
+const terminateProduct = async (productType, productId) => {
+    const apiClient = getApiClient();
+
+    console.log('joinProducts - productType:', productType);
+    console.log('joinProducts - typeId:', productId);
+
+    const productData = {
+        ...(productType === 'deposit' && { depositId: productId }),
+        ...(productType === 'savings' && { savingsId: productId }),
+    };
+
+    try {
+        console.log(`Request URL: /${productType}/my`);
+        console.log('Request Data:', productData);
+
+        const res = await apiClient.patch(`/${productType}/my`, productData, {
+            headers: { animalId: 1 },
+        });
+
+        if (res.status === 200) {
+            console.log(res.data);
+        } else {
+            console.error('Unexpected status code:', res.status);
+        }
+    } catch (error) {
+        console.error('error: ', error);
+        return error;
+    }
+};
+
 export const ProductTerminationDetailCard = ({
     productType,
+    productId,
     productName,
     period,
     amount,
+    // 현재 해지시 예상 금액 변수 추가예정
     payment,
     finalReturn,
     restTurn,
     endTurn,
     warning,
-    goToNextCard,
+    goToScript,
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-
 
     return (
         <Card>
@@ -57,7 +89,7 @@ export const ProductTerminationDetailCard = ({
                 infoContent={
                     payment && productType === 'savings'
                         ? `${payment.toLocaleString()}원 / 턴` // payment가 있고 savings일 때
-                        : `${amount.toLocaleString()}원` //
+                        : `${amount.toLocaleString()}원`
                 }
             />
             <ProductJoinInfo infoTitle={'만기 회차'} infoContent={`${endTurn}턴`} />
@@ -75,12 +107,14 @@ export const ProductTerminationDetailCard = ({
 
             <ProductJoinInfo
                 infoTitle={'지급액'}
+                // finalReturn -> 현재 해지시 예상 금액 변수 추가되면 수정
                 infoContent={`${finalReturn.toLocaleString()}원`}
             />
             <StampButton onClick={() => setIsModalOpen(true)} />
             {isModalOpen && (
                 <StampModal
-                    goToScript={goToNextCard}
+                    action={() => terminateProduct(productType, productId)}
+                    goToScript={goToScript}
                     handleCloseModal={() => setIsModalOpen(false)}
                 />
             )}

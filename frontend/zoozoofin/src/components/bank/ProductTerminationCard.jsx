@@ -32,7 +32,7 @@ export const ProductTerminationCard = ({
                 infoContent2={`${rate}%`}
                 $isLoan={productType === 'loan'}
             />
-            <Divider isLine={true} />
+            <Divider $isLine={true} />
             <ProductJoinInfo
                 infoTitle={'가입 금액'}
                 infoContent={

@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
-// import { Link } from 'react-router-dom';
 
 import { ProductCard } from '@components/bank/ProductCard';
 import { ProductJoinCard } from '@components/bank/ProductJoinCard';
@@ -29,8 +27,6 @@ const JoinProduct = ({ productType }) => {
     const [savingsAmount, setSavingsAmount] = useState(null);
     const [expectedFinalAmount, setExpectedFinalAmount] = useState(null);
 
-    const URL = import.meta.env.VITE_URL;
-
     // 상품 정보 받아오기
     const fetchProducts = async () => {
         const apiClient = getApiClient();
@@ -52,6 +48,7 @@ const JoinProduct = ({ productType }) => {
 
     useEffect(() => {}, [products]);
 
+    // 도장 찍은 후 -로딩중- 모달 뜨고 사라지는 함수
     useEffect(() => {
         if (currentCard === 4) {
             const timer = setTimeout(() => {
@@ -137,7 +134,7 @@ const JoinProduct = ({ productType }) => {
                         />
                     );
                 } else if (currentCard === 4) {
-                    return <Loading content={'로딩중'} />;
+                    return <Loading content={'가입 처리중'} />;
                 }
             })()}
         </Block>

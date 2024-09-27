@@ -16,14 +16,7 @@ const CardBlock = styled(Card)`
     margin: 8px 0;
 `;
 
-// savings, deposit 정보 받아서 각각 다르게 axios 보내기. 재활용
-export const ProductCard = ({
-    productTypeId,
-    productName,
-    productPeriod,
-    productRate,
-    handleClick,
-}) => {
+export const ProductCard = ({ productName, productPeriod, productRate, handleClick }) => {
     return (
         <CardBlock onClick={handleClick}>
             <NormalIcon icon={IconChicken}></NormalIcon>
