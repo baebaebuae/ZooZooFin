@@ -54,6 +54,10 @@ public class TurnRecord extends BaseEntity {
     @NotNull
     private Long savingsMake;
 
+    @Column(name = "savings_pay")
+    @NotNull
+    private Long savingsPay;
+
     @Column(name = "savings_finish")
     @NotNull
     private Long savingsFinish;
