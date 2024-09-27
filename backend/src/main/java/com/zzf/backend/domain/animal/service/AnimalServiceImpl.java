@@ -114,12 +114,12 @@ public class AnimalServiceImpl implements AnimalService {
         Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member)
                 .orElseThrow(() -> new CustomException(ANIMAL_ALL_END_EXCEPTION));
 
-        List<Deposit> deposit = depositRepository.findAllByAnimalAndDepositEndTurn(animal, animal.getAnimalTurn());
+        List<Deposit> deposit = depositRepository.findAllByAnimalAndDepositIsEndFalse(animal);
         Long depositTotal = deposit.stream()
                 .map(Deposit::getDepositAmount)
                 .reduce(0L, Long::sum);
 
-        List<Savings> savings = savingsRepository.findAllByAnimalAndSavingsEndTurn(animal, animal.getAnimalTurn());
+        List<Savings> savings = savingsRepository.findAllByAnimalAndSavingsIsEndFalse(animal);
         Long savingsTotal = savings.stream()
                 .map(Savings::getSavingsAmount)
                 .reduce(0L, Long::sum);
