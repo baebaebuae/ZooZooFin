@@ -131,7 +131,7 @@ const TerminateProduct = ({ productType }) => {
                             amount={selectedProduct.amount}
                             payment={selectedProduct.payment}
                             // 현재 턴까지 낸 금액에 0.5% 이율 적용한, 현재 해지시 예상 금액 변수 추가 예정
-                            finalReturn={selectedProduct.finalReturn}
+                            deleteReturn={selectedProduct.deleteReturn}
                             restTurn={selectedProduct.restTurn}
                             endTurn={selectedProduct.endTurn}
                             goToScript={goToNextCard}
