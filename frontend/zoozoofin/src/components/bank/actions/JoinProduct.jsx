@@ -33,39 +33,18 @@ const JoinProduct = ({ productType }) => {
 
     // 상품 정보 받아오기
     const fetchProducts = async () => {
+        const apiClient = getApiClient();
+
         try {
-            const res = await axios({
-                method: 'get',
-                url: `${URL}/${productType}`,
-                headers: {
-                    Authorization: `Bearer ${import.meta.env.VITE_ACCESS_TOKEN}`,
-                    'Access-Control-Allow-Origin': `http://localhost:5173`,
-                    'Access-Control-Allow-Credentials': 'true',
-                },
-            });
-            if (res.status === 200) {
-                console.log(res.data.body);
-                setProducts(res.data.body);
-            }
+            const res = await apiClient.get(`/${productType}`);
+
+            console.log(res.data.body);
+            setProducts(res.data.body);
         } catch (error) {
             // console.error('error: ', error);
             return error;
         }
     };
-
-    // // 상품 정보 받아오기 - store 데려옴 - - animal 안만들어서 오류
-    // const fetchProducts = async () => {
-    //     const apiClient = getApiClient();
-
-    //     try {
-    //         const res = await apiClient.get(`/${productType}`);
-    //         console.log(res.data.body);
-    //         setProducts(res.data.body);
-    //     } catch (error) {
-    //         // console.error('error: ', error);
-    //         return error;
-    //     }
-    // };
 
     useEffect(() => {
         fetchProducts();

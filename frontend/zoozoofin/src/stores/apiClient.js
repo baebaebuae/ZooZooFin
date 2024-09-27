@@ -25,6 +25,7 @@ export const isLoggedIn = () => !!getAccessToken();
 export const getApiClient = () => {
     const accessToken = TOKEN;
     // const accessToken = getAccessToken();
+    // console.log(accessToken);
     const refreshToken = getRefreshToken();
     if (accessToken) {
         console.log('getApiClient: accessToken이 존재합니다.');
