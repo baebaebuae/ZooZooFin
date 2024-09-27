@@ -17,6 +17,11 @@ public enum SuccessCode {
 
     MY_ANIMAL_SUCCESS(200, "나의 동물 리스트 조회 성공"),
 
+    GET_HOLDINGS_SUCCESS(200, "보유 주식 조회 성공"),
+    GET_STOCK_LIST_SUCCESS(200, "주식 리스트 조회 성공"),
+    BUY_STOCK_SUCCESS(201, "주식 구매 성공"),
+    SELL_STOCK_SUCCESS(204, "주식 판매 성공"),
+
     ANIMAL_TYPES_SUCCESS(200, "동물 타입 조회 성공"),
     ANIMAL_CREATE_SUCCESS(201, "동물 생성 성공"),
     PORTFOLIO_SUCCESS(200, "포트폴리오 조회 성공"),

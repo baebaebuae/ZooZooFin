@@ -50,10 +50,14 @@ public class EndingServiceImpl implements EndingService {
         EndingStatus endingStatus = EndingStatus.getEndingStatus(endingRequest.endingType());
 
         List<Deposit> deposit = depositRepository.findAllByAnimalAndDepositEndTurn(animal, animal.getAnimalTurn());
-        Long depositTotal = deposit.stream().map(Deposit::getDepositAmount).reduce(0L, Long::sum);
+        Long depositTotal = deposit.stream()
+                .map(Deposit::getDepositAmount)
+                .reduce(0L, Long::sum);
 
         List<Savings> savings = savingsRepository.findAllByAnimalAndSavingsEndTurn(animal, animal.getAnimalTurn());
-        Long savingsTotal = savings.stream().map(Savings::getSavingsAmount).reduce(0L, Long::sum);
+        Long savingsTotal = savings.stream()
+                .map(Savings::getSavingsAmount)
+                .reduce(0L, Long::sum);
 
         List<StockHoldings> stockHoldings = stockHoldingsRepository.findAllByAnimalAndStockIsSoldFalse(animal);
         Long stockTotal = stockHoldings.stream().map(holdings -> {

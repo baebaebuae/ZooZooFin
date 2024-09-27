@@ -9,6 +9,7 @@ import lombok.*;
 @Entity
 @Table(name = "animal")
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Animal extends BaseEntity {
 

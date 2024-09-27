@@ -38,31 +38,44 @@ public enum ErrorCode {
     ANIMAL_ALL_END_EXCEPTION(404, "게임을 진행중인 동물이 없습니다."),
     ANIMAL_TYPE_NOT_FOUND_EXCEPTION(404, "존재하지 않는 동물 타입입니다."),
 
+    // Deposit
     DEPOSIT_NOT_FOUND_EXCEPTION(404, "존재하지 않는 예금입니다."),
+    DEPOSIT_TYPE_NOT_FOUND_EXCEPTION(404, "존재하지 않는 예금상품입니다."),
+
+    // Savings
     SAVINGS_NOT_FOUND_EXCEPTION(404, "존재하지 않는 적금입니다."),
+    SAVINGS_TYPE_NOT_FOUND_EXCEPTION(404, "존재하지 않는 적금상품입니다."),
+
+    // Loan
     LOAN_NOT_FOUND_EXCEPTION(404, "존재하지 않는 대출입니다."),
+    NO_SUCH_LOAN_TYPE_EXCEPTION(404, "존재하지 않는 대출 타입입니다."),
+
+    // Capital
     CAPITAL_NOT_FOUND_EXCEPTION(404, "존재하지 않는 사채입니다."),
     CAPITAL_DUPLICATE_NOT_ALLOWED_EXCEPTION(400, "사채는 중복 대출이 불가능합니다."),
-    DEPOSIT_TYPE_NOT_FOUND_EXCEPTION(404, "존재하지 않는 예금상품입니다."),
-    SAVINGS_TYPE_NOT_FOUND_EXCEPTION(404, "존재하지 않는 적금상품입니다."),
+
+    // Turn
+    TURN_RECORD_NOT_FOUND(404, "턴 기록을 찾을 수 없습니다."),
     TURN_OVER_EXCEPTION(400, "51턴 이상은 진행이 불가능합니다."),
 
     // Stock
     STOCK_NOT_FOUND_EXCEPTION(404, "존재하지 않는 주식입니다."),
     CHART_NOT_FOUND_EXCEPTION(404, "존재하지 않는 주식 차트입니다."),
+    STOCK_TYPE_NOT_FOUND_EXCEPTION(404, "존재하지 않는 주식 타입입니다."),
+    LACK_ASSETS_EXCEPTION(400, "주식을 구매할 자금이 부족합니다."),
+    HOLDINGS_NOT_FOUND_EXCEPTION(400, "해당 주식을 보유하고 있지 않습니다."),
+    LACK_STOCK_EXCEPTION(400, "보유중인 주식이 부족합니다."),
 
+    // Quiz
     QUIZ_NOT_FOUND_EXCEPTION(404, "존재하지 않는 퀴즈지롱~!"),
     QUIZ_RESULT_NOT_FOUND_EXCEPTION(404, "존재하지 않는 퀴즈 결과지롱~!"),
+    DUPLICATE_QUIZ_ID_EXCEPTION(400, "중복된 퀴즈 아이디가 존재합니다."),
 
     CASH_SHORTAGE_EXCEPTION(409, "현금이 부족합니다."),
-
     SAME_DAY_CANCELLATION_NOT_ALLOWED(400, "당일 취소는 불가능합니다."),
     CREDIT_LOW(400, "신용 등급이 낮습니다."),
-    NO_SUCH_LOAN_TYPE_EXCEPTION(404, "존재하지 않는 대출 타입입니다."),
     NO_SUCH_CREDIT_EXCEPTION(404, "존재하지 않는 대출 등급입니다."),
     EARLY_REPAYMENT_NOT_ALLOWED_EXCEPTION(400, "중도 상환은 불가능합니다."),
-
-    DUPLICATE_QUIZ_ID_EXCEPTION(400, "중복된 퀴즈 아이디가 존재합니다."),
 
     // Ending
     ENDING_STATUS_NOT_FOUND_EXCEPTION(404, "해당 코드의 엔딩을 찾을 수 없습니다."),

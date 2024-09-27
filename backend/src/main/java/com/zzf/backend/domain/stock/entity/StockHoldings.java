@@ -4,13 +4,11 @@ import com.zzf.backend.domain.animal.entity.Animal;
 import com.zzf.backend.global.base.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
+@Setter
 @Table(name = "stock_holdings")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StockHoldings extends BaseEntity {
@@ -34,14 +32,14 @@ public class StockHoldings extends BaseEntity {
 
     @NotNull
     @Column(name = "stock_average_price")
-    private Long stockAveragePrice;
+    private Double stockAveragePrice;
 
     @NotNull
     @Column(name = "stock_is_sold")
     private Boolean stockIsSold;
 
     @Builder
-    public StockHoldings(Stock stock, Animal animal, Long stockCount, Long stockAveragePrice, Boolean stockIsSold) {
+    public StockHoldings(Stock stock, Animal animal, Long stockCount, Double stockAveragePrice, Boolean stockIsSold) {
         this.stock = stock;
         this.animal = animal;
         this.stockCount = stockCount;

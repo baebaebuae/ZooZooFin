@@ -115,16 +115,24 @@ public class AnimalServiceImpl implements AnimalService {
                 .orElseThrow(() -> new CustomException(ANIMAL_ALL_END_EXCEPTION));
 
         List<Deposit> deposit = depositRepository.findAllByAnimalAndDepositEndTurn(animal, animal.getAnimalTurn());
-        Long depositTotal = deposit.stream().map(Deposit::getDepositAmount).reduce(0L, Long::sum);
+        Long depositTotal = deposit.stream()
+                .map(Deposit::getDepositAmount)
+                .reduce(0L, Long::sum);
 
         List<Savings> savings = savingsRepository.findAllByAnimalAndSavingsEndTurn(animal, animal.getAnimalTurn());
-        Long savingsTotal = savings.stream().map(Savings::getSavingsAmount).reduce(0L, Long::sum);
+        Long savingsTotal = savings.stream()
+                .map(Savings::getSavingsAmount)
+                .reduce(0L, Long::sum);
 
         List<Loan> loan = loanRepository.findAllByAnimalAndLoanIsEndFalse(animal);
-        Long loanTotal = loan.stream().map(Loan::getLoanAmount).reduce(0L, Long::sum);
+        Long loanTotal = loan.stream()
+                .map(Loan::getLoanAmount)
+                .reduce(0L, Long::sum);
 
         List<Capital> capital = capitalRepository.findAllByAnimalAndCapitalIsEndFalse(animal);
-        Long capitalTotal = capital.stream().map(Capital::getCapitalAmount).reduce(0L, Long::sum);
+        Long capitalTotal = capital.stream()
+                .map(Capital::getCapitalAmount)
+                .reduce(0L, Long::sum);
 
         long allTotal = 0L;
         allTotal += animal.getAnimalAssets();
