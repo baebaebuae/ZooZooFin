@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 
 import styled from 'styled-components';
-import ActionContainer from '@components/bank/ActionContainer.jsx';
 import Bubble from '@components/root/bubble';
 import { useStore } from '../store.js';
 
@@ -72,7 +71,8 @@ const Loan = () => {
     if (currentScript.type === 'action') {
         switch (currentScript.content) {
             case '대출 가능 여부 조회':
-                return <ActionContainer currentAction={'joinLoan'} />;
+                // return <CheckLoan productType={'loan'} />;
+                return <div>joinLoan으로 이동</div>;
 
             case 'END':
                 return <div>스크립트 끝남</div>;
@@ -90,20 +90,6 @@ const Loan = () => {
                 );
         }
     }
-
-    return (
-        <LoanBlock>
-            {/* type==='script'일 때 */}
-            {/* <BubbleBlock /> 렌더링 */}
-            {/* script id 더하는 함수 작동중 */}
-
-            {/* type==='action'일 때 */}
-            {/* 해당 action명 받아서 ActionContainer의 content 전환 */}
-            {/* 단일 id */}
-
-            <ActionContainer currentAction={'terminateSavings'} />
-        </LoanBlock>
-    );
 };
 
 export default Loan;

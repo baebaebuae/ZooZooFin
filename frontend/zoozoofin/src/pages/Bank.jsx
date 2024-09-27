@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
-import ActionContainer from '@components/bank/ActionContainer.jsx';
 import Bubble from '@components/root/bubble';
 import { useStore } from '../store.js';
 
@@ -97,18 +96,14 @@ const Bank = () => {
     if (currentScript.type === 'action') {
         switch (currentScript.content) {
             case '예금 상품 조회':
-                // return <ActionContainer currentAction={'joinDeposit'} />;
                 return <JoinProduct productType={'deposit'} />;
             case '적금 상품 조회':
-                // return <ActionContainer currentAction={'joinSavings'} />;
                 return <JoinProduct productType={'savings'} />;
 
             case '예금 상품 해지 조회':
-                // return <ActionContainer currentAction={'terminateDeposit'} />;
                 return <TerminateProduct productType={'deposit'} />;
 
             case '적금 상품 해지 조회':
-                // return <ActionContainer currentAction={'terminateSavings'} />;
                 return <TerminateProduct productType={'savings'} />;
             case '파산 처리':
                 return (
