@@ -4,6 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class SavingsRequest {
-    private Long savingsTypeId;
-    private Long savingsPayment;
+    private Long typeId;
+    private Long money;
 }

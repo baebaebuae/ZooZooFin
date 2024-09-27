@@ -45,6 +45,7 @@ public enum ErrorCode {
     CAPITAL_DUPLICATE_NOT_ALLOWED_EXCEPTION(400, "사채는 중복 대출이 불가능합니다."),
     DEPOSIT_TYPE_NOT_FOUND_EXCEPTION(404, "존재하지 않는 예금상품입니다."),
     SAVINGS_TYPE_NOT_FOUND_EXCEPTION(404, "존재하지 않는 적금상품입니다."),
+    TURN_OVER_EXCEPTION(400, "51턴 이상은 진행이 불가능합니다."),
 
     // Stock
     STOCK_NOT_FOUND_EXCEPTION(404, "존재하지 않는 주식입니다."),

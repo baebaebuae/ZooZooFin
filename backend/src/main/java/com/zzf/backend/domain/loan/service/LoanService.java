@@ -1,7 +1,5 @@
 package com.zzf.backend.domain.loan.service;
 
-import com.zzf.backend.domain.animal.entity.Animal;
-import com.zzf.backend.domain.home.DTO.LoanWarningDTO;
 import com.zzf.backend.domain.loan.dto.LoanAvailableResponse;
 import com.zzf.backend.domain.loan.dto.LoanRequest;
 import com.zzf.backend.domain.loan.dto.MyLoanListResponse;
