@@ -104,6 +104,7 @@ public class DepositServiceImpl implements DepositService {
                     .amount(deposit.getDepositAmount())
                     .rate(depositType.getDepositRate())
                     .finalReturn(finalReturn) // 만기 시 금액
+                    .deleteReturn(deposit.getDepositAmount() + deposit.getDepositAmount() / 200) // 해지시 금액
                     .restTurn(deposit.getDepositEndTurn() - animal.getAnimalTurn()) // (마감 턴) - (캐릭터 현재 턴)
                     .endTurn(deposit.getDepositEndTurn())
                     .depositImgUrl(depositType.getDepositImgUrl())

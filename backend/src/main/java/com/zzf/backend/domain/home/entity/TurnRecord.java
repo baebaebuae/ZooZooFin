@@ -62,9 +62,9 @@ public class TurnRecord extends BaseEntity {
     @NotNull
     private Long capitalMake;
 
-    @Column(name = "capital_finish")
+    @Column(name = "capital_repay")
     @NotNull
-    private Long capitalFinish;
+    private Long capitalRepay;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "animal_id")

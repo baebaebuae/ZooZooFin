@@ -41,5 +41,5 @@ public interface NextTurnService {
      *
      * @param animal 플레이어블 캐릭터
      */
-    void capitalGoToNextTurn(Animal animal);
+    long capitalGoToNextTurn(Animal animal);
 }

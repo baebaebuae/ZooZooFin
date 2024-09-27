@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @Builder
 public class SavingsNextTurnDTO {
-    long warningSavingsCount;
-    long savingsFinishTotal;
+    long warningSavingsCount; // 경고받은 적금 수
+    long savingsFinishTotal; // 만기, 해지한 적금 총액
 }

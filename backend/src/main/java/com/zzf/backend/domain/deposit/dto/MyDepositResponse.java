@@ -12,6 +12,7 @@ public class MyDepositResponse {
     private Long amount;
     private Long rate;
     private Long finalReturn;
+    private Long deleteReturn;
     private Long restTurn;
     private Long endTurn;
     private String depositImgUrl;
