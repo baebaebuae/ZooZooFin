@@ -34,6 +34,7 @@ public enum SuccessCode {
     DELETE_SUCCESS(200, "삭제 성공"),
     SCRIPT_SUCCESS(200, "스크립트 조회 성공"),
 
+    WORK_SUCCESS(201, "급여 지불 성공"),
 
     TODAY_QUIZ_SUCCESS(200, "오늘의 퀴즈 조회 성공"),
     QUIZ_SUCCESS(200, "퀴즈 조회 성공"),
