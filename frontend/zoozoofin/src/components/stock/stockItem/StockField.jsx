@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import { DefaultField } from './StockComponent';
-import { DefaultFieldIcon, ActiveFieldIcon } from './StockIcons'; // ActiveFieldIcon도 임포트 필요
+import {
+    DefaultField,
+    AtciveText,
+    DefaultText,
+} from '@components/stock/common/container/FieldIconContainer';
+import { DefaultFieldIcon, ActiveFieldIcon } from '@components/stock/common/icon/StockIcons'; // ActiveFieldIcon도 임포트 필요
 
 // StockFieldList 정의
 const StockFieldList = {
@@ -88,7 +92,11 @@ const StockField = () => {
                         ) : (
                             <DefaultFieldIcon field={key} />
                         )}
-                        {value}
+                        {activeIndex === index ? (
+                            <AtciveText>{value}</AtciveText>
+                        ) : (
+                            <DefaultText>{value}</DefaultText>
+                        )}
                     </DefaultField>
                 ))}
             </Wrapper>
