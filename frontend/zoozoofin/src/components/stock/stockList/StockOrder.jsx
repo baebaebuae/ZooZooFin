@@ -10,9 +10,7 @@ export const StockOrder = () => {
                 <MessageIcon />몇 주 구매할거야 개굴?
             </ChannelMessage>
             <OrderCard />
-            <ActiveButton size={'large'} isBorder={true}>
-                구매하기
-            </ActiveButton>
+            <ActiveButton size={'large'}>구매하기</ActiveButton>
         </>
     );
 };

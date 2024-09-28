@@ -11,9 +11,7 @@ export const StockResult = () => {
                 구매 완료했어 개굴!
             </ChannelMessage>
             <TotalCard />
-            <ActiveButton size={'large'} isBorder={true}>
-                완료!
-            </ActiveButton>
+            <ActiveButton size={'large'}>완료!</ActiveButton>
         </>
     );
 };

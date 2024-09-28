@@ -1,7 +1,7 @@
 import StockField from '@components/stock/stockItem/StockField';
+import StockProducts from '@components/stock/stockItem/StockProducts';
 import { ChannelMessage } from '@components/stock/common/container/ChannelContainer';
 import { MessageIcon } from '@components/stock/common/icon/StockIcons';
-import StockProducts from '@components/stock/stockItem/StockProducts';
 
 // 공통 부분 작성중
 

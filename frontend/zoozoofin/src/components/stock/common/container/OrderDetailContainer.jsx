@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { CarrotIcon } from '@components/stock/common/icon/StockIcons';
-import StockInputBox from '@components/stock/common/container/StockinputBox';
+import StockInputBox from '@components/stock/common/container/StockInputBox';
 
 const ColumnContainerBox = styled.div`
     display: flex;

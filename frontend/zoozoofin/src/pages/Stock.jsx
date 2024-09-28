@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
-import StockChannel from '../components/stock/stockList/StockChannel';
-import StockBuy from '../components/stock/stockList/StockBuy';
-import { StockOrder } from '../components/stock/stockList/StockOrder';
-import StockResult from '../components/stock/stockList/StockResult';
+import StockChannel from '@components/stock/stockList/StockChannel';
+import StockBuy from '@components/stock/stockList/StockBuy';
+import { StockOrder } from '@components/stock/stockList/StockOrder';
+import StockResult from '@components/stock/stockList/StockResult';
 
 // 첫 진입시 환영 컴포넌트
 
