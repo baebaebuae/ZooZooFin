@@ -1,5 +1,12 @@
-import { ChannelCard, ChannelMessage, ChannelInfo, MoveButton } from './StockComponent';
-import { MessageIcon, DomesticIcon, OverseasIcon, ETFIcon } from './StockIcons';
+import { ChannelCard } from '@components/stock/common/card/ChannelCard';
+import { ChannelMessage, ChannelInfo } from '@components/stock/common/container/ChannelContainer';
+import {
+    MessageIcon,
+    DomesticIcon,
+    OverseasIcon,
+    ETFIcon,
+} from '@components/stock/common/icon/StockIcons';
+import { DetailButton } from '@components/stock/common/button/Button';
 
 const StockChannel = () => {
     return (
@@ -13,21 +20,21 @@ const StockChannel = () => {
                     <DomesticIcon />
                     국내 주식
                 </ChannelInfo>
-                <MoveButton>설명</MoveButton>
+                <DetailButton>설명</DetailButton>
             </ChannelCard>
             <ChannelCard>
                 <ChannelInfo>
                     <OverseasIcon />
                     해외 주식
                 </ChannelInfo>
-                <MoveButton>설명</MoveButton>
+                <DetailButton>설명</DetailButton>
             </ChannelCard>
             <ChannelCard>
                 <ChannelInfo>
                     <ETFIcon />
                     ETF
                 </ChannelInfo>
-                <MoveButton>설명</MoveButton>
+                <DetailButton>설명</DetailButton>
             </ChannelCard>
         </>
     );

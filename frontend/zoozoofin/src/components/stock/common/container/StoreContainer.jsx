@@ -1,17 +1,5 @@
 import styled from 'styled-components';
 
-import { Card } from '../root/card';
-
-// 주식 구매 카드
-export const StockBuyingCard = styled(Card)`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px 30px;
-    gap: 12px;
-`;
-
 export const BuyingContent = styled.div`
     display: flex;
     flex-direction: row;
@@ -37,6 +25,11 @@ export const CompanyName = styled.p`
 `;
 
 export const StockPrice = styled.p`
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-end;
+    gap: 5px;
     font-size: 18px;
     font-weight: bold;
     padding: 0px;
@@ -49,7 +42,7 @@ export const CurrentStockState = styled.div`
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    width: 60%;
+    width: 60px;
     padding: 1px 0px;
     border-radius: 30px;
     background-color: ${({ current, theme }) => {
@@ -73,9 +66,10 @@ export const CurrentStockState = styled.div`
     }};
 `;
 
-export const Divider = styled.div`
-    width: 100%;
-    height: 1px;
-    margin: ${({ isLine }) => (isLine ? '4px' : '0px')};
-    background-color: ${({ theme }) => theme.colors.primary};
+export const ButtonContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
 `;
