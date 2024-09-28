@@ -15,6 +15,7 @@ export const ActiveButton = styled(Button)`
     padding: ${({ size }) => (size === 'large' ? '12px 20px' : '10px 12px')};
     gap: 10px;
     background-color: ${({ theme }) => theme.colors.primaryDeep};
+    border: 5px solid white;
 `;
 
 export const InactiveButton = styled(Button)`
