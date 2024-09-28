@@ -23,8 +23,8 @@ const Stock = () => {
     return (
         <>
             <SampleBlock>
-                {/* <StockChannel /> */}
-                {/* <StockBuy /> */}
+                <StockChannel />
+                <StockBuy />
                 <StockOrder />
                 <StockResult />
             </SampleBlock>
