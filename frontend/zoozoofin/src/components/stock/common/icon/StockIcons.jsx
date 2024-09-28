@@ -24,7 +24,7 @@ import {
     IconHouse,
     IconOil,
     IconMicro,
-} from './StockFieldIcons';
+} from '@/components/stock/common/icon/StockFieldIcons';
 
 const IconWrapper = ({ icon: Icon, width, height }) => {
     return <Icon width={width} height={height} />;
