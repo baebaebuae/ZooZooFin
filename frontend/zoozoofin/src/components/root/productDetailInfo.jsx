@@ -21,7 +21,7 @@ const InfoTitle = styled.div`
 `;
 
 const InfoContent = styled.div`
-    font-size: ${({ isLoan }) => (isLoan ? '16px' : '20px')};
+    font-size: ${({ isLoan }) => (isLoan ? '14px' : '20px')};
     text-align: center;
     font-weight: bold;
     color: ${({ theme, $isEarlyTermination }) =>
@@ -40,11 +40,11 @@ export const ProductDetailInfo = ({
         <InfoBlock>
             <InfoBox>
                 <InfoTitle>{infoTitle1}</InfoTitle>
-                <InfoContent $isLoan={isLoan}>{infoContent1}</InfoContent>
+                <InfoContent isLoan={isLoan}>{infoContent1}</InfoContent>
             </InfoBox>
             <InfoBox>
                 <InfoTitle>{infoTitle2}</InfoTitle>
-                <InfoContent $isLoan={isLoan} $isEarlyTermination={isEarlyTermination}>
+                <InfoContent isLoan={isLoan} $isEarlyTermination={isEarlyTermination}>
                     {infoContent2}
                 </InfoContent>
             </InfoBox>
@@ -70,23 +70,23 @@ const JoinBox = styled.div`
 `;
 
 const JoinTitle = styled.div`
-    font-size: 14px;
+    font-size: ${({ isLoan }) => (isLoan ? '12px' : '20px')};
     text-align: center;
     color: ${({ theme }) => theme.colors.gray};
 `;
 
 const JoinContent = styled.div`
-    font-size: 20px;
+    font-size: ${({ isLoan }) => (isLoan ? '14px' : '20px')};
     text-align: center;
     font-weight: bold;
     color: ${({ theme }) => theme.colors.primaryDeep};
 `;
 
-export const ProductJoinInfo = ({ infoTitle, infoContent }) => {
+export const ProductJoinInfo = ({ isLoan, infoTitle, infoContent }) => {
     return (
         <JoinBox>
-            <JoinTitle>{infoTitle}</JoinTitle>
-            <JoinContent>{infoContent}</JoinContent>
+            <JoinTitle isLoan={isLoan}>{infoTitle}</JoinTitle>
+            <JoinContent isLoan={isLoan}>{infoContent}</JoinContent>
         </JoinBox>
     );
 };

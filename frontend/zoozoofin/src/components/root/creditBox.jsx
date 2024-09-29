@@ -3,15 +3,12 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import CreditArrow from '@assets/images/components/credit_arrow.svg?react';
 
-const CreditBoxStyle = styled.div`
-    font-family: 'OneMobilePop';
-    color: gray;
-`;
+const CreditBoxStyle = styled.div``;
 
 const CreditTitle = styled.div`
-    font-size: 10px;
-    margin-bottom: 4px;
-    text-align: start;
+    font-size: 14px;
+    margin-bottom: 10px;
+    text-align: center;
 `;
 
 const CreditRateBox = styled.div`
@@ -29,6 +26,8 @@ const CreditBar = styled.div`
 `;
 
 const CreditRate = styled.div`
+    font-family: 'OneMobilePop';
+    color: gray;
     width: 40px;
     font-size: 12px;
 `;

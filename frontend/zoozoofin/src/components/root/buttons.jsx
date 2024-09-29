@@ -15,6 +15,13 @@ export const Button = styled.button`
     border: ${({ isBorder }) => (isBorder ? `5px solid white` : 'none')};
 `;
 
+export const LoanButton = styled(Button)`
+    background-color: ${({ theme, isSelected }) => (isSelected ? theme.colors.yellow : 'white')};
+    border: ${({ theme, isSelected }) =>
+        isSelected ? 'none' : `2px solid ${theme.colors.yellow}`};
+    color: ${({ theme, isSelected }) => (isSelected ? 'white' : theme.colors.gray)};
+`;
+
 export const StampButton = ({ onClick }) => {
     return (
         <>

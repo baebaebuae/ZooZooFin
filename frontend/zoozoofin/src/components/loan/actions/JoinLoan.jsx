@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import { Loading } from '@components/root/loading';
+import { LoanJoinCard } from '@components/loan/LoanJoinCard';
+import { CheckCreditCardMini } from '@components/loan/CheckCreditCardMini';
 
 import { MessageBox } from '@components/root/messageBox';
 import { NormalIcon } from '@components/root/icon';
@@ -78,7 +80,7 @@ const JoinLoan = ({ productType }) => {
 
     return (
         <Block>
-            {currentCard < 4 && (
+            {currentCard < 3 && (
                 <MessageBox>
                     <NormalIcon icon={IconChick} />
                     <div>{joinGuideMessages[currentCard]}</div>
@@ -87,7 +89,14 @@ const JoinLoan = ({ productType }) => {
 
             {(() => {
                 if (currentCard === 1) {
-                    return <div>대출카드</div>;
+                    return (
+                        <>
+                            <CheckCreditCardMini />
+                            <LoanJoinCard />
+                        </>
+                    );
+                } else if (currentCard === 3) {
+                    return <Loading content={'대출 처리중'} />;
                 } else if (currentCard === 4) {
                     return <Loading content={'대출 처리중'} />;
                 }
