@@ -13,6 +13,8 @@ import {
 } from './root/headerButton';
 import { PropInfo } from './root/headerCharInfo';
 
+import CharacterInfo from './character/CharacterInfo';
+
 const HeaderBlock = styled.div`
     width: 340px;
     display: flex;
@@ -84,7 +86,7 @@ const Header = () => {
                 </HeaderButtonBlock>
                 <HeaderUserBlock>
                     <LargeIcon icon={CharRabbit} onClick={openCharInfo} />
-                    {isCharOpen && <div>캐릭터 정보창</div>}
+                    {isCharOpen && <CharacterInfo onClose={openCharInfo} />}
                     <PropInfo propMoney={'10,000,000'} propGold={'4,230'} />
                 </HeaderUserBlock>
             </HeaderBlock>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled, { createGlobalStyle } from "styled-components";
 import { Modal } from "@components/root/modal";
-import { Check } from "lucide-react";
+import { Check, X } from "lucide-react";
 import { getApiClient } from "@/stores/apiClient";
 import CreditBox from '@components/root/creditBox';
 import { BadgeStroke } from '@components/root/badge';
@@ -16,6 +16,19 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const ModalBackdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
+
 const StyledModal = styled(Modal)`
   font-family: 'ONE Mobile POP', sans-serif;
   background-color: #f0f0f0;
@@ -28,6 +41,7 @@ const StyledModal = styled(Modal)`
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  z-index: 1001;
 `;
 
 const ModalContent = styled.div`
@@ -143,7 +157,7 @@ const AssetValue = styled.span`
   color: ${props => props.color || '#333'};
 `;
 
-const CharacterInfo = () => {
+const CharacterInfo = ({ onClose }) => {
   const [characterData, setCharacterData] = useState(null);
   const navigate = useNavigate();
 
@@ -164,8 +178,10 @@ const CharacterInfo = () => {
   const handleBadgeClick = (type) => {
     if (type === 'quiz' && !characterData.isSolveQuizToday) {
       navigate('/school');
+      onClose();
     } else if (type === 'work' && !characterData.isWorkToday) {
       navigate('/work');
+      onClose();
     } else {
       console.log('이미 완료된 작업입니다.');
     }
@@ -180,89 +196,91 @@ const CharacterInfo = () => {
   return (
     <>
       <GlobalStyle />
-      <StyledModal>
-        <ModalContent>
-          <Header>
-            <Subtitle>{characterData.animalHierarchy}</Subtitle>
-            <TopSection>
-              <Title title={characterData.animalName}>{characterData.animalName}</Title>
-              <StyledBadgeStroke title={characterData.animalAbility}>{characterData.animalAbility}</StyledBadgeStroke>
-            </TopSection>
-          </Header>
-          <CreditSection>
-            <CreditBox grade={characterData.animalCredit} />
-          </CreditSection>
-          <BadgeContainer>
-            {allTasksCompleted ? (
-              <BadgeItem 
-                completed={true}
-                activeColor="#4CAF50"
-                onClick={() => console.log('모든 작업이 완료되었습니다.')}
-              >
-                <BadgeIcon>
-                  <Check size={20} color="#ffffff" />
-                </BadgeIcon>
-                <BadgeText completed={true} activeColor="#4CAF50">
-                  완료
-                </BadgeText>
-              </BadgeItem>
-            ) : (
-              <>
+      <ModalBackdrop onClick={onClose}>
+        <StyledModal onClose={onClose} onClick={(e) => e.stopPropagation()}>
+          <ModalContent>
+            <Header>
+              <Subtitle>{characterData.animalHierarchy}</Subtitle>
+              <TopSection>
+                <Title title={characterData.animalName}>{characterData.animalName}</Title>
+                <StyledBadgeStroke title={characterData.animalAbility}>{characterData.animalAbility}</StyledBadgeStroke>
+              </TopSection>
+            </Header>
+            <CreditSection>
+              <CreditBox grade={characterData.animalCredit} />
+            </CreditSection>
+            <BadgeContainer>
+              {allTasksCompleted ? (
                 <BadgeItem 
-                  completed={false}
-                  activeColor="#FFD700"
-                  onClick={() => handleBadgeClick('quiz')}
+                  completed={true}
+                  activeColor="#4CAF50"
+                  onClick={() => console.log('모든 작업이 완료되었습니다.')}
                 >
                   <BadgeIcon>
-                    {characterData.isSolveQuizToday ? <Check size={20} color="#FFD700" /> : '🐑'}
+                    <Check size={20} color="#ffffff" />
                   </BadgeIcon>
-                  <BadgeText completed={false} activeColor="#FFD700">
-                    퀴즈
+                  <BadgeText completed={true} activeColor="#4CAF50">
+                    완료
                   </BadgeText>
                 </BadgeItem>
-                <BadgeItem 
-                  completed={false}
-                  activeColor="#FFA500"
-                  onClick={() => handleBadgeClick('work')}
-                >
-                  <BadgeIcon>
-                    {characterData.isWorkToday ? <Check size={20} color="#FFA500" /> : '🥕'}
-                  </BadgeIcon>
-                  <BadgeText completed={false} activeColor="#FFA500">
-                    GO
-                  </BadgeText>
-                </BadgeItem>
-              </>
-            )}
-          </BadgeContainer>
-          <AssetSection>
-            <AssetRow>
-              <AssetLabel>순자산</AssetLabel>
-              <AssetValue bold>{characterData.totalAmount.toLocaleString()}원</AssetValue>
-            </AssetRow>
-            <AssetRow>
-              <AssetLabel>현금</AssetLabel>
-              <AssetValue>{characterData.totalAssets.toLocaleString()}원</AssetValue>
-            </AssetRow>
-            <AssetRow>
-              <AssetLabel>예금</AssetLabel>
-              <AssetValue>{characterData.totalDeposit.toLocaleString()}원</AssetValue>
-            </AssetRow>
-            <AssetRow>
-              <AssetLabel>적금</AssetLabel>
-              <AssetValue>{characterData.totalSavings.toLocaleString()}원</AssetValue>
-            </AssetRow>
-            <AssetRow>
-              <AssetLabel>주식</AssetLabel>
-              <AssetValue>{characterData.totalStock.toLocaleString()}원</AssetValue>
-            </AssetRow>
-            <AssetRow>
-              <AssetLabel>대출</AssetLabel>
-              <AssetValue color="#ff0000">-{characterData.totalLoan.toLocaleString()}원</AssetValue>
-            </AssetRow>
-          </AssetSection>
-        </ModalContent>
-      </StyledModal>
+              ) : (
+                <>
+                  <BadgeItem 
+                    completed={false}
+                    activeColor="#FFD700"
+                    onClick={() => handleBadgeClick('quiz')}
+                  >
+                    <BadgeIcon>
+                      {characterData.isSolveQuizToday ? <Check size={20} color="#FFD700" /> : '🐑'}
+                    </BadgeIcon>
+                    <BadgeText completed={false} activeColor="#FFD700">
+                      퀴즈
+                    </BadgeText>
+                  </BadgeItem>
+                  <BadgeItem 
+                    completed={false}
+                    activeColor="#FFA500"
+                    onClick={() => handleBadgeClick('work')}
+                  >
+                    <BadgeIcon>
+                      {characterData.isWorkToday ? <Check size={20} color="#FFA500" /> : '🥕'}
+                    </BadgeIcon>
+                    <BadgeText completed={false} activeColor="#FFA500">
+                      GO
+                    </BadgeText>
+                  </BadgeItem>
+                </>
+              )}
+            </BadgeContainer>
+            <AssetSection>
+              <AssetRow>
+                <AssetLabel>순자산</AssetLabel>
+                <AssetValue bold>{characterData.totalAmount.toLocaleString()}원</AssetValue>
+              </AssetRow>
+              <AssetRow>
+                <AssetLabel>현금</AssetLabel>
+                <AssetValue>{characterData.totalAssets.toLocaleString()}원</AssetValue>
+              </AssetRow>
+              <AssetRow>
+                <AssetLabel>예금</AssetLabel>
+                <AssetValue>{characterData.totalDeposit.toLocaleString()}원</AssetValue>
+              </AssetRow>
+              <AssetRow>
+                <AssetLabel>적금</AssetLabel>
+                <AssetValue>{characterData.totalSavings.toLocaleString()}원</AssetValue>
+              </AssetRow>
+              <AssetRow>
+                <AssetLabel>주식</AssetLabel>
+                <AssetValue>{characterData.totalStock.toLocaleString()}원</AssetValue>
+              </AssetRow>
+              <AssetRow>
+                <AssetLabel>대출</AssetLabel>
+                <AssetValue color="#ff0000">-{characterData.totalLoan.toLocaleString()}원</AssetValue>
+              </AssetRow>
+            </AssetSection>
+          </ModalContent>
+        </StyledModal>
+      </ModalBackdrop>
     </>
   );
 };
