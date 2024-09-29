@@ -1,12 +1,8 @@
 package com.zzf.backend.domain.stock.controller;
 
-import com.zzf.backend.domain.stock.dto.BuyStockRequest;
-import com.zzf.backend.domain.stock.dto.GetHoldingsResponse;
-import com.zzf.backend.domain.stock.dto.SellStockRequest;
-import com.zzf.backend.domain.stock.dto.StockListResponse;
+import com.zzf.backend.domain.stock.dto.*;
 import com.zzf.backend.domain.stock.service.StockService;
 import com.zzf.backend.global.dto.ResponseDto;
-import com.zzf.backend.global.status.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,20 +31,20 @@ public class StockController {
         return ResponseDto.success(GET_STOCK_LIST_SUCCESS, stockList);
     }
 
-    @GetMapping("/{stockId}")
-    public ResponseDto<?> getStockInfo(@RequestHeader Long animalId,
+    @GetMapping("/info/{stockId}")
+    public ResponseDto<StockInfoResponse> getStockInfo(@RequestHeader Long animalId,
                                        @PathVariable Long stockId) {
+        StockInfoResponse stockInfo = stockService.getStockInfo(animalId, stockId);
 
-
-        return ResponseDto.success(null);
+        return ResponseDto.success(STOCK_INFO_SUCCESS, stockInfo);
     }
 
     @GetMapping("/statements/{stockId}")
-    public ResponseDto<?> getStockStatements(@RequestHeader Long animalId,
-                                             @PathVariable Long stockId) {
+    public ResponseDto<StockDetailResponse> getStockDetail(@RequestHeader Long animalId,
+                                                           @PathVariable Long stockId) {
+        StockDetailResponse stockDetail = stockService.getStockDetail(animalId, stockId);
 
-
-        return ResponseDto.success(null);
+        return ResponseDto.success(STOCK_DETAIL_SUCCESS, stockDetail);
     }
 
     @PostMapping("/buy")

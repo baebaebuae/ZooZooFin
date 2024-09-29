@@ -63,9 +63,9 @@ public class EndingServiceImpl implements EndingService {
         Long stockTotal = stockHoldings.stream().map(holdings -> {
             Stock stock = stockRepository.findById(holdings.getStock().getStockId())
                     .orElseThrow(() -> new CustomException(STOCK_NOT_FOUND_EXCEPTION));
-            Chart chart = chartRepository.findByStockAndChartTurn(stock, animal.getAnimalTurn())
+            Chart chart = chartRepository.findByStockAndTurn(stock, animal.getAnimalTurn())
                     .orElseThrow(() -> new CustomException(CHART_NOT_FOUND_EXCEPTION));
-            return chart.getChartSell();
+            return chart.getPrice();
 
         }).reduce(0L, Long::sum);
 
