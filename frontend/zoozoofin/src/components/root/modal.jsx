@@ -18,8 +18,8 @@ const ModalBox = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 200px;
-    height: 300px;
+    width: 220px;
+    min-height: 300px;
     padding: 40px 35px;
     border-radius: 40px;
     border: 10px solid white;

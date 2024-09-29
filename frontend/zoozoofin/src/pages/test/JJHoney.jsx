@@ -14,7 +14,7 @@ import { Input } from '@components/root/input';
 import { InputBox } from '@components/inputBox';
 import { MessageBox } from '@components/root/messageBox';
 import { ProductDetailInfo, ProductJoinInfo } from '@components/root/productDetailInfo';
-import ProgressBox from '@components/root/progessBar';
+import ProgressBox from '@components/root/progressBar';
 import { TurnSliderLoan } from '@components/root/slider';
 import { Switch } from '@components/root/switch';
 
@@ -142,7 +142,7 @@ const JJHoney = () => {
             </Working>
             <Working>
                 <h2>Modal</h2>
-                <Modal></Modal>
+                {/* <Modal></Modal> */}
             </Working>
             <Working>
                 <h2>ProductDetailInfo</h2>

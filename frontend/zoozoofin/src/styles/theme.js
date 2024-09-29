@@ -8,6 +8,7 @@ export const theme = {
         tertiaryDeep: '#147952',
         background: '#EBF0F4',
         gray: '#6C7377',
+        yellow: '#ffd84e',
         warn: '#FF3E3E',
         inactive: '#CED1D3',
     },

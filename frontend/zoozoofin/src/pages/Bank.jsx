@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import styled from 'styled-components';
 import Bubble from '@components/root/bubble';
@@ -7,7 +7,6 @@ import { useStore } from '../store.js';
 
 import JoinProduct from '@components/bank/actions/JoinProduct';
 import TerminateProduct from '@components/bank/actions/TerminateProduct';
-import JoinLoan from '@components/bank/actions/JoinLoan';
 import Bankrupt from '@components/bank/actions/Bankrupt';
 
 import { getApiClient } from '@stores/apiClient';
@@ -34,10 +33,16 @@ const BubbleBlock = styled(Bubble)`
 `;
 
 const Bank = () => {
-    const { scripts, fetchTutorialScript } = useStore();
+    const { setScripts, scripts, fetchTutorialScript } = useStore();
 
     const [currentId, setCurrentId] = useState(1);
     const [currentScript, setCurrentScript] = useState(null);
+
+    const location = useLocation();
+
+    useEffect(() => {
+        setScripts([]); // 스크립트 상태 초기화
+    }, [location.pathname, setScripts]);
 
     const navigate = useNavigate();
 

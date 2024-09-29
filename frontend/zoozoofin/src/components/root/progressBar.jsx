@@ -41,21 +41,23 @@ const BoldText = styled.span`
     font-weight: bold;
 `;
 
-export default function ProgressBox({ rate, restTurn }) {
+export default function ProgressBox({ isLoan, rate, restTurn }) {
     return (
         <ProgressBoxStyle>
-            <ProgressTitle>Title</ProgressTitle>
+            {/* <ProgressTitle>Title</ProgressTitle> */}
             <ProgressBarBack>
                 <ProgressBarFront $rate={rate} />
             </ProgressBarBack>
             <ProgressInfoBox>
                 <ProgressRate>
                     <BoldText>{rate}%</BoldText>
-                    진행중🔥
+                    {isLoan ? '갚았어요!🔥' : '진행중🔥'}
                 </ProgressRate>
-                <RestTurn>
-                    남은 만기 회차<BoldText>{restTurn}턴</BoldText>
-                </RestTurn>
+                {isLoan ? null : (
+                    <RestTurn>
+                        남은 만기 회차<BoldText>{restTurn}턴</BoldText>
+                    </RestTurn>
+                )}
             </ProgressInfoBox>
         </ProgressBoxStyle>
     );
