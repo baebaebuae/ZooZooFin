@@ -33,7 +33,6 @@ oauth:
   kakao:
     secret: ${OAUTH_KAKAO_SECRET}
   base-url: ${BASE_URL}
-  token-redirect_url: http://localhost:5173
 
 jwt:
   access-expiration: ${ACCESS_EXPIRATION}

@@ -9,6 +9,6 @@ public class BuyStockRequest {
 
     private final Long stockId;
 
-    private final Long amount;
+    private final Long count;
 
 }

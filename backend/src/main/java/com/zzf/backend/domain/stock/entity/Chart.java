@@ -24,47 +24,42 @@ public class Chart extends BaseEntity {
     private Stock stock;
 
     @NotNull
-    @Column(name = "chart_turn")
-    private Long chartTurn;
+    @Column(name = "turn")
+    private Long turn;
 
     @NotNull
-    @Column(name = "chart_rate")
-    private Double chartRate;
+    @Column(name = "rate")
+    private Double rate;
 
     @NotNull
-    @Column(name = "chart_buy")
-    private Long chartBuy;
+    @Column(name = "price")
+    private Long price;
 
     @NotNull
-    @Column(name = "chart_sell")
-    private Long chartSell;
+    @Column(name = "high_price")
+    private Long highPrice;
 
     @NotNull
-    @Column(name = "chart_high")
-    private Long chartHigh;
+    @Column(name = "low_price")
+    private Long lowPrice;
 
     @NotNull
-    @Column(name = "chart_low")
-    private Long chartLow;
+    @Column(name = "start_price")
+    private Long startPrice;
 
     @NotNull
-    @Column(name = "chart_start")
-    private Long chartStart;
-
-    @NotNull
-    @Column(name = "chart_end")
-    private Long chartEnd;
+    @Column(name = "end_price")
+    private Long endPrice;
 
     @Builder
-    public Chart(Stock stock, Long chartTurn, Double chartRate, Long chartBuy, Long chartSell, Long chartHigh, Long chartLow, Long chartStart, Long chartEnd) {
+    public Chart(Stock stock, Long turn, Double rate, Long price, Long highPrice, Long lowPrice, Long startPrice, Long endPrice) {
         this.stock = stock;
-        this.chartTurn = chartTurn;
-        this.chartRate = chartRate;
-        this.chartBuy = chartBuy;
-        this.chartSell = chartSell;
-        this.chartHigh = chartHigh;
-        this.chartLow = chartLow;
-        this.chartStart = chartStart;
-        this.chartEnd = chartEnd;
+        this.turn = turn;
+        this.rate = rate;
+        this.price = price;
+        this.highPrice = highPrice;
+        this.lowPrice = lowPrice;
+        this.startPrice = startPrice;
+        this.endPrice = endPrice;
     }
 }

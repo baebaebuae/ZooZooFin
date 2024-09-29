@@ -55,7 +55,6 @@ spring:
 
 oauth:
   base-url: http://localhost:8080
-  token-redirect_url: http://localhost:5173
 
 logging:
   level:
@@ -104,7 +103,6 @@ spring:
 
 oauth:
   base-url: ${BASE_URL}
-  token-redirect_url: ${REDIRECT_URL}
 
 logging:
   level:
