@@ -58,6 +58,12 @@ public enum ErrorCode {
     TURN_RECORD_NOT_FOUND(404, "턴 기록을 찾을 수 없습니다."),
     TURN_OVER_EXCEPTION(400, "51턴 이상은 진행이 불가능합니다."),
 
+    // NextTurn
+    NEXT_TURN_RECORD_NOT_FOUND(404, "다음 턴 기록을 찾을 수 없습니다."),
+
+    // Warning
+    WARNING_RECORD_NOT_FOUND(404, "경고 기록을 찾을 수 없습니다."),
+
     // Stock
     STOCK_NOT_FOUND_EXCEPTION(404, "존재하지 않는 주식입니다."),
     CHART_NOT_FOUND_EXCEPTION(404, "존재하지 않는 주식 차트입니다."),

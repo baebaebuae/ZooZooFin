@@ -14,6 +14,12 @@ import com.zzf.backend.domain.capital.repository.CapitalRepository;
 import com.zzf.backend.domain.deposit.entity.Deposit;
 import com.zzf.backend.domain.deposit.repository.DepositRepository;
 import com.zzf.backend.domain.ending.status.EndingStatus;
+import com.zzf.backend.domain.home.entity.NextTurnRecord;
+import com.zzf.backend.domain.home.entity.TurnRecord;
+import com.zzf.backend.domain.home.entity.WarningRecord;
+import com.zzf.backend.domain.home.repository.NextTurnRecordRepository;
+import com.zzf.backend.domain.home.repository.TurnRecordRepository;
+import com.zzf.backend.domain.home.repository.WarningRecordRepository;
 import com.zzf.backend.domain.loan.entity.Loan;
 import com.zzf.backend.domain.loan.repository.LoanRepository;
 import com.zzf.backend.domain.member.entity.Member;
@@ -43,6 +49,9 @@ public class AnimalServiceImpl implements AnimalService {
     private final SavingsRepository savingsRepository;
     private final LoanRepository loanRepository;
     private final CapitalRepository capitalRepository;
+    private final TurnRecordRepository turnRecordRepository;
+    private final WarningRecordRepository warningRecordRepository;
+    private final NextTurnRecordRepository nextTurnRecordRepository;
 
     @Override
     public List<AnimalTypeResponse> getAnimalTypes() {
@@ -64,17 +73,58 @@ public class AnimalServiceImpl implements AnimalService {
         AnimalType animalType = animalTypeRepository.findById(animalCreateRequest.getAnimalTypeId())
                 .orElseThrow(() -> new CustomException(ANIMAL_TYPE_NOT_FOUND_EXCEPTION));
 
-        animalRepository.save(Animal.builder()
+        Animal animal = animalRepository.save(Animal.builder()
                 .member(member)
                 .animalType(animalType)
                 .animalName(animalCreateRequest.getAnimalName())
-                .animalTurn(0L)
+                .animalTurn(1L)
                 .animalAssets(0L)
                 .animalCredit(0L)
                 .animalHierarchy(HierarchyStatus.PART_TIME.getHierarchyName())
                 .animalIsWork(false)
                 .animalIsEnd(false)
                 .animalQuestCleared(false)
+                .build());
+
+        // 턴 기록
+        turnRecordRepository.save(TurnRecord.builder()
+                .turnRecordTurn(1L)
+                .dailyCharge(0L)
+                .loanMake(0L)
+                .loanRepay(0L)
+                .stockBuy(0L)
+                .stockSell(0L)
+                .depositMake(0L)
+                .depositFinish(0L)
+                .savingsMake(0L)
+                .savingsPay(0L)
+                .savingsFinish(0L)
+                .capitalMake(0L)
+                .capitalRepay(0L)
+                .animal(animal)
+                .build());
+
+        // 고지서 기록
+        warningRecordRepository.save(WarningRecord.builder()
+                .warningRecordTurn(1L)
+                .warningSavingsCount(0L)
+                .warningLoanCount(0L)
+                .depositTotal(0L)
+                .depositRepay(0L)
+                .savingsTotal(0L)
+                .savingsRepay(0L)
+                .stockTotal(0L)
+                .stockRepay(0L)
+                .animal(animal)
+                .build());
+
+        // 다음 턴 예상 지출 기록
+        nextTurnRecordRepository.save(NextTurnRecord.builder()
+                .nextTurnRecordTurn(2L)
+                .nextSavingsRepayment(0L)
+                .nextLoanRepayment(0L)
+                .nextCapitalRepayment(0L)
+                .animal(animal)
                 .build());
     }
 

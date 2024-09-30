@@ -1,13 +1,12 @@
 package com.zzf.backend.domain.home.service;
 
 import com.zzf.backend.domain.animal.entity.Animal;
+import com.zzf.backend.domain.animal.repository.AnimalRepository;
 import com.zzf.backend.domain.capital.entity.Capital;
 import com.zzf.backend.domain.capital.repository.CapitalRepository;
 import com.zzf.backend.domain.deposit.entity.Deposit;
 import com.zzf.backend.domain.deposit.repository.DepositRepository;
-import com.zzf.backend.domain.home.dto.LoanRepayDTO;
-import com.zzf.backend.domain.home.dto.LoanWarningDTO;
-import com.zzf.backend.domain.home.dto.SavingsNextTurnDTO;
+import com.zzf.backend.domain.home.dto.*;
 import com.zzf.backend.domain.home.entity.NextTurnRecord;
 import com.zzf.backend.domain.home.entity.TurnRecord;
 import com.zzf.backend.domain.home.entity.WarningRecord;
@@ -27,13 +26,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.zzf.backend.global.status.ErrorCode.NO_SUCH_LOAN_TYPE_EXCEPTION;
-import static com.zzf.backend.global.status.ErrorCode.TURN_OVER_EXCEPTION;
+import static com.zzf.backend.global.status.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
 public class NextTurnServiceImpl implements NextTurnService {
 
+    private final AnimalRepository animalRepository;
     private final DepositRepository depositRepository;
     private final SavingsRepository savingsRepository;
     private final LoanRepository loanRepository;
@@ -45,7 +44,9 @@ public class NextTurnServiceImpl implements NextTurnService {
 
     @Override
     @Transactional
-    public void nextTurn(Animal animal) {
+    public void nextTurn(long animalId) {
+        Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
+
         if (animal.getAnimalTurn() >= 50) {
             throw new CustomException(TURN_OVER_EXCEPTION);
         }
@@ -121,19 +122,81 @@ public class NextTurnServiceImpl implements NextTurnService {
                 .animal(animal)
                 .build();
 
-//        // 적금 지출 예측
-//        long savingsExpect = savingsExpect(animal);
-//        nextTurnRecord.setNextSavingsRepayment(savingsExpect);
-//
-//        // 대출 지출 예측
-//        long loanExpect = loanExpect(animal);
-//        nextTurnRecord.setNextLoanRepayment(loanExpect);
-//
-//        // 사채 지출 예측
-//        long capitalExpect = capitalExpect(animal);
-//        nextTurnRecord.setNextCapitalRepayment(capitalExpect);
+        // 적금 지출 예측
+        long savingsExpect = savingsExpect(animal);
+        nextTurnRecord.setNextSavingsRepayment(-savingsExpect);
+
+        // 대출 지출 예측
+        long loanExpect = loanExpect(animal);
+        nextTurnRecord.setNextLoanRepayment(-loanExpect);
+
+        // 사채 지출 예측
+        long capitalExpect = capitalExpect(animal);
+        nextTurnRecord.setNextCapitalRepayment(-capitalExpect);
 
         nextTurnRecordRepository.save(nextTurnRecord);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public TurnRecordResponse getTurnRecord(long animalId) {
+        Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
+
+        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getAnimalTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
+
+        TurnRecordResponse turnRecordResponse = TurnRecordResponse.builder()
+                .dailyCharge(turnRecord.getDailyCharge())
+                .loanMake(turnRecord.getLoanMake())
+                .loanRepay(turnRecord.getLoanRepay())
+                .stockBuy(turnRecord.getStockBuy())
+                .stockSell(turnRecord.getStockSell())
+                .depositMake(turnRecord.getDepositMake())
+                .depositFinish(turnRecord.getDepositFinish())
+                .savingsMake(turnRecord.getSavingsMake())
+                .savingsPay(turnRecord.getSavingsPay())
+                .savingsFinish(turnRecord.getSavingsFinish())
+                .capitalMake(turnRecord.getCapitalMake())
+                .capitalRepay(turnRecord.getCapitalRepay())
+                .build();
+
+        return turnRecordResponse;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public WarningRecordResponse getWarningRecord(long animalId) {
+        Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
+
+        WarningRecord warningRecord = warningRecordRepository.findByAnimalAndWarningRecordTurn(animal, animal.getAnimalTurn()).orElseThrow(() -> new CustomException(WARNING_RECORD_NOT_FOUND));
+
+        WarningRecordResponse warningRecordResponse = WarningRecordResponse.builder()
+                .warningSavingsCount(warningRecord.getWarningSavingsCount())
+                .warningLoanCount(warningRecord.getWarningLoanCount())
+                .depositTotal(warningRecord.getDepositTotal())
+                .depositRepay(warningRecord.getDepositRepay())
+                .savingsTotal(warningRecord.getSavingsTotal())
+                .savingsRepay(warningRecord.getSavingsRepay())
+                .stockTotal(warningRecord.getStockTotal())
+                .stockRepay(warningRecord.getStockRepay())
+                .build();
+
+        return warningRecordResponse;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public NextTurnRecordResponse getNextTurnRecord(long animalId) {
+        Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
+
+        NextTurnRecord nextTurnRecord = nextTurnRecordRepository.findByAnimalAndNextTurnRecordTurn(animal, animal.getAnimalTurn()).orElseThrow(() -> new CustomException(NEXT_TURN_RECORD_NOT_FOUND));
+
+        NextTurnRecordResponse nextTurnRecordResponse = NextTurnRecordResponse.builder()
+                .nextSavingsRepayment(nextTurnRecord.getNextSavingsRepayment())
+                .nextLoanRepayment(nextTurnRecord.getNextLoanRepayment())
+                .nextCapitalRepayment(nextTurnRecord.getNextCapitalRepayment())
+                .build();
+
+        return nextTurnRecordResponse;
     }
 
     // 예금 다음 턴으로 넘어가기
@@ -249,10 +312,25 @@ public class NextTurnServiceImpl implements NextTurnService {
     }
 
     // 적금 지출 예측
-    private long savingsExpect(Animal animal) {
+    @Override
+    @Transactional(readOnly = true)
+    public long savingsExpect(Animal animal) {
         // 진행 중인 적금 모두 조회
         List<Savings> savingsList = savingsRepository.findAllByAnimalAndSavingsIsEndFalse(animal);
-        return 0L;
+        long total = 0L;
+
+        for (Savings savings : savingsList){
+
+            if (savings.getSavingsEndTurn().equals(animal.getAnimalTurn() + 1)){
+                // 마지막 턴인 경우 넘어감
+                continue;
+            }
+
+            total += savings.getSavingsPayment();
+
+        }
+
+        return total;
     }
 
     // 대출 다음 턴으로 넘어가기
@@ -279,7 +357,7 @@ public class NextTurnServiceImpl implements NextTurnService {
         List<LoanRepayDTO> nonWarnList = new ArrayList<>();
 
         for (Loan loan : loanList) {
-            // 이번달에 전체 얼마 내야하는지 계산 (대출 방식, 대출 원금, 이자율, 대출 기간, 현재 턴)
+            // 현재 턴에 전체 얼마 내야하는지 계산 (대출 방식, 대출 원금, 이자율, 대출 기간, 현재 턴)
             Long repayment = repay(loan.getLoanType(), loan.getLoanAmount(), loan.getLoanRate(),
                     loan.getLoanPeriod(), loan.getLoanPeriod() - loan.getLoanToEnd() + 1);
 
@@ -314,7 +392,7 @@ public class NextTurnServiceImpl implements NextTurnService {
                 loanWarningDTO.setDepositRepay(loanWarningDTO.getDepositTotal());
             }
 
-            // 경고 받은 진짜 갚아야할 금액중 예금 압류 총액 제거.
+            // 경고 받은 진짜 갚아야할 금액 중 예금 압류 총액 제거.
             warnListRepayment -= loanWarningDTO.getDepositTotal();
 
             // 예금 압류 했는데도 모자람
@@ -492,8 +570,22 @@ public class NextTurnServiceImpl implements NextTurnService {
     }
 
     // 대출 지출 예측
-    private long loanExpect(Animal animal) {
-        return 0L;
+    @Override
+    @Transactional(readOnly = true)
+    public long loanExpect(Animal animal) {
+
+        List<Loan> loanList = loanRepository.findAllByAnimalAndLoanIsEndFalse(animal);
+        long total = 0L;
+
+        for (Loan loan : loanList) {
+            // 다음 턴에 전체 얼마 내야하는지 계산 (대출 방식, 대출 원금, 이자율, 대출 기간, 다음 턴)
+            Long repayment = repay(loan.getLoanType(), loan.getLoanAmount(), loan.getLoanRate(),
+                    loan.getLoanPeriod(), loan.getLoanPeriod() - loan.getLoanToEnd() + 1);
+
+            total += repayment;
+        }
+
+        return total;
     }
 
     // 사채 다음 턴으로 넘어가기
@@ -555,7 +647,20 @@ public class NextTurnServiceImpl implements NextTurnService {
     }
 
     // 사채 지출 예측
-    private long capitalExpect(Animal animal) {
-        return 0L;
+    @Override
+    @Transactional(readOnly = true)
+    public long capitalExpect(Animal animal) {
+
+        List<Capital> capitalList = capitalRepository.findAllByAnimalAndCapitalIsEndFalse(animal);
+        long total = 0L;
+
+        for (Capital capital : capitalList){
+            // 마감턴일 경우 money에 추가
+            if (capital.getCapitalEndTurn().equals(animal.getAnimalTurn() + 1)){
+                total = capital.getCapitalAmount() + capital.getCapitalAmount() / 10;
+            }
+        }
+
+        return total;
     }
 }

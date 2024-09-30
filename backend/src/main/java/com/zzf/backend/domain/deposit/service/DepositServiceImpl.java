@@ -1,5 +1,7 @@
 package com.zzf.backend.domain.deposit.service;
 
+import com.zzf.backend.domain.home.entity.TurnRecord;
+import com.zzf.backend.domain.home.repository.TurnRecordRepository;
 import com.zzf.backend.domain.member.entity.Member;
 import com.zzf.backend.domain.member.repository.MemberRepository;
 import com.zzf.backend.domain.deposit.dto.DepositRequest;
@@ -28,6 +30,7 @@ public class DepositServiceImpl implements DepositService {
     private final DepositRepository depositRepository;
     private final DepositTypeRepository depositTypeRepository;
     private final AnimalRepository animalRepository;
+    private final TurnRecordRepository turnRecordRepository;
 
     // 예금 상품 목록 조회
     @Override
@@ -78,6 +81,10 @@ public class DepositServiceImpl implements DepositService {
 
         // 캐릭터 가용 자산 감소
         animal.decreaseAnimalAssets(depositRequest.getMoney());
+
+        // 턴 기록에 추가
+        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getAnimalTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
+        turnRecord.setDepositMake(turnRecord.getDepositMake() - depositRequest.getMoney());
     }
 
     // 내 예금 조회
@@ -131,5 +138,10 @@ public class DepositServiceImpl implements DepositService {
         // 예금 완료 처리
         deposit.changeDepositIsEnd(true);
         animal.increaseAnimalAssets(deposit.getDepositAmount() + deposit.getDepositAmount() / 200);
+
+        // 턴 기록에 추가
+        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getAnimalTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
+        turnRecord.setDepositFinish(turnRecord.getDepositFinish() + deposit.getDepositAmount() + deposit.getDepositAmount() / 200);
+
     }
 }

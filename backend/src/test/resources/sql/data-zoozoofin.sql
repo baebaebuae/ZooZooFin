@@ -1,6 +1,9 @@
 insert into member(member_id, kakao_member_id, member_gold_bar, member_is_solve_quiz, created_date, modified_date) values ('913418af-6b2e-11ef-929f-28c5d21eabf3', 'asdfasdfasdf', 0, false, now(), now());
 insert into animal_type(animal_type_name, animal_ability, animal_img_url) values ('토끼', 1, 'https://ssafy.com');
 insert into animal(animal_name, animal_turn, animal_assets, animal_credit, animal_hierarchy, animal_is_work, animal_is_end, animal_quest_cleared, created_date, modified_date, member_id, animal_type_id) values ('베베붸', 1, 1000000000, 5, 10, false, false, false, now(), now(), '913418af-6b2e-11ef-929f-28c5d21eabf3', 1);
+insert into turn_record(turn_record_turn, daily_charge, loan_make, loan_repay, stock_buy, stock_sell, deposit_make, deposit_finish, savings_make, savings_pay, savings_finish, capital_make, capital_repay, animal_id, created_date, modified_date) values (1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, now(), now());
+insert into warning_record(warning_record_turn, warning_savings_count, warning_loan_count, deposit_total, deposit_repay, savings_total, savings_repay, stock_total, stock_repay, animal_id, created_date, modified_date) values (1, 0, 0, 0, 0, 0, 0, 0, 0, 1, now(), now());
+insert into next_turn_record(next_turn_record_turn, next_savings_payment, next_loan_repayment, next_capital_repayment, animal_id, created_date, modified_date) values (1, 0, 0, 0, 1, now(), now());
 insert into deposit_type(deposit_period, deposit_rate, deposit_name, deposit_img_url) values
                                                                                           (5, 3, '주주예금', 'https://ssafy.com'),
                                                                                           (10, 10, '꼬꼬예금', 'https://ssafy.com'),

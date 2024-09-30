@@ -1,5 +1,10 @@
 package com.zzf.backend.domain.loan.service;
 
+import com.zzf.backend.domain.home.entity.NextTurnRecord;
+import com.zzf.backend.domain.home.entity.TurnRecord;
+import com.zzf.backend.domain.home.repository.NextTurnRecordRepository;
+import com.zzf.backend.domain.home.repository.TurnRecordRepository;
+import com.zzf.backend.domain.home.service.NextTurnService;
 import com.zzf.backend.domain.member.repository.MemberRepository;
 import com.zzf.backend.domain.animal.entity.Animal;
 import com.zzf.backend.domain.animal.repository.AnimalRepository;
@@ -25,9 +30,10 @@ import static com.zzf.backend.global.status.ErrorCode.*;
 public class LoanServiceImpl implements LoanService {
 
     private final HomeService homeService;
-    private final MemberRepository memberRepository;
     private final AnimalRepository animalRepository;
     private final LoanRepository loanRepository;
+    private final TurnRecordRepository turnRecordRepository;
+    private final NextTurnRecordRepository nextTurnRecordRepository;
 
     // 대출 가능 여부 체크
     @Override
@@ -96,6 +102,15 @@ public class LoanServiceImpl implements LoanService {
 
         // 캐릭터 가용 자산 증가
         animal.increaseAnimalAssets(loanRequest.getLoanAmounts());
+
+        // 턴 기록에 추가
+        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getAnimalTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
+        turnRecord.setLoanMake(turnRecord.getLoanMake() + loanRequest.getLoanAmounts());
+
+        // 다음 턴 기록에 추가
+        NextTurnRecord nextTurnRecord = nextTurnRecordRepository.findByAnimalAndNextTurnRecordTurn(animal, animal.getAnimalTurn() + 1).orElseThrow(() -> new CustomException(NEXT_TURN_RECORD_NOT_FOUND));
+        nextTurnRecord.setNextLoanRepayment(nextTurnRecord.getNextLoanRepayment()
+               - repay(loan.getLoanType(), loan.getLoanAmount(), loan.getLoanRate(), loan.getLoanPeriod(), 1));
     }
 
     // 내 대출 조회
@@ -160,6 +175,71 @@ public class LoanServiceImpl implements LoanService {
 
         //대출 종료 처리
         loan.changeLoanIsEnd(true);
+
+        // 턴 기록에 추가
+        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getAnimalTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
+        turnRecord.setLoanRepay(turnRecord.getLoanRepay() - restLoan);
+
+        // 다음 턴 기록에 추가
+        NextTurnRecord nextTurnRecord = nextTurnRecordRepository.findByAnimalAndNextTurnRecordTurn(animal, animal.getAnimalTurn() + 1).orElseThrow(() -> new CustomException(NEXT_TURN_RECORD_NOT_FOUND));
+        nextTurnRecord.setNextLoanRepayment(nextTurnRecord.getNextLoanRepayment()
+                + repay(loan.getLoanType(), loan.getLoanAmount(), loan.getLoanRate(), loan.getLoanPeriod(), loan.getLoanPeriod() - loan.getLoanToEnd() + 1));
+    }
+
+    // 대출금 계산 함수
+    private long repay(long loanType, long loanAmount, long loanRate, long loanPeriod, long turn) {
+        if (loanType == 1L) {
+            // 만기 일시 상환
+            return manGi(loanAmount, loanRate, loanPeriod, turn);
+        } else if (loanType == 2L) {
+            // 원금 균등 상환
+            return wonGum(loanAmount, loanRate, loanPeriod, turn);
+        } else if (loanType == 3L) {
+            // 원리금 균등 상환
+            return wonLeeGum(loanAmount, loanRate, loanPeriod);
+        } else {
+            throw new CustomException(NO_SUCH_LOAN_TYPE_EXCEPTION);
+        }
+    }
+
+    // 만기 일시 상환
+    private long manGi(long loanAmount, long loanRate, long loanPeriod, long turn) {
+        // 이자 계산
+        long interest = loanAmount * loanRate / 100;
+
+        // 현재 턴이 마지막 턴인지 확인
+        if (turn < loanPeriod) {
+            return interest;
+        } else {
+            return interest + loanAmount;
+        }
+    }
+
+    // 원금 균등 상환
+    private long wonGum(long loanAmount, long loanRate, long loanPeriod, long turn) {
+        // 매 턴마다 상환할 원금
+        long principalRepayment = loanAmount / loanPeriod;
+
+        // 남은 대출 원금
+        long remainingPrincipal = loanAmount - principalRepayment * (turn - 1);
+
+        // 현재 턴에 대한 이자
+        long interest = remainingPrincipal * loanRate / 100;
+
+        // 총 상환 금액
+        return principalRepayment + interest;
+    }
+
+    // 원리금 균등 상환
+    private long wonLeeGum(long loanAmount, long loanRate, long loanPeriod) {
+        // 이자율
+        double ratePerTurn = (double) loanRate / 100;
+
+        // 매 턴마다 상환해야 할 금액 계산
+        double temp = Math.pow(1 + ratePerTurn, loanPeriod);
+        double paymentPerTurn = loanAmount * ratePerTurn * temp / (temp - 1);
+
+        return (long) Math.floor(paymentPerTurn);
     }
 
     // 대출 한도 비율, 밸런스 패치

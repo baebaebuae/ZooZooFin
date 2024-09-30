@@ -1,5 +1,10 @@
 package com.zzf.backend.domain.savings.service;
 
+import com.zzf.backend.domain.home.entity.NextTurnRecord;
+import com.zzf.backend.domain.home.entity.TurnRecord;
+import com.zzf.backend.domain.home.repository.NextTurnRecordRepository;
+import com.zzf.backend.domain.home.repository.TurnRecordRepository;
+import com.zzf.backend.domain.home.repository.WarningRecordRepository;
 import com.zzf.backend.domain.member.entity.Member;
 import com.zzf.backend.domain.member.repository.MemberRepository;
 import com.zzf.backend.domain.savings.dto.MySavingsResponse;
@@ -28,7 +33,8 @@ public class SavingsServiceImpl implements SavingsService{
     private final SavingsRepository savingsRepository;
     private final SavingsTypeRepository savingsTypeRepository;
     private final AnimalRepository animalRepository;
-    private final MemberRepository memberRepository;
+    private final TurnRecordRepository turnRecordRepository;
+    private final NextTurnRecordRepository nextTurnRecordRepository;
 
     // 적금 상품 목록 조회
     @Override
@@ -83,6 +89,14 @@ public class SavingsServiceImpl implements SavingsService{
 
         // 캐릭터 가용 자산 감소
         animal.decreaseAnimalAssets(savingsRequest.getMoney());
+
+        // 턴 기록에 추가
+        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getAnimalTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
+        turnRecord.setSavingsMake(turnRecord.getSavingsMake() - savingsRequest.getMoney());
+
+        // 다음 턴 기록에도 추가
+        NextTurnRecord nextTurnRecord = nextTurnRecordRepository.findByAnimalAndNextTurnRecordTurn(animal, animal.getAnimalTurn() + 1).orElseThrow(() -> new CustomException(NEXT_TURN_RECORD_NOT_FOUND));
+        nextTurnRecord.setNextSavingsRepayment(nextTurnRecord.getNextSavingsRepayment() - savingsRequest.getMoney());
     }
 
     // 내 적금 확인
@@ -140,5 +154,15 @@ public class SavingsServiceImpl implements SavingsService{
 
         savings.changeSavingsIsEnd(true);
         animal.increaseAnimalAssets( savings.getSavingsAmount() + savings.getSavingsAmount() / 200);
+
+        // 턴 기록에 추가
+        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getAnimalTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
+        turnRecord.setSavingsFinish(turnRecord.getSavingsFinish() + savings.getSavingsAmount() + savings.getSavingsAmount() / 200);
+
+        if (animal.getAnimalTurn() + 1 != savings.getSavingsEndTurn()){
+            // 다음 턴이 만기가 아닌 경우, 다음 턴 기록에서 repayment 빼기
+            NextTurnRecord nextTurnRecord = nextTurnRecordRepository.findByAnimalAndNextTurnRecordTurn(animal, animal.getAnimalTurn() + 1).orElseThrow(() -> new CustomException(NEXT_TURN_RECORD_NOT_FOUND));
+            nextTurnRecord.setNextSavingsRepayment(nextTurnRecord.getNextSavingsRepayment() + savings.getSavingsPayment());
+        }
     }
 }
