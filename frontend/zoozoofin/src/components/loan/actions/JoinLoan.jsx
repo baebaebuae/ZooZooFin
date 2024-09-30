@@ -3,13 +3,12 @@ import styled from 'styled-components';
 
 import { Loading } from '@components/root/loading';
 import { LoanJoinCard } from '@components/loan/LoanJoinCard';
+import { LoanCheckCard } from '@components/loan/LoanCheckCard';
 import { CheckCreditCardMini } from '@components/loan/CheckCreditCardMini';
 
 import { MessageBox } from '@components/root/messageBox';
 import { NormalIcon } from '@components/root/icon';
 import IconChick from '@assets/images/icons/icon_chick.svg?react';
-
-import { getApiClient } from '@stores/apiClient';
 
 const Block = styled.div`
     display: flex;
@@ -18,45 +17,24 @@ const Block = styled.div`
     gap: 20px;
 `;
 
-const JoinLoan = ({ productType }) => {
+const JoinLoan = ({ goToScript }) => {
     const [currentCard, setCurrentCard] = useState(1);
 
-    const [products, setProducts] = useState([]);
-    const [savingsAmount, setSavingsAmount] = useState(null);
+    // const [products, setProducts] = useState([]);
+    const [loanAmount, setLoanAmount] = useState(null);
     const [expectedFinalAmount, setExpectedFinalAmount] = useState(null);
 
-    // 상품 정보 받아오기
-    const fetchProducts = async () => {
-        const apiClient = getApiClient();
+    const [loanPeriod, setLoanPeriod] = useState(0);
+    const [expectedFinalTurn, setExpectedFinalTurn] = useState(0);
 
-        try {
-            const res = await apiClient.get(
-                `/${productType}`,
-                {},
-                {
-                    headers: { animalId: 1 },
-                }
-            );
-
-            console.log(res.data.body);
-            setProducts(res.data.body);
-        } catch (error) {
-            // console.error('error: ', error);
-            return error;
-        }
-    };
-
-    useEffect(() => {
-        fetchProducts();
-    }, []);
-
-    useEffect(() => {}, [products]);
+    const [repayType, setRepayType] = useState(null);
 
     // 도장 찍은 후 -로딩중- 모달 뜨고 사라지는 함수
     useEffect(() => {
-        if (currentCard === 4) {
+        if (currentCard > 2) {
             const timer = setTimeout(() => {
                 goToNextCard();
+                goToScript();
             }, 2000);
 
             return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 정리
@@ -67,10 +45,19 @@ const JoinLoan = ({ productType }) => {
         setCurrentCard(currentCard + 1);
     };
 
-    const saveAmount = (savingsAmount, expectedFinalAmount) => {
+    const saveLoanInfo = (
+        loanAmount,
+        expectedFinalAmount,
+        loanPeriod,
+        expectedFinalTurn,
+        repayType
+    ) => {
         goToNextCard();
-        setSavingsAmount(savingsAmount);
+        setLoanAmount(loanAmount);
         setExpectedFinalAmount(expectedFinalAmount);
+        setLoanPeriod(loanPeriod);
+        setExpectedFinalTurn(expectedFinalTurn);
+        setRepayType(repayType);
     };
 
     const joinGuideMessages = {
@@ -91,13 +78,33 @@ const JoinLoan = ({ productType }) => {
                 if (currentCard === 1) {
                     return (
                         <>
-                            <CheckCreditCardMini />
-                            <LoanJoinCard />
+                            {/* loanLimit, loanRate 등 각 변수 임의로 지정 */}
+                            <CheckCreditCardMini
+                                loanLimit={500000}
+                                loanAvailable={300000}
+                                characterCredit={5}
+                            />
+                            <LoanJoinCard
+                                currentTurn={10}
+                                maxAmount={50000000}
+                                saveLoanInfo={saveLoanInfo}
+                                loanRate={5}
+                            />
                         </>
                     );
+                } else if (currentCard === 2) {
+                    return (
+                        <LoanCheckCard
+                            loanAmount={loanAmount}
+                            expectedFinalAmount={expectedFinalAmount}
+                            loanPeriod={loanPeriod}
+                            expectedFinalTurn={expectedFinalTurn}
+                            loanRate={5}
+                            repayType={repayType}
+                            goToNextCard={goToNextCard}
+                        />
+                    );
                 } else if (currentCard === 3) {
-                    return <Loading content={'대출 처리중'} />;
-                } else if (currentCard === 4) {
                     return <Loading content={'대출 처리중'} />;
                 }
             })()}

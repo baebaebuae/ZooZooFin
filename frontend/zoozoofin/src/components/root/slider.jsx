@@ -1,5 +1,5 @@
 // 입력 턴 조절하는 슬라이더
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Slider from '@mui/material/Slider';
 import { Input } from './input';
@@ -18,7 +18,7 @@ export const SliderBox = styled.div`
 //     return `${value}턴`;
 // }
 
-export const TurnSliderLoan = ({ title, min, max }) => {
+export const TurnSliderLoan = ({ title, min, max, onTurnChange }) => {
     const midAmount = Math.floor((min + max) / 2);
     const [value, setValue] = useState(midAmount);
 
@@ -29,6 +29,10 @@ export const TurnSliderLoan = ({ title, min, max }) => {
     const handleInputChange = (event) => {
         setValue(event.target.value === '' ? 0 : Number(event.target.value));
     };
+
+    useEffect(() => {
+        onTurnChange(value);
+    }, [value, onTurnChange]);
 
     const marks = [
         {

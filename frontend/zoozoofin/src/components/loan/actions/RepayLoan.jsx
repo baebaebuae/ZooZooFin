@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import { Loading } from '@components/root/loading';
+import { LoanInfoCard } from '@components/loan/LoanInfoCard';
+import { LoanRepayDetailCard } from '@components/loan/LoanRepayDetailCard';
 
 import { getApiClient } from '@stores/apiClient';
 
@@ -41,7 +43,7 @@ const RepayLoan = ({ goToScript }) => {
 
     // 도장 찍은 후 -로딩중- 모달 뜨고 사라지는 함수
     useEffect(() => {
-        if (currentCard === 1) {
+        if (currentCard === 3) {
             const timer = setTimeout(() => {
                 goToNextCard();
             }, 3000); // 대출 가능 여부 평가 - 다른 모달보다 1초 길게 설정
@@ -54,9 +56,28 @@ const RepayLoan = ({ goToScript }) => {
         <Block>
             {(() => {
                 if (currentCard === 1) {
-                    return <div>1번 카드 : 대출 관리 카드, 대출 리스트</div>;
+                    return (
+                        <>
+                            <LoanInfoCard
+                                charName={'토랭이'}
+                                totalLoan={3000000}
+                                restLoan={1000000}
+                            />
+                            <LoanRepayDetailCard
+                                loanNumber={2}
+                                loanType={2}
+                                isRepayAvailable={true}
+                                loanRate={4}
+                                payBackTurn={8}
+                                loanPeriod={20}
+                                loanAmount={1000000}
+                                loanRemain={300000}
+                                warning={false}
+                            />
+                        </>
+                    );
                 } else if (currentCard === 2) {
-                    return <div>대출 상품 조회</div>;
+                    return <></>;
                 } else if (currentCard === 5) {
                     return <Loading content={'대출 상환 처리중'} />;
                 }

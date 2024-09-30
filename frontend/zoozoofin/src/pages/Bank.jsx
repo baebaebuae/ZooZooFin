@@ -80,8 +80,21 @@ const Bank = () => {
         setCurrentId(nextScript);
     };
 
+    const [isLoading, setIsLoading] = useState(true);
+
+    // 입장 시 1.5초정도 로딩 페이지
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 1500);
+
+        return () => clearTimeout(timer);
+    }, []);
+
     // 로딩 중일 때 Loader 컴포넌트 렌더링
-    if (!currentScript) return <div>은행 입장중...</div>;
+    if (isLoading || !currentScript) {
+        return <div>은행 입장중...</div>;
+    }
 
     if (currentScript.type === 'script') {
         return (

@@ -37,10 +37,10 @@ export const ProductJoinCard = ({
 
         const rate = Math.ceil((productRate / 100 / productPeriod) * 1000) / 1000;
         const a = (productPeriod * (productPeriod + 1)) / 2;
-        const expectedSavingsReturn = newAmount * productPeriod + newAmount * a * rate;
 
-        const expectedDepositReturn = newAmount + newAmount * (productRate / 100) * productPeriod;
+        const expectedSavingsReturn = newAmount * productPeriod + newAmount * a * rate;
         // 예금일 때는 단순 계산(원금+(원금*이율*턴수))
+        const expectedDepositReturn = newAmount + newAmount * (productRate / 100) * productPeriod;
 
         setExpectedFinalAmount(isSavings ? expectedSavingsReturn : expectedDepositReturn);
     }

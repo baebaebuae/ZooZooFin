@@ -39,7 +39,10 @@ export const InputBox = ({
     const handleMaxAmount = () => setSavingsAmount(maxAmount);
 
     useEffect(() => {
-        onSavingsAmountChange(savingsAmount);
+        if (savingsAmount > 0) {
+            // console.log('savingsAmount: ', savingsAmount);
+            onSavingsAmountChange(savingsAmount);
+        }
     }, [savingsAmount, onSavingsAmountChange]);
 
     return (
@@ -85,7 +88,6 @@ export const InputBoxLoan = ({
     amount4,
     maxAmount,
     onSavingsAmountChange,
-    isSavings,
 }) => {
     const [savingsAmount, setSavingsAmount] = useState(0);
 
