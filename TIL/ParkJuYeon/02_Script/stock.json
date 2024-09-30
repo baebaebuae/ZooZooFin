@@ -1,0 +1,91 @@
+[
+  {
+    "scriptId": 0,
+    "category": "stock",
+    "type": "action",
+    "content": "END",
+    "responses": [
+      {
+        "nextScript": null,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 1,
+    "category": "stock",
+    "type": "script",
+    "content": "안녕! ${name}\n여긴 **주식**을 사고 팔 수 있는\n**주식거래소**야 개굴!",
+    "responses": [
+      {
+        "nextScript": 2,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 2,
+    "category": "stock",
+    "type": "script",
+    "content": "어떤 **주식 채널**로 볼거야 개굴?",
+    "responses": [
+      {
+        "nextScript": 3,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 3,
+    "category": "stock",
+    "type": "action",
+    "content": "주식거래소",
+    "responses": [
+      {
+        "nextScript": 4,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 4,
+    "category": "stock",
+    "type": "script",
+    "content": "좋아 개굴! ${channel}에서 뭐 할거야 개굴?",
+    "responses": [
+      {
+        "nextScript": 5,
+        "selection": "주식을 **살래!**"
+      },
+      {
+        "nextScript": 6,
+        "condition": "보유주식조회",
+        "selection": "주식을 **팔래!**"
+      }
+    ]
+  },
+  {
+    "scriptId": 5,
+    "category": "stock",
+    "type": "action",
+    "content": "주식구매",
+    "responses": [
+      {
+        "nextScript": 0,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 6,
+    "category": "stock",
+    "type": "action",
+    "content": "주식판매",
+    "responses": [
+      {
+        "nextScript": 0,
+        "selection": null
+      }
+    ]
+  }
+]
