@@ -7,6 +7,8 @@ import styled from 'styled-components';
 import { Card } from '@components/root/card';
 import { Button } from '@components/root/buttons';
 
+import LoanRepayTable from '@components/loan/LoanRepayTable';
+
 // component로 빼면 import 수정
 import { RepayTypeBlock } from './LoanJoinCard';
 import { TurnSliderInterest } from '@components/root/slider';
@@ -41,17 +43,36 @@ const ModalBackground = styled.div`
 
 export const LoanCalculator = ({ repayType, handleCloseModal }) => {
     const [isModalOpen, setIsModalOpen] = useState(true);
+    const [isResultOpen, setIsResultOpen] = useState(false);
+
+    const [loanAmount, setLoanAmount] = useState(0);
+    const [loanPeriod, setLoanPeriod] = useState(0);
+    const [loanRate, setLoanRate] = useState(0);
 
     const closeModal = () => {
         setIsModalOpen(false);
         handleCloseModal();
     };
 
+    const handleLoanAmountChange = (newAmount) => {
+        setLoanAmount(newAmount);
+    };
+    const handleLoanPeriodChange = (newPeriod) => {
+        setLoanPeriod(newPeriod);
+    };
+    const handleLoanRateChange = (newRate) => {
+        setLoanRate(newRate);
+    };
+
+    const handleClick = () => {
+        setIsResultOpen(!isResultOpen);
+    };
+
     return (
         <>
             {isModalOpen && (
                 <ModalBackground onClick={closeModal}>
-                    <CardBlock>
+                    <CardBlock onClick={(e) => e.stopPropagation()}>
                         <InfoTitle>대출 이자 계산기</InfoTitle>
                         <RepayTypeBlock loanType={`${repayType}균등상환`} />
                         <InputBoxLoan
@@ -61,14 +82,37 @@ export const LoanCalculator = ({ repayType, handleCloseModal }) => {
                             amount3={5000000}
                             amount4={10000000}
                             // maxAmount={100000000}
-                            // onSavingsAmountChange={() => {}}
+                            onLoanAmountChange={handleLoanAmountChange}
                             isSavings={false}
                         ></InputBoxLoan>{' '}
-                        <TurnSliderInterest unit={'턴'} title={'대출기간'} min={1} max={50} />
-                        <TurnSliderInterest unit={'%'} title={'대출금리'} min={1} max={10} />
-                        <Button size={'normal'} color={'primary'}>
+                        <TurnSliderInterest
+                            unit={'턴'}
+                            title={'대출기간'}
+                            min={1}
+                            max={50}
+                            onValueChange={handleLoanPeriodChange}
+                        />
+                        <TurnSliderInterest
+                            unit={'%'}
+                            title={'대출금리'}
+                            min={1}
+                            max={10}
+                            onValueChange={handleLoanRateChange}
+                        />
+                        <Button size={'normal'} color={'primary'} onClick={handleClick}>
                             계산하기
                         </Button>
+                        {/* <div>대출원금: {loanAmount}</div>
+                        <div>대출기간: {loanPeriod}</div>
+                        <div>대출금리: {loanRate}</div> */}
+                        {isResultOpen && (
+                            <LoanRepayTable
+                                repayType={repayType}
+                                loanAmount={loanAmount}
+                                loanPeriod={loanPeriod}
+                                loanRate={loanRate}
+                            />
+                        )}
                     </CardBlock>
                 </ModalBackground>
             )}

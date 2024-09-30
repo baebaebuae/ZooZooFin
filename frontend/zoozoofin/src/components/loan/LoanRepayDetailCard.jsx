@@ -1,8 +1,12 @@
 // 대출 중도 상환 상세 정보 확인 카드
+import { useState } from 'react';
 import styled from 'styled-components';
 import { ProductJoinInfo } from '@components/root/productDetailInfo';
 import { Card, Divider } from '@components/root/card';
 import { Button } from '@components/root/buttons';
+import { StampModal } from '@components/root/stampModal';
+
+import { getApiClient } from '@stores/apiClient';
 
 const InfoTitleBlock = styled.div`
     width: 100%;
@@ -42,7 +46,35 @@ const WarningText = styled.div`
     color: ${({ theme }) => theme.colors.warn};
 `;
 
+const repayLoan = async (loanId) => {
+    const apiClient = getApiClient();
+
+    console.log('joinProducts - productId:', loanId);
+
+    const productData = {
+        loanId: loanId,
+    };
+
+    try {
+        console.log('Request Data:', productData);
+
+        const res = await apiClient.patch('/loan/my', productData, {
+            headers: { animalId: 1 },
+        });
+
+        if (res.status === 200) {
+            console.log(res.data);
+        } else {
+            console.error('Unexpected status code:', res.status);
+        }
+    } catch (error) {
+        console.error('error: ', error);
+        return error;
+    }
+};
+
 export const LoanRepayDetailCard = ({
+    loanId,
     loanNumber,
     loanType,
     isRepayAvailable,
@@ -53,7 +85,10 @@ export const LoanRepayDetailCard = ({
     loanRemain,
     handleClick,
     warning,
+    goToScript,
 }) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     return (
         <CardBlock onClick={handleClick}>
             <InfoTitleBlock>
@@ -103,9 +138,20 @@ export const LoanRepayDetailCard = ({
                 infoTitle={'남은 상환 금액'}
                 infoContent={`${loanRemain}원`}
             />
-            <Button size={'normal'} color={isRepayAvailable ? 'primary' : 'inactive'}>
+            <Button
+                size={'normal'}
+                color={isRepayAvailable ? 'primary' : 'inactive'}
+                onClick={() => setIsModalOpen(true)}
+            >
                 상환하기
             </Button>
+            {isModalOpen && (
+                <StampModal
+                    action={() => repayLoan(loanId)}
+                    goToScript={goToScript}
+                    handleCloseModal={() => setIsModalOpen(false)}
+                />
+            )}
         </CardBlock>
     );
 };

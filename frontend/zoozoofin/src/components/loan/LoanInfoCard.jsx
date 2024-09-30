@@ -21,14 +21,7 @@ const BoldText = styled.span`
     font-weight: bold;
 `;
 
-export const LoanInfoCard = ({
-    charName,
-    totalLoan,
-    restLoan,
-    productPeriod,
-    productRate,
-    handleClick,
-}) => {
+export const LoanInfoCard = ({ charName, totalLoan, restLoan, handleClick }) => {
     return (
         <CardBlock onClick={handleClick}>
             <InfoTitle>
