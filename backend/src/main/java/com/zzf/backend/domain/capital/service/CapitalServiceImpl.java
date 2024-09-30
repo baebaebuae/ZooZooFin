@@ -3,6 +3,7 @@ package com.zzf.backend.domain.capital.service;
 import com.zzf.backend.domain.animal.entity.Animal;
 import com.zzf.backend.domain.animal.repository.AnimalRepository;
 import com.zzf.backend.domain.capital.dto.CapitalRequest;
+import com.zzf.backend.domain.capital.dto.CapitalResponse;
 import com.zzf.backend.domain.capital.entity.Capital;
 import com.zzf.backend.domain.capital.repository.CapitalRepository;
 import com.zzf.backend.domain.home.entity.NextTurnRecord;
@@ -69,6 +70,27 @@ public class CapitalServiceImpl implements CapitalService{
         // 턴 기록 추가
         TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getAnimalTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
         turnRecord.setCapitalMake(turnRecord.getCapitalMake() + capitalRequest.getCapitalAmounts() * 9 / 10);
+    }
+
+    // 내 사채 조회
+    @Override
+    @Transactional(readOnly = true)
+    public CapitalResponse getMyCapital(Long animalId){
+        Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
+
+        List<Capital> capitalList = capitalRepository.findAllByAnimalAndCapitalIsEndFalse(animal);
+
+        CapitalResponse capitalResponse = CapitalResponse.builder().build();
+
+        for (Capital capital : capitalList){
+
+            capitalResponse.setCapitalOrigin(capital.getCapitalAmount());
+            capitalResponse.setCapitalRestMoney(capital.getCapitalRemain());
+            capitalResponse.setCapitalRestTurn(capital.getCapitalEndTurn() - animal.getAnimalTurn());
+            capitalResponse.setCapitalEndTurn(capital.getCapitalEndTurn());
+        }
+
+        return capitalResponse;
     }
 
     // 사채 상환
