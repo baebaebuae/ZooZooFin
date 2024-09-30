@@ -5,6 +5,10 @@ import com.zzf.backend.domain.animal.repository.AnimalRepository;
 import com.zzf.backend.domain.capital.dto.CapitalRequest;
 import com.zzf.backend.domain.capital.entity.Capital;
 import com.zzf.backend.domain.capital.repository.CapitalRepository;
+import com.zzf.backend.domain.home.entity.NextTurnRecord;
+import com.zzf.backend.domain.home.entity.TurnRecord;
+import com.zzf.backend.domain.home.repository.NextTurnRecordRepository;
+import com.zzf.backend.domain.home.repository.TurnRecordRepository;
 import com.zzf.backend.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +24,8 @@ public class CapitalServiceImpl implements CapitalService{
 
     private final AnimalRepository animalRepository;
     private final CapitalRepository capitalRepository;
+    private final TurnRecordRepository turnRecordRepository;
+    private final NextTurnRecordRepository nextTurnRecordRepository;
 
     // 사채 대출 가능한지 확인
     @Override
@@ -60,6 +66,9 @@ public class CapitalServiceImpl implements CapitalService{
             animal.changeAnimalCredit(10L);
         }
 
+        // 턴 기록 추가
+        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getAnimalTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
+        turnRecord.setCapitalMake(turnRecord.getCapitalMake() + capitalRequest.getCapitalAmounts() * 9 / 10);
     }
 
     // 사채 상환
@@ -86,6 +95,12 @@ public class CapitalServiceImpl implements CapitalService{
             capital.changeCapitalIsEnd(true);
 
             animal.decreaseAnimalAssets(money);
+
+            TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getAnimalTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
+            turnRecord.setCapitalRepay(0L);
+
+            NextTurnRecord nextTurnRecord = nextTurnRecordRepository.findByAnimalAndNextTurnRecordTurn(animal, animal.getAnimalTurn() + 1).orElseThrow(() -> new CustomException(NEXT_TURN_RECORD_NOT_FOUND));
+            nextTurnRecord.setNextCapitalRepayment(0L);
         }
     }
 }
