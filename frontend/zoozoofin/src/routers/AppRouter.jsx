@@ -24,7 +24,7 @@ import Work from '@pages/Work';
 import WalletPage from '@pages/test/WalletPage';
 import Auth from '../pages/Auth';
 import TestPaper from '../components/school/TestPaper';
-
+import Game from '@components/work/Game'
 const Background = styled.div`
     width: 360px;
     height: 640px;
@@ -77,7 +77,10 @@ const AppRouter = () => {
                     {/* 퀴즈 페이지 추가 */}
                     <Route path="/testpaper" element={<TestPaper />} />
                 </Route>
-                <Route path="/work" element={<Work />} />
+                <Route path="/work/*">
+                    <Route index element={<Work />} />
+                    <Route path="inGame" element={<Game />}/>
+                </Route>
                 <Route path="/ending" element={<Ending />} />
                 <Route path="/wallet" element={<WalletPage />} />
 
