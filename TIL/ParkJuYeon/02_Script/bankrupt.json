@@ -1,7 +1,7 @@
 [
   {
     "scriptId": 0,
-    "category": "bank",
+    "category": "bankrupt",
     "type": "action",
     "content": "END",
     "responses": [
@@ -13,7 +13,7 @@
   },
   {
     "scriptId": 1,
-    "category": "bank",
+    "category": "bankrupt",
     "type": "script",
     "content": "안녕, ${name}!\n은행에는 무슨 일로 왔어, 꿀?",
     "responses": [
@@ -28,12 +28,16 @@
       {
         "nextScript": 17,
         "selection": "대출 코너에 볼 일이 있어."
+      },
+      {
+        "nextScript": 19,
+        "selection": "파산 신청하려구😂"
       }
     ]
   },
   {
     "scriptId": 2,
-    "category": "bank",
+    "category": "bankrupt",
     "type": "script",
     "content": "가입, 해지 중 어떤 서비스를 이용할거야, 꿀?",
     "responses": [
@@ -53,7 +57,7 @@
   },
   {
     "scriptId": 3,
-    "category": "bank",
+    "category": "bankrupt",
     "type": "script",
     "content": "좋아, 현재 가입 가능한 예금 상품을 보여줄게, 꿀.",
     "responses": [
@@ -65,7 +69,7 @@
   },
   {
     "scriptId": 4,
-    "category": "bank",
+    "category": "bankrupt",
     "type": "action",
     "content": "예금 상품 조회",
     "responses": [
@@ -77,7 +81,7 @@
   },
   {
     "scriptId": 5,
-    "category": "bank",
+    "category": "bankrupt",
     "type": "script",
     "content": "가입이 잘 완료됐어!\n주주은행을 이용해줘서 고마워.\n그럼 또 보자, 꿀!",
     "responses": [
@@ -89,7 +93,7 @@
   },
   {
     "scriptId": 6,
-    "category": "bank",
+    "category": "bankrupt",
     "type": "script",
     "content": "좋아. 현재 가입한 예금 상품을 보여줄게, 꿀",
     "responses": [
@@ -101,7 +105,7 @@
   },
   {
     "scriptId": 7,
-    "category": "bank",
+    "category": "bankrupt",
     "type": "action",
     "content": "예금 상품 해지 조회",
     "responses": [
@@ -113,7 +117,7 @@
   },
   {
     "scriptId": 8,
-    "category": "bank",
+    "category": "bankrupt",
     "type": "script",
     "content": "해지가 잘 완료됐어!\n주주은행을 이용해줘서 고마워.\n그럼 또 보자, 꿀!",
     "responses": [
@@ -125,7 +129,7 @@
   },
   {
     "scriptId": 9,
-    "category": "bank",
+    "category": "bankrupt",
     "type": "script",
     "content": "그래. 잠시만 기다려 줘, 꿀!",
     "responses": [
@@ -137,7 +141,7 @@
   },
   {
     "scriptId": 10,
-    "category": "bank",
+    "category": "bankrupt",
     "type": "script",
     "content": "가입, 해지 중 어떤 서비스를 이용할거야, 꿀?",
     "responses": [
@@ -157,7 +161,7 @@
   },
   {
     "scriptId": 11,
-    "category": "bank",
+    "category": "bankrupt",
     "type": "script",
     "content": "좋아. 현재 가입 가능한 적금 상품을 보여줄게, 꿀.",
     "responses": [
@@ -169,7 +173,7 @@
   },
   {
     "scriptId": 12,
-    "category": "bank",
+    "category": "bankrupt",
     "type": "action",
     "content": "적금 상품 조회",
     "responses": [
@@ -181,7 +185,7 @@
   },
   {
     "scriptId": 13,
-    "category": "bank",
+    "category": "bankrupt",
     "type": "script",
     "content": "가입이 잘 완료됐어!\n주주은행을 이용해줘서 고마워.\n그럼 또 보자, 꿀!",
     "responses": [
@@ -193,7 +197,7 @@
   },
   {
     "scriptId": 14,
-    "category": "bank",
+    "category": "bankrupt",
     "type": "script",
     "content": "좋아, 현재 가입한 적금 상품을 보여줄게, 꿀.",
     "responses": [
@@ -205,7 +209,7 @@
   },
   {
     "scriptId": 15,
-    "category": "bank",
+    "category": "bankrupt",
     "type": "action",
     "content": "적금 상품 해지 조회",
     "responses": [
@@ -217,7 +221,7 @@
   },
   {
     "scriptId": 16,
-    "category": "bank",
+    "category": "bankrupt",
     "type": "script",
     "content": "해지가 잘 완료됐어!\n주주은행을 이용해줘서 고마워, 꿀.",
     "responses": [
@@ -229,7 +233,7 @@
   },
   {
     "scriptId": 17,
-    "category": "bank",
+    "category": "bankrupt",
     "type": "script",
     "content": "대출은 너굴맨이 처리한다구!\n잠시만 기다려줘.",
     "responses": [
@@ -241,12 +245,68 @@
   },
   {
     "scriptId": 18,
-    "category": "bank",
+    "category": "bankrupt",
     "type": "action",
     "content": "대출 코너로 입장",
     "responses": [
       {
         "nextScript": null,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 19,
+    "category": "bankrupt",
+    "type": "script",
+    "content": "이런. 자산을 많이 잃었구나.\n정말 파산 신청할거야, 꿀?",
+    "responses": [
+      {
+        "nextScript": 20,
+        "selection": "응😂"
+      },
+      {
+        "nextScript": 1,
+        "selection": "아니, 다시 생각해볼게."
+      }
+    ]
+  },
+  {
+    "scriptId": 20,
+    "category": "bankrupt",
+    "type": "script",
+    "content": "파산 신청을 완료하면 게임이 종료되고, 선택을 되돌릴 수 없어.\n그래도 신청할거야?",
+    "responses": [
+      {
+        "nextScript": 21,
+        "selection": "응!!!!!!!"
+      },
+      {
+        "nextScript": 0,
+        "selection": "다시 생각해볼게."
+      }
+    ]
+  },
+  {
+    "scriptId": 21,
+    "category": "bankrupt",
+    "type": "action",
+    "content": "파산 처리",
+    "responses": [
+      {
+        "nextScript": 22,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 22,
+    "category": "bankrupt",
+    "type": "script",
+    "content": "파산 처리가 완료됐어.\n${name}, 주주시티를 떠난다니 정말 아쉽다.\n투자하러 또 놀러와! 안녕!",
+    "responses": [
+      {
+        "nextScript": 0,
         "selection": null
       }
     ]
