@@ -1,0 +1,290 @@
+[
+  {
+    "scriptId": 0,
+    "category": "no_loan",
+    "type": "action",
+    "content": "END",
+    "responses": [
+      {
+        "nextScript": null,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 1,
+    "category": "no_loan",
+    "type": "script",
+    "content": "반갑다,${name}\n대출 코너에는 무슨 일이지?",
+    "responses": [
+      {
+        "nextScript": 2,
+        "selection": "대출을 받으러 왔어."
+      },
+      {
+        "nextScript": 18,
+        "selection": "미안, 은행 코너로 돌아갈게."
+      }
+    ]
+  },
+  {
+    "scriptId": 2,
+    "category": "no_loan",
+    "type": "script",
+    "content": "대출을 받으러 왔나?\n좋아. 우선 대출 가능 여부와 한도를 알려주지.",
+    "responses": [
+      {
+        "nextScript": 3,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 3,
+    "category": "no_loan",
+    "type": "action",
+    "content": "대출 가능 여부 조회",
+    "responses": [
+      {
+        "nextScript": 4,
+        "selection": 1
+      },
+      {
+        "nextScript": 4,
+        "selection": 2
+      },
+      {
+        "nextScript": 4,
+        "selection": 3
+      },
+      {
+        "nextScript": 4,
+        "selection": 4
+      },
+      {
+        "nextScript": 4,
+        "selection": 5
+      },
+      {
+        "nextScript": 4,
+        "selection": 6
+      },
+      {
+        "nextScript": 19,
+        "selection": 7
+      },
+      {
+        "nextScript": 19,
+        "selection": 8
+      },
+      {
+        "nextScript": 19,
+        "selection": 9
+      },
+      {
+        "nextScript": 19,
+        "selection": 10
+      }
+    ]
+  },
+  {
+    "scriptId": 4,
+    "category": "no_loan",
+    "type": "script",
+    "content": "신용등급 관리를 잘해왔군.\n대출은 1등급에서 6등급 사이여야만 받을 수 있다고.",
+    "responses": [
+      {
+        "nextScript": 5,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 5,
+    "category": "no_loan",
+    "type": "script",
+    "content": "대출 주의사항을 확인할건가?",
+    "responses": [
+      {
+        "nextScript": 6,
+        "selection": "응, 확인할래."
+      },
+      {
+        "nextScript": 15,
+        "selection": "아니, 바로 대출 받을래."
+      }
+    ]
+  },
+  {
+    "scriptId": 6,
+    "category": "no_loan",
+    "type": "script",
+    "content": "그래? 그렇다면 대출에 대해 자세히 알려주지.",
+    "responses": [
+      {
+        "nextScript": 7,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 7,
+    "category": "no_loan",
+    "type": "script",
+    "content": "대출 기간은 자유롭게 정할 수 있다.\n**대출이자**는 각 턴마다 갚아야하고, **이율**은 턴마다 **1~6% 단리**로 붙는다.\n아, 이자는 자동으로 빠져나가니 걱정말라고.",
+    "responses": [
+      {
+        "nextScript": 8,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 8,
+    "category": "no_loan",
+    "type": "script",
+    "content": "대출금 원금은 은행에 와서 직접 갚아야한다. 상환 방법으로는\n✔️ 원금균등상환\n✔️원리금균등상환\n✔️만기일시상환\n총 세 가지가 있지.",
+    "responses": [
+      {
+        "nextScript": 9,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 9,
+    "category": "no_loan",
+    "type": "action",
+    "content": "대출 안내",
+    "responses": [
+      {
+        "nextScript": 10,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 10,
+    "category": "no_loan",
+    "type": "script",
+    "content": "좋아. 이번엔 돈을 제 때 못 갚았을 때, 그러니까 **연체 시 주의사항**도 알려주지.",
+    "responses": [
+      {
+        "nextScript": 11,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 11,
+    "category": "no_loan",
+    "type": "script",
+    "content": "정해진 상환일에 돈을 제 때 갚지 않으면 경고를 1회 부여한다.\n이 때 신용도는 1단계 하락한다.",
+    "responses": [
+      {
+        "nextScript": 12,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 12,
+    "category": "no_loan",
+    "type": "script",
+    "content": "돈을 갚지 못한 그 다음 턴까지도 상환이 이루어지지 않으면 내가 네 소유의 재산을 **[예금-적금-주식]** 순으로 압류한다.",
+    "responses": [
+      {
+        "nextScript": 13,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 13,
+    "category": "no_loan",
+    "type": "script",
+    "content": "한 상품이 아니라 **전량을 압류**한다는 사실을 꼭 명심하라고.\n위험도가 큰 만큼, 무리하게 돈을 빌리지 않는 게 좋겠지.",
+    "responses": [
+      {
+        "nextScript": 14,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 14,
+    "category": "no_loan",
+    "type": "script",
+    "content": "이제 설명이 다 끝났다.\n대출을 받을건가?",
+    "responses": [
+      {
+        "nextScript": 15,
+        "selection": "응, 받을래."
+      },
+      {
+        "nextScript": 18,
+        "selection": "아니, 은행으로 돌아갈래."
+      }
+    ]
+  },
+  {
+    "scriptId": 15,
+    "category": "no_loan",
+    "type": "script",
+    "content": "좋아. 그럼 대출 서류를 꺼내주지.",
+    "responses": [
+      {
+        "nextScript": 16,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 16,
+    "category": "no_loan",
+    "type": "action",
+    "content": "대출 서류",
+    "responses": [
+      {
+        "nextScript": 17,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 17,
+    "category": "no_loan",
+    "type": "script",
+    "content": "대출이 완료됐어.\n주주은행을 이용해줘서 고맙다.\n원금 상환할 때 또 보자고!",
+    "responses": [
+      {
+        "nextScript": 0,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 18,
+    "category": "no_loan",
+    "type": "action",
+    "content": "은행으로 이동",
+    "responses": [
+      {
+        "nextScript": null,
+        "selection": null
+      }
+    ]
+  },
+  {
+    "scriptId": 19,
+    "category": "no_loan",
+    "type": "script",
+    "content": "이런. 신용등급이 너무 낮아서 지금은 대출을 받을 수 없는 상태야.\n앞으로 신용등급 관리를 잘 해야할 것 같군. 이만 돌아가봐.",
+    "responses": [
+      {
+        "nextScript": 0,
+        "selection": null
+      }
+    ]
+  }
+]
