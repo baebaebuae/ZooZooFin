@@ -11,5 +11,6 @@ export const theme = {
         yellow: '#ffd84e',
         warn: '#FF3E3E',
         inactive: '#CED1D3',
+        bubble: '#EBF4F0',
     },
 };

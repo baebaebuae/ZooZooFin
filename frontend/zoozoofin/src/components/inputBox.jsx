@@ -39,8 +39,7 @@ export const InputBox = ({
     const handleMaxAmount = () => setSavingsAmount(maxAmount);
 
     useEffect(() => {
-        if (savingsAmount > 0) {
-            // console.log('savingsAmount: ', savingsAmount);
+        if (savingsAmount >= 0) {
             onSavingsAmountChange(savingsAmount);
         }
     }, [savingsAmount, onSavingsAmountChange]);
@@ -80,36 +79,32 @@ const ButtonBlockLoan = styled.div`
     gap: 4px;
 `;
 
-export const InputBoxLoan = ({
-    title,
-    amount1,
-    amount2,
-    amount3,
-    amount4,
-    maxAmount,
-    onSavingsAmountChange,
-}) => {
-    const [savingsAmount, setSavingsAmount] = useState(0);
+export const InputBoxLoan = ({ title, amount1, amount2, amount3, amount4, onLoanAmountChange }) => {
+    const [loanAmount, setLoanAmount] = useState(0);
 
     const addAmount = (value) =>
-        setSavingsAmount((prev) => {
+        setLoanAmount((prev) => {
             const newAmount = prev + value;
-            return newAmount > maxAmount ? maxAmount : newAmount;
+            onLoanAmountChange(newAmount);
+            return newAmount;
         });
 
-    const handleDelete = () => setSavingsAmount(0);
+    const handleDelete = () => {
+        setLoanAmount(0);
+        onLoanAmountChange(0);
+    };
     // const handleMaxAmount = () => setSavingsAmount(maxAmount);
 
-    useEffect(() => {
-        onSavingsAmountChange(savingsAmount);
-    }, [savingsAmount, onSavingsAmountChange]);
+    // useEffect(() => {
+    //     onSavingsAmountChange(savingsAmount);
+    // }, [savingsAmount, onSavingsAmountChange]);
 
     return (
         <InputBlock>
             <ProductJoinInfo
                 isLoan={true}
                 infoTitle={title}
-                infoContent={`${savingsAmount.toLocaleString()} 원`}
+                infoContent={`${loanAmount.toLocaleString()} 원`}
             />
 
             <ButtonBlockLoan>

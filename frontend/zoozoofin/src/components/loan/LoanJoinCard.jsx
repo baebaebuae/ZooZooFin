@@ -97,6 +97,11 @@ export const LoanJoinCard = ({ currentTurn, maxAmount, saveLoanInfo, loanRate })
     const [isModalOpen, setIsModalOpen] = useState(false);
     const handleModalOpen = () => {
         setIsModalOpen(true);
+        document.body.style.overflow = 'hidden'; // 외부 스크롤 막기
+    };
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        document.body.style.overflow = 'auto'; // 외부 스크롤 허용
     };
 
     const RepayTypes = ['원금', '원리금', '만기'];
@@ -162,7 +167,7 @@ export const LoanJoinCard = ({ currentTurn, maxAmount, saveLoanInfo, loanRate })
         setLoanAmount(newAmount);
         loanAmount > 0
             ? handleLoanFinalAmount(selectedRepayType, loanAmount, loanRate, loanPeriod)
-            : handleLoanFinalAmount(selectedRepayType, 0, loanRate, loanPeriod);
+            : setExpectedFinalAmount(0);
     }
 
     function handleTurnChange(newTurn) {
@@ -172,7 +177,9 @@ export const LoanJoinCard = ({ currentTurn, maxAmount, saveLoanInfo, loanRate })
 
     return (
         <>
-            {isModalOpen && <LoanCalculator />}
+            {isModalOpen && (
+                <LoanCalculator repayType={selectedRepayType} handleCloseModal={handleCloseModal} />
+            )}
             <CardBlock>
                 <InfoTitle>대출 서류</InfoTitle>
                 <RepayTypeButtonBlock title="상환 방식" />

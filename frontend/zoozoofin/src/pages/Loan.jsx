@@ -8,6 +8,7 @@ import { useStore } from '../store.js';
 import CheckCredit from '@components/loan/actions/CheckCredit';
 import RepayLoan from '@components/loan/actions/RepayLoan';
 import JoinLoan from '@components/loan/actions/JoinLoan';
+import InstructLoan from '@components/loan/actions/InstructLoan';
 
 const LoanBlock = styled.div`
     display: flex;
@@ -115,6 +116,9 @@ const Loan = () => {
                         }
                     />
                 );
+            case '대출 안내':
+                return <InstructLoan />;
+
             case '은행으로 이동':
                 return navigate('/bank');
 

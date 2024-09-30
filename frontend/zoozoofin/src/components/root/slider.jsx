@@ -80,17 +80,18 @@ export const TurnSliderLoan = ({ title, min, max, onTurnChange }) => {
 };
 
 // [TurnSliderCalc] 대출 이자 계산기에서 사용될 대출기간&대출금리 Slider 생성 예정
-export const TurnSliderInterest = ({ title, min, max, unit }) => {
+export const TurnSliderInterest = ({ title, min, max, unit, onValueChange }) => {
     const midAmount = Math.floor((min + max) / 2);
     const [value, setValue] = useState(midAmount);
 
     const handleSliderChange = (event, newValue) => {
         setValue(newValue);
+        onValueChange(newValue);
     };
 
-    const handleInputChange = (event) => {
-        setValue(event.target.value === '' ? 0 : Number(event.target.value));
-    };
+    // const handleInputChange = (event) => {
+    //     setValue(event.target.value === '' ? 0 : Number(event.target.value));
+    // };
 
     const marks = [
         {
