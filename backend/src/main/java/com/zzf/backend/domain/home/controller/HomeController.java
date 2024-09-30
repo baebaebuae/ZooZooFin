@@ -1,11 +1,14 @@
 package com.zzf.backend.domain.home.controller;
 
-import com.zzf.backend.domain.home.dto.NextTurnRecordResponse;
-import com.zzf.backend.domain.home.dto.TurnRecordResponse;
-import com.zzf.backend.domain.home.dto.WarningRecordResponse;
-import com.zzf.backend.domain.home.entity.TurnRecord;
-import com.zzf.backend.domain.home.entity.WarningRecord;
+import com.zzf.backend.domain.capital.dto.CapitalResponse;
+import com.zzf.backend.domain.capital.service.CapitalService;
+import com.zzf.backend.domain.deposit.dto.MyDepositResponse;
+import com.zzf.backend.domain.deposit.service.DepositService;
+import com.zzf.backend.domain.home.dto.*;
+import com.zzf.backend.domain.home.service.HomeService;
 import com.zzf.backend.domain.home.service.NextTurnService;
+import com.zzf.backend.domain.savings.dto.MySavingsResponse;
+import com.zzf.backend.domain.savings.service.SavingsService;
 import com.zzf.backend.global.dto.ResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,6 +17,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.zzf.backend.global.status.SuccessCode.*;
 
@@ -26,8 +31,37 @@ import static com.zzf.backend.global.status.SuccessCode.*;
 public class HomeController {
 
     private final NextTurnService nextTurnService;
+    private final HomeService homeService;
+    private final DepositService depositService;
+    private final SavingsService savingsService;
+    private final CapitalService capitalService;
 
-    // 다음 턴으로 넘어가기
+    // 내 예적금 조회 001
+    @GetMapping("/my-deposit-savings")
+    public ResponseDto<DepositSavingsResponse> getMyDepositSavings(@RequestHeader Long animalId){
+
+        long totalMoney = homeService.getMyDepositSavings(animalId);
+        List<MyDepositResponse> myDepositResponseList = depositService.getMyDeposit(animalId);
+        List<MySavingsResponse> mySavingsResponseList = savingsService.getMySavings(animalId);
+
+        return ResponseDto.success(READ_SUCCESS, DepositSavingsResponse.builder()
+                .totalMoney(totalMoney)
+                .myDepositResponseList(myDepositResponseList)
+                .mySavingsResponseList(mySavingsResponseList)
+                .build());
+    }
+
+    // 내 사채 조회 004
+    @GetMapping("/capital")
+    public ResponseDto<CapitalResponse> getMyCapital(@RequestHeader Long animalId){
+
+        CapitalResponse capitalResponse = capitalService.getMyCapital(animalId);
+
+        return ResponseDto.success(READ_SUCCESS, capitalResponse);
+    }
+
+
+    // 다음 턴으로 넘어가기 006
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "다음 턴으로 넘어가기 성공")
     })
@@ -40,7 +74,7 @@ public class HomeController {
         return ResponseDto.success(UPDATE_SUCCESS);
     }
 
-    // 오늘 거래 내역
+    // 오늘 거래 내역 007
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "오늘 거래 내역 조회 성공")
     })
@@ -53,7 +87,7 @@ public class HomeController {
         return ResponseDto.success(READ_SUCCESS, turnRecordResponse);
     }
 
-    // 미납 고지서
+    // 미납 고지서 008
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "미납 고지서 조회 성공")
     })
@@ -66,7 +100,7 @@ public class HomeController {
         return ResponseDto.success(READ_SUCCESS, warningRecordResponse);
     }
 
-    // 다음 턴 기록
+    // 다음 턴 기록 009
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "다음 턴 기록 조회 성공")
     })

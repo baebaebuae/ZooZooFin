@@ -1,5 +1,6 @@
 package com.zzf.backend.domain.home.service;
 
+import com.zzf.backend.domain.animal.repository.AnimalRepository;
 import com.zzf.backend.domain.capital.entity.Capital;
 import com.zzf.backend.domain.capital.repository.CapitalRepository;
 import com.zzf.backend.domain.animal.entity.Animal;
@@ -9,21 +10,33 @@ import com.zzf.backend.domain.loan.entity.Loan;
 import com.zzf.backend.domain.loan.repository.LoanRepository;
 import com.zzf.backend.domain.savings.entity.Savings;
 import com.zzf.backend.domain.savings.repository.SavingsRepository;
+import com.zzf.backend.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.zzf.backend.global.status.ErrorCode.ANIMAL_NOT_FOUND_EXCEPTION;
+
 @Service
 @RequiredArgsConstructor
 public class HomeServiceImpl implements HomeService{
 
+    private final AnimalRepository animalRepository;
     private final DepositRepository depositRepository;
     private final SavingsRepository savingsRepository;
     private final LoanRepository loanRepository;
     private final CapitalRepository capitalRepository;
 
+
+    @Override
+    @Transactional(readOnly = true)
+    public long getMyDepositSavings(Long animalId) {
+        Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
+
+        return getMyTotalDeposit(animal) + getMyTotalSavings(animal);
+    }
 
     // 전 재산을 계산해주는 함수
     @Override
