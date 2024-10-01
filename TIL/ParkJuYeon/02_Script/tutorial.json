@@ -1,244 +1,380 @@
-[
-  {
-    "category": "tutorial",
-    "scripts": [
-      {
-        "id": 0,
-        "type": "action",
-        "content": "END",
-        "responses": {
-        }
-      },
-      {
-        "id": 1,
-        "type": "script",
-        "content": "안녕? 주주시티에 온 걸 환영해.",
-        "responses": {
-          "next": 2
-        }
-      },
-      {
-        "id": 2,
-        "type": "script",
-        "content": "난 주주시티 안내를 도와줄 뭉뭉이야.",
-        "responses": {
-          "next": 3
-        }
-      },
-      {
-        "id": 3,
-        "type": "script",
-        "content": "너는 이름이 뭐야?",
-        "responses": {
-          "이름 알려주기": 4
-        }
-      },
-      {
-        "id": 4,
-        "type": "action",
-        "content": "INPUT_NAME",
-        "responses": {
-          "next": 5
-        }
-      },
-      {
-        "id": 5,
-        "type": "script",
-        "content": "${name}, 반가워!",
-        "responses": {
-          "next": 6
-        }
-      },
-      {
-        "id": 6,
-        "type": "script",
-        "content": "우리 도시는 새로 입주한 투자민에게 100만원의 지원금을 지급해줘.",
-        "responses": {
-          "next": 7
-        }
-      },
-      {
-        "id": 7,
-        "type": "script",
-        "content": "그럼 이제 네가 지낼 방으로 데려다줄게.",
-        "responses": {
-          "좋아!": 8
-        }
-      },
-      {
-        "id": 8,
-        "type": "script",
-        "content": "여긴 네가 지낼 방이야. 어때?",
-        "responses": {
-          "예쁘다!": 9,
-          "별로야..": 10
-        }
-      },
-      {
-        "id": 9,
-        "type": "script",
-        "content": "${name}, 네 방이라서 특별히 신경 썼지.\n 그럼 같이 방을 둘러볼까?",
-        "responses": {
-          "좋아!": 11
-        }
-      },
-      {
-        "id": 10,
-        "type": "script",
-        "content": "에구, 특별히 신경 쓴다고 썼는데, 그래도 지내는 데에 불편한 점은 없을거야!\n 그럼 같이 방을 둘러볼까?",
-        "responses": {
-          "그래!": 11
-        }
-      },
-      {
-        "id": 11,
-        "type": "action",
-        "content": "ROOM_GUIDE",
-        "responses": {
-          "BED": 12,
-          "NOTEBOOK": 15
-        },
-        "condition": {
-          "responses": ["BED", "NOTEBOOK"],
-          "next": 19
-        }
-      },
-      {
-        "id": 12,
-        "type": "script",
-        "content": "**침대**를 누르면 잠을 잘 수 있어.",
-        "responses": {
-          "next": 13
-        }
-      },
-      {
-        "id": 13,
-        "type": "script",
-        "content": "오늘은 이 도시에 온 지 0일째 되는 날.\n 잠들고 나면 하루가 지나서 1일이 더해질거야.",
-        "responses": {
-          "응. 내일이 되면?": 14
-        }
-      },
-      {
-        "id": 14,
-        "type": "script",
-        "content": "내일부터는 일을 하거나,\n 주식에 투자하거나,\n 대출을 받을 수 있어.",
-        "responses": {
-          "좋아. 알겠어!": 11
-        }
-      },
-      {
-        "id": 15,
-        "type": "script",
-        "content": "**노트북**을 누르면 내 자산 정보와 거래 내역을 확인할 수 있는 앱들이 있을거야.",
-        "responses": {
-          "next": 16
-        }
-      },
-      {
-        "id": 16,
-        "type": "action",
-        "content": "NOTEBOOK_DETAIL",
-        "responses": {
-          "next": 17
-        }
-      },
-      {
-        "id": 17,
-        "type": "script",
-        "content": "각 앱을 눌러서 어떤 기능이 있는지 확인해봐.",
-        "responses": {
-          "next": 18
-        }
-      },
-      {
-        "id": 18,
-        "type": "action",
-        "content": "NOTEBOOK_FUNCTION",
-        "responses": {
-          "next": 11
-        }
-      },
-      {
-        "id": 19,
-        "type": "action",
-        "content": "MENU_BAR",
-        "responses": {
-          "next": 20
-        }
-      },
-      {
-        "id": 20,
-        "type": "script",
-        "content": "이번엔 메뉴바를 소개해줄게.",
-        "responses": {
-          "next": 21
-        }
-      },
-      {
-        "id": 21,
-        "type": "action",
-        "content": "MENU_FIRST",
-        "responses": {
-          "next": 22
-        }
-      },
-      {
-        "id": 22,
-        "type": "script",
-        "content": "가장 왼쪽 버튼은 메뉴 버튼이야.\n 버튼을 누르면 ~~~~ 할 수 있는 아이콘을 볼 수 있을거야.",
-        "responses": {
-          "next": 23
-        }
-      },
-      {
-        "id": 23,
-        "type": "action",
-        "content": "MENU_SECOND",
-        "responses": {
-          "next": 24
-        }
-      },
-      {
-        "id": 24,
-        "type": "script",
-        "content": "두 번째는 지갑 버튼이야.\n오늘, 그러니까 **이번 턴에 거래한 돈**과\n**다음 턴에 계좌에서 빠져나갈 돈**을 조회할 수 있어.",
-        "responses": {
-          "next": 25
-        }
-      },
-      {
-        "id": 25,
-        "type": "action",
-        "content": "MENU_THIRD",
-        "responses": {
-          "next": 26
-        }
-      },
-      {
-        "id": 26,
-        "type": "script",
-        "content": "지도 버튼을 누르면 주주시티에서 이용할 수 있는 건물을 한 눈에 볼 수 있어.\n 은행, 주식 거래소, 자산 획득용 미니게임, 그리고 집으로 바로 이동할 수 있다구.",
-        "responses": {
-          "next": 27
-        }
-      },
-      {
-        "id": 27,
-        "type": "action",
-        "content": "MENU_LAST",
-        "responses": {
-          "next": 28
-        }
-      },
-      {
-        "id": 28,
-        "type": "script",
-        "content": "마지막 버튼의 숫자는 현재 턴을 나타내.\n 버튼을 눌러도 별다른 효과는 없다구~!",
-        "responses": {
-          "next": 0
-        }
-      }
-    ]
-  }
+[{
+  "scriptId": 0,
+  "category": "tutorial",
+  "type": "action",
+  "content": "END",
+  "responses": []
+},
+{
+  "scriptId": 1,
+  "category": "tutorial",
+  "type": "script",
+  "content": "안녕? 주주시티에 온 걸 환영해.",
+  "responses": [
+    {
+      "nextScript": 2,
+      "selection": null
+    }
+  ]
+},
+{
+  "scriptId": 2,
+  "category": "tutorial",
+  "type": "script",
+  "content": "난 주주시티 안내를 도와줄 뭉뭉이야.",
+  "responses": [
+    {
+      "nextScript": 3,
+      "selection": null
+    }
+  ]
+},
+{
+  "scriptId": 3,
+  "category": "tutorial",
+  "type": "script",
+  "content": "너는 이름이 뭐야?",
+  "responses": [
+    {
+      "nextScript": 4,
+      "selection": "이름 알려주기"
+    }
+  ]
+},
+{
+  "scriptId": 4,
+  "category": "tutorial",
+  "type": "action",
+  "content": "INPUT_NAME",
+  "responses": [
+    {
+      "nextScript": 5,
+      "selection": null
+    }
+  ]
+},
+{
+  "scriptId": 5,
+  "category": "tutorial",
+  "type": "script",
+  "content": "${name}, 반가워!",
+  "responses": [
+    {
+      "nextScript": 6,
+      "selection": null
+    }
+  ]
+},
+{
+  "scriptId": 6,
+  "category": "tutorial",
+  "type": "script",
+  "content": "우리 도시는 새로 입주한 투자민에게 100만원의 지원금을 지급해줘.",
+  "responses": [
+    {
+      "nextScript": 7,
+      "selection": null
+    }
+  ]
+},
+{
+  "scriptId": 7,
+  "category": "tutorial",
+  "type": "script",
+  "content": "그럼 이제 네가 지낼 방으로 데려다줄게.",
+  "responses": [
+    {
+      "nextScript": 8,
+      "selection": "좋아!"
+    }
+  ]
+},
+{
+  "scriptId": 8,
+  "category": "tutorial",
+  "type": "script",
+  "content": "여긴 네가 지낼 방이야. 어때?",
+  "responses": [
+    {
+      "nextScript": 9,
+      "selection": "예쁘다!"
+    },
+    {
+      "nextScript": 10,
+      "selection": "별로야.."
+    }
+  ]
+},
+{
+  "scriptId": 9,
+  "category": "tutorial",
+  "type": "script",
+  "content": "${name}, 네 방이라서 특별히 신경 썼지.\n 그럼 같이 방을 둘러볼까?",
+  "responses": [
+    {
+      "nextScript": 11,
+      "selection": "좋아!"
+    }
+  ]
+},
+{
+  "scriptId": 10,
+  "category": "tutorial",
+  "type": "script",
+  "content": "에구, 특별히 신경 쓴다고 썼는데, 그래도 지내는 데에 불편한 점은 없을거야!\n 그럼 같이 방을 둘러볼까?",
+  "responses": [
+    {
+      "nextScript": 11,
+      "selection": "그래!"
+    }
+  ]
+},
+{
+  "scriptId": 11,
+  "category": "tutorial",
+  "type": "action",
+  "content": "ROOM_GUIDE",
+  "responses": [
+    {
+      "nextScript": 12,
+      "selection": "BED"
+    },
+    {
+      "nextScript": 15,
+      "selection": "NOTEBOOK"
+    },
+    {
+      "nextScript": 19,
+      "selection": "All"
+    }
+  ]
+},
+{
+  "scriptId": 12,
+  "category": "tutorial",
+  "type": "script",
+  "content": "**침대**를 누르면 잠을 잘 수 있어.",
+  "responses": [
+    {
+      "nextScript": 13,
+      "selection": null
+    }
+  ]
+},
+{
+  "scriptId": 13,
+  "category": "tutorial",
+  "type": "script",
+  "content": "오늘은 이 도시에 온 지 0일째 되는 날.\n 잠들고 나면 하루가 지나서 1일이 더해질거야.",
+  "responses": [
+    {
+      "nextScript": 14,
+      "selection": "응. 내일이 되면?"
+    }
+  ]
+},
+{
+  "scriptId": 14,
+  "category": "tutorial",
+  "type": "script",
+  "content": "내일부터는 일을 하거나,\n 주식에 투자하거나,\n 대출을 받을 수 있어.",
+  "responses": [
+    {
+      "nextScript": 11,
+      "selection": "좋아. 알겠어!"
+    }
+  ]
+},
+{
+  "scriptId": 15,
+  "category": "tutorial",
+  "type": "script",
+  "content": "**노트북**을 누르면 내 자산 정보와 거래 내역을 확인할 수 있는 앱들이 있을거야.",
+  "responses": [
+    {
+      "nextScript": 16,
+      "selection": null
+    }
+  ]
+},
+{
+  "scriptId": 16,
+  "category": "tutorial",
+  "type": "action",
+  "content": "NOTEBOOK_DETAIL",
+  "responses": [
+    {
+      "nextScript": 17,
+      "selection": null
+    }
+  ]
+},
+{
+  "scriptId": 17,
+  "category": "tutorial",
+  "type": "script",
+  "content": "각 앱을 눌러서 어떤 기능이 있는지 확인해봐.",
+  "responses": [
+    {
+      "nextScript": 18,
+      "selection": null
+    }
+  ]
+},
+{
+  "scriptId": 18,
+  "category": "tutorial",
+  "type": "action",
+  "content": "NOTEBOOK_FUNCTION",
+  "responses": [
+    {
+      "nextScript": 11,
+      "selection": null
+    }
+  ]
+},
+{
+  "scriptId": 19,
+  "category": "tutorial",
+  "type": "action",
+  "content": "MENU_BAR",
+  "responses": [
+    {
+      "nextScript": 20,
+      "selection": null
+    }
+  ]
+},
+{
+  "scriptId": 20,
+  "category": "tutorial",
+  "type": "script",
+  "content": "이번엔 메뉴바를 소개해줄게.",
+  "responses": [
+    {
+      "nextScript": 21,
+      "selection": null
+    }
+  ]
+},
+{
+  "scriptId": 21,
+  "category": "tutorial",
+  "type": "action",
+  "content": "MENU_FIRST",
+  "responses": [
+    {
+      "nextScript": 22,
+      "selection": null
+    }
+  ]
+},
+{
+  "scriptId": 22,
+  "category": "tutorial",
+  "type": "script",
+  "content": "가장 왼쪽 버튼은 메뉴 버튼이야.\n 버튼을 누르면 ~~~~ 할 수 있는 아이콘을 볼 수 있을거야.",
+  "responses": [
+    {
+      "nextScript": 23,
+      "selection": null
+    }
+  ]
+},
+{
+  "scriptId": 23,
+  "category": "tutorial",
+  "type": "action",
+  "content": "MENU_SECOND",
+  "responses": [
+    {
+      "nextScript": 24,
+      "selection": null
+    }
+  ]
+},
+{
+  "scriptId": 24,
+  "category": "tutorial",
+  "type": "script",
+  "content": "두 번째는 지갑 버튼이야.\n오늘, 그러니까 **이번 턴에 거래한 돈**과\n**다음 턴에 계좌에서 빠져나갈 돈**을 조회할 수 있어.",
+  "responses": [
+    {
+      "nextScript": 25,
+      "selection": null
+    }
+  ]
+},
+{
+  "scriptId": 25,
+  "category": "tutorial",
+  "type": "action",
+  "content": "MENU_THIRD",
+  "responses": [
+    {
+      "nextScript": 26,
+      "selection": null
+    }
+  ]
+},
+{
+  "scriptId": 26,
+  "category": "tutorial",
+  "type": "script",
+  "content": "지도 버튼을 누르면 주주시티에서 이용할 수 있는 건물을 한 눈에 볼 수 있어.\n 은행, 주식 거래소, 자산 획득용 미니게임, 그리고 집으로 바로 이동할 수 있다구.",
+  "responses": [
+    {
+      "nextScript": 27,
+      "selection": null
+    }
+  ]
+},
+{
+  "scriptId": 27,
+  "category": "tutorial",
+  "type": "action",
+  "content": "MENU_LAST",
+  "responses": [
+    {
+      "nextScript": 28,
+      "selection": null
+    }
+  ]
+},
+{
+  "scriptId": 28,
+  "category": "tutorial",
+  "type": "script",
+  "content": "마지막 버튼의 숫자는 현재 턴을 나타내.\n 버튼을 눌러도 별다른 효과는 없다구~!",
+  "responses": [
+    {
+      "nextScript": 29,
+      "selection": null
+    }
+  ]
+},
+{
+  "scriptId": 29,
+  "category": "tutorial",
+  "type": "script",
+  "content": "어때? 재밌을 것 같아?",
+  "responses": [
+    {
+      "nextScript": 30,
+      "selection": "응!"
+    }
+  ]
+},
+{
+  "scriptId": 30,
+  "category": "tutorial",
+  "type": "script",
+  "content": "이제 주주시티의 일원이 될 준비가 된 것 같네.\n그럼 투자를 시작하러 가보자!",
+  "responses": [
+    {
+      "nextScript": 0,
+      "selection": null
+    }
+  ]
+}
 ]
