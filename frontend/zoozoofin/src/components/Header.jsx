@@ -54,9 +54,9 @@ const Header = () => {
                 <Link to="/jjhoney">지현 작업실</Link>
             </WorkingAreas>
             <WorkingAreas>
-                각 화면 임시 링크
                 <Link to="/start">시작화면</Link>
                 <Link to="/tutorial">튜토리얼</Link>
+                <Link to="/createanimal">캐릭터생성</Link>
                 <Link to="/myroom">내 방</Link>
                 <Link to="/laptop">노트북</Link>
                 <Link to="/bank">은행</Link>

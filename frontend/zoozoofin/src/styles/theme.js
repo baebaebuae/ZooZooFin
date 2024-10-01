@@ -9,6 +9,7 @@ export const theme = {
         background: '#EBF0F4',
         gray: '#6C7377',
         yellow: '#ffd84e',
+        orange: '#f7954f',
         warn: '#FF3E3E',
         inactive: '#CED1D3',
         bubble: '#EBF4F0',
