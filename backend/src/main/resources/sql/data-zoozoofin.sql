@@ -48,3 +48,11 @@ VALUES (1, '2024-09-26',
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
        (5, '2024-09-26', 'KOSPI 200과 같이 특정 지수나 특정 자산의 가격 움직임과 수익률이 연동하도록 설계된 펀드는 무엇일까?', 'ETF', 'short',
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+ insert into chart (stock_id, turn, rate, price, high_price, low_price, start_price, end_price, created_date, modified_date)
+     values
+     (1, -25, 0, 78100, 79800, 76400, 79400, 78300, now(), now()),
+     (1, -24, 0.32, 78350, 79600, 77100, 78100, 77300, now(), now()),
+     (1, -23, -2.75, 76250, 77800, 74700, 77600, 75600, now(), now()),
+     (1, -22, -3.74, 73500, 75800, 71200, 75400, 73300, now(), now()),
+     (1, -21, -0.81, 74100, 74900, 73300, 74900, 74000, now(), now());
