@@ -48,7 +48,7 @@ public class HomeServiceImpl implements HomeService{
         long totalAssets = 0;
 
         // 보유 금액
-        totalAssets += animal.getAnimalAssets();
+        totalAssets += animal.getAssets();
 
         // 총 예금
         totalAssets += getMyTotalDeposit(animal);

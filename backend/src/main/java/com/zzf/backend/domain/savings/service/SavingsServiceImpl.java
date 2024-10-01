@@ -4,9 +4,6 @@ import com.zzf.backend.domain.home.entity.NextTurnRecord;
 import com.zzf.backend.domain.home.entity.TurnRecord;
 import com.zzf.backend.domain.home.repository.NextTurnRecordRepository;
 import com.zzf.backend.domain.home.repository.TurnRecordRepository;
-import com.zzf.backend.domain.home.repository.WarningRecordRepository;
-import com.zzf.backend.domain.member.entity.Member;
-import com.zzf.backend.domain.member.repository.MemberRepository;
 import com.zzf.backend.domain.savings.dto.MySavingsResponse;
 import com.zzf.backend.domain.savings.dto.SavingsRequest;
 import com.zzf.backend.domain.savings.dto.SavingsTypeResponse;
@@ -68,7 +65,7 @@ public class SavingsServiceImpl implements SavingsService{
         SavingsType savingsType = savingsTypeRepository.findById(savingsRequest.getTypeId()).orElseThrow(() -> new CustomException(SAVINGS_TYPE_NOT_FOUND_EXCEPTION));
 
         // 현금 부족
-        if (animal.getAnimalAssets() < savingsRequest.getMoney()){
+        if (animal.getAssets() < savingsRequest.getMoney()){
             throw new CustomException(CASH_SHORTAGE_EXCEPTION);
         }
 
@@ -77,8 +74,8 @@ public class SavingsServiceImpl implements SavingsService{
                 .savingsPayment(savingsRequest.getMoney())
                 .savingsAmount(savingsRequest.getMoney())
                 .savingsInterest(0L)
-                .savingsStartTurn(animal.getAnimalTurn())
-                .savingsEndTurn(animal.getAnimalTurn() + savingsType.getSavingsPeriod())
+                .savingsStartTurn(animal.getTurn())
+                .savingsEndTurn(animal.getTurn() + savingsType.getSavingsPeriod())
                 .savingsWarning(false)
                 .savingsIsEnd(false)
                 .animal(animal)
@@ -91,11 +88,11 @@ public class SavingsServiceImpl implements SavingsService{
         animal.decreaseAnimalAssets(savingsRequest.getMoney());
 
         // 턴 기록에 추가
-        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getAnimalTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
+        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
         turnRecord.setSavingsMake(turnRecord.getSavingsMake() - savingsRequest.getMoney());
 
         // 다음 턴 기록에도 추가
-        NextTurnRecord nextTurnRecord = nextTurnRecordRepository.findByAnimalAndNextTurnRecordTurn(animal, animal.getAnimalTurn() + 1).orElseThrow(() -> new CustomException(NEXT_TURN_RECORD_NOT_FOUND));
+        NextTurnRecord nextTurnRecord = nextTurnRecordRepository.findByAnimalAndNextTurnRecordTurn(animal, animal.getTurn() + 1).orElseThrow(() -> new CustomException(NEXT_TURN_RECORD_NOT_FOUND));
         nextTurnRecord.setNextSavingsRepayment(nextTurnRecord.getNextSavingsRepayment() - savingsRequest.getMoney());
     }
 
@@ -127,7 +124,7 @@ public class SavingsServiceImpl implements SavingsService{
                     .payment(savings.getSavingsPayment())
                     .finalReturn(finalReturn) // 만기 시 금액
                     .deleteReturn(savings.getSavingsAmount() + savings.getSavingsAmount() / 200) // 해지 시 금액
-                    .restTurn(savings.getSavingsEndTurn() - animal.getAnimalTurn()) // (마감 턴) - (캐릭터 현재 턴)
+                    .restTurn(savings.getSavingsEndTurn() - animal.getTurn()) // (마감 턴) - (캐릭터 현재 턴)
                     .endTurn(savings.getSavingsEndTurn())
                     .warning(savings.getSavingsWarning())
                     .savingsImgUrl(savingsType.getSavingsImgUrl())
@@ -148,7 +145,7 @@ public class SavingsServiceImpl implements SavingsService{
         Savings savings = savingsRepository.findById(savingsId).orElseThrow(() -> new CustomException(SAVINGS_NOT_FOUND_EXCEPTION));
 
         // 당일 취소 불가능
-        if (savings.getSavingsStartTurn().equals(animal.getAnimalTurn())){
+        if (savings.getSavingsStartTurn().equals(animal.getTurn())){
             throw new CustomException(SAME_DAY_CANCELLATION_NOT_ALLOWED);
         }
 
@@ -156,12 +153,12 @@ public class SavingsServiceImpl implements SavingsService{
         animal.increaseAnimalAssets( savings.getSavingsAmount() + savings.getSavingsAmount() / 200);
 
         // 턴 기록에 추가
-        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getAnimalTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
+        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
         turnRecord.setSavingsFinish(turnRecord.getSavingsFinish() + savings.getSavingsAmount() + savings.getSavingsAmount() / 200);
 
-        if (animal.getAnimalTurn() + 1 != savings.getSavingsEndTurn()){
+        if (animal.getTurn() + 1 != savings.getSavingsEndTurn()){
             // 다음 턴이 만기가 아닌 경우, 다음 턴 기록에서 repayment 빼기
-            NextTurnRecord nextTurnRecord = nextTurnRecordRepository.findByAnimalAndNextTurnRecordTurn(animal, animal.getAnimalTurn() + 1).orElseThrow(() -> new CustomException(NEXT_TURN_RECORD_NOT_FOUND));
+            NextTurnRecord nextTurnRecord = nextTurnRecordRepository.findByAnimalAndNextTurnRecordTurn(animal, animal.getTurn() + 1).orElseThrow(() -> new CustomException(NEXT_TURN_RECORD_NOT_FOUND));
             nextTurnRecord.setNextSavingsRepayment(nextTurnRecord.getNextSavingsRepayment() + savings.getSavingsPayment());
         }
     }

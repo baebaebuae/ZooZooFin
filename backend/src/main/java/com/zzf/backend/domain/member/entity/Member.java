@@ -22,11 +22,23 @@ public class Member extends BaseEntity {
     private String kakaoMemberId;
 
     @NotNull
-    @Column(name = "member_gold_bar")
-    private Long memberGoldBar;
+    @Column(name = "gold_bar")
+    private Long goldBar;
 
     @NotNull
-    @Column(name = "member_is_solve_quiz")
-    private Boolean memberIsSolveQuiz;
+    @Column(name = "is_solved_quiz")
+    private Boolean isSolvedQuiz;
+
+    @NotNull
+    @Column(name = "bank_count")
+    private Long bankCount;
+
+    @NotNull
+    @Column(name = "loan_count")
+    private Long loanCount;
+
+    @NotNull
+    @Column(name = "stock_count")
+    private Long stockCount;
 
 }

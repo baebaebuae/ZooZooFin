@@ -111,8 +111,11 @@ public class OAuthServiceImpl implements OAuthService {
                             Member newMember = Member.builder()
                                     .memberId(memberId)
                                     .kakaoMemberId(kakaoMemberId)
-                                    .memberGoldBar(0L)
-                                    .memberIsSolveQuiz(false)
+                                    .goldBar(0L)
+                                    .isSolvedQuiz(false)
+                                    .bankCount(0L)
+                                    .loanCount(0L)
+                                    .stockCount(0L)
                                     .build();
                             memberRepository.save(newMember);
                             return newMember;

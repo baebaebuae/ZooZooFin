@@ -49,7 +49,7 @@ public class StockServiceImpl implements StockService {
                     Stock stock = stockRepository.findById(holdings.getStock().getStockId())
                             .orElseThrow(() -> new CustomException(STOCK_NOT_FOUND_EXCEPTION));
 
-                    Chart chart = chartRepository.findByStockAndTurn(stock, animal.getAnimalTurn())
+                    Chart chart = chartRepository.findByStockAndTurn(stock, animal.getTurn())
                             .orElseThrow(() -> new CustomException(CHART_NOT_FOUND_EXCEPTION));
 
                     return holdings.getStockCount() * chart.getPrice();
@@ -68,7 +68,7 @@ public class StockServiceImpl implements StockService {
                 .totalProfit(totalProfit)
                 .holdingsList(stockHoldings.stream()
                         .map(holdings -> {
-                            Chart chart = chartRepository.findByStockAndTurn(holdings.getStock(), animal.getAnimalTurn())
+                            Chart chart = chartRepository.findByStockAndTurn(holdings.getStock(), animal.getTurn())
                                     .orElseThrow(() -> new CustomException(CHART_NOT_FOUND_EXCEPTION));
 
                             double stockRate = getStockRate(holdings.getStockAveragePrice(), chart.getPrice());
@@ -107,7 +107,7 @@ public class StockServiceImpl implements StockService {
                                 .stockName(stock.getStockName())
                                 .stockIntro(stock.getStockInfo())
                                 .stockImage(stock.getStockImg())
-                                .rate(chartRepository.findByStockAndTurn(stock, animal.getAnimalTurn())
+                                .rate(chartRepository.findByStockAndTurn(stock, animal.getTurn())
                                         .orElseThrow(() -> new CustomException(CHART_NOT_FOUND_EXCEPTION))
                                         .getRate())
                                 .build())
@@ -123,12 +123,12 @@ public class StockServiceImpl implements StockService {
         Stock stock = stockRepository.findById(stockId)
                 .orElseThrow(() -> new CustomException(STOCK_NOT_FOUND_EXCEPTION));
 
-        List<Chart> chartList = chartRepository.findAllByStockAndTurnLessThanEqual(stock, animal.getAnimalTurn());
+        List<Chart> chartList = chartRepository.findAllByStockAndTurnLessThanEqual(stock, animal.getTurn());
         if (chartList.isEmpty()) {
             throw new CustomException(CHART_NOT_FOUND_EXCEPTION);
         }
 
-        List<News> newsList = newsRepository.findAllByStockAndTurn(stock, animal.getAnimalTurn());
+        List<News> newsList = newsRepository.findAllByStockAndTurn(stock, animal.getTurn());
 
         return StockInfoResponse.builder()
                 .stockName(stock.getStockName())
@@ -149,12 +149,12 @@ public class StockServiceImpl implements StockService {
         Stock stock = stockRepository.findById(stockId)
                 .orElseThrow(() -> new CustomException(STOCK_NOT_FOUND_EXCEPTION));
 
-        List<Chart> chartList = chartRepository.findAllByStockAndTurnLessThanEqual(stock, animal.getAnimalTurn());
+        List<Chart> chartList = chartRepository.findAllByStockAndTurnLessThanEqual(stock, animal.getTurn());
         if (chartList.isEmpty()) {
             throw new CustomException(CHART_NOT_FOUND_EXCEPTION);
         }
 
-        Long period = animal.getAnimalTurn() <= 25 ? 1L : 2L;
+        Long period = animal.getTurn() <= 25 ? 1L : 2L;
 
         FinancialStatements fs = financialRepository.findByStockAndPeriod(stock, period)
                 .orElseThrow(() -> new CustomException(FINANCIAL_STATEMENTS_NOT_FOUND));
@@ -181,23 +181,23 @@ public class StockServiceImpl implements StockService {
         Animal animal = animalRepository.findById(animalId)
                 .orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
-        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getAnimalTurn())
+        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getTurn())
                 .orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
 
         Stock stock = stockRepository.findById(buyStockRequest.getStockId())
                 .orElseThrow(() -> new CustomException(STOCK_NOT_FOUND_EXCEPTION));
 
-        Chart chart = chartRepository.findByStockAndTurn(stock, animal.getAnimalTurn())
+        Chart chart = chartRepository.findByStockAndTurn(stock, animal.getTurn())
                 .orElseThrow(() -> new CustomException(CHART_NOT_FOUND_EXCEPTION));
 
         Long cost = chart.getPrice() * buyStockRequest.getCount();
 
-        if (animal.getAnimalAssets() < cost) {
+        if (animal.getAssets() < cost) {
             throw new CustomException(LACK_ASSETS_EXCEPTION);
         }
 
 
-        animal.setAnimalAssets(animal.getAnimalAssets() - cost);
+        animal.setAssets(animal.getAssets() - cost);
 
         turnRecord.setStockBuy(cost);
 
@@ -233,7 +233,7 @@ public class StockServiceImpl implements StockService {
                 .animal(animal)
                 .tradeCount(buyStockRequest.getCount())
                 .isBuy(true)
-                .turn(animal.getAnimalTurn())
+                .turn(animal.getTurn())
                 .build());
     }
 
@@ -242,13 +242,13 @@ public class StockServiceImpl implements StockService {
         Animal animal = animalRepository.findById(animalId)
                 .orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
-        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getAnimalTurn())
+        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getTurn())
                 .orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
 
         Stock stock = stockRepository.findById(sellStockRequest.getStockId())
                 .orElseThrow(() -> new CustomException(STOCK_NOT_FOUND_EXCEPTION));
 
-        Chart chart = chartRepository.findByStockAndTurn(stock, animal.getAnimalTurn())
+        Chart chart = chartRepository.findByStockAndTurn(stock, animal.getTurn())
                 .orElseThrow(() -> new CustomException(CHART_NOT_FOUND_EXCEPTION));
 
         StockHoldings stockHoldings = stockHoldingsRepository.findByStockAndAnimalAndStockIsSoldFalse(stock, animal)
@@ -261,7 +261,7 @@ public class StockServiceImpl implements StockService {
 
         Long cost = chart.getPrice() * sellStockRequest.getCount();
 
-        animal.setAnimalAssets(animal.getAnimalAssets() + cost);
+        animal.setAssets(animal.getAssets() + cost);
 
         turnRecord.setStockSell(cost);
 
@@ -283,7 +283,7 @@ public class StockServiceImpl implements StockService {
                 .animal(animal)
                 .tradeCount(sellStockRequest.getCount())
                 .isBuy(false)
-                .turn(animal.getAnimalTurn())
+                .turn(animal.getTurn())
                 .build());
     }
 

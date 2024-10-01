@@ -50,8 +50,8 @@ public class CapitalServiceImpl implements CapitalService{
         Capital capital = Capital.builder()
                 .capitalAmount(capitalRequest.getCapitalAmounts())
                 .capitalRemain(capitalRequest.getCapitalAmounts())
-                .capitalStartTurn(animal.getAnimalTurn())
-                .capitalEndTurn(animal.getAnimalTurn() + capitalRequest.getCapitalPeriod())
+                .capitalStartTurn(animal.getTurn())
+                .capitalEndTurn(animal.getTurn() + capitalRequest.getCapitalPeriod())
                 .capitalIsEnd(false)
                 .build();
 
@@ -61,14 +61,14 @@ public class CapitalServiceImpl implements CapitalService{
         animal.increaseAnimalAssets(capitalRequest.getCapitalAmounts() * 9 / 10);
 
         // 캐릭터 신용도 3단계 감소
-        if (animal.getAnimalCredit() < 8){
-            animal.changeAnimalCredit(animal.getAnimalCredit() + 3);
+        if (animal.getCredit() < 8){
+            animal.changeAnimalCredit(animal.getCredit() + 3);
         }else{
             animal.changeAnimalCredit(10L);
         }
 
         // 턴 기록 추가
-        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getAnimalTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
+        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
         turnRecord.setCapitalMake(turnRecord.getCapitalMake() + capitalRequest.getCapitalAmounts() * 9 / 10);
     }
 
@@ -86,7 +86,7 @@ public class CapitalServiceImpl implements CapitalService{
 
             capitalResponse.setCapitalOrigin(capital.getCapitalAmount());
             capitalResponse.setCapitalRestMoney(capital.getCapitalRemain());
-            capitalResponse.setCapitalRestTurn(capital.getCapitalEndTurn() - animal.getAnimalTurn());
+            capitalResponse.setCapitalRestTurn(capital.getCapitalEndTurn() - animal.getTurn());
             capitalResponse.setCapitalEndTurn(capital.getCapitalEndTurn());
         }
 
@@ -103,7 +103,7 @@ public class CapitalServiceImpl implements CapitalService{
 
         for (Capital capital : capitalList){
 
-            if (animal.getAnimalAssets() < money){
+            if (animal.getAssets() < money){
                 // 현금 없는 경우
                 throw new CustomException(CASH_SHORTAGE_EXCEPTION);
             }
@@ -118,10 +118,10 @@ public class CapitalServiceImpl implements CapitalService{
 
             animal.decreaseAnimalAssets(money);
 
-            TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getAnimalTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
+            TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
             turnRecord.setCapitalRepay(0L);
 
-            NextTurnRecord nextTurnRecord = nextTurnRecordRepository.findByAnimalAndNextTurnRecordTurn(animal, animal.getAnimalTurn() + 1).orElseThrow(() -> new CustomException(NEXT_TURN_RECORD_NOT_FOUND));
+            NextTurnRecord nextTurnRecord = nextTurnRecordRepository.findByAnimalAndNextTurnRecordTurn(animal, animal.getTurn() + 1).orElseThrow(() -> new CustomException(NEXT_TURN_RECORD_NOT_FOUND));
             nextTurnRecord.setNextCapitalRepayment(0L);
         }
     }

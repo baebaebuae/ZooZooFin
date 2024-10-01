@@ -76,14 +76,14 @@ public class AnimalServiceImpl implements AnimalService {
         Animal animal = animalRepository.save(Animal.builder()
                 .member(member)
                 .animalType(animalType)
-                .animalName(animalCreateRequest.getAnimalName())
-                .animalTurn(1L)
-                .animalAssets(0L)
-                .animalCredit(0L)
-                .animalHierarchy(HierarchyStatus.PART_TIME.getHierarchyName())
-                .animalIsWork(false)
-                .animalIsEnd(false)
-                .animalQuestCleared(false)
+                .name(animalCreateRequest.getAnimalName())
+                .turn(1L)
+                .assets(0L)
+                .credit(0L)
+                .hierarchy(HierarchyStatus.PART_TIME.getHierarchyName())
+                .isWorked(false)
+                .isEnd(false)
+                .questCleared(false)
                 .build());
 
         // 턴 기록
@@ -141,9 +141,9 @@ public class AnimalServiceImpl implements AnimalService {
                 .orElseThrow(() -> new CustomException(PORTFOLIO_NOT_FOUND_EXCEPTION));
 
         return AnimalPortfolioResponse.builder()
-                .animalName(animal.getAnimalName())
-                .animalAsset(animal.getAnimalAssets())
-                .animalCredit(animal.getAnimalCredit())
+                .animalName(animal.getName())
+                .animalAsset(animal.getAssets())
+                .animalCredit(animal.getCredit())
                 .portfolio(AnimalPortfolioResponse.Portfolio.builder()
                         .depositPercent(portfolio.getPortfolioDepositPercent())
                         .savingsPercent(portfolio.getPortfolioSavingsPercent())
@@ -161,7 +161,7 @@ public class AnimalServiceImpl implements AnimalService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND_EXCEPTION));
 
-        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member)
+        Animal animal = animalRepository.findByMemberAndIsEndFalse(member)
                 .orElseThrow(() -> new CustomException(ANIMAL_ALL_END_EXCEPTION));
 
         List<Deposit> deposit = depositRepository.findAllByAnimalAndDepositIsEndFalse(animal);
@@ -185,21 +185,21 @@ public class AnimalServiceImpl implements AnimalService {
                 .reduce(0L, Long::sum);
 
         long allTotal = 0L;
-        allTotal += animal.getAnimalAssets();
+        allTotal += animal.getAssets();
         allTotal += depositTotal;
         allTotal += savingsTotal;
         allTotal += loanTotal;
         allTotal += capitalTotal;
 
         return AnimalInfoResponse.builder()
-                .animalName(animal.getAnimalName())
+                .animalName(animal.getName())
                 .animalAbility(animal.getAnimalType().getAnimalAbility())
-                .animalHierarchy(animal.getAnimalHierarchy())
-                .animalCredit(animal.getAnimalCredit())
-                .isSolveQuizToday(member.getMemberIsSolveQuiz())
-                .isWorkToday(animal.getAnimalIsWork())
+                .animalHierarchy(animal.getHierarchy())
+                .animalCredit(animal.getCredit())
+                .isSolvedQuizToday(member.getIsSolvedQuiz())
+                .isWorkToday(animal.getIsWorked())
                 .totalAmount(allTotal)
-                .totalAssets(animal.getAnimalAssets())
+                .totalAssets(animal.getAssets())
                 .totalDeposit(depositTotal)
                 .totalSavings(savingsTotal)
                 .totalStock(savingsTotal)
