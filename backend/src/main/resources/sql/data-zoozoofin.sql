@@ -27,6 +27,15 @@ values (5, 4, '주주적금', 'https://ssafy.com'),
        (10, 12, '너굴적금', 'https://ssafy.com'),
        (25, 50, '곰곰적금', 'https://ssafy.com');
 
+insert into stock(stock_type, stock_name, stock_code, stock_info, stock_description, stock_img, stock_field,
+                  created_date, modified_date)
+values ('국내', '개굴전자', '005930', '개굴전자는 개굴 반도체 개굴', '개굴전자 설명이다 개굴 개굴개굴 반도체 너무 조타 개굴', 'img.url', '제조', now(), now());
+
+insert into financial_statements(stock_id, period, revenue, market_cap, divided_yield, pbr, per, roe, psr,
+                                 created_date, modified_date)
+values (1, 1, 429978, 954551, 1.18, 1.45, 9.93, 16.84, 2.22, now(), now()),
+       (1, 2, 446216, 544383, 1.60, 0.82, 24.49, 3.55, 1.22, now(), now());
+
 insert into quiz (QUIZ_ID, QUIZ_DATE, QUIZ_QUESTION, QUIZ_ANSWER, QUIZ_TYPE, CREATED_DATE, MODIFIED_DATE)
 VALUES (1, '2024-09-26',
         'IPO(기업공개)란 개인이나 소수 주주로 구성되어 폐쇄성을 띠고 있는 기업이 그 주식을 법정절차와 방법에 따라 일반 대중에게 분산, 소유토록 하고 재무 내용을 공시하는 것이다.', 'X', 'ox',

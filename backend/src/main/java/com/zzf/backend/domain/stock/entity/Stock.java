@@ -44,22 +44,17 @@ public class Stock extends BaseEntity {
     private String stockImg;
 
     @NotNull
-    @Column(name = "stock_dividends")
-    private Long stockDividends;
-
-    @NotNull
     @Column(name = "stock_field")
     private String stockField;
 
     @Builder
-    public Stock(String stockType, String stockName, String stockCode, String stockInfo, String stockDescription, String stockImg, Long stockDividends, String stockField) {
+    public Stock(String stockType, String stockName, String stockCode, String stockInfo, String stockDescription, String stockImg, String stockField) {
         this.stockType = stockType;
         this.stockName = stockName;
         this.stockCode = stockCode;
         this.stockInfo = stockInfo;
         this.stockDescription = stockDescription;
         this.stockImg = stockImg;
-        this.stockDividends = stockDividends;
         this.stockField = stockField;
     }
 }
