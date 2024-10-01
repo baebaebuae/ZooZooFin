@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import CorrectSVG from '@assets/images/mission/complete.svg?react';
 
@@ -42,30 +42,25 @@ const ScrollableContent = styled.div`
   padding-right: 20px;
   margin-right: -20px;
 
-  /* 스크롤바 전체 */
   &::-webkit-scrollbar {
     width: 6px;
   }
 
-  /* 스크롤바 트랙 (배경) */
   &::-webkit-scrollbar-track {
     background: transparent;
     margin: 10px 0;
   }
 
-  /* 스크롤바 핸들 */
   &::-webkit-scrollbar-thumb {
     background-color: rgba(139, 69, 19, 0.3);
     border-radius: 3px;
     transition: background-color 0.2s;
   }
 
-  /* 스크롤바 핸들 호버 시 */
   &::-webkit-scrollbar-thumb:hover {
     background-color: rgba(139, 69, 19, 0.5);
   }
 
-  /* Firefox를 위한 스크롤바 스타일 */
   scrollbar-width: thin;
   scrollbar-color: rgba(139, 69, 19, 0.3) transparent;
 `;
@@ -105,6 +100,7 @@ const MissionItem = styled.li`
   align-items: center;
   justify-content: center;
   position: relative;
+  cursor: pointer; 
 `;
 
 const MissionText = styled.span`
@@ -132,64 +128,65 @@ const CloseButton = styled.button`
   color: #8B4513;
 `;
 
-const MissionDashboard = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  
+const MissionDashboard = ({ isOpen, onClose }) => {
   const missions = [
-    { text: '신용도 확인하기', completed: false },
-    { text: '퀴즈 풀기', completed: false },
-    { text: '주식 매수하기', completed: true },
-    { text: '주식 기업 정보 조사하기', completed: false },
-    { text: '예적금 상품 확인하기', completed: true },
-    { text: '주식 거래소 방문하기', completed: true },
-    { text: '은행 방문하기', completed: true },
-    { text: '은행 방문하기', completed: true },
-    { text: '은행 방문하기', completed: false },
-    { text: '은행 방문하기', completed: false },
+    { name: '은행 방문하기', completed: true, page: 'bank' },
+    { name: '퀴즈 풀기', completed: false, page: 'school' },
+    { name: '일하러가기', completed: false, page: 'work' },
+    { name: '주식 거래하기', completed: false, page: 'stock' },
+    { name: 'ETF 거래하기', completed: false, page: 'stock' },
+    { name: '대출거래소 방문하기', completed: true, page: 'loan' },
+    { name: '콩팥 캐피탈 방문하기', completed: false, page: 'lender' },
+    { name: '노트북 열어보기', completed: false, page: 'laptop' },
+    { name: '예적금 상품 확인하기', completed: false, page: 'bank' },
+    { name: '신용도 확인하기', completed: false, page: 'loan' }
   ];
 
   const incompleteMissions = missions.filter(mission => !mission.completed);
   const completedMissions = missions.filter(mission => mission.completed);
 
+  const handleMissionClick = (page) => {
+    window.location.href = `/${page}`; // 페이지 이동
+  };
+
+  if (!isOpen) return null;
+
   return (
     <>
       <GlobalStyle />
-      <button onClick={() => setIsModalOpen(true)}>미션</button>
-      {isModalOpen && (
-        <ModalOverlay onClick={() => setIsModalOpen(false)}>
-          <ModalContent onClick={(e) => e.stopPropagation()}>
-            <CloseButton onClick={() => setIsModalOpen(false)}>&times;</CloseButton>
-            <ScrollableContent>
-              <Title>미션</Title>
-              {incompleteMissions.length > 0 && (
-                <>
-                  <Subtitle>미션을 완료하고 골드를 받아보세요!</Subtitle>
-                  <MissionList>
-                    {incompleteMissions.map((mission, index) => (
-                      <MissionItem key={index}>
-                        <MissionText>{mission.text}</MissionText>
-                      </MissionItem>
-                    ))}
-                  </MissionList>
-                </>
-              )}
-              {completedMissions.length > 0 && (
-                <>
-                  <Subtitle>----------------- 완료한 미션 -----------------</Subtitle>
-                  <MissionList>
-                    {completedMissions.map((mission, index) => (
-                      <MissionItem key={index}>
-                        <CompletedIcon />
-                        <MissionText>{mission.text}</MissionText>
-                      </MissionItem>
-                    ))}
-                  </MissionList>
-                </>
-              )}
-            </ScrollableContent>
-          </ModalContent>
-        </ModalOverlay>
-      )}
+      <ModalOverlay onClick={onClose}>
+        <ModalContent onClick={(e) => e.stopPropagation()}>
+          <CloseButton onClick={onClose}>&times;</CloseButton>
+          <ScrollableContent>
+            <Title>미션</Title>
+            {incompleteMissions.length > 0 && (
+              <>
+                <Subtitle>미션을 완료하고 골드를 받아보세요!</Subtitle>
+                <MissionList>
+                  {incompleteMissions.map((mission, index) => (
+                    <MissionItem key={index} onClick={() => handleMissionClick(mission.page)}>
+                      <MissionText>{mission.name}</MissionText>
+                    </MissionItem>
+                  ))}
+                </MissionList>
+              </>
+            )}
+            {completedMissions.length > 0 && (
+              <>
+                <Subtitle>----------------- 완료한 미션 -----------------</Subtitle>
+                <MissionList>
+                  {completedMissions.map((mission, index) => (
+                    <MissionItem key={index} onClick={() => handleMissionClick(mission.page)}>
+                      <CompletedIcon />
+                      <MissionText>{mission.name}</MissionText>
+                    </MissionItem>
+                  ))}
+                </MissionList>
+              </>
+            )}
+          </ScrollableContent>
+        </ModalContent>
+      </ModalOverlay>
     </>
   );
 };
