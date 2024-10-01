@@ -15,6 +15,9 @@ import VolumeOffRoundedIcon from '@mui/icons-material/VolumeOffRounded';
 import VolumeUpRoundedIcon from '@mui/icons-material/VolumeUpRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded';
+import FlagRoundedIcon from '@mui/icons-material/FlagRounded';
+
+import MissionDashboard from '../../components/Mission';
 
 const HeaderButton = styled.div`
     display: flex;
@@ -69,12 +72,17 @@ export const HeaderButtons = ({ currentTurn }) => {
 export const HeaderHamburgerButton = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [isMusicOn, setIsMusicOn] = useState(true);
+    const [isMissionOpen, setIsMissionOpen] = useState(false);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
         setAnchorEl(null);
+    };
+    const handleMissionClick = () => {
+        setIsMissionOpen(true);
+        handleClose();
     };
 
     return (
@@ -98,6 +106,12 @@ export const HeaderHamburgerButton = () => {
                     </ListItemIcon>
                     캐릭터 히스토리
                 </MenuItem>
+                <MenuItem onClick={handleMissionClick}>
+                    <ListItemIcon>
+                        <FlagRoundedIcon />
+                    </ListItemIcon>
+                    Mission
+                </MenuItem>
                 <MenuItem onClick={() => setIsMusicOn(!isMusicOn)}>
                     <ListItemIcon>
                         {isMusicOn ? <VolumeUpRoundedIcon /> : <VolumeOffRoundedIcon />}
@@ -111,6 +125,10 @@ export const HeaderHamburgerButton = () => {
                     로그아웃
                 </MenuItem>
             </Menu>
+            <MissionDashboard 
+                isOpen={isMissionOpen} 
+                onClose={() => setIsMissionOpen(false)} 
+            />
         </>
     );
 };

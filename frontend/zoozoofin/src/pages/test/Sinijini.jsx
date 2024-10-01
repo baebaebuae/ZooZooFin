@@ -8,7 +8,7 @@ const Sinijini = () => {
   return (
     <>
       <h1>희진 작업실</h1>
-      <MissionDashboard/>
+      {/* <MissionDashboard/> */}
       <Hint/>
       {/* <CharacterInfo></CharacterInfo> */}
       {/* <TestPaper/> */}

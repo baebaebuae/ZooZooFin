@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import CorrectSVG from '@assets/images/mission/complete.svg?react';
 
@@ -128,9 +128,7 @@ const CloseButton = styled.button`
   color: #8B4513;
 `;
 
-const MissionDashboard = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  
+const MissionDashboard = ({ isOpen, onClose }) => {
   const missions = [
     { name: '은행 방문하기', completed: true, page: 'bank' },
     { name: '퀴즈 풀기', completed: false, page: 'school' },
@@ -151,45 +149,44 @@ const MissionDashboard = () => {
     window.location.href = `/${page}`; // 페이지 이동
   };
 
+  if (!isOpen) return null;
+
   return (
     <>
       <GlobalStyle />
-      <button onClick={() => setIsModalOpen(true)}>미션</button>
-      {isModalOpen && (
-        <ModalOverlay onClick={() => setIsModalOpen(false)}>
-          <ModalContent onClick={(e) => e.stopPropagation()}>
-            <CloseButton onClick={() => setIsModalOpen(false)}>&times;</CloseButton>
-            <ScrollableContent>
-              <Title>미션</Title>
-              {incompleteMissions.length > 0 && (
-                <>
-                  <Subtitle>미션을 완료하고 골드를 받아보세요!</Subtitle>
-                  <MissionList>
-                    {incompleteMissions.map((mission, index) => (
-                      <MissionItem key={index} onClick={() => handleMissionClick(mission.page)}>
-                        <MissionText>{mission.name}</MissionText>
-                      </MissionItem>
-                    ))}
-                  </MissionList>
-                </>
-              )}
-              {completedMissions.length > 0 && (
-                <>
-                  <Subtitle>----------------- 완료한 미션 -----------------</Subtitle>
-                  <MissionList>
-                    {completedMissions.map((mission, index) => (
-                      <MissionItem key={index} onClick={() => handleMissionClick(mission.page)}>
-                        <CompletedIcon />
-                        <MissionText>{mission.name}</MissionText>
-                      </MissionItem>
-                    ))}
-                  </MissionList>
-                </>
-              )}
-            </ScrollableContent>
-          </ModalContent>
-        </ModalOverlay>
-      )}
+      <ModalOverlay onClick={onClose}>
+        <ModalContent onClick={(e) => e.stopPropagation()}>
+          <CloseButton onClick={onClose}>&times;</CloseButton>
+          <ScrollableContent>
+            <Title>미션</Title>
+            {incompleteMissions.length > 0 && (
+              <>
+                <Subtitle>미션을 완료하고 골드를 받아보세요!</Subtitle>
+                <MissionList>
+                  {incompleteMissions.map((mission, index) => (
+                    <MissionItem key={index} onClick={() => handleMissionClick(mission.page)}>
+                      <MissionText>{mission.name}</MissionText>
+                    </MissionItem>
+                  ))}
+                </MissionList>
+              </>
+            )}
+            {completedMissions.length > 0 && (
+              <>
+                <Subtitle>----------------- 완료한 미션 -----------------</Subtitle>
+                <MissionList>
+                  {completedMissions.map((mission, index) => (
+                    <MissionItem key={index} onClick={() => handleMissionClick(mission.page)}>
+                      <CompletedIcon />
+                      <MissionText>{mission.name}</MissionText>
+                    </MissionItem>
+                  ))}
+                </MissionList>
+              </>
+            )}
+          </ScrollableContent>
+        </ModalContent>
+      </ModalOverlay>
     </>
   );
 };
