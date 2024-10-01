@@ -28,3 +28,8 @@ export const useStore = create((set) => ({
     },
     setScripts: (newScripts) => set({ scripts: newScripts }),
 }));
+
+export const useMusicStore = create((set) => ({
+    isMusicOn: false,
+    toggleMusic: () => set((state) => ({ isMusicOn: !state.isMusicOn })),
+}));
