@@ -29,75 +29,75 @@ public class Animal extends BaseEntity {
     private AnimalType animalType;
 
     @NotNull
-    @Column(name = "animal_name")
-    private String animalName;
+    @Column(name = "name")
+    private String name;
 
     @NotNull
-    @Column(name = "animal_turn")
-    private Long animalTurn;
+    @Column(name = "turn")
+    private Long turn;
 
     @NotNull
-    @Column(name = "animal_assets")
-    private Long animalAssets;
+    @Column(name = "assets")
+    private Long assets;
 
     @NotNull
-    @Column(name = "animal_credit")
-    private Long animalCredit;
+    @Column(name = "credit")
+    private Long credit;
 
     @NotNull
-    @Column(name = "animal_hierarchy")
-    private String animalHierarchy;
+    @Column(name = "hierarchy")
+    private String hierarchy;
 
     @NotNull
-    @Column(name = "animal_is_work")
-    private Boolean animalIsWork;
+    @Column(name = "is_worked")
+    private Boolean isWorked;
 
     @NotNull
-    @Column(name = "animal_is_end")
-    private Boolean animalIsEnd;
+    @Column(name = "is_end")
+    private Boolean isEnd;
 
     @NotNull
-    @Column(name = "animal_quest_cleared")
-    private Boolean animalQuestCleared;
+    @Column(name = "quest_cleared")
+    private Boolean questCleared;
 
     @Builder
-    public Animal(Member member, AnimalType animalType, String animalName, Long animalTurn, Long animalAssets, Long animalCredit, String animalHierarchy, Boolean animalIsWork, Boolean animalIsEnd, Boolean animalQuestCleared) {
+    public Animal(Member member, AnimalType animalType, String name, Long turn, Long assets, Long credit, String hierarchy, Boolean isWorked, Boolean isEnd, Boolean questCleared) {
         this.member = member;
         this.animalType = animalType;
-        this.animalName = animalName;
-        this.animalTurn = animalTurn;
-        this.animalAssets = animalAssets;
-        this.animalCredit = animalCredit;
-        this.animalHierarchy = animalHierarchy;
-        this.animalIsWork = animalIsWork;
-        this.animalIsEnd = animalIsEnd;
-        this.animalQuestCleared = animalQuestCleared;
+        this.name = name;
+        this.turn = turn;
+        this.assets = assets;
+        this.credit = credit;
+        this.hierarchy = hierarchy;
+        this.isWorked = isWorked;
+        this.isEnd = isEnd;
+        this.questCleared = questCleared;
     }
 
     public void changeAnimalAssets(Long money) {
-        this.animalAssets = money;
+        this.assets = money;
     }
 
     public void increaseAnimalAssets(Long money) {
-        this.animalAssets += money;
+        this.assets += money;
     }
 
     public void decreaseAnimalAssets(Long money) {
-        this.animalAssets -= money;
+        this.assets -= money;
     }
 
     public void changeAnimalCredit(Long credit) {
-        this.animalCredit = credit;
+        this.credit = credit;
     }
 
     public void changeAnimalHierarchy(String hierarchy) {
-        this.animalHierarchy = hierarchy;
+        this.hierarchy = hierarchy;
     }
 
     /**
      * <h4>1턴 증가</h4>
      */
     public void increaseAnimalTurn(){
-        this.animalTurn++;
+        this.turn++;
     }
 }

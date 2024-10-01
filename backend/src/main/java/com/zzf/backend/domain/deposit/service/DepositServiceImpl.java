@@ -2,8 +2,6 @@ package com.zzf.backend.domain.deposit.service;
 
 import com.zzf.backend.domain.home.entity.TurnRecord;
 import com.zzf.backend.domain.home.repository.TurnRecordRepository;
-import com.zzf.backend.domain.member.entity.Member;
-import com.zzf.backend.domain.member.repository.MemberRepository;
 import com.zzf.backend.domain.deposit.dto.DepositRequest;
 import com.zzf.backend.domain.deposit.dto.DepositTypeResponse;
 import com.zzf.backend.domain.deposit.dto.MyDepositResponse;
@@ -63,15 +61,15 @@ public class DepositServiceImpl implements DepositService {
         DepositType depositType = depositTypeRepository.findById(depositRequest.getTypeId()).orElseThrow(() -> new CustomException(DEPOSIT_TYPE_NOT_FOUND_EXCEPTION));
 
         // 현금 부족
-        if (animal.getAnimalAssets() < depositRequest.getMoney()) {
+        if (animal.getAssets() < depositRequest.getMoney()) {
             throw new CustomException(CASH_SHORTAGE_EXCEPTION);
         }
 
         // 예금 만들기
         Deposit deposit = Deposit.builder()
                 .depositAmount(depositRequest.getMoney())
-                .depositStartTurn(animal.getAnimalTurn()) // ex) 시작턴 3턴
-                .depositEndTurn(animal.getAnimalTurn() + depositType.getDepositPeriod()) // ex) 끝턴 3턴 + 10턴 = 13턴
+                .depositStartTurn(animal.getTurn()) // ex) 시작턴 3턴
+                .depositEndTurn(animal.getTurn() + depositType.getDepositPeriod()) // ex) 끝턴 3턴 + 10턴 = 13턴
                 .depositIsEnd(false)
                 .animal(animal)
                 .depositType(depositType)
@@ -83,7 +81,7 @@ public class DepositServiceImpl implements DepositService {
         animal.decreaseAnimalAssets(depositRequest.getMoney());
 
         // 턴 기록에 추가
-        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getAnimalTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
+        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
         turnRecord.setDepositMake(turnRecord.getDepositMake() - depositRequest.getMoney());
     }
 
@@ -112,7 +110,7 @@ public class DepositServiceImpl implements DepositService {
                     .rate(depositType.getDepositRate())
                     .finalReturn(finalReturn) // 만기 시 금액
                     .deleteReturn(deposit.getDepositAmount() + deposit.getDepositAmount() / 200) // 해지시 금액
-                    .restTurn(deposit.getDepositEndTurn() - animal.getAnimalTurn()) // (마감 턴) - (캐릭터 현재 턴)
+                    .restTurn(deposit.getDepositEndTurn() - animal.getTurn()) // (마감 턴) - (캐릭터 현재 턴)
                     .endTurn(deposit.getDepositEndTurn())
                     .depositImgUrl(depositType.getDepositImgUrl())
                     .build();
@@ -131,7 +129,7 @@ public class DepositServiceImpl implements DepositService {
         Deposit deposit = depositRepository.findById(depositId).orElseThrow(() -> new CustomException(DEPOSIT_NOT_FOUND_EXCEPTION));
 
         // 당일 취소 불가능
-        if (deposit.getDepositStartTurn().equals(animal.getAnimalTurn())) {
+        if (deposit.getDepositStartTurn().equals(animal.getTurn())) {
             throw new CustomException(SAME_DAY_CANCELLATION_NOT_ALLOWED);
         }
 
@@ -140,7 +138,7 @@ public class DepositServiceImpl implements DepositService {
         animal.increaseAnimalAssets(deposit.getDepositAmount() + deposit.getDepositAmount() / 200);
 
         // 턴 기록에 추가
-        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getAnimalTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
+        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
         turnRecord.setDepositFinish(turnRecord.getDepositFinish() + deposit.getDepositAmount() + deposit.getDepositAmount() / 200);
 
     }

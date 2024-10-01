@@ -11,5 +11,5 @@ import java.util.Optional;
 @Repository
 public interface AnimalRepository extends JpaRepository<Animal, Long> {
     List<Animal> findAllByMember(Member member);
-    Optional<Animal> findByMemberAndAnimalIsEndFalse(Member member);
+    Optional<Animal> findByMemberAndIsEndFalse(Member member);
 }

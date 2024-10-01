@@ -47,7 +47,7 @@ public class NextTurnServiceImpl implements NextTurnService {
     public void nextTurn(long animalId) {
         Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
-        if (animal.getAnimalTurn() >= 50) {
+        if (animal.getTurn() >= 50) {
             throw new CustomException(TURN_OVER_EXCEPTION);
         }
 
@@ -56,7 +56,7 @@ public class NextTurnServiceImpl implements NextTurnService {
 
         // 턴 기록
         TurnRecord turnRecord = TurnRecord.builder()
-                .turnRecordTurn(animal.getAnimalTurn())
+                .turnRecordTurn(animal.getTurn())
                 .dailyCharge(0L)
                 .loanMake(0L)
                 .loanRepay(0L)
@@ -74,7 +74,7 @@ public class NextTurnServiceImpl implements NextTurnService {
 
         // 고지서 기록
         WarningRecord warningRecord = WarningRecord.builder()
-                .warningRecordTurn(animal.getAnimalTurn())
+                .warningRecordTurn(animal.getTurn())
                 .warningSavingsCount(0L)
                 .warningLoanCount(0L)
                 .depositTotal(0L)
@@ -115,7 +115,7 @@ public class NextTurnServiceImpl implements NextTurnService {
         warningRecordRepository.save(warningRecord);
 
         NextTurnRecord nextTurnRecord = NextTurnRecord.builder()
-                .nextTurnRecordTurn(animal.getAnimalTurn() + 1)
+                .nextTurnRecordTurn(animal.getTurn() + 1)
                 .nextSavingsRepayment(0L)
                 .nextLoanRepayment(0L)
                 .nextCapitalRepayment(0L)
@@ -142,7 +142,7 @@ public class NextTurnServiceImpl implements NextTurnService {
     public TurnRecordResponse getTurnRecord(long animalId) {
         Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
-        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getAnimalTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
+        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
 
         TurnRecordResponse turnRecordResponse = TurnRecordResponse.builder()
                 .dailyCharge(turnRecord.getDailyCharge())
@@ -167,7 +167,7 @@ public class NextTurnServiceImpl implements NextTurnService {
     public WarningRecordResponse getWarningRecord(long animalId) {
         Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
-        WarningRecord warningRecord = warningRecordRepository.findByAnimalAndWarningRecordTurn(animal, animal.getAnimalTurn()).orElseThrow(() -> new CustomException(WARNING_RECORD_NOT_FOUND));
+        WarningRecord warningRecord = warningRecordRepository.findByAnimalAndWarningRecordTurn(animal, animal.getTurn()).orElseThrow(() -> new CustomException(WARNING_RECORD_NOT_FOUND));
 
         WarningRecordResponse warningRecordResponse = WarningRecordResponse.builder()
                 .warningSavingsCount(warningRecord.getWarningSavingsCount())
@@ -188,7 +188,7 @@ public class NextTurnServiceImpl implements NextTurnService {
     public NextTurnRecordResponse getNextTurnRecord(long animalId) {
         Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
-        NextTurnRecord nextTurnRecord = nextTurnRecordRepository.findByAnimalAndNextTurnRecordTurn(animal, animal.getAnimalTurn()).orElseThrow(() -> new CustomException(NEXT_TURN_RECORD_NOT_FOUND));
+        NextTurnRecord nextTurnRecord = nextTurnRecordRepository.findByAnimalAndNextTurnRecordTurn(animal, animal.getTurn()).orElseThrow(() -> new CustomException(NEXT_TURN_RECORD_NOT_FOUND));
 
         NextTurnRecordResponse nextTurnRecordResponse = NextTurnRecordResponse.builder()
                 .nextSavingsRepayment(nextTurnRecord.getNextSavingsRepayment())
@@ -211,7 +211,7 @@ public class NextTurnServiceImpl implements NextTurnService {
     @Transactional
     public long depositMature(Animal animal) {
         // 만기인 예금 모두 조회
-        List<Deposit> depositList = depositRepository.findAllByAnimalAndDepositEndTurn(animal, animal.getAnimalTurn());
+        List<Deposit> depositList = depositRepository.findAllByAnimalAndDepositEndTurn(animal, animal.getTurn());
         long total = 0;
         for (Deposit deposit : depositList) {
             deposit.changeDepositIsEnd(true);
@@ -226,8 +226,8 @@ public class NextTurnServiceImpl implements NextTurnService {
 
             // 예치금액 5천만원 이상이면 신용등급 1단계 증가
             if (deposit.getDepositAmount() >= 50000000) {
-                if (animal.getAnimalCredit() > 1) {
-                    animal.changeAnimalCredit(animal.getAnimalCredit() - 1);
+                if (animal.getCredit() > 1) {
+                    animal.changeAnimalCredit(animal.getCredit() - 1);
                 }
             }
         }
@@ -253,14 +253,14 @@ public class NextTurnServiceImpl implements NextTurnService {
             savings.increaseSavingsInterest((long) Math.ceil((savings.getSavingsAmount() * rate)));
 
             // 적금이 만료된 경우 돈 반환
-            if (savings.getSavingsEndTurn().equals(animal.getAnimalTurn())) {
+            if (savings.getSavingsEndTurn().equals(animal.getTurn())) {
                 total += savingsMature(savings, animal);
                 continue;
             }
 
             // 돈이 없는 경우
             long monthlyPayment = savings.getSavingsPayment();
-            if (animal.getAnimalAssets() < monthlyPayment) {
+            if (animal.getAssets() < monthlyPayment) {
                 if (savings.getSavingsWarning()) {
                     // 경고 받은 적있는 경우 강제 적금 해지
                     savings.changeSavingsIsEnd(true);
@@ -303,8 +303,8 @@ public class NextTurnServiceImpl implements NextTurnService {
 
         // 예치 금액 5천만원 이상이면 신용등급 1단계 증가
         if (savings.getSavingsAmount() >= 50000000) {
-            if (animal.getAnimalCredit() > 1) {
-                animal.changeAnimalCredit(animal.getAnimalCredit() - 1);
+            if (animal.getCredit() > 1) {
+                animal.changeAnimalCredit(animal.getCredit() - 1);
             }
         }
 
@@ -321,7 +321,7 @@ public class NextTurnServiceImpl implements NextTurnService {
 
         for (Savings savings : savingsList){
 
-            if (savings.getSavingsEndTurn().equals(animal.getAnimalTurn() + 1)){
+            if (savings.getSavingsEndTurn().equals(animal.getTurn() + 1)){
                 // 마지막 턴인 경우 넘어감
                 continue;
             }
@@ -339,7 +339,7 @@ public class NextTurnServiceImpl implements NextTurnService {
     public LoanWarningDTO loanGoToNextTurn(Animal animal) {
         // 캐릭터는 이미 다음턴으로 넘어온 상태
         LoanWarningDTO loanWarningDTO = LoanWarningDTO.builder()
-                .originalAssets(animal.getAnimalAssets())
+                .originalAssets(animal.getAssets())
                 .warningLoanCount(0L)
                 .depositTotal(0L)
                 .depositRepay(0L)
@@ -370,12 +370,12 @@ public class NextTurnServiceImpl implements NextTurnService {
         }
 
         // 경고 받은 진짜 갚아야할 금액중 현금 보유액 제거.
-        warnListRepayment -= animal.getAnimalAssets();
+        warnListRepayment -= animal.getAssets();
 
         // (갚아야할 금액이 아직 남은 경우) -> 압류
         if (warnListRepayment > 0) {
             // 신용등급 1단계 감소
-            long credit = animal.getAnimalCredit();
+            long credit = animal.getCredit();
             animal.changeAnimalCredit(credit < 10 ? credit + 1 : credit);
 
             // 예금 압류
@@ -440,7 +440,7 @@ public class NextTurnServiceImpl implements NextTurnService {
         }
 
         // (경고 X) 대출
-        long animalAsset = animal.getAnimalAssets();
+        long animalAsset = animal.getAssets();
         for (LoanRepayDTO loanRepayDTO : nonWarnList) {
 
             animalAsset -= loanRepayDTO.getLoanRepay();
@@ -600,14 +600,14 @@ public class NextTurnServiceImpl implements NextTurnService {
             // 일단 대출액 증가
             capital.compoundInterest();
 
-            if (animal.getAnimalTurn().equals(capital.getCapitalEndTurn())) {
+            if (animal.getTurn().equals(capital.getCapitalEndTurn())) {
                 // 마감 턴인 경우
 
                 LoanWarningDTO loanWarningDTO = LoanWarningDTO.builder().build();
                 long repayment = capital.getCapitalRemain();
 
                 // 사채 대출액 중, 현금 보유액 제거.
-                repayment -= animal.getAnimalAssets();
+                repayment -= animal.getAssets();
 
                 // (갚아야할 금액이 아직 남은 경우) -> 압류
                 if (repayment > 0) {
@@ -656,7 +656,7 @@ public class NextTurnServiceImpl implements NextTurnService {
 
         for (Capital capital : capitalList){
             // 마감턴일 경우 money에 추가
-            if (capital.getCapitalEndTurn().equals(animal.getAnimalTurn() + 1)){
+            if (capital.getCapitalEndTurn().equals(animal.getTurn() + 1)){
                 total = capital.getCapitalAmount() + capital.getCapitalAmount() / 10;
             }
         }

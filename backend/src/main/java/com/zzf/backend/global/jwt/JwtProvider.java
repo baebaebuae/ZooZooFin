@@ -73,7 +73,7 @@ public class JwtProvider {
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND_EXCEPTION));
-        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member)
+        Animal animal = animalRepository.findByMemberAndIsEndFalse(member)
                 .orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
         return animal.getAnimalId();

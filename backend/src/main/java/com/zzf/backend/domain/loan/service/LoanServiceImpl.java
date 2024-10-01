@@ -4,8 +4,6 @@ import com.zzf.backend.domain.home.entity.NextTurnRecord;
 import com.zzf.backend.domain.home.entity.TurnRecord;
 import com.zzf.backend.domain.home.repository.NextTurnRecordRepository;
 import com.zzf.backend.domain.home.repository.TurnRecordRepository;
-import com.zzf.backend.domain.home.service.NextTurnService;
-import com.zzf.backend.domain.member.repository.MemberRepository;
 import com.zzf.backend.domain.animal.entity.Animal;
 import com.zzf.backend.domain.animal.repository.AnimalRepository;
 import com.zzf.backend.domain.home.service.HomeService;
@@ -42,9 +40,9 @@ public class LoanServiceImpl implements LoanService {
         Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
         // 신용 등급이 7등급보다 낮은 경우
-        if (animal.getAnimalCredit() > 6) {
+        if (animal.getCredit() > 6) {
             return LoanAvailableResponse.builder()
-                    .characterCredit(animal.getAnimalCredit())
+                    .characterCredit(animal.getCredit())
                     .isAvailable(false)
                     .build();
         }
@@ -54,22 +52,22 @@ public class LoanServiceImpl implements LoanService {
 
         if (totalAssets < 0) {
             return LoanAvailableResponse.builder()
-                    .characterCredit(animal.getAnimalCredit())
-                    .loanRate(animal.getAnimalCredit())
+                    .characterCredit(animal.getCredit())
+                    .loanRate(animal.getCredit())
                     .isAvailable(false)
                     .build();
         }
 
         // 대출 한도
-        long loanLimit = getLoanLimit(animal.getAnimalCredit(), totalAssets);
+        long loanLimit = getLoanLimit(animal.getCredit(), totalAssets);
 
         // 실제 대출 가능 금액
         long loanAvailable = loanLimit - homeService.getMyRestLoans(animal);
 
         return LoanAvailableResponse.builder()
-                .characterCredit(animal.getAnimalCredit())
+                .characterCredit(animal.getCredit())
                 .isAvailable(loanAvailable >= 500000)
-                .loanRate(animal.getAnimalCredit())
+                .loanRate(animal.getCredit())
                 .loanLimit(loanLimit)
                 .loanAvailable(loanAvailable)
                 .build();
@@ -82,16 +80,16 @@ public class LoanServiceImpl implements LoanService {
         Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
         // 신용 등급이 낮을 경우 대출 불가
-        if (animal.getAnimalCredit() > 6) {
+        if (animal.getCredit() > 6) {
             throw new CustomException(CREDIT_LOW);
         }
 
         Loan loan = Loan.builder()
                 .loanType(loanRequest.getLoanType())
-                .loanRate(animal.getAnimalCredit())
+                .loanRate(animal.getCredit())
                 .loanAmount(loanRequest.getLoanAmounts())
                 .loanRemain(loanRequest.getLoanAmounts())
-                .loanStartTurn(animal.getAnimalTurn())
+                .loanStartTurn(animal.getTurn())
                 .loanPeriod(loanRequest.getLoanPeriod()) // 대출 기간
                 .loanToEnd(loanRequest.getLoanPeriod()) // 남은 턴
                 .loanWarning(false)
@@ -104,11 +102,11 @@ public class LoanServiceImpl implements LoanService {
         animal.increaseAnimalAssets(loanRequest.getLoanAmounts());
 
         // 턴 기록에 추가
-        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getAnimalTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
+        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
         turnRecord.setLoanMake(turnRecord.getLoanMake() + loanRequest.getLoanAmounts());
 
         // 다음 턴 기록에 추가
-        NextTurnRecord nextTurnRecord = nextTurnRecordRepository.findByAnimalAndNextTurnRecordTurn(animal, animal.getAnimalTurn() + 1).orElseThrow(() -> new CustomException(NEXT_TURN_RECORD_NOT_FOUND));
+        NextTurnRecord nextTurnRecord = nextTurnRecordRepository.findByAnimalAndNextTurnRecordTurn(animal, animal.getTurn() + 1).orElseThrow(() -> new CustomException(NEXT_TURN_RECORD_NOT_FOUND));
         nextTurnRecord.setNextLoanRepayment(nextTurnRecord.getNextLoanRepayment()
                - repay(loan.getLoanType(), loan.getLoanAmount(), loan.getLoanRate(), loan.getLoanPeriod(), 1));
     }
@@ -166,7 +164,7 @@ public class LoanServiceImpl implements LoanService {
         long restLoan = loan.getLoanRemain() + loan.getLoanRemain() / 100;
 
         // 캐릭터 현금이 부족한 경우
-        if (animal.getAnimalAssets() < restLoan) {
+        if (animal.getAssets() < restLoan) {
             throw new CustomException(CASH_SHORTAGE_EXCEPTION);
         }
 
@@ -177,11 +175,11 @@ public class LoanServiceImpl implements LoanService {
         loan.changeLoanIsEnd(true);
 
         // 턴 기록에 추가
-        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getAnimalTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
+        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
         turnRecord.setLoanRepay(turnRecord.getLoanRepay() - restLoan);
 
         // 다음 턴 기록에 추가
-        NextTurnRecord nextTurnRecord = nextTurnRecordRepository.findByAnimalAndNextTurnRecordTurn(animal, animal.getAnimalTurn() + 1).orElseThrow(() -> new CustomException(NEXT_TURN_RECORD_NOT_FOUND));
+        NextTurnRecord nextTurnRecord = nextTurnRecordRepository.findByAnimalAndNextTurnRecordTurn(animal, animal.getTurn() + 1).orElseThrow(() -> new CustomException(NEXT_TURN_RECORD_NOT_FOUND));
         nextTurnRecord.setNextLoanRepayment(nextTurnRecord.getNextLoanRepayment()
                 + repay(loan.getLoanType(), loan.getLoanAmount(), loan.getLoanRate(), loan.getLoanPeriod(), loan.getLoanPeriod() - loan.getLoanToEnd() + 1));
     }

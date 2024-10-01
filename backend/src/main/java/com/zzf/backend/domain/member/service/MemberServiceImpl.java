@@ -26,13 +26,13 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND_EXCEPTION));
 
-        Animal animal = animalRepository.findByMemberAndAnimalIsEndFalse(member)
+        Animal animal = animalRepository.findByMemberAndIsEndFalse(member)
                 .orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
         return ProfileResponse.builder()
                 .animalImg(animal.getAnimalType().getAnimalImgUrl())
-                .animalAssets(animal.getAnimalAssets())
-                .memberGoldBar(member.getMemberGoldBar())
+                .animalAssets(animal.getAssets())
+                .memberGoldBar(member.getGoldBar())
                 .build();
     }
 

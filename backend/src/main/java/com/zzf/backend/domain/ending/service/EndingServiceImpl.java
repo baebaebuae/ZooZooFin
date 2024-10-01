@@ -49,12 +49,12 @@ public class EndingServiceImpl implements EndingService {
 
         EndingStatus endingStatus = EndingStatus.getEndingStatus(endingRequest.endingType());
 
-        List<Deposit> deposit = depositRepository.findAllByAnimalAndDepositEndTurn(animal, animal.getAnimalTurn());
+        List<Deposit> deposit = depositRepository.findAllByAnimalAndDepositEndTurn(animal, animal.getTurn());
         Long depositTotal = deposit.stream()
                 .map(Deposit::getDepositAmount)
                 .reduce(0L, Long::sum);
 
-        List<Savings> savings = savingsRepository.findAllByAnimalAndSavingsEndTurn(animal, animal.getAnimalTurn());
+        List<Savings> savings = savingsRepository.findAllByAnimalAndSavingsEndTurn(animal, animal.getTurn());
         Long savingsTotal = savings.stream()
                 .map(Savings::getSavingsAmount)
                 .reduce(0L, Long::sum);
@@ -63,7 +63,7 @@ public class EndingServiceImpl implements EndingService {
         Long stockTotal = stockHoldings.stream().map(holdings -> {
             Stock stock = stockRepository.findById(holdings.getStock().getStockId())
                     .orElseThrow(() -> new CustomException(STOCK_NOT_FOUND_EXCEPTION));
-            Chart chart = chartRepository.findByStockAndTurn(stock, animal.getAnimalTurn())
+            Chart chart = chartRepository.findByStockAndTurn(stock, animal.getTurn())
                     .orElseThrow(() -> new CustomException(CHART_NOT_FOUND_EXCEPTION));
             return chart.getPrice();
 
@@ -71,7 +71,7 @@ public class EndingServiceImpl implements EndingService {
 
 
         long score = 0L;
-        score += animal.getAnimalAssets();
+        score += animal.getAssets();
         score += depositTotal;
         score += savingsTotal;
         score += stockTotal;

@@ -32,8 +32,8 @@ public class MyAnimalResponse {
         return new AnimalInfo(
                 animal.getAnimalId(),
                 animal.getAnimalType().getAnimalTypeId(),
-                animal.getAnimalName(),
-                animal.getAnimalAssets(),
+                animal.getName(),
+                animal.getAssets(),
                 animal.getCreatedDate()
         );
     }
