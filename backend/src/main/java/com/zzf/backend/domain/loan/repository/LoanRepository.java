@@ -13,4 +13,7 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
 
     // 캐릭터 만기 안된 대출 모두 조회, 마감 턴 빠른 순으로 정렬
     List<Loan> findAllByAnimalAndLoanIsEndFalseOrderByLoanToEndAsc(Animal animal);
+
+    // 대출 존재 여부 확인
+    boolean existsByAnimalAndLoanIsEndFalse(Animal animal);
 }

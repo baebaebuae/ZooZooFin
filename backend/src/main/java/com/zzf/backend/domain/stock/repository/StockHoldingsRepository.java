@@ -20,4 +20,6 @@ public interface StockHoldingsRepository extends JpaRepository<StockHoldings, Lo
     List<StockHoldings> findAllByAnimalAndStockIsSoldFalse(Animal animal);
 
     List<StockHoldings> findAllByStockStockTypeAndAnimalAndStockIsSoldFalse(String stockType, Animal animal);
+
+    boolean existsByAnimalAndStockIsSoldFalse(Animal animal);
 }
