@@ -1,5 +1,6 @@
 package com.zzf.backend.domain.script.controller;
 
+import com.zzf.backend.domain.animal.entity.Animal;
 import com.zzf.backend.domain.script.dto.ScriptDto;
 import com.zzf.backend.domain.script.dto.ScriptResponse;
 import com.zzf.backend.domain.script.service.ScriptServiceImpl;
@@ -39,9 +40,12 @@ public class ScriptController {
         }
     )
     public ResponseDto<ScriptResponse> getScriptsByCategory(
+            @RequestHeader Long animalId,
             @Parameter(name = "category", description = "스크립트 장소명", example = "tutorial", required = true)
             @RequestParam(name = "category") String category) {
-        List<Script> scripts = scriptServiceImpl.findScriptByCategory(category);
+
+
+        List<Script> scripts = scriptServiceImpl.findScriptByCategory(animalId, category);
         List<ScriptDto> scriptDtoList = scripts.stream()
                 .map(ScriptDto::new)
                 .collect(Collectors.toList());

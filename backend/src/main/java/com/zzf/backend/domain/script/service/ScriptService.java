@@ -7,5 +7,5 @@ import java.util.List;
 public interface ScriptService {
     List<Script> findAllScripts();
 
-    List<Script> findScriptByCategory(String category);
+    List<Script> findScriptByCategory(Long animalId, String category);
 }

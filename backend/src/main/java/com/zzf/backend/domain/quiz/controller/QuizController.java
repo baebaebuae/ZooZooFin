@@ -61,8 +61,9 @@ public class QuizController {
 
     // 퀴즈 채점 결과
     @PostMapping("/submit")
-    public ResponseDto<QuizResponse> submitQuiz(@RequestBody @Valid QuizRequest quizRequest) {
-        Long animalId = 1L;
+    public ResponseDto<QuizResponse> submitQuiz(
+            @RequestHeader Long animalId,
+            @RequestBody @Valid QuizRequest quizRequest) {
         QuizResponse quizResponse = quizServiceImpl.gradeQuizzes(animalId, quizRequest);
         return ResponseDto.success(SuccessCode.QUIZ_GRADING_SUCCESS, quizResponse);
     }
