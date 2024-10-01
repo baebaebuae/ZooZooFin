@@ -26,6 +26,11 @@
     src: url('./src/assets/fonts/neodgm_code.ttf') format('truetype');
 }
 
+@font-face {
+    font-family: 'MangoDdobak';
+    src: url('./src/assets/fonts/MangoDdobak.ttf') format('truetype');
+}
+
 @media (min-width: 360px) and (min-height: 640px) {
     body {
         font-family: 'OneMobile';

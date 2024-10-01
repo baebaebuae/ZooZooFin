@@ -20,6 +20,7 @@ import Loan from '@pages/Loan';
 import School from '@pages/School';
 import Stock from '@pages/Stock';
 import Tutorial from '@pages/Tutorial';
+import CreateAnimal from '@pages/CreateAnimal';
 import Work from '@pages/Work';
 import WalletPage from '@pages/test/WalletPage';
 import Auth from '../pages/Auth';
@@ -125,6 +126,7 @@ const AppRouter = () => {
                 <Route path="/" element={<Navigate replace to="/start" />} />
                 <Route path="/start" element={<Start />} />
                 <Route path="/tutorial" element={<Tutorial />} />
+                <Route path="/createanimal" element={<CreateAnimal />} />
                 <Route path="/map" element={<Map />} />
                 <Route element={<LayoutInGame />}>
                     <Route path="/bank" element={<Bank />} />
