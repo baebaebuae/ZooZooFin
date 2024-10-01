@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
     EnterButton,
@@ -7,6 +7,7 @@ import {
     NaverButton,
     GoogleButton,
 } from '@styles/components/start/Buttons';
+
 const API_URI = import.meta.env.VITE_URL;
 
 const Start = () => {
@@ -34,6 +35,7 @@ const Start = () => {
     return (
         <>
             <h1>시작화면</h1>
+
             {isEntered ? (
                 <div style={{ backgroundColor: 'black' }}>
                     <EnterButton onClick={handleEnter}>입장 버튼</EnterButton>
