@@ -2,6 +2,7 @@ package com.zzf.backend.domain.script.service;
 
 import com.zzf.backend.domain.animal.entity.Animal;
 import com.zzf.backend.domain.animal.repository.AnimalRepository;
+import com.zzf.backend.domain.capital.repository.CapitalRepository;
 import com.zzf.backend.domain.loan.repository.LoanRepository;
 import com.zzf.backend.domain.script.document.Script;
 import com.zzf.backend.domain.script.repository.ScriptRepository;
@@ -26,6 +27,8 @@ public class ScriptServiceImpl implements ScriptService {
 
     private final LoanRepository loanRepository;
 
+    private final CapitalRepository capitalRepository;
+
     @Override
     public List<Script> findAllScripts() {
         return scriptRepository.findAll();
@@ -47,7 +50,9 @@ public class ScriptServiceImpl implements ScriptService {
         }
 
         // capital 없을 경우
-
+        if (category.equals("capital") && !capitalRepository.existsByAnimalAndCapitalIsEndFalse(animal)) {
+            category = "no_capital";
+        }
 
         return scriptRepository.findByCategory(category);
     }
