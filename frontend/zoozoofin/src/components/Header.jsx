@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { WorkingAreas } from '@styles/components/common/Header';
 import { LargeIcon } from '@components/root/icon';
 import CharRabbit from '@assets/images/characters/rabbit.svg?react';
 
@@ -15,7 +14,16 @@ import { PropInfo } from './root/headerCharInfo';
 
 import CharacterInfo from './character/CharacterInfo';
 
+export const WorkingAreas = styled.div`
+    height: 50px;
+    width: full;
+    display: flex;
+    justify-content: space-between;
+`;
+
 const HeaderBlock = styled.div`
+    position: fixed;
+    top: 20;
     width: 340px;
     display: flex;
     justify-content: space-between;
