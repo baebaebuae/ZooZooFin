@@ -21,7 +21,11 @@ export const NormalIcon = ({ icon }) => {
     return <img src={icon} width={20} height={20} />;
     // return <img width={20} height={20} />;
 };
-
+export const SmallIcon = ({ icon }) => {
+    // return <IconWrapper icon={icon} width={20} height={20} />;
+    return <img src={icon} width={15} height={15} />;
+    // return <img width={20} height={20} />;
+};
 // 아이콘이 필요한 위치에서
 
 // 파일을 import하고
