@@ -67,7 +67,7 @@ export const StockInputBox = ({
                 unit={'주'}
                 hasValue={savingsAmount !== 0}
                 onDelete={handleDelete}
-            ></Input>
+            />
             <ButtonBlock>
                 <InputButton
                     size={'small'}

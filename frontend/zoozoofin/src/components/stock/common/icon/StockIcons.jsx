@@ -27,15 +27,15 @@ import {
 } from '@components/stock/common/icon/StockFieldIcons';
 
 const IconWrapper = ({ icon: Icon, width, height }) => {
-    return <Icon width={width} height={height} />;
+    return <img src={Icon} width={width} height={height} />;
 };
 
 export const MessageIcon = () => {
-    return <IconWrapper icon={CharFrog} width={25} height={25} />;
+    return <IconWrapper icon={CharFrog} width={35} height={25} />;
 };
 
 export const DomesticIcon = () => {
-    return <IconWrapper icon={CharFrog} width={50} height={50} />;
+    return <IconWrapper icon={CharFrog} width={50} height={35} />;
 };
 export const OverseasIcon = () => {
     return <IconWrapper icon={IconOverseas} width={50} height={50} />;
@@ -64,7 +64,7 @@ const Icons = {
 
 const FieldIcon = ({ field }) => {
     const IconComponent = Icons[field];
-    return <IconWrapper icon={IconComponent} width={25} height={25} />;
+    return <IconWrapper icon={IconComponent} width={30} height={30} />;
 };
 
 export const DefaultFieldIcon = ({ field }) => {
