@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { CarrotIcon } from '@components/stock/common/icon/StockIcons';
 import StockInputBox from '@components/stock/common/container/StockInputBox';
@@ -45,30 +46,71 @@ const ColumnInfoBox = ({ title, content, showIcon }) => {
 };
 
 // 구매 / 판매 => prop으로 받아서 처리할 예정 (변수명 변경 예정)
-export const BuyingOrder = ({ maxStock, maxMoney }) => {
+export const OrderSubtitle = ({ type, maxStock, maxMoney }) => {
+    const [stockTitle, SetStockTitle] = useState(null);
+    const [priceTitle, SetPriceTitle] = useState(null);
+    useEffect(() => {
+        if (type === 'buy') {
+            SetStockTitle('최대 구매 가능 주');
+            SetPriceTitle('최대 구매 가능 금액');
+        } else {
+            SetStockTitle('최대 판매 가능 주');
+            SetPriceTitle('최대 판매 가능 금액');
+        }
+    }, [type]);
+
     return (
         <RowContainerBox>
-            <ColumnInfoBox title={'최대 구매 가능 주'} content={maxStock} showIcon={false} />
-            <ColumnInfoBox title={'최대 구매 가능 금액'} content={maxMoney} showIcon={true} />
+            <ColumnInfoBox title={stockTitle} content={maxStock} showIcon={false} />
+            <ColumnInfoBox title={priceTitle} content={maxMoney} showIcon={true} />
         </RowContainerBox>
     );
 };
 
-export const InputOrder = () => {
+export const TotalPrice = ({ title, total }) => {
     return (
-        <StockInputBox
-            title={'구매할 주'}
-            amount1={1}
-            amount2={5}
-            amount3={10}
-            amount4={25}
-            maxAmount={50}
-            onSavingsAmountChange={() => {}}
-            isSavings={true}
+        <ColumnInfoBox
+            title={title}
+            content={total !== null ? total.toLocaleString() : total}
+            showIcon={true}
         />
     );
 };
 
-export const TotalPrice = ({ total }) => {
-    return <ColumnInfoBox title={'총 구매할 금액'} content={total} showIcon={true} />;
+export const InputOrder = ({ type, stockPrice }) => {
+    const [title, SetTitle] = useState(0);
+    const [totalTitle, SetTotalTitle] = useState(null);
+
+    useEffect(() => {
+        if (type === 'buy') {
+            SetTitle('구매할 주');
+            SetTotalTitle('총 구매할 금액');
+        } else {
+            SetTitle('판매할 주');
+            SetTotalTitle('총 판매할 금액');
+        }
+    }, [type]);
+    const [total, SetTotal] = useState(null);
+    const handleTotal = (total) => {
+        const totalPrice = total * stockPrice;
+        SetTotal(totalPrice);
+    };
+    return (
+        <>
+            <StockInputBox
+                title={title}
+                amount1={1}
+                amount2={5}
+                amount3={10}
+                amount4={25}
+                maxAmount={50}
+                onSavingsAmountChange={() => {}}
+                isSavings={true}
+                handleTotal={handleTotal}
+                type={type}
+            />
+
+            <TotalPrice title={totalTitle} total={total} />
+        </>
+    );
 };
