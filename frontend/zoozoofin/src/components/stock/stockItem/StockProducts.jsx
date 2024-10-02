@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { StockBuyingCard, Divider } from '@components/stock/common/card/StoreCards';
 import StockTitleContainer from '@components/stock/common/container/StockTitleContainer';
 
-export const StockProducts = () => {
+export const StockProducts = ({ field, onStockSelected, type }) => {
     const [open, setOpen] = useState([false, false, false]);
 
     const handleToggle = (index) => {
@@ -11,6 +11,7 @@ export const StockProducts = () => {
         setOpen(newOpen);
     };
 
+    // field별 리스트 조회 후 출력 예정
     const stockItems = [
         {
             companyName: '개굴전자',
@@ -32,6 +33,11 @@ export const StockProducts = () => {
         },
     ];
 
+    const handleClickStock = () => {
+        onStockSelected(true);
+        console.log('check!');
+    };
+
     return (
         <StockBuyingCard>
             {stockItems.map((item, index) => (
@@ -43,6 +49,8 @@ export const StockProducts = () => {
                     info={item.info}
                     isOpen={open[index]}
                     onToggle={() => handleToggle(index)}
+                    isStockSelected={handleClickStock}
+                    type={type}
                 />
             ))}
         </StockBuyingCard>

@@ -11,6 +11,7 @@ import {
 import { CarrotIcon } from '@components/stock/common/icon/StockIcons';
 import { ActiveButton, DetailButton } from '@components/stock/common/button/Button';
 import { Divider } from '@components/stock/common/card/StoreCards';
+import { useEffect, useState } from 'react';
 
 export const StockTitle = ({ companyName, stockPrice, currentState, onToggle }) => {
     return (
@@ -19,7 +20,7 @@ export const StockTitle = ({ companyName, stockPrice, currentState, onToggle }) 
             <BuyingMoneyContent>
                 <CurrentStockState current={currentState}>{currentState}</CurrentStockState>
                 <StockPrice>
-                    {stockPrice} <CarrotIcon />
+                    {stockPrice.toLocaleString()} <CarrotIcon />
                 </StockPrice>
             </BuyingMoneyContent>
         </BuyingContent>
@@ -33,7 +34,25 @@ export const StockTitleContainer = ({
     info,
     isOpen,
     onToggle,
+    // 구매 화면 이동 테스트를 위헤 추가 => 데이터 연결 후 삭제 예정
+    isStockSelected,
+    type,
 }) => {
+    const [value, SetValue] = useState(null);
+
+    useEffect(() => {
+        if (type === 'buy') {
+            SetValue('구매하기');
+        } else {
+            SetValue('판매하기');
+        }
+    }, [type]);
+    const handleClickStock = () => {
+        isStockSelected(true);
+    };
+
+    // 단위 ',' 찍기
+
     return (
         <>
             <BuyingContent onClick={onToggle}>
@@ -41,14 +60,16 @@ export const StockTitleContainer = ({
                 <BuyingMoneyContent>
                     <CurrentStockState current={currentState}>{currentState}</CurrentStockState>
                     <StockPrice>
-                        {stockPrice} <CarrotIcon />
+                        {stockPrice.toLocaleString()} <CarrotIcon />
                     </StockPrice>
                 </BuyingMoneyContent>
             </BuyingContent>
             <Collapse in={isOpen} timeout="auto" unmountOnExit>
                 <p>{info}</p>
                 <ButtonContainer>
-                    <ActiveButton variant="contained">구매하기</ActiveButton>
+                    <ActiveButton variant="contained" onClick={handleClickStock}>
+                        {value}
+                    </ActiveButton>
                     <DetailButton variant="outlined">상세 정보</DetailButton>
                 </ButtonContainer>
             </Collapse>
