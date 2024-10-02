@@ -5,10 +5,12 @@ import com.zzf.backend.domain.portfolio.entity.Portfolio;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface PortfolioRepository extends JpaRepository<Portfolio, Long> {
     Optional<Portfolio> findByAnimal(Animal animal);
     boolean existsByAnimal(Animal animal);
+    List<Portfolio> findTop10ByOrderByPortfolioScoreDesc();
 }
