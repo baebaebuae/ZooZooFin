@@ -31,6 +31,11 @@
     src: url('./src/assets/fonts/MangoDdobak.ttf') format('truetype');
 }
 
+@font-face {
+    font-family: 'YeongdeokSea';
+    src: url('./src/assets/fonts/Yeongdeok\ Sea.ttf') format('truetype');
+}
+
 @media (min-width: 360px) and (min-height: 640px) {
     body {
         font-family: 'OneMobile';

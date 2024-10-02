@@ -43,6 +43,8 @@ const Background = styled.div`
 `;
 
 const MusicToggleButton = styled.button`
+    position: fixed;
+    z-index: 1000;
     width: 100%;
     text-align: right;
     background-color: transparent;

@@ -10,6 +10,8 @@ import RepayLoan from '@components/loan/actions/RepayLoan';
 import JoinLoan from '@components/loan/actions/JoinLoan';
 import InstructLoan from '@components/loan/actions/InstructLoan';
 
+import { Loader } from '@components/Loader';
+
 const LoanBlock = styled.div`
     display: flex;
     flex-direction: column;
@@ -74,7 +76,7 @@ const Loan = () => {
     }, []);
 
     // 로딩 중일 때 Loader 컴포넌트 렌더링
-    if (isLoading || !currentScript) return <div>대출 코너 입장중...</div>;
+    if (isLoading || !currentScript) return <Loader loadingText={'대출 코너로 입장하는 중...'} />;
 
     if (currentScript.type === 'script') {
         return (

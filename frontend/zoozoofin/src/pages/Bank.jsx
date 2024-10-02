@@ -8,6 +8,7 @@ import { useStore } from '../store.js';
 import JoinProduct from '@components/bank/actions/JoinProduct';
 import TerminateProduct from '@components/bank/actions/TerminateProduct';
 import Bankrupt from '@components/bank/actions/Bankrupt';
+import { Loader } from '@components/Loader';
 
 import { getApiClient } from '@stores/apiClient';
 
@@ -93,7 +94,7 @@ const Bank = () => {
 
     // 로딩 중일 때 Loader 컴포넌트 렌더링
     if (isLoading || !currentScript) {
-        return <div>은행 입장중...</div>;
+        return <Loader loadingText={'은행으로 입장하는 중...'} />;
     }
 
     if (currentScript.type === 'script') {

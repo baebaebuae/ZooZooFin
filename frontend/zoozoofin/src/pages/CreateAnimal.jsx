@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 import Rabbit from '@assets/images/characters/rabbit.svg?react';
@@ -98,6 +99,15 @@ const AnimalInfoSpecialNum = styled(AnimalInfoSpecialContent)`
 const CreateAnimal = () => {
     const [animals, setAnimals] = useState([]);
     const [selectedAnimal, setSelectedAnimal] = useState(null);
+    const navigate = useNavigate();
+
+    const moveToTutorial = () => {
+        navigate('/tutorial', {
+            state: {
+                animalTypeId: selectedAnimal.animalTypeId,
+            },
+        });
+    };
 
     const handleClick = (animal) => {
         setSelectedAnimal(animal);
@@ -117,36 +127,6 @@ const CreateAnimal = () => {
         }
     };
 
-    const createAnimal = async (animalTypeId, animalName) => {
-        // Tutorial에서 실행할 예정
-        // 저장해서 가져온 animalTypeId와
-        // Tutorial에서 입력한 animalName을 넣어서 실행
-        const apiClient = getApiClient();
-
-        console.log('animalTypeId:', animalTypeId);
-        console.log('animalName:', animalName);
-
-        const productData = {
-            animalTypeId: animalTypeId,
-            animalName: animalName,
-        };
-
-        try {
-            console.log('Request Data:', productData);
-
-            const res = await apiClient.post(`/animal`, productData, {});
-
-            if (res.status === 200) {
-                console.log(res.data);
-            } else {
-                console.error('Unexpected status code:', res.status);
-            }
-        } catch (error) {
-            console.error('error: ', error);
-            return error;
-        }
-    };
-
     useEffect(() => {
         fetchAnimals();
     }, []);
@@ -158,40 +138,45 @@ const CreateAnimal = () => {
             <TitleMessage>생성할 캐릭터를 선택해줘.</TitleMessage>
 
             <AnimalBlock>
-                {animals.map((animal, index) => {
-                    4;
-                    return (
-                        <AnimalCard
-                            key={index}
-                            // isSelected={animal === selectedAnimal}
-                            isSelected={animal.animalTypeId === selectedAnimal?.animalTypeId}
-                            onClick={() => handleClick(animal)}
-                        >
-                            {/* 사진이 정중앙 상태가 아님  */}
-                            <AnimalPhoto>
-                                <Rabbit width={150} height={150} />
-                            </AnimalPhoto>
+                {/* 받아온 animals 없을 때 에러 처리 */}
+                {animals &&
+                    animals.map((animal, index) => {
+                        4;
+                        return (
+                            <AnimalCard
+                                key={index}
+                                // isSelected={animal === selectedAnimal}
+                                isSelected={animal.animalTypeId === selectedAnimal?.animalTypeId}
+                                onClick={() => handleClick(animal)}
+                            >
+                                {/* 사진이 정중앙 상태가 아님  */}
+                                <AnimalPhoto>
+                                    <Rabbit width={150} height={150} />
+                                </AnimalPhoto>
 
-                            <AnimalInfoBox>
-                                <AnimalInfoName>{animal.animalTypeName}</AnimalInfoName>
-                                <AnimalInfoCondition>예금, 적금 가입 시</AnimalInfoCondition>
-                                <AnimalInfoSpecial>
-                                    <AnimalInfoSpecialContent>우대금리</AnimalInfoSpecialContent>
-                                    <AnimalInfoSpecialNum>
-                                        +{animal.animalAbility}%
-                                    </AnimalInfoSpecialNum>
-                                </AnimalInfoSpecial>
-                            </AnimalInfoBox>
-                        </AnimalCard>
-                    );
-                })}
+                                <AnimalInfoBox>
+                                    <AnimalInfoName>{animal.animalTypeName}</AnimalInfoName>
+                                    <AnimalInfoCondition>예금, 적금 가입 시</AnimalInfoCondition>
+                                    <AnimalInfoSpecial>
+                                        <AnimalInfoSpecialContent>
+                                            우대금리
+                                        </AnimalInfoSpecialContent>
+                                        <AnimalInfoSpecialNum>
+                                            +{animal.animalAbility}%
+                                        </AnimalInfoSpecialNum>
+                                    </AnimalInfoSpecial>
+                                </AnimalInfoBox>
+                            </AnimalCard>
+                        );
+                    })}
             </AnimalBlock>
             {selectedAnimal && (
                 <Button
                     isBorder={true}
                     color={'primaryShadow'}
-                    onClick={() => {}} // Tutorial로 넘어가는 함수
+                    // onClick={() => {}} // Tutorial로 넘어가는 함수
                     // 이 때 selectedAnimal.animalTypeId만 같이 보내기(path로)
+                    onClick={moveToTutorial}
                 >
                     선택 완료
                 </Button>
