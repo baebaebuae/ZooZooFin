@@ -2,6 +2,7 @@ package com.zzf.backend.domain.ending.controller;
 
 import com.zzf.backend.domain.ending.dto.EndingRequest;
 import com.zzf.backend.domain.ending.service.EndingService;
+import com.zzf.backend.global.auth.annotation.AnimalId;
 import com.zzf.backend.global.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ public class EndingController {
     private final EndingService endingService;
 
     @PostMapping
-    public ResponseDto<?> createEnding(@RequestHeader Long animalId,
+    public ResponseDto<?> createEnding(@AnimalId Long animalId,
                                        @RequestBody EndingRequest endingRequest) {
         endingService.createEnding(animalId, endingRequest);
 

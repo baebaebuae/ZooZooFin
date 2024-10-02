@@ -1,12 +1,12 @@
-insert into member(member_id, kakao_member_id, gold_bar, is_solved_quiz, bank_count, loan_count, stock_count,
-                   created_date,
-                   modified_date)
-values ('913418af-6b2e-11ef-929f-28c5d21eabf3', 'asdfasdfasdf', 0, false, 0, 0, 0, now(), now());
+insert into member(id, provider_name, provider_id, username, gold_bar, is_solved_quiz, bank_count, loan_count,
+                   stock_count,
+                   created_date, modified_date)
+values (10, 'kakao', '123412341234', '913418af-6b2e-11ef-929f-28c5d21eabf3', 0, false, 0, 0, 0, now(), now());
 insert into animal_type(animal_type_name, animal_ability, animal_img_url)
 values ('토끼', 1, 'https://ssafy.com');
 insert into animal(name, turn, assets, credit, hierarchy, is_worked,
                    is_end, quest_cleared, created_date, modified_date, member_id, animal_type_id)
-values ('베베붸', 1, 1000000000, 5, 10, false, false, false, now(), now(), '913418af-6b2e-11ef-929f-28c5d21eabf3', 1);
+values ('베베붸', 1, 1000000000, 5, 10, false, false, false, now(), now(), 10, 1);
 insert into turn_record(turn_record_turn, daily_charge, loan_make, loan_repay, stock_buy, stock_sell, deposit_make,
                         deposit_finish, savings_make, savings_pay, savings_finish, capital_make, capital_repay,
                         animal_id, created_date, modified_date)

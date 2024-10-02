@@ -22,12 +22,12 @@ import com.zzf.backend.domain.home.repository.TurnRecordRepository;
 import com.zzf.backend.domain.home.repository.WarningRecordRepository;
 import com.zzf.backend.domain.loan.entity.Loan;
 import com.zzf.backend.domain.loan.repository.LoanRepository;
-import com.zzf.backend.domain.member.entity.Member;
-import com.zzf.backend.domain.member.repository.MemberRepository;
 import com.zzf.backend.domain.portfolio.entity.Portfolio;
 import com.zzf.backend.domain.portfolio.repository.PortfolioRepository;
 import com.zzf.backend.domain.savings.entity.Savings;
 import com.zzf.backend.domain.savings.repository.SavingsRepository;
+import com.zzf.backend.global.auth.entity.Member;
+import com.zzf.backend.global.auth.repository.MemberRepository;
 import com.zzf.backend.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -67,11 +67,15 @@ public class AnimalServiceImpl implements AnimalService {
 
     @Override
     public void createAnimal(String memberId, AnimalCreateRequest animalCreateRequest) {
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findByUsername(memberId)
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND_EXCEPTION));
 
         AnimalType animalType = animalTypeRepository.findById(animalCreateRequest.getAnimalTypeId())
                 .orElseThrow(() -> new CustomException(ANIMAL_TYPE_NOT_FOUND_EXCEPTION));
+
+        if (animalRepository.existsByMemberAndIsEndFalse(member)) {
+            throw new CustomException(ANIMAL_ALREADY_EXIST);
+        }
 
         Animal animal = animalRepository.save(Animal.builder()
                 .member(member)
@@ -133,7 +137,7 @@ public class AnimalServiceImpl implements AnimalService {
         Animal animal = animalRepository.findById(animalId)
                 .orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
-        if (!animal.getMember().getMemberId().equals(memberId)) {
+        if (!animal.getMember().getUsername().equals(memberId)) {
             throw new CustomException(ANIMAL_UNAVAILABLE_EXCEPTION);
         }
 
@@ -158,7 +162,7 @@ public class AnimalServiceImpl implements AnimalService {
 
     @Override
     public AnimalInfoResponse getAnimalInfo(String memberId) {
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findByUsername(memberId)
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND_EXCEPTION));
 
         Animal animal = animalRepository.findByMemberAndIsEndFalse(member)

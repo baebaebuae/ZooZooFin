@@ -5,6 +5,7 @@ import com.zzf.backend.domain.quiz.dto.QuizRequest;
 import com.zzf.backend.domain.quiz.dto.QuizResponse;
 import com.zzf.backend.domain.quiz.entity.Quiz;
 import com.zzf.backend.domain.quiz.service.QuizServiceImpl;
+import com.zzf.backend.global.auth.annotation.AnimalId;
 import com.zzf.backend.global.dto.ResponseDto;
 import com.zzf.backend.global.status.SuccessCode;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -62,7 +63,7 @@ public class QuizController {
     // 퀴즈 채점 결과
     @PostMapping("/submit")
     public ResponseDto<QuizResponse> submitQuiz(
-            @RequestHeader Long animalId,
+            @AnimalId Long animalId,
             @RequestBody @Valid QuizRequest quizRequest) {
         QuizResponse quizResponse = quizServiceImpl.gradeQuizzes(animalId, quizRequest);
         return ResponseDto.success(SuccessCode.QUIZ_GRADING_SUCCESS, quizResponse);

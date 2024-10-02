@@ -1,10 +1,10 @@
 package com.zzf.backend.domain.script.controller;
 
-import com.zzf.backend.domain.animal.entity.Animal;
 import com.zzf.backend.domain.script.dto.ScriptDto;
 import com.zzf.backend.domain.script.dto.ScriptResponse;
 import com.zzf.backend.domain.script.service.ScriptServiceImpl;
 import com.zzf.backend.domain.script.document.Script;
+import com.zzf.backend.global.auth.annotation.AnimalId;
 import com.zzf.backend.global.dto.ResponseDto;
 import com.zzf.backend.global.status.SuccessCode;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -40,7 +40,7 @@ public class ScriptController {
         }
     )
     public ResponseDto<ScriptResponse> getScriptsByCategory(
-            @RequestHeader Long animalId,
+            @AnimalId Long animalId,
             @Parameter(name = "category", description = "스크립트 장소명", example = "tutorial", required = true)
             @RequestParam(name = "category") String category) {
 

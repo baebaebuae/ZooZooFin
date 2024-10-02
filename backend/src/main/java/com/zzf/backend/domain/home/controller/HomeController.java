@@ -9,6 +9,7 @@ import com.zzf.backend.domain.home.service.HomeService;
 import com.zzf.backend.domain.home.service.NextTurnService;
 import com.zzf.backend.domain.savings.dto.MySavingsResponse;
 import com.zzf.backend.domain.savings.service.SavingsService;
+import com.zzf.backend.global.auth.annotation.AnimalId;
 import com.zzf.backend.global.dto.ResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -38,7 +39,7 @@ public class HomeController {
 
     // 내 예적금 조회 001
     @GetMapping("/my-deposit-savings")
-    public ResponseDto<DepositSavingsResponse> getMyDepositSavings(@RequestHeader Long animalId){
+    public ResponseDto<DepositSavingsResponse> getMyDepositSavings(@AnimalId Long animalId){
 
         long totalMoney = homeService.getMyDepositSavings(animalId);
         List<MyDepositResponse> myDepositResponseList = depositService.getMyDeposit(animalId);
@@ -53,7 +54,7 @@ public class HomeController {
 
     // 내 사채 조회 004
     @GetMapping("/capital")
-    public ResponseDto<CapitalResponse> getMyCapital(@RequestHeader Long animalId){
+    public ResponseDto<CapitalResponse> getMyCapital(@AnimalId Long animalId){
 
         CapitalResponse capitalResponse = capitalService.getMyCapital(animalId);
 
@@ -67,7 +68,7 @@ public class HomeController {
     })
     @Operation(summary = "다음 턴으로 넘어가기 기능", description = "예금, 적금, 대출, 사채를 다음 턴으로 넘어가게 해줌")
     @PatchMapping("/next")
-    public ResponseDto<Void> patchNextTurn(@RequestHeader Long animalId){
+    public ResponseDto<Void> patchNextTurn(@AnimalId Long animalId){
 
         nextTurnService.nextTurn(animalId);
 
@@ -80,7 +81,7 @@ public class HomeController {
     })
     @Operation(summary = "오늘 거래 내역 확인하기 기능", description = "오늘 거래내역을 보여줌")
     @GetMapping("/turn-record")
-    public ResponseDto<TurnRecordResponse> getTurnRecord(@RequestHeader Long animalId){
+    public ResponseDto<TurnRecordResponse> getTurnRecord(@AnimalId Long animalId){
 
         TurnRecordResponse turnRecordResponse = nextTurnService.getTurnRecord(animalId);
 
@@ -93,7 +94,7 @@ public class HomeController {
     })
     @Operation(summary = "미납 고지서 확인하기 기능", description = "경고횟수, 압류 내역 등을 보여줌")
     @GetMapping("/warning-record")
-    public ResponseDto<WarningRecordResponse> getWarningRecord(@RequestHeader Long animalId){
+    public ResponseDto<WarningRecordResponse> getWarningRecord(@AnimalId Long animalId){
 
         WarningRecordResponse warningRecordResponse = nextTurnService.getWarningRecord(animalId);
 
@@ -106,7 +107,7 @@ public class HomeController {
     })
     @Operation(summary = "다음 턴 예상 지출 내역 확인하기 기능", description = "다음 턴의 예상 지출 내역을 보여줌")
     @GetMapping("/next-turn-record")
-    public ResponseDto<NextTurnRecordResponse> getNextTurnRecord(@RequestHeader Long animalId){
+    public ResponseDto<NextTurnRecordResponse> getNextTurnRecord(@AnimalId Long animalId){
 
         NextTurnRecordResponse nextTurnRecordResponse = nextTurnService.getNextTurnRecord(animalId);
 

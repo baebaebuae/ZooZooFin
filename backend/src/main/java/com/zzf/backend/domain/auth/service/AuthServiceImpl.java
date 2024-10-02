@@ -48,7 +48,7 @@ public class AuthServiceImpl implements AuthService {
             throw new CustomException(EXPIRED_TOKEN);
         }
 
-        String memberId = token.getMemberId().toString();
+        String memberId = token.getMemberId();
         String newAccessToken = jwtProvider.createAccessToken(memberId);
         String newRefreshToken = jwtProvider.createRefreshToken();
 

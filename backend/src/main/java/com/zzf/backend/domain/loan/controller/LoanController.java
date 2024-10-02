@@ -2,8 +2,8 @@ package com.zzf.backend.domain.loan.controller;
 
 import com.zzf.backend.domain.loan.dto.*;
 import com.zzf.backend.domain.loan.service.LoanService;
+import com.zzf.backend.global.auth.annotation.AnimalId;
 import com.zzf.backend.global.dto.ResponseDto;
-import com.zzf.backend.global.status.SuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -11,9 +11,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.zzf.backend.global.status.SuccessCode.*;
 
@@ -32,7 +29,7 @@ public class LoanController {
     })
     @Operation(summary = "대출 가능 여부 조회", description = "사용자가 대출이 가능한지 여부를 보여줌.")
     @GetMapping("/check")
-    public ResponseDto<LoanAvailableResponse> checkLoanAvailable(@RequestHeader Long animalId){
+    public ResponseDto<LoanAvailableResponse> checkLoanAvailable(@AnimalId Long animalId){
 
         LoanAvailableResponse loanAvailableResponse = loanService.checkLoanAvailable(animalId);
 
@@ -56,7 +53,7 @@ public class LoanController {
     })
     @Operation(summary = "대출 등록", description = "대출을 등록함.")
     @PostMapping
-    public ResponseDto<Void> postLoan(@RequestHeader Long animalId,
+    public ResponseDto<Void> postLoan(@AnimalId Long animalId,
                                       @RequestBody LoanRequest loanRequest){
 
         loanService.postLoan(animalId, loanRequest);
@@ -70,7 +67,7 @@ public class LoanController {
     })
     @Operation(summary = "내 대출 조회", description = "내 대출 목록을 보여줌.")
     @GetMapping("/my")
-    public ResponseDto<MyLoanListResponse> getMyLoan(@RequestHeader Long animalId){
+    public ResponseDto<MyLoanListResponse> getMyLoan(@AnimalId Long animalId){
 
         MyLoanListResponse myLoanListResponse = loanService.getMyLoan(animalId);
         return ResponseDto.success(READ_SUCCESS, myLoanListResponse);
@@ -93,7 +90,7 @@ public class LoanController {
     })
     @Operation(summary = "대출금 중도 상환", description = "대출금을 중도 상환함. 전액 상환만 가능. 일부 상환은 불가능.")
     @PatchMapping("/my")
-    public ResponseDto<Void> patchLoan(@RequestHeader Long animalId,
+    public ResponseDto<Void> patchLoan(@AnimalId Long animalId,
                                        @RequestBody LoanDeleteRequest loanDeleteRequest){
         Long loanId = loanDeleteRequest.getLoanId();
 

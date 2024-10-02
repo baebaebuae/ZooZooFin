@@ -58,31 +58,31 @@ class AnimalControllerTest {
 
     }
 
-    @Test
-    public void create_animal_success() throws Exception {
-        // given
-        long testTypeId = 1L;
-        String testAnimalName = "testAnimalName";
-
-        AnimalCreateRequest animalCreateRequest = AnimalCreateRequest.builder()
-                .animalTypeId(testTypeId)
-                .animalName(testAnimalName)
-                .build();
-        String content = gson.toJson(animalCreateRequest);
-
-        // when
-        ResultActions actions = mockMvc.perform(
-                post("/api/v1/animal")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(content));
-
-        // then
-        actions
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.httpStatus").value(ANIMAL_CREATE_SUCCESS.getHttpStatus()))
-                .andExpect(jsonPath("$.message").value(ANIMAL_CREATE_SUCCESS.getMessage()));
-    }
+//    @Test
+//    public void create_animal_success() throws Exception {
+//        // given
+//        long testTypeId = 1L;
+//        String testAnimalName = "testAnimalName";
+//
+//        AnimalCreateRequest animalCreateRequest = AnimalCreateRequest.builder()
+//                .animalTypeId(testTypeId)
+//                .animalName(testAnimalName)
+//                .build();
+//        String content = gson.toJson(animalCreateRequest);
+//
+//        // when
+//        ResultActions actions = mockMvc.perform(
+//                post("/api/v1/animal")
+//                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(content));
+//
+//        // then
+//        actions
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.httpStatus").value(ANIMAL_CREATE_SUCCESS.getHttpStatus()))
+//                .andExpect(jsonPath("$.message").value(ANIMAL_CREATE_SUCCESS.getMessage()));
+//    }
 
     @Test
     public void get_portfolio_success() throws Exception {

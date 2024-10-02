@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableScheduling
 @EnableJpaAuditing
-@EnableJpaRepositories(basePackages = "com.zzf.backend.domain")
+@EnableJpaRepositories(basePackages = {"com.zzf.backend.domain", "com.zzf.backend.global.auth"})
 @EnableMongoRepositories(basePackages = "com.zzf.backend.domain.script")
 @EnableRedisRepositories(basePackages = "com.zzf.backend.global.redis",
         enableKeyspaceEvents = RedisKeyValueAdapter.EnableKeyspaceEvents.ON_STARTUP)
