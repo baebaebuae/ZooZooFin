@@ -10,10 +10,6 @@ import TerminateProduct from '@components/bank/actions/TerminateProduct';
 import Bankrupt from '@components/bank/actions/Bankrupt';
 import { Loader } from '@components/Loader';
 
-import { getApiClient } from '@stores/apiClient';
-
-const apiClient = getApiClient();
-
 const BankBlock = styled.div`
     display: flex;
     flex-direction: column;
