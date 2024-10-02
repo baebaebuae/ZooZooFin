@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { NormalIcon } from '@components/root/icon';
-import IconChicken from '@assets/images/icons/icon_chicken.svg?react';
+import IconChicken from '@assets/images/icons/icon_chicken.png';
 import { ProductDetailInfo } from '@components/root/productDetailInfo';
 import { Card } from '@components/root/card';
 

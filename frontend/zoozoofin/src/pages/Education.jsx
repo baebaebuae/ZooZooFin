@@ -7,7 +7,7 @@ import { OrbitControls, useGLTF } from '@react-three/drei';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import backgroundImage from '@assets/images/background/stock.svg';
+import backgroundImage from '@assets/images/background/stock.png';
 
 const SchoolContainer = styled.div`
     display: flex;
@@ -45,7 +45,8 @@ const StyledSlider = styled(Slider)`
     width: 100%;
     height: 100%;
 
-    .slick-prev, .slick-next {
+    .slick-prev,
+    .slick-next {
         z-index: 3;
         &:before {
             color: white;
@@ -95,7 +96,7 @@ const Button = styled.button`
     font-family: 'OneMobilePop', sans-serif;
     background-color: ${({ theme }) => theme.colors.primaryDeep};
     padding: 5px 15px; /* large 크기 */
-    font-size: 15px; 
+    font-size: 15px;
     border: none; /* 기본적으로 테두리 없음 */
     animation: ${blink} 1s infinite;
     z-index: 3;
@@ -121,7 +122,12 @@ const DarkOverlay = styled.div`
 const NPCModel = () => {
     const { scene } = useGLTF('/models/mungmung.glb');
     return (
-        <primitive object={scene} scale={1.3} position={[0.4, -2, -0.3]} rotation={[0, Math.PI / 6, 0]} />
+        <primitive
+            object={scene}
+            scale={1.3}
+            position={[0.4, -2, -0.3]}
+            rotation={[0, Math.PI / 6, 0]}
+        />
     );
 };
 
@@ -136,7 +142,10 @@ const Education = () => {
     const sliderRef = useRef(null);
     const navigate = useNavigate();
 
-    const educationTopic = { content: '주식을 소유하면 어떤 권리를 얻을 수 있는지 알아볼까?', img_num: '001,002' };
+    const educationTopic = {
+        content: '주식을 소유하면 어떤 권리를 얻을 수 있는지 알아볼까?',
+        img_num: '001,002',
+    };
 
     useEffect(() => {
         const loadImages = async () => {
@@ -180,7 +189,7 @@ const Education = () => {
         slidesToShow: 1,
         slidesToScroll: 1,
         arrows: true,
-        afterChange: (current) => setCurrentSlide(current)
+        afterChange: (current) => setCurrentSlide(current),
     };
 
     return (

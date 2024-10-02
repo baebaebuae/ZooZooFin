@@ -1,6 +1,7 @@
 import styled from 'styled-components';
-import IconGold from '@assets/images/icons/icon_gold.svg?react';
-import IconMoney from '@assets/images/icons/icon_money.svg?react';
+import IconGold from '@assets/images/icons/icon_gold.png';
+import IconMoney from '@assets/images/icons/icon_money.png';
+import { NormalIcon } from '@components/root/icon';
 
 const PropInfoBox = styled.div``;
 
@@ -35,11 +36,11 @@ export const PropInfo = ({ propMoney, propGold }) => {
                 <PropMoney>
                     {propMoney}
                     {/* 형식 문제로(10,000,000) 문자열 처리되어있음 */}
-                    <IconMoney width={30} height={20} />
+                    <NormalIcon icon={IconMoney} />
                 </PropMoney>
                 <PropGold>
                     {propGold}
-                    <IconGold width={30} height={20} />
+                    <NormalIcon icon={IconGold} />
                 </PropGold>
             </PropInfoBox>
         </>

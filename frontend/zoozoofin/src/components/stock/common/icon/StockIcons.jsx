@@ -1,7 +1,7 @@
-import CharFrog from '@assets/images/characters/frog.svg?react';
-import IconOverseas from '@assets/images/icons/stocks/icon_overseas.svg?react';
-import IconETF from '@assets/images/icons/stocks/icon_ETF.svg?react';
-import IconCarrot from '@assets/images/icons/icon_carrot.svg?react';
+import CharFrog from '@assets/images/characters/frog.png';
+import IconOverseas from '@assets/images/icons/stocks/icon_overseas.png';
+import IconETF from '@assets/images/icons/stocks/icon_ETF.png';
+import IconCarrot from '@assets/images/icons/icon_carrot.png';
 
 import {
     DefaultFieldBox,

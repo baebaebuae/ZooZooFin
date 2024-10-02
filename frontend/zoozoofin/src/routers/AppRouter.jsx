@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useState, useEffect, useRef } from 'react';
 
 import Juju from '@pages/test/Juju';
-import JJHoney from '@pages/test/JJHoney';
 import Sinijini from '@pages/test/Sinijini';
 import Jignonne from '@pages/test/Jignonne';
 
@@ -43,7 +42,6 @@ const Background = styled.div`
 `;
 
 const MusicToggleButton = styled.button`
-    position: fixed;
     z-index: 1000;
     width: 100%;
     text-align: right;
@@ -74,7 +72,7 @@ const AppRouter = () => {
 
     // 이미지 불러오는 함수
     const getBackgroundimage = async (pathname) => {
-        const image = await import(`../assets/images/background/${pathname}.svg`);
+        const image = await import(`../assets/images/background/${pathname}.png`);
         setBackgroundimage(image.default);
     };
 
@@ -149,7 +147,6 @@ const AppRouter = () => {
                 <Route path="/wallet" element={<WalletPage />} />
 
                 <Route path="/juju" element={<Juju />} />
-                <Route path="/jjhoney" element={<JJHoney />} />
                 <Route path="/sinijini" element={<Sinijini />} />
                 <Route path="/jignonne" element={<Jignonne />} />
                 {/* social login */}

@@ -114,13 +114,13 @@ export const LoanRepayDetailCard = ({
             </InfoTitleBlock>
             <Divider isLine={true} />
             <ProductJoinInfo
-                isLoan={true}
+                $isLoan={true}
                 infoTitle={'대출 원금'}
                 infoContent={`${loanAmount}원`}
             />
-            <ProductJoinInfo isLoan={true} infoTitle={'대출 금리'} infoContent={`${loanRate}%`} />
+            <ProductJoinInfo $isLoan={true} infoTitle={'대출 금리'} infoContent={`${loanRate}%`} />
             <ProductJoinInfo
-                isLoan={true}
+                $isLoan={true}
                 infoTitle={'상환 방식'}
                 infoContent={
                     loanType === 1
@@ -134,7 +134,7 @@ export const LoanRepayDetailCard = ({
                 <WarningText>중도상환시 원금에 대해 1%의 수수료가 부과됩니다.</WarningText>
             )}
             <ProductJoinInfo
-                isLoan={true}
+                $isLoan={true}
                 infoTitle={'남은 상환 금액'}
                 infoContent={`${loanRemain}원`}
             />

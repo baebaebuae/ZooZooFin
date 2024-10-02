@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { NormalIcon } from '@components/root/icon';
-import IconChicken from '@assets/images/icons/icon_chicken.svg?react';
+import IconChicken from '@assets/images/icons/icon_chicken.png';
 import { ProductDetailInfo, ProductJoinInfo, ExtraInfo } from '@components/root/productDetailInfo';
 import { StampButton } from '@components/root/buttons';
 import { Divider } from '@components/root/card';

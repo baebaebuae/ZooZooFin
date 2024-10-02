@@ -167,7 +167,7 @@ const Tutorial = () => {
                             <div>animalName: {animalName}</div>
                             <Button
                                 color={'orange'}
-                                isBorder={true}
+                                $isBorder={true}
                                 onClick={
                                     // () => handleResponseClick(currentScript.responses[0].nextScript)
                                     () =>

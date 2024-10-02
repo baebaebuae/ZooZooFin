@@ -116,7 +116,7 @@ export const LoanJoinCard = ({ currentTurn, maxAmount, saveLoanInfo, loanRate })
                         <LoanButton
                             key={index}
                             size={'normal'}
-                            isSelected={loanType === selectedRepayType}
+                            $isSelected={loanType === selectedRepayType}
                             onClick={() => setSelectedRepayType(loanType)}
                         >
                             {loanType}
@@ -209,7 +209,7 @@ export const LoanJoinCard = ({ currentTurn, maxAmount, saveLoanInfo, loanRate })
                     infoContent1={`${expectedFinalTurn}턴`}
                     infoTitle2={'상환 예상 금액'}
                     infoContent2={`${expectedFinalAmount.toLocaleString()} 원`}
-                    isLoan={true}
+                    $isLoan={true}
                     isEarlyTermination={false}
                 ></ProductDetailInfo>
                 <Button

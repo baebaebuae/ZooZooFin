@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Delete from '@assets/images/icons/icon_delete.svg?react';
+import Delete from '@assets/images/icons/icon_delete.png';
 
 const InputBox = styled.div`
     display: flex;

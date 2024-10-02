@@ -8,7 +8,7 @@ import { Loading } from '@components/root/loading';
 
 import { MessageBox } from '@components/root/messageBox';
 import { NormalIcon } from '@components/root/icon';
-import IconChick from '@assets/images/icons/icon_chick.svg?react';
+import IconChick from '@assets/images/icons/icon_chick.png';
 
 import { getApiClient } from '@stores/apiClient';
 
@@ -112,7 +112,7 @@ const JoinProduct = ({ productType, goToScript }) => {
                             productName={selectedProduct.name}
                             productPeriod={selectedProduct.period}
                             productRate={selectedProduct.rate}
-                            isLoan={false}
+                            $isLoan={false}
                             currentTurn={5}
                             maxAmount={10000000}
                             isSavings={productType === 'savings'} // true=적금, false=예금

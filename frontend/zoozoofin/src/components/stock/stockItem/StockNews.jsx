@@ -1,5 +1,5 @@
 import { LargeIcon } from '@components/root/icon';
-import IconNews from '@assets/images/icons/stocks/icon_news.svg?react';
+import IconNews from '@assets/images/icons/stocks/icon_news.png';
 import { Divider } from '@components/stock/common/card/StoreCards';
 import { StockDetailCard } from '@components/stock/common/card/DetailCard';
 import {

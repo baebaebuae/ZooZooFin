@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Loadingtest1 from '@assets/images/background/loadingtest1.png';
+import Loading from '@assets/images/background/loading.png';
 // import Loadingtest2 from '@assets/images/background/loadingtest2.svg';
 
 import LoadingPuppy from '@assets/images/characters/loadingPuppy.png';
@@ -42,7 +42,7 @@ const LoadingText = styled.div`
 export const Loader = ({ loadingText }) => {
     return (
         <>
-            <Background backgroundimage={Loadingtest1} />
+            <Background backgroundimage={Loading} />
             {/* <Background backgroundimage={Loadingtest2} /> */}
 
             <LoadingContainer>
