@@ -5,6 +5,7 @@ import com.zzf.backend.domain.animal.dto.AnimalInfoResponse;
 import com.zzf.backend.domain.animal.dto.AnimalPortfolioResponse;
 import com.zzf.backend.domain.animal.dto.AnimalTypeResponse;
 import com.zzf.backend.domain.animal.service.AnimalService;
+import com.zzf.backend.global.auth.annotation.MemberId;
 import com.zzf.backend.global.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class AnimalController {
     }
 
     @PostMapping
-    public ResponseDto<?> createAnimal(@RequestHeader String memberId,
+    public ResponseDto<?> createAnimal(@MemberId String memberId,
                                        @RequestBody AnimalCreateRequest animalCreateRequest) {
         animalService.createAnimal(memberId, animalCreateRequest);
 
@@ -36,7 +37,7 @@ public class AnimalController {
     }
 
     @GetMapping("/{animalId}")
-    public ResponseDto<AnimalPortfolioResponse> getPortfolio(@RequestHeader String memberId,
+    public ResponseDto<AnimalPortfolioResponse> getPortfolio(@MemberId String memberId,
                                                              @PathVariable Long animalId) {
         AnimalPortfolioResponse portfolio = animalService.getPortfolio(memberId, animalId);
 
@@ -44,7 +45,7 @@ public class AnimalController {
     }
 
     @GetMapping("/info")
-    public ResponseDto<AnimalInfoResponse> getAnimalInfo(@RequestHeader String memberId) {
+    public ResponseDto<AnimalInfoResponse> getAnimalInfo(@MemberId String memberId) {
         AnimalInfoResponse animalInfo = animalService.getAnimalInfo(memberId);
 
         return ResponseDto.success(ANIMAL_INFO_SUCCESS, animalInfo);

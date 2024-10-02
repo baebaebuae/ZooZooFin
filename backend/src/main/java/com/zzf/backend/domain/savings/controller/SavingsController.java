@@ -5,8 +5,8 @@ import com.zzf.backend.domain.savings.dto.SavingsDeleteRequest;
 import com.zzf.backend.domain.savings.dto.SavingsRequest;
 import com.zzf.backend.domain.savings.dto.SavingsTypeResponse;
 import com.zzf.backend.domain.savings.service.SavingsService;
+import com.zzf.backend.global.auth.annotation.AnimalId;
 import com.zzf.backend.global.dto.ResponseDto;
-import com.zzf.backend.global.status.SuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 import static com.zzf.backend.global.status.SuccessCode.*;
 
@@ -47,7 +46,7 @@ public class SavingsController {
     })
     @Operation(summary = "적금 등록", description = "적금을 등록함.")
     @PostMapping
-    public ResponseDto<Void> postSavings(@RequestHeader Long animalId,
+    public ResponseDto<Void> postSavings(@AnimalId Long animalId,
                                          @RequestBody SavingsRequest savingsRequest){
 
         savingsService.postSavings(animalId, savingsRequest);
@@ -62,7 +61,7 @@ public class SavingsController {
     })
     @Operation(summary = "내 적금 조회", description = "내가 등록한 적금 목록을 보여줌.")
     @GetMapping("/my")
-    public ResponseDto<List<MySavingsResponse>> getMySavings(@RequestHeader Long animalId){
+    public ResponseDto<List<MySavingsResponse>> getMySavings(@AnimalId Long animalId){
 
         List<MySavingsResponse> mySavingsResponseList = savingsService.getMySavings(animalId);
 
@@ -75,7 +74,7 @@ public class SavingsController {
     })
     @Operation(summary = "적금 해지", description = "적금을 해지함.")
     @PatchMapping("/my")
-    public ResponseDto<Void> deleteMySavings(@RequestHeader Long animalId,
+    public ResponseDto<Void> deleteMySavings(@AnimalId Long animalId,
                                              @RequestBody SavingsDeleteRequest savingsDeleteRequest){
         Long savingsId = savingsDeleteRequest.getSavingsId();
 

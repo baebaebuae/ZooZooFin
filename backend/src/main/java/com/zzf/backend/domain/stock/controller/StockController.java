@@ -2,6 +2,7 @@ package com.zzf.backend.domain.stock.controller;
 
 import com.zzf.backend.domain.stock.dto.*;
 import com.zzf.backend.domain.stock.service.StockService;
+import com.zzf.backend.global.auth.annotation.AnimalId;
 import com.zzf.backend.global.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ public class StockController {
     private final StockService stockService;
 
     @GetMapping("/{stockType}")
-    public ResponseDto<GetHoldingsResponse> getHoldings(@RequestHeader Long animalId,
+    public ResponseDto<GetHoldingsResponse> getHoldings(@AnimalId Long animalId,
                                                         @PathVariable String stockType) {
         GetHoldingsResponse holdings = stockService.getHoldings(animalId, stockType);
 
@@ -24,7 +25,7 @@ public class StockController {
     }
 
     @GetMapping("/list/{stockType}")
-    public ResponseDto<StockListResponse> getStockList(@RequestHeader Long animalId,
+    public ResponseDto<StockListResponse> getStockList(@AnimalId Long animalId,
                                                        @PathVariable String stockType) {
         StockListResponse stockList = stockService.getStockList(animalId, stockType);
 
@@ -32,15 +33,15 @@ public class StockController {
     }
 
     @GetMapping("/info/{stockId}")
-    public ResponseDto<StockInfoResponse> getStockInfo(@RequestHeader Long animalId,
-                                       @PathVariable Long stockId) {
+    public ResponseDto<StockInfoResponse> getStockInfo(@AnimalId Long animalId,
+                                                       @PathVariable Long stockId) {
         StockInfoResponse stockInfo = stockService.getStockInfo(animalId, stockId);
 
         return ResponseDto.success(STOCK_INFO_SUCCESS, stockInfo);
     }
 
     @GetMapping("/statements/{stockId}")
-    public ResponseDto<StockDetailResponse> getStockDetail(@RequestHeader Long animalId,
+    public ResponseDto<StockDetailResponse> getStockDetail(@AnimalId Long animalId,
                                                            @PathVariable Long stockId) {
         StockDetailResponse stockDetail = stockService.getStockDetail(animalId, stockId);
 
@@ -48,7 +49,7 @@ public class StockController {
     }
 
     @PostMapping("/buy")
-    public ResponseDto<?> buyStock(@RequestHeader Long animalId,
+    public ResponseDto<?> buyStock(@AnimalId Long animalId,
                                    @RequestBody BuyStockRequest buyStockRequest) {
         stockService.buyStock(animalId, buyStockRequest);
 
@@ -56,7 +57,7 @@ public class StockController {
     }
 
     @PostMapping("/sell")
-    public ResponseDto<?> sellStock(@RequestHeader Long animalId,
+    public ResponseDto<?> sellStock(@AnimalId Long animalId,
                                     @RequestBody SellStockRequest sellStockRequest) {
         stockService.sellStock(animalId, sellStockRequest);
 

@@ -5,10 +5,9 @@ import com.zzf.backend.domain.deposit.dto.DepositRequest;
 import com.zzf.backend.domain.deposit.dto.DepositTypeResponse;
 import com.zzf.backend.domain.deposit.dto.MyDepositResponse;
 import com.zzf.backend.domain.deposit.service.DepositService;
+import com.zzf.backend.global.auth.annotation.AnimalId;
 import com.zzf.backend.global.dto.ResponseDto;
-import com.zzf.backend.global.status.SuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 import static com.zzf.backend.global.status.SuccessCode.*;
 
@@ -49,7 +47,7 @@ public class DepositController {
     })
     @Operation(summary = "예금 등록", description = "예금을 등록함.")
     @PostMapping
-    public ResponseDto<Void> postDeposit(@RequestHeader Long animalId,
+    public ResponseDto<Void> postDeposit(@AnimalId Long animalId,
                                          @RequestBody DepositRequest depositRequest){
         depositService.postDeposit(animalId, depositRequest);
 
@@ -62,7 +60,7 @@ public class DepositController {
     })
     @Operation(summary = "내 예금 조회", description = "내 예금 목록을 보여줌.")
     @GetMapping("/my")
-    public ResponseDto<List<MyDepositResponse>> getMyDeposit(@RequestHeader Long animalId){
+    public ResponseDto<List<MyDepositResponse>> getMyDeposit(@AnimalId Long animalId){
 
         List<MyDepositResponse> myDepositResponseList = depositService.getMyDeposit(animalId);
 
@@ -75,7 +73,7 @@ public class DepositController {
     })
     @Operation(summary = "예금 해지", description = "예금을 해지함.")
     @PatchMapping("/my")
-    public ResponseDto<Void> deleteMyDeposit(@RequestHeader Long animalId,
+    public ResponseDto<Void> deleteMyDeposit(@AnimalId Long animalId,
                                              @RequestBody DepositDeleteRequest depositDeleteRequest){
         Long depositId = depositDeleteRequest.getDepositId();
 

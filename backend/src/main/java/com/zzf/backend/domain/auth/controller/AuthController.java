@@ -3,12 +3,10 @@ package com.zzf.backend.domain.auth.controller;
 import com.zzf.backend.domain.auth.dto.ReissueRequest;
 import com.zzf.backend.domain.auth.dto.ReissueResponse;
 import com.zzf.backend.domain.auth.service.AuthService;
+import com.zzf.backend.global.auth.annotation.AccessToken;
 import com.zzf.backend.global.dto.ResponseDto;
-import com.zzf.backend.global.jwt.JwtProvider;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 import static com.zzf.backend.global.status.SuccessCode.*;
@@ -20,19 +18,17 @@ import static com.zzf.backend.global.status.SuccessCode.*;
 public class AuthController {
 
     private final AuthService authService;
-    private final JwtProvider jwtProvider;
 
     @PostMapping("/logout")
-    public ResponseDto<?> logout(@RequestHeader String accessToken) {
+    public ResponseDto<Void> logout(@AccessToken String accessToken) {
         authService.logout(accessToken);
 
-        return ResponseDto.success(LOGOUT_SUCCESS, null);
+        return ResponseDto.success(LOGOUT_SUCCESS);
     }
 
     @PatchMapping("/reissue")
-    public ResponseDto<?> reissueAccessToken(HttpServletRequest request,
-                                             @RequestBody ReissueRequest reissueRequest) {
-        String accessToken = jwtProvider.getAccessTokenFromRequest(request);
+    public ResponseDto<ReissueResponse> reissueAccessToken(@AccessToken String accessToken,
+                                                           @RequestBody ReissueRequest reissueRequest) {
         ReissueResponse reissue = authService.reissue(accessToken, reissueRequest.getRefreshToken());
 
         return ResponseDto.success(REISSUE_SUCCESS, reissue);

@@ -1,6 +1,6 @@
 package com.zzf.backend.domain.animal.entity;
 
-import com.zzf.backend.domain.member.entity.Member;
+import com.zzf.backend.global.auth.entity.Member;
 import com.zzf.backend.global.base.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -97,7 +97,7 @@ public class Animal extends BaseEntity {
     /**
      * <h4>1턴 증가</h4>
      */
-    public void increaseAnimalTurn(){
+    public void increaseAnimalTurn() {
         this.turn++;
     }
 }

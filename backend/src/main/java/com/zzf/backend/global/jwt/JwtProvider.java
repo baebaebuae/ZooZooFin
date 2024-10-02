@@ -2,13 +2,14 @@ package com.zzf.backend.global.jwt;
 
 import com.zzf.backend.domain.animal.entity.Animal;
 import com.zzf.backend.domain.animal.repository.AnimalRepository;
-import com.zzf.backend.domain.member.entity.Member;
-import com.zzf.backend.domain.member.repository.MemberRepository;
+import com.zzf.backend.global.auth.entity.Member;
+import com.zzf.backend.global.auth.repository.MemberRepository;
 import com.zzf.backend.global.exception.CustomException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -49,14 +50,10 @@ public class JwtProvider {
     }
 
     public String getAccessTokenFromHeader(String header) {
-        if (header != null) {
-            if (!header.toLowerCase().startsWith(BEARER_PREFIX)) {
-                throw new CustomException(MALFORMED_TOKEN);
-            }
-            return header.substring(7);
+        if (header == null || !header.toLowerCase().startsWith(BEARER_PREFIX)) {
+            return null;
         }
-
-        throw new CustomException(AUTHORIZATION_HEADER_NOT_EXIST);
+        return header.substring(BEARER_PREFIX.length());
     }
 
     public String getMemberIdFromAccessToken(String accessToken) {
@@ -71,7 +68,7 @@ public class JwtProvider {
     public Long getAnimalIdFromAccessToken(String accessToken) {
         String memberId = getMemberIdFromAccessToken(accessToken);
 
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findByUsername(memberId)
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND_EXCEPTION));
         Animal animal = animalRepository.findByMemberAndIsEndFalse(member)
                 .orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
@@ -94,14 +91,24 @@ public class JwtProvider {
         return UUID.randomUUID().toString();
     }
 
-    public void validateAccessToken(String accessToken) {
+    public boolean validateAccessToken(String accessToken) {
+        if (StringUtils.isEmpty(accessToken)) {
+            return false;
+        }
+
+        Claims claims = parseClaims(accessToken);
+        return claims.getExpiration().after(new Date());
+    }
+
+    private Claims parseClaims(String token) {
         try {
-            Jwts.parserBuilder()
+            return Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
-                    .parseClaimsJws(accessToken);
+                    .parseClaimsJws(token)
+                    .getBody();
         } catch (ExpiredJwtException e) {
-            throw new CustomException(EXPIRED_TOKEN);
+            return e.getClaims();
         } catch (MalformedJwtException e) {
             throw new CustomException(MALFORMED_TOKEN);
         } catch (UnsupportedJwtException e) {

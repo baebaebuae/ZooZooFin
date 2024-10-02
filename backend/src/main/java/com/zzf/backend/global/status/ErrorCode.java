@@ -20,6 +20,7 @@ public enum ErrorCode {
 
     // Auth
     AUTHORIZATION_HEADER_NOT_EXIST(401, "인증 헤더가 존재하지 않습니다."),
+    UNAUTHORIZED(401, "인증되지 않은 요청입니다."),
     ACCESS_DENIED(403, "허용되지 않는 접근입니다."),
     AUTHENTICATION_REQUIRED(401, "올바르지 않은 권한입니다."),
     ALREADY_LOGOUT(401, "이미 로그아웃한 토큰입니다."),
@@ -34,6 +35,7 @@ public enum ErrorCode {
 
     // Animal
     ANIMAL_NOT_FOUND_EXCEPTION(404, "존재하지 않는 동물입니다."),
+    ANIMAL_ALREADY_EXIST(400, "이미 진행중인 동물이 있습니다."),
     ANIMAL_UNAVAILABLE_EXCEPTION(404, "접근할 수 없는 동물입니다."),
     ANIMAL_ALL_END_EXCEPTION(404, "게임을 진행중인 동물이 없습니다."),
     ANIMAL_TYPE_NOT_FOUND_EXCEPTION(404, "존재하지 않는 동물 타입입니다."),
