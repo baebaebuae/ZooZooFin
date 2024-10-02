@@ -21,7 +21,7 @@ const InfoTitle = styled.div`
 `;
 
 const InfoContent = styled.div`
-    font-size: ${({ isLoan }) => (isLoan ? '14px' : '20px')};
+    font-size: ${({ $isLoan }) => ($isLoan ? '14px' : '20px')};
     text-align: center;
     font-weight: bold;
     color: ${({ theme, $isEarlyTermination }) =>
@@ -33,18 +33,18 @@ export const ProductDetailInfo = ({
     infoContent1,
     infoTitle2,
     infoContent2,
-    isLoan,
+    $isLoan,
     isEarlyTermination,
 }) => {
     return (
         <InfoBlock>
             <InfoBox>
                 <InfoTitle>{infoTitle1}</InfoTitle>
-                <InfoContent isLoan={isLoan}>{infoContent1}</InfoContent>
+                <InfoContent $isLoan={$isLoan}>{infoContent1}</InfoContent>
             </InfoBox>
             <InfoBox>
                 <InfoTitle>{infoTitle2}</InfoTitle>
-                <InfoContent isLoan={isLoan} $isEarlyTermination={isEarlyTermination}>
+                <InfoContent $isLoan={$isLoan} $isEarlyTermination={isEarlyTermination}>
                     {infoContent2}
                 </InfoContent>
             </InfoBox>
@@ -58,7 +58,7 @@ ProductDetailInfo.propTypes = {
     infoContent1: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     infoTitle2: PropTypes.string.isRequired,
     infoContent2: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    isLoan: PropTypes.bool,
+    $isLoan: PropTypes.bool,
     isEarlyTermination: PropTypes.bool,
 };
 
@@ -70,23 +70,23 @@ const JoinBox = styled.div`
 `;
 
 const JoinTitle = styled.div`
-    font-size: ${({ isLoan }) => (isLoan ? '12px' : '20px')};
+    font-size: ${({ $isLoan }) => ($isLoan ? '12px' : '20px')};
     text-align: center;
     color: ${({ theme }) => theme.colors.gray};
 `;
 
 const JoinContent = styled.div`
-    font-size: ${({ isLoan }) => (isLoan ? '14px' : '20px')};
+    font-size: ${({ $isLoan }) => ($isLoan ? '14px' : '20px')};
     text-align: center;
     font-weight: bold;
     color: ${({ theme }) => theme.colors.primaryDeep};
 `;
 
-export const ProductJoinInfo = ({ isLoan, infoTitle, infoContent }) => {
+export const ProductJoinInfo = ({ $isLoan, infoTitle, infoContent }) => {
     return (
         <JoinBox>
-            <JoinTitle isLoan={isLoan}>{infoTitle}</JoinTitle>
-            <JoinContent isLoan={isLoan}>{infoContent}</JoinContent>
+            <JoinTitle $isLoan={$isLoan}>{infoTitle}</JoinTitle>
+            <JoinContent $isLoan={$isLoan}>{infoContent}</JoinContent>
         </JoinBox>
     );
 };

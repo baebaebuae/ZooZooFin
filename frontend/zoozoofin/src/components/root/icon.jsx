@@ -4,17 +4,22 @@
 // 최상위 wrapper로 IconWrapper 생성
 
 const IconWrapper = ({ icon: Icon, width, height, onClick }) => {
-    return <Icon width={width} height={height} onClick={onClick} />;
+    // return <Icon width={width} height={height} onClick={onClick} />;
+    return <img src={Icon} width={width} height={height} onClick={onClick} />;
 };
 
 // 아이콘 크기에 따라 LargeIcon, NormalIcon으로 세분화
 
 export const LargeIcon = ({ icon, onClick }) => {
-    return <IconWrapper icon={icon} width={30} height={30} onClick={onClick} />;
+    // return <img width={30} height={30} onClick={onClick} />;
+    return <img src={icon} width={30} height={30} onClick={onClick} />;
+    // return <IconWrapper icon={icon} width={30} height={30} onClick={onClick} />;
 };
 
 export const NormalIcon = ({ icon }) => {
-    return <IconWrapper icon={icon} width={20} height={20} />;
+    // return <IconWrapper icon={icon} width={20} height={20} />;
+    return <img src={icon} width={20} height={20} />;
+    // return <img width={20} height={20} />;
 };
 
 // 아이콘이 필요한 위치에서

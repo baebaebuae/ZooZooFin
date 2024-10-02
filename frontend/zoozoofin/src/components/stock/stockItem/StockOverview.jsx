@@ -5,7 +5,7 @@ import {
     GraphTitle,
 } from '@components/stock/common/container/StockOverviewContainer';
 import { CardTitle } from '@components/stock/common/container/StockDetailContainer';
-import IconGraph from '@assets/images/icons/stocks/icon_graph.svg?react';
+import IconGraph from '@assets/images/icons/stocks/icon_graph.png';
 import { LargeIcon } from '@components/root/icon';
 import { MovingAverage } from '@components/stock/common/graph/MovingAverage';
 

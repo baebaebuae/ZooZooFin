@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { LargeIcon } from '@components/root/icon';
-import IconOverview from '@assets/images/icons/stocks/icon_overview.svg?react';
+import IconOverview from '@assets/images/icons/stocks/icon_overview.png';
 import { QuestionButton } from '@components/stock/common/button/Button';
 import { Divider } from '@components/stock/common/card/StoreCards';
 

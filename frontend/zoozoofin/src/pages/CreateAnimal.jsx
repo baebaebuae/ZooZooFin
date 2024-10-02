@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
-import Rabbit from '@assets/images/characters/rabbit.svg?react';
+import Rabbit from '@assets/images/characters/rabbit.png';
 import { Button } from '@components/root/buttons';
 
 import { getApiClient } from '@stores/apiClient';
@@ -37,8 +37,8 @@ const AnimalCard = styled.div`
     width: 240px;
     border-radius: 28px;
     padding: 5px;
-    background: ${({ isSelected }) =>
-        isSelected ? 'linear-gradient(90deg, red, yellow, green)' : 'none'};
+    background: ${({ $isSelected }) =>
+        $isSelected ? 'linear-gradient(90deg, red, yellow, green)' : 'none'};
 `;
 
 const AnimalPhoto = styled.div`
@@ -146,12 +146,12 @@ const CreateAnimal = () => {
                             <AnimalCard
                                 key={index}
                                 // isSelected={animal === selectedAnimal}
-                                isSelected={animal.animalTypeId === selectedAnimal?.animalTypeId}
+                                $sSelected={animal.animalTypeId === selectedAnimal?.animalTypeId}
                                 onClick={() => handleClick(animal)}
                             >
-                                {/* 사진이 정중앙 상태가 아님  */}
                                 <AnimalPhoto>
-                                    <Rabbit width={150} height={150} />
+                                    {/* <Rabbit width={150} height={150} /> */}
+                                    <img src={Rabbit} />
                                 </AnimalPhoto>
 
                                 <AnimalInfoBox>
@@ -172,7 +172,7 @@ const CreateAnimal = () => {
             </AnimalBlock>
             {selectedAnimal && (
                 <Button
-                    isBorder={true}
+                    $isBorder={true}
                     color={'primaryShadow'}
                     // onClick={() => {}} // Tutorial로 넘어가는 함수
                     // 이 때 selectedAnimal.animalTypeId만 같이 보내기(path로)
