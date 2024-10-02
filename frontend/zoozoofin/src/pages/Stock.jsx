@@ -127,9 +127,13 @@ const Stock = () => {
         );
     };
 
-    // 구매/판매 완료 후 => 결과 확인
+    // 구매/판매 완료 후 => 결과 확인 컴포넌트 이동
     const handleOrderCompletion = (done) => {
         setIsDone(done);
+    };
+
+    const handleCompletion = () => {
+        handleResponseClick(currentScript.responses[0].nextScript);
     };
 
     if (currentScript.type === 'script') {
@@ -166,16 +170,17 @@ const Stock = () => {
             case '주식거래소':
                 return (
                     <SampleBlock>
-                        <StockChannel
-                            onChannelSelect={handleChannelSelection}
-                            onOrderCompletion={handleOrderCompletion}
-                        />
+                        <StockChannel onChannelSelect={handleChannelSelection} />
                     </SampleBlock>
                 );
             case '주식구매':
                 return (
                     <SampleBlock>
-                        {!isDone ? <StockBuy channel={channel} /> : <StockResult />}
+                        {!isDone ? (
+                            <StockBuy channel={channel} onOrderCompletion={handleOrderCompletion} />
+                        ) : (
+                            <StockResult onComplete={handleCompletion} />
+                        )}
                     </SampleBlock>
                 );
             case 'END':

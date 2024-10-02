@@ -16,8 +16,6 @@ export const StockBuy = ({ channel, onOrderCompletion }) => {
     const handleFieldClick = (field) => {
         SetisFieldSelected(true);
         Setfield(field);
-        console.log(field);
-        console.log(isFieldSelected);
     };
 
     // 상품 구매하기 이동을 위한 상태 설정

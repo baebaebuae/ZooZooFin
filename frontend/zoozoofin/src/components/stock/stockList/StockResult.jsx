@@ -3,7 +3,11 @@ import { ChannelMessage } from '@components/stock/common/container/ChannelContai
 import { MessageIcon } from '@components/stock/common/icon/StockIcons';
 import { ActiveButton } from '@components/stock/common/button/Button';
 
-export const StockResult = () => {
+export const StockResult = ({ onComplete }) => {
+    const handleOnClick = () => {
+        onComplete();
+    };
+
     return (
         <>
             <ChannelMessage>
@@ -11,7 +15,9 @@ export const StockResult = () => {
                 구매 완료했어 개굴!
             </ChannelMessage>
             <TotalCard />
-            <ActiveButton size={'large'}>완료!</ActiveButton>
+            <ActiveButton size={'large'} onClick={handleOnClick}>
+                완료!
+            </ActiveButton>
         </>
     );
 };
