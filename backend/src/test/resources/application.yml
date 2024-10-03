@@ -64,14 +64,7 @@ spring:
     mongodb:
       uri: ${LOCAL_MONGO_URI}
 
-oauth:
-  google:
-    secret: ${OAUTH_GOOGLE_SECRET}
-  naver:
-    secret: ${OAUTH_NAVER_SECRET}
-  kakao:
-    secret: ${OAUTH_KAKAO_SECRET}
-  base-url: ${BASE_URL}
+callback: ${CALLBACK_URI}
 
 jwt:
   access-expiration: ${ACCESS_EXPIRATION}
