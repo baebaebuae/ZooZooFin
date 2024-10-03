@@ -6,6 +6,7 @@ import { getApiClient } from "@/stores/apiClient";
 import CreditBox from '@components/root/creditBox';
 import { BadgeStroke } from '@components/root/badge';
 import { useNavigate } from 'react-router-dom';
+import { theme } from "@/styles/theme"; //테마 파일(색상코드)
 
 const GlobalStyle = createGlobalStyle`
   @font-face {
@@ -31,7 +32,7 @@ const ModalBackdrop = styled.div`
 
 const StyledModal = styled(Modal)`
   font-family: 'ONE Mobile POP', sans-serif;
-  background-color: #f0f0f0;
+  background-color: ${({ theme }) => theme.colors.background};
   border-radius: 20px;
   padding: 20px;
   width: 100%;
@@ -45,11 +46,15 @@ const StyledModal = styled(Modal)`
 `;
 
 const ModalContent = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  flex-grow: 1;
+  font-family: 'ONE Mobile POP', sans-serif;
+  background-color: ${({ theme }) => theme.colors.background};
+  border-radius: 20px;
+  padding: 20px;
+  width: 90%;
+  max-width: 300px;
+  max-height: 80vh;
+  overflow: hidden;
+  position: relative;
 `;
 
 const Header = styled.div`
@@ -69,14 +74,14 @@ const TopSection = styled.div`
 
 const Subtitle = styled.div`
   font-size: 14px;
-  color: #666;
+  color: ${({ theme }) => theme.colors.gray};
   margin-bottom: 5px;
 `;
 
 const Title = styled.h2`
   font-size: 24px;
   font-weight: bold;
-  color: #0080ff;
+  color: ${({ theme }) => theme.colors.primaryDeep};
   margin: 0;
   max-width: 45%;
   overflow: hidden;
@@ -115,9 +120,9 @@ const FullWidthCreditBox = styled(CreditBox)`
     border-radius: 5px;
     background: linear-gradient(
       270deg,
-      #4ec306 -0.25%,
-      #f0e92d 26.3%,
-      #f00 99.96%
+      ${({ theme }) => theme.colors.tertiary} -0.25%,
+      ${({ theme }) => theme.colors.yellow} 26.3%,
+      ${({ theme }) => theme.colors.warn} 99.96%
     );
   }
 `;
@@ -133,7 +138,7 @@ const BadgeItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${props => props.completed ? props.activeColor : '#ffffff'};
+  background-color: ${props => props.completed ? props.activeColor : 'white'};
   border: 2px solid ${props => props.activeColor};
   border-radius: 20px;
   padding: 5px 15px;
@@ -153,7 +158,7 @@ const BadgeIcon = styled.div`
 const BadgeText = styled.span`
   font-size: 14px;
   font-weight: 500;
-  color: ${props => props.completed ? '#ffffff' : props.activeColor};
+  color: ${props => props.completed ? 'white' : props.activeColor};
 `;
 
 const AssetSection = styled.div`
@@ -173,13 +178,13 @@ const AssetRow = styled.div`
 
 const AssetLabel = styled.span`
   font-size: 14px;
-  color: #666;
+  color: ${({ theme }) => theme.colors.gray};
 `;
 
 const AssetValue = styled.span`
   font-size: 14px;
   font-weight: ${props => props.bold ? 'bold' : 'normal'};
-  color: ${props => props.color || '#333'};
+  color: ${props => props.color || "Black"};
 `;
 
 const Spacer = styled.div`
@@ -246,9 +251,9 @@ const CharacterInfo = ({ onClose }) => {
                   onClick={() => console.log('모든 작업이 완료되었습니다.')}
                 >
                   <BadgeIcon>
-                    <Check size={20} color="#ffffff" />
+                    <Check size={20} color="white" />
                   </BadgeIcon>
-                  <BadgeText completed={true} activeColor="#4CAF50">
+                  <BadgeText completed={true} activeColor={theme.colors.secondary}>
                     완료
                   </BadgeText>
                 </BadgeItem>
@@ -256,25 +261,25 @@ const CharacterInfo = ({ onClose }) => {
                 <>
                   <BadgeItem 
                     completed={characterData.isSolveQuizToday}
-                    activeColor="#007BFF"
+                    activeColor={theme.colors.primary}
                     onClick={() => handleBadgeClick('quiz')}
                   >
                     <BadgeIcon>
-                      {characterData.isSolveQuizToday ? <Check size={20} color="#007BFF" /> : '✏️'}
+                      {characterData.isSolveQuizToday ? <Check size={20} color={theme.colors.primary} /> : '✏️'}
                     </BadgeIcon>
-                    <BadgeText completed={characterData.isSolveQuizToday} activeColor="#007BFF">
+                    <BadgeText completed={characterData.isSolveQuizToday} activeColor={theme.colors.primary}>
                       GO
                     </BadgeText>
                   </BadgeItem>
                   <BadgeItem 
                     completed={characterData.isWorkToday}
-                    activeColor="#FFA500"
+                    activeColor={theme.colors.orange}
                     onClick={() => handleBadgeClick('work')}
                   >
                     <BadgeIcon>
-                      {characterData.isWorkToday ? <Check size={20} color="#FFA500" /> : '🥕'}
+                      {characterData.isWorkToday ? <Check size={20} color={theme.colors.orange} /> : '🥕'}
                     </BadgeIcon>
-                    <BadgeText completed={characterData.isWorkToday} activeColor="#FFA500">
+                    <BadgeText completed={characterData.isWorkToday} activeColor={theme.colors.orange}>
                       GO
                     </BadgeText>
                   </BadgeItem>
@@ -307,7 +312,7 @@ const CharacterInfo = ({ onClose }) => {
               </AssetRow>
               <AssetRow>
                 <AssetLabel>대출</AssetLabel>
-                <AssetValue color="#ff0000">-{characterData.totalLoan.toLocaleString()}원</AssetValue>
+                <AssetValue color={theme.colors.warn}>-{characterData.totalLoan.toLocaleString()}원</AssetValue>
               </AssetRow>
             </AssetSection>
           </ModalContent>
