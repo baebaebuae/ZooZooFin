@@ -21,17 +21,6 @@ const Start = () => {
         window.location.href = `${API_URI}/oauth/${domain}`;
     };
 
-    // const test = async () => {
-    //     const apiClient = getApiClient();
-    //     try {
-    //         const res = await apiClient.get('/member/profile');
-    //         console.log(res.data.message);
-    //         console.log(res.data.body);
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // };
-
     return (
         <>
             <h1>시작화면</h1>

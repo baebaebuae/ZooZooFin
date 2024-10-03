@@ -12,14 +12,14 @@ export const Button = styled.button`
     padding: ${({ size }) =>
         size === 'small' ? '6px 10px' : size === 'large' ? '12px 20px' : '8px 12px'};
     font-size: ${({ size }) => (size === 'small' ? '10px' : size === 'large' ? '24px' : '14px')};
-    border: ${({ isBorder }) => (isBorder ? `5px solid white` : 'none')};
+    border: ${({ $isBorder }) => ($isBorder ? `5px solid white` : 'none')};
 `;
 
 export const LoanButton = styled(Button)`
-    background-color: ${({ theme, isSelected }) => (isSelected ? theme.colors.yellow : 'white')};
-    border: ${({ theme, isSelected }) =>
-        isSelected ? 'none' : `2px solid ${theme.colors.yellow}`};
-    color: ${({ theme, isSelected }) => (isSelected ? 'white' : theme.colors.gray)};
+    background-color: ${({ theme, $isSelected }) => ($isSelected ? theme.colors.yellow : 'white')};
+    border: ${({ theme, $isSelected }) =>
+        $isSelected ? 'none' : `2px solid ${theme.colors.yellow}`};
+    color: ${({ theme, $isSelected }) => ($isSelected ? 'white' : theme.colors.gray)};
 `;
 
 export const StampButton = ({ onClick }) => {

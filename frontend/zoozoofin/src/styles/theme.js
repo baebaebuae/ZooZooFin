@@ -10,6 +10,7 @@ export const theme = {
         gray: '#6C7377',
         yellow: '#ffd84e',
         orange: '#f7954f',
+        lightOrange: '#F2C6A0',
         warn: '#FF3E3E',
         inactive: '#CED1D3',
         bubble: '#EBF4F0',

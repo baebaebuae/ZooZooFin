@@ -1,7 +1,7 @@
-import CharFrog from '@assets/images/characters/frog.svg?react';
-import IconOverseas from '@assets/images/icons/stocks/icon_overseas.svg?react';
-import IconETF from '@assets/images/icons/stocks/icon_ETF.svg?react';
-import IconCarrot from '@assets/images/icons/icon_carrot.svg?react';
+import CharFrog from '@assets/images/characters/frog.png';
+import IconOverseas from '@assets/images/icons/stocks/icon_overseas.png';
+import IconETF from '@assets/images/icons/stocks/icon_ETF.png';
+import IconCarrot from '@assets/images/icons/icon_carrot.png';
 
 import {
     DefaultFieldBox,
@@ -27,15 +27,15 @@ import {
 } from '@components/stock/common/icon/StockFieldIcons';
 
 const IconWrapper = ({ icon: Icon, width, height }) => {
-    return <Icon width={width} height={height} />;
+    return <img src={Icon} width={width} height={height} />;
 };
 
 export const MessageIcon = () => {
-    return <IconWrapper icon={CharFrog} width={25} height={25} />;
+    return <IconWrapper icon={CharFrog} width={35} height={25} />;
 };
 
 export const DomesticIcon = () => {
-    return <IconWrapper icon={CharFrog} width={50} height={50} />;
+    return <IconWrapper icon={CharFrog} width={50} height={35} />;
 };
 export const OverseasIcon = () => {
     return <IconWrapper icon={IconOverseas} width={50} height={50} />;
@@ -64,7 +64,7 @@ const Icons = {
 
 const FieldIcon = ({ field }) => {
     const IconComponent = Icons[field];
-    return <IconWrapper icon={IconComponent} width={25} height={25} />;
+    return <IconWrapper icon={IconComponent} width={30} height={30} />;
 };
 
 export const DefaultFieldIcon = ({ field }) => {

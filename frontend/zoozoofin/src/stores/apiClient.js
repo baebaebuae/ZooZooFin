@@ -1,6 +1,5 @@
 import axios from 'axios';
 const API_URL = import.meta.env.VITE_URL;
-const TOKEN = import.meta.env.VITE_ACCESS_TOKEN;
 export const createApiClient = (accessToken) => {
     if (!accessToken) {
         console.error('createApiClient: accessToken이 제공되지 않았습니다.');
@@ -23,10 +22,9 @@ const clearAccessToken = () => localStorage.removeItem('accessToken');
 export const isLoggedIn = () => !!getAccessToken();
 
 export const getApiClient = () => {
-    const accessToken = TOKEN;
-    // const accessToken = getAccessToken();
-    // console.log(accessToken);
+    const accessToken = getAccessToken();
     const refreshToken = getRefreshToken();
+    
     if (accessToken) {
         console.log('getApiClient: accessToken이 존재합니다.');
     }
