@@ -97,8 +97,7 @@ spring:
     hibernate:
       ddl-auto: ${LOCAL_DDL_AUTO}
 
-oauth:
-  base-url: http://localhost:8080
+callback: ${LOCAL_CALLBACK_URI}
 
 logging:
   level:
@@ -172,8 +171,7 @@ spring:
     hibernate:
       ddl-auto: ${LOCAL_DDL_AUTO}
 
-oauth:
-  base-url: ${BASE_URL}
+callback: ${CALLBACK_URI}
 
 logging:
   level:
