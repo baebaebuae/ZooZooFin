@@ -27,7 +27,8 @@ public class CustomOAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuc
     @Value("${jwt.refresh-expiration}")
     private Long refreshExpiration;
 
-    private static final String CALLBACK_URI = "/callback";
+    @Value("${callback}")
+    private String CALLBACK_URI;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
