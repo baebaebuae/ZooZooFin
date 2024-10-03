@@ -8,7 +8,7 @@ import { LoanRepayDetailCard } from '@components/loan/LoanRepayDetailCard';
 
 import { MessageBox } from '@components/root/messageBox';
 import { NormalIcon } from '@components/root/icon';
-import IconFrog from '@assets/images/icons/icon_frog.svg?react';
+import IconFrog from '@assets/images/icons/icon_frog.png';
 
 import { getApiClient } from '@stores/apiClient';
 

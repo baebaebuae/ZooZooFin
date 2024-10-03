@@ -7,7 +7,7 @@ import { Loading } from '@components/root/loading';
 
 import { MessageBox } from '@components/root/messageBox';
 import { NormalIcon } from '@components/root/icon';
-import IconChick from '@assets/images/icons/icon_chick.svg?react';
+import IconChick from '@assets/images/icons/icon_chick.png';
 
 import { getApiClient } from '@stores/apiClient';
 

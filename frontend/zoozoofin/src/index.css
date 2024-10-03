@@ -2,33 +2,45 @@
     font-family: 'OneMobile';
     src: url('./src/assets/fonts/ONE\ Mobile\ Regular.ttf') format('truetype');
     font-weight: normal;
+    font-display: swap;
 }
 
 @font-face {
     font-family: 'OneMobile';
     src: url('./src/assets/fonts/ONE\ Mobile\ Bold.ttf') format('truetype');
     font-weight: bold;
+    font-display: swap;
 }
 
 @font-face {
     font-family: 'OneMobile';
     src: url('./src/assets/fonts/ONE\ Mobile\ Light.ttf') format('truetype');
     font-weight: light;
+    font-display: swap;
 }
 
 @font-face {
     font-family: 'OneMobilePop';
     src: url('./src/assets/fonts/ONE\ Mobile\ POP.ttf') format('truetype');
+    font-display: swap;
 }
 
 @font-face {
     font-family: 'neodgm_code';
     src: url('./src/assets/fonts/neodgm_code.ttf') format('truetype');
+    font-display: swap;
 }
 
 @font-face {
     font-family: 'MangoDdobak';
     src: url('./src/assets/fonts/MangoDdobak.ttf') format('truetype');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'YeongdeokSea';
+    src: url('./src/assets/fonts/Yeongdeok\ Sea.ttf') format('truetype');
+    font-display: swap;
 }
 
 @media (min-width: 360px) and (min-height: 640px) {

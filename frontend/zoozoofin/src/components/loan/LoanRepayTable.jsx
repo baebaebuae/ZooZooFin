@@ -94,10 +94,11 @@ const LoanRepayTable = ({ repayType, loanAmount, loanPeriod, loanRate }) => {
             </thead>
             <tbody>
                 {rows.map((row, index) => (
-                    <>
+                    <React.Fragment key={row.turn}>
                         {/* 만기 일시 상환 */}
                         {repayType === '만기' && (
                             <TableRow key={`maturityInterest-${index}`}>
+                                {/* <TableRow> */}
                                 <TableCell>{row.turn}</TableCell>
                                 <TableCell>
                                     {row.maturityInterest.principal.toLocaleString()}
@@ -117,6 +118,7 @@ const LoanRepayTable = ({ repayType, loanAmount, loanPeriod, loanRate }) => {
                         {/* 원금 균등 상환 */}
                         {repayType === '원금' && (
                             <TableRow key={`principalRepayment-${index}`}>
+                                {/* <TableRow> */}
                                 <TableCell>{row.turn}</TableCell>
                                 <TableCell>
                                     {row.principalRepayment.principal.toLocaleString()}
@@ -136,6 +138,7 @@ const LoanRepayTable = ({ repayType, loanAmount, loanPeriod, loanRate }) => {
                         {/* 원리금 균등 상환 */}
                         {repayType === '원리금' && (
                             <TableRow key={`principalInterest-${index}`}>
+                                {/* <TableRow> */}
                                 <TableCell>{row.turn}</TableCell>
                                 <TableCell>
                                     {row.principalInterest.principal.toLocaleString()}
@@ -151,7 +154,7 @@ const LoanRepayTable = ({ repayType, loanAmount, loanPeriod, loanRate }) => {
                                 </TableCell>
                             </TableRow>
                         )}
-                    </>
+                    </React.Fragment>
                 ))}
             </tbody>
         </Table>

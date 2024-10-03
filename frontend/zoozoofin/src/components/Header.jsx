@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { WorkingAreas } from '@styles/components/common/Header';
 import { LargeIcon } from '@components/root/icon';
-import CharRabbit from '@assets/images/characters/rabbit.svg?react';
+import CharRabbit from '@assets/images/characters/rabbit.png';
 
 import styled from 'styled-components';
 import {
@@ -16,6 +15,7 @@ import { PropInfo } from './root/headerCharInfo';
 import CharacterInfo from './character/CharacterInfo';
 
 const HeaderBlock = styled.div`
+    position: fixed;
     width: 340px;
     display: flex;
     justify-content: space-between;
@@ -47,32 +47,6 @@ const Header = () => {
 
     return (
         <nav>
-            <WorkingAreas>
-                <Link to="/juju">주연 작업실</Link>
-                <Link to="/sinijini">희진 작업실</Link>
-                <Link to="/jignonne">진영 작업실</Link>
-                <Link to="/jjhoney">지현 작업실</Link>
-            </WorkingAreas>
-            <WorkingAreas>
-                <Link to="/start">시작화면</Link>
-                <Link to="/tutorial">튜토리얼</Link>
-                <Link to="/createanimal">캐릭터생성</Link>
-                <Link to="/myroom">내 방</Link>
-                <Link to="/laptop">노트북</Link>
-                <Link to="/bank">은행</Link>
-                <Link to="/stock">주식</Link>
-                <Link to="/lender">콩팥캐피탈</Link>
-                <Link to="/school">학교</Link>
-                <Link to="/work">당근게임</Link>
-                <Link to="/ending">엔딩</Link>
-            </WorkingAreas>
-            <div>360px</div>
-            <TempWidthLine />
-
-            {/*  */}
-            {/* 진짜 헤더 */}
-            {/*  */}
-
             <HeaderBlock>
                 <HeaderButtonBlock>
                     <HeaderHamburgerButton />
@@ -90,10 +64,6 @@ const Header = () => {
                     <PropInfo propMoney={'10,000,000'} propGold={'4,230'} />
                 </HeaderUserBlock>
             </HeaderBlock>
-
-            {/*  */}
-            {/* 진짜 헤더 */}
-            {/*  */}
         </nav>
     );
 };

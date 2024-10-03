@@ -64,6 +64,12 @@ const ResponseButton = styled.button`
     font-size: 14px;
     background-color: transparent;
     border: none;
+    display: inline-flex;
+    align-items: center;
+`;
+
+const ResponseSymbol = styled.span`
+    margin-right: 5px;
 `;
 
 export const Bubble = ({ npc, type, content, responses, onClick }) => {
@@ -111,7 +117,12 @@ export const Bubble = ({ npc, type, content, responses, onClick }) => {
                                 key={index}
                                 onClick={() => onClick(response.nextScript)}
                             >
-                                {response.selection && `▶ ${response.selection}`}
+                                {response.selection && (
+                                    <>
+                                        <ResponseSymbol>▶ </ResponseSymbol>
+                                        {response.selection}
+                                    </>
+                                )}
                             </ResponseButton>
                         ))}
                     </ResponseBlock>

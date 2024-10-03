@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { Button } from '@components/root/buttons';
 import { NormalIcon } from '@components/root/icon';
-import IconChicken from '@assets/images/icons/icon_chicken.svg?react';
+import IconChicken from '@assets/images/icons/icon_chicken.png';
 import { ProductDetailInfo, ProductJoinInfo } from '@components/root/productDetailInfo';
 import { StampButton } from '@components/root/buttons';
 import { Divider } from '@components/root/card';
@@ -80,7 +80,7 @@ export const ProductTerminationDetailCard = ({
                 infoContent1={`${period}턴`}
                 infoTitle2={'이율'}
                 infoContent2={'0.5%'} // 해지는 이율 고정임
-                isLoan={productType === 'loan'}
+                $isLoan={productType === 'loan'}
                 isEarlyTermination={true}
             />
             <Divider $isLine={true} />

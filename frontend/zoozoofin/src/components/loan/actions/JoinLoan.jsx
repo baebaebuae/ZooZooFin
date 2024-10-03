@@ -8,7 +8,7 @@ import { CheckCreditCardMini } from '@components/loan/CheckCreditCardMini';
 
 import { MessageBox } from '@components/root/messageBox';
 import { NormalIcon } from '@components/root/icon';
-import IconChick from '@assets/images/icons/icon_chick.svg?react';
+import IconChick from '@assets/images/icons/icon_chick.png';
 
 const Block = styled.div`
     display: flex;

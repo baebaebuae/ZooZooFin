@@ -6,18 +6,40 @@ import {
     AtciveText,
     DefaultText,
 } from '@components/stock/common/container/FieldIconContainer';
-import { DefaultFieldIcon, ActiveFieldIcon } from '@components/stock/common/icon/StockIcons'; // ActiveFieldIcon도 임포트 필요
+import { DefaultFieldIcon, ActiveFieldIcon } from '@components/stock/common/icon/StockIcons';
 
-// StockFieldList 정의
+// 채널 별 주식 분야 리스트
 const StockFieldList = {
-    Manufacturing: '제조',
-    Ship: '조선',
-    IT: 'IT',
-    Entertainment: '엔터',
-    Bio: '바이오',
-    Food: '식품',
-    Chemistry: '화학',
-    Bank: '금융',
+    domestic: {
+        Manufacturing: '제조',
+        Ship: '조선',
+        IT: 'IT',
+        Entertainment: '엔터',
+        Bio: '바이오',
+        Food: '식품',
+        Chemistry: '화학',
+        Bank: '금융',
+    },
+    overseas: {
+        Manufacturing: '제조',
+        Micro: '반도체',
+        IT: 'IT',
+        Entertainment: '엔터',
+        Bio: '바이오',
+        Food: '식품',
+        Oil: '화학/정유',
+        Bank: '금융',
+    },
+    ETF: {
+        Energy: '에너지/화학',
+        Micro: '반도체',
+        IT: 'IT',
+        House: '리츠',
+        Bio: '바이오',
+        China: '중국',
+        Construction: '기계/건설',
+        Bank: '금융',
+    },
 };
 
 // Carousel Div
@@ -26,7 +48,7 @@ const FieldBox = styled.div`
     flex-direction: row;
     align-items: flex-start;
     width: 110%;
-    padding: 15px 0;
+    padding: 25px 0;
     gap: 30px;
     background: rgba(217, 217, 217, 0.6);
     border: 6px solid ${({ theme }) => theme.colors.primary};
@@ -44,9 +66,9 @@ const Wrapper = styled.div`
 `;
 
 // 무한 스크롤 원리 적용
-const StockField = () => {
+const StockField = ({ type, onFieldSelect }) => {
     const fieldBoxRef = useRef(null);
-    const [items, setItems] = useState(Object.entries(StockFieldList));
+    const [items, setItems] = useState(Object.entries(StockFieldList[type]));
     const [activeIndex, setActiveIndex] = useState(null); // 활성화된 필드의 인덱스를 관리
 
     // 스크롤이 끝에 도달했는지 확인하는 함수
@@ -61,7 +83,7 @@ const StockField = () => {
 
     // 리스트에 아이템 추가하는 함수
     const addMoreItems = () => {
-        setItems((prevItems) => [...prevItems, ...Object.entries(StockFieldList)]);
+        setItems((prevItems) => [...prevItems, ...Object.entries(StockFieldList[type])]);
     };
 
     useEffect(() => {
@@ -78,9 +100,8 @@ const StockField = () => {
     // 아이템 클릭 시 활성화된 인덱스를 설정하는 함수
     const handleFieldClick = (index, key) => {
         setActiveIndex(index); // 클릭한 필드의 인덱스를 저장
-        console.log(`Clicked key : ${key}!!`);
+        onFieldSelect(key);
     };
-
     return (
         <FieldBox ref={fieldBoxRef}>
             <Wrapper>

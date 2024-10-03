@@ -8,4 +8,5 @@ export const ChannelCard = styled(Card)`
     align-items: center;
     padding: 15px 30px;
     width: 75%;
+    height: 50px;
 `;

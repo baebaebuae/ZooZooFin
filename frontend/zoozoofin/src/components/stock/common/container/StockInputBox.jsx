@@ -25,8 +25,12 @@ export const StockInputBox = ({
     amount4,
     maxAmount,
     onSavingsAmountChange,
+    handleTotal,
+    type,
 }) => {
     const [savingsAmount, setSavingsAmount] = useState(0);
+    const [total, SetTotal] = useState(null);
+    const [value, SetValue] = useState(null);
 
     const addAmount = (value) =>
         setSavingsAmount((prev) => {
@@ -39,17 +43,31 @@ export const StockInputBox = ({
 
     useEffect(() => {
         onSavingsAmountChange(savingsAmount);
+        SetTotal(savingsAmount);
     }, [savingsAmount, onSavingsAmountChange]);
+
+    useEffect(() => {
+        if (type === 'buy') {
+            SetValue('구매');
+        } else {
+            SetValue('판매');
+        }
+    }, [type]);
+
+    // total 값 넘겨주기
+    useEffect(() => {
+        handleTotal(total);
+    }, [total, handleTotal]);
 
     return (
         <InputBlock>
             <Input
                 title={title}
-                value={savingsAmount === 0 ? '구매할 주를 입력해줘.' : savingsAmount}
+                value={savingsAmount === 0 ? `${value}할 주를 입력해줘.` : savingsAmount}
                 unit={'주'}
                 hasValue={savingsAmount !== 0}
                 onDelete={handleDelete}
-            ></Input>
+            />
             <ButtonBlock>
                 <InputButton
                     size={'small'}

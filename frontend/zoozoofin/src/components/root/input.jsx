@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import Delete from '@assets/images/icons/icon_delete.svg?react';
+import Delete from '@assets/images/icons/icon_delete.png';
+import { SmallIcon } from '@components/root/icon';
 
 const InputBox = styled.div`
     display: flex;
@@ -25,7 +26,7 @@ export const Input = ({ title, value, unit, hasValue, onDelete }) => {
             <InputBox>
                 {value.toLocaleString()}
                 {hasValue ? unit : null}
-                {hasValue ? <Delete onClick={onDelete} /> : null}
+                {hasValue ? <SmallIcon icon={Delete} onClick={onDelete} /> : null}
             </InputBox>
         </>
     );
