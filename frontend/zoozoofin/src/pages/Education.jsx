@@ -97,7 +97,7 @@ const Button = styled.button`
     padding: 5px 15px; /* large 크기 */
     font-size: 15px; 
     border: none; /* 기본적으로 테두리 없음 */
-    animation: ${blink} 1s infinite;
+    animation: ${blink} 1.8s infinite;
     z-index: 3;
     width: 90px; /* 버튼의 가로 크기 */
     position: absolute;

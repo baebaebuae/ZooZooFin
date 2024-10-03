@@ -98,6 +98,30 @@ const CreditSection = styled.div`
   width: 100%;
 `;
 
+const FullWidthCreditBox = styled(CreditBox)`
+  width: 100% !important;
+
+  & > div {
+    width: 100% !important;
+  }
+
+  & > div > div {
+    width: 100% !important;
+  }
+
+  .gQkfQu {
+    width: 100% !important;
+    height: 7px;
+    border-radius: 5px;
+    background: linear-gradient(
+      270deg,
+      #4ec306 -0.25%,
+      #f0e92d 26.3%,
+      #f00 99.96%
+    );
+  }
+`;
+
 const BadgeContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -135,9 +159,10 @@ const BadgeText = styled.span`
 const AssetSection = styled.div`
   background-color: white;
   border-radius: 10px;
-  padding: 15px;
+  padding: 10px;
   width: 100%;
   box-sizing: border-box;
+  margin-bottom: ${props => props.marginBottom || '0'};
 `;
 
 const AssetRow = styled.div`
@@ -155,6 +180,10 @@ const AssetValue = styled.span`
   font-size: 14px;
   font-weight: ${props => props.bold ? 'bold' : 'normal'};
   color: ${props => props.color || '#333'};
+`;
+
+const Spacer = styled.div`
+  height: 15px;
 `;
 
 const CharacterInfo = ({ onClose }) => {
@@ -207,7 +236,7 @@ const CharacterInfo = ({ onClose }) => {
               </TopSection>
             </Header>
             <CreditSection>
-              <CreditBox grade={characterData.animalCredit} />
+              <FullWidthCreditBox grade={characterData.animalCredit} />
             </CreditSection>
             <BadgeContainer>
               {allTasksCompleted ? (
@@ -226,26 +255,26 @@ const CharacterInfo = ({ onClose }) => {
               ) : (
                 <>
                   <BadgeItem 
-                    completed={false}
-                    activeColor="#FFD700"
+                    completed={characterData.isSolveQuizToday}
+                    activeColor="#007BFF"
                     onClick={() => handleBadgeClick('quiz')}
                   >
                     <BadgeIcon>
-                      {characterData.isSolveQuizToday ? <Check size={20} color="#FFD700" /> : '🐑'}
+                      {characterData.isSolveQuizToday ? <Check size={20} color="#007BFF" /> : '✏️'}
                     </BadgeIcon>
-                    <BadgeText completed={false} activeColor="#FFD700">
-                      퀴즈
+                    <BadgeText completed={characterData.isSolveQuizToday} activeColor="#007BFF">
+                      GO
                     </BadgeText>
                   </BadgeItem>
                   <BadgeItem 
-                    completed={false}
+                    completed={characterData.isWorkToday}
                     activeColor="#FFA500"
                     onClick={() => handleBadgeClick('work')}
                   >
                     <BadgeIcon>
                       {characterData.isWorkToday ? <Check size={20} color="#FFA500" /> : '🥕'}
                     </BadgeIcon>
-                    <BadgeText completed={false} activeColor="#FFA500">
+                    <BadgeText completed={characterData.isWorkToday} activeColor="#FFA500">
                       GO
                     </BadgeText>
                   </BadgeItem>
@@ -257,6 +286,9 @@ const CharacterInfo = ({ onClose }) => {
                 <AssetLabel>순자산</AssetLabel>
                 <AssetValue bold>{characterData.totalAmount.toLocaleString()}원</AssetValue>
               </AssetRow>
+            </AssetSection>
+            <Spacer />
+            <AssetSection>
               <AssetRow>
                 <AssetLabel>현금</AssetLabel>
                 <AssetValue>{characterData.totalAssets.toLocaleString()}원</AssetValue>
