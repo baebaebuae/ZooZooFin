@@ -10,6 +10,11 @@ import com.zzf.backend.domain.loan.entity.Loan;
 import com.zzf.backend.domain.loan.repository.LoanRepository;
 import com.zzf.backend.domain.savings.entity.Savings;
 import com.zzf.backend.domain.savings.repository.SavingsRepository;
+import com.zzf.backend.domain.stock.entity.Chart;
+import com.zzf.backend.domain.stock.entity.Stock;
+import com.zzf.backend.domain.stock.entity.StockHoldings;
+import com.zzf.backend.domain.stock.repository.ChartRepository;
+import com.zzf.backend.domain.stock.repository.StockHoldingsRepository;
 import com.zzf.backend.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.zzf.backend.global.status.ErrorCode.ANIMAL_NOT_FOUND_EXCEPTION;
+import static com.zzf.backend.global.status.ErrorCode.CHART_NOT_FOUND_EXCEPTION;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +32,8 @@ public class HomeServiceImpl implements HomeService{
     private final AnimalRepository animalRepository;
     private final DepositRepository depositRepository;
     private final SavingsRepository savingsRepository;
+    private final StockHoldingsRepository stockHoldingsRepository;
+    private final ChartRepository chartRepository;
     private final LoanRepository loanRepository;
     private final CapitalRepository capitalRepository;
 
@@ -57,7 +65,7 @@ public class HomeServiceImpl implements HomeService{
         totalAssets += getMyTotalSavings(animal);
 
         // 총 주식
-        // totalAssets += getMyTotalStock(character);
+        totalAssets += getMyTotalStock(animal);
 
         // 총 대출금
         totalAssets -= getMyRestLoans(animal);
@@ -94,6 +102,24 @@ public class HomeServiceImpl implements HomeService{
 
         for (Savings savings : savingsList){
             money += savings.getSavingsAmount();
+        }
+
+        return money;
+    }
+
+    // 남은 주식 계산
+    @Override
+    @Transactional(readOnly = true)
+    public long getMyTotalStock(Animal animal){
+        long money = 0L;
+
+        List<StockHoldings> stockHoldingsList = stockHoldingsRepository.findAllByAnimalAndStockIsSoldFalse(animal);
+
+        for (StockHoldings stockHoldings : stockHoldingsList){
+            Chart chart = chartRepository.findByStockAndTurn(stockHoldings.getStock(), animal.getTurn())
+                    .orElseThrow(() -> new CustomException(CHART_NOT_FOUND_EXCEPTION));
+
+            money += stockHoldings.getStockCount() * chart.getPrice();
         }
 
         return money;

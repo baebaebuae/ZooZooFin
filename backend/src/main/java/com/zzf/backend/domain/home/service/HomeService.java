@@ -11,6 +11,8 @@ public interface HomeService {
 
     long getMyTotalSavings(Animal animal);
 
+    long getMyTotalStock(Animal animal);
+
     long getMyRestLoans(Animal animal);
 
     long getMyTotalLoans(Animal animal);

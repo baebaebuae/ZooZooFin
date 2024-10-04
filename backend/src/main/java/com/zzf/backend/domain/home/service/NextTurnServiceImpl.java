@@ -18,6 +18,14 @@ import com.zzf.backend.domain.loan.repository.LoanRepository;
 import com.zzf.backend.domain.savings.entity.Savings;
 import com.zzf.backend.domain.savings.entity.SavingsType;
 import com.zzf.backend.domain.savings.repository.SavingsRepository;
+import com.zzf.backend.domain.stock.entity.Chart;
+import com.zzf.backend.domain.stock.entity.Stock;
+import com.zzf.backend.domain.stock.entity.StockHistory;
+import com.zzf.backend.domain.stock.entity.StockHoldings;
+import com.zzf.backend.domain.stock.repository.ChartRepository;
+import com.zzf.backend.domain.stock.repository.StockHistoryRepository;
+import com.zzf.backend.domain.stock.repository.StockHoldingsRepository;
+import com.zzf.backend.domain.stock.repository.StockRepository;
 import com.zzf.backend.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,7 +45,9 @@ public class NextTurnServiceImpl implements NextTurnService {
     private final SavingsRepository savingsRepository;
     private final LoanRepository loanRepository;
     private final CapitalRepository capitalRepository;
-    // private final StockRepository;
+    private final StockHoldingsRepository stockHoldingsRepository;
+    private final StockHistoryRepository stockHistoryRepository;
+    private final ChartRepository chartRepository;
     private final TurnRecordRepository turnRecordRepository;
     private final NextTurnRecordRepository nextTurnRecordRepository;
     private final WarningRecordRepository warningRecordRepository;
@@ -478,9 +488,10 @@ public class NextTurnServiceImpl implements NextTurnService {
         for (Deposit deposit : depositList) {
             // 예금 종료 처리
             deposit.changeDepositIsEnd(true);
-            animal.increaseAnimalAssets(deposit.getDepositAmount());
             money += deposit.getDepositAmount();
         }
+
+        animal.increaseAnimalAssets(money);
         loanWarningDTO.setDepositTotal(money);
     }
 
@@ -496,9 +507,10 @@ public class NextTurnServiceImpl implements NextTurnService {
         for (Savings savings : savingsList) {
             // 적금 종료 처리
             savings.changeSavingsIsEnd(true);
-            animal.increaseAnimalAssets(savings.getSavingsAmount());
             money += savings.getSavingsAmount();
         }
+
+        animal.increaseAnimalAssets(money);
         loanWarningDTO.setSavingsTotal(money);
     }
 
@@ -509,7 +521,27 @@ public class NextTurnServiceImpl implements NextTurnService {
         long money = 0L;
 
         // 주식 모두 팔고 판 금액 animal.assets와 money에 더하기.
+        List<StockHoldings> stockHoldingsList = stockHoldingsRepository.findAllByAnimalAndStockIsSoldFalse(animal);
 
+        for (StockHoldings stockHoldings : stockHoldingsList){
+            Stock stock = stockHoldings.getStock();
+
+            Chart chart = chartRepository.findByStockAndTurn(stock, animal.getTurn())
+                    .orElseThrow(() -> new CustomException(CHART_NOT_FOUND_EXCEPTION));
+
+            money += stockHoldings.getStockCount() * chart.getPrice();
+
+            stockHoldings.setStockIsSold(true);
+            stockHistoryRepository.save(StockHistory.builder()
+                            .stock(stock)
+                            .animal(animal)
+                            .tradeCount(stockHoldings.getStockCount())
+                            .isBuy(false)
+                            .turn(animal.getTurn())
+                    .build());
+        }
+
+        animal.increaseAnimalAssets(money);
         loanWarningDTO.setSavingsTotal(money);
     }
 
