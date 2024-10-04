@@ -15,5 +15,10 @@ export const theme = {
         warnBackground: '#FFE5E5',
         inactive: '#CED1D3',
         bubble: '#EBF4F0',
+        billBack: '#FEF9E6',
+        billBlueBack: '#D9F3E3',
+        billRedBack: '#FDE8CD',
+        billBlueText: '#20A3CD',
+        billRedText: '#FA8271',
     },
 };
