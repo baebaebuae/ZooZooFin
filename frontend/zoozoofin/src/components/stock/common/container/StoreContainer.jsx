@@ -20,8 +20,29 @@ export const BuyingMoneyContent = styled.div`
 `;
 
 export const CompanyName = styled.p`
-    font-size: 16px;
-    margin: 0px;
+    margin: 0;
+    font-size: ${({ type }) => {
+        if (type === 'title') {
+            return '12px';
+        } else {
+            return '16px';
+        }
+    }};
+    color: ${({ type }) => {
+        if (type === 'title') {
+            return '#6C7377';
+        } else {
+            return 'black';
+        }
+    }};
+`;
+
+export const TitleCoulumn = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 10px;
 `;
 
 export const StockPrice = styled.p`

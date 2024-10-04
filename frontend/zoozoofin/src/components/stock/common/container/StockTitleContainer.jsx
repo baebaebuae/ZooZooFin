@@ -7,6 +7,7 @@ import {
     CurrentStockState,
     StockPrice,
     ButtonContainer,
+    TitleCoulumn,
 } from '@components/stock/common/container/StoreContainer';
 import { CarrotIcon } from '@components/stock/common/icon/StockIcons';
 import { ActiveButton, DetailButton } from '@components/stock/common/button/Button';
@@ -34,7 +35,7 @@ export const StockTitleContainer = ({
     info,
     isOpen,
     onToggle,
-    // 구매 화면 이동 테스트를 위헤 추가 => 데이터 연결 후 삭제 예정
+    // 구매 화면 이동 테스트를 위해 추가 => 데이터 연결 후 삭제 예정
     isStockSelected,
     type,
 }) => {
@@ -56,7 +57,10 @@ export const StockTitleContainer = ({
     return (
         <>
             <BuyingContent onClick={onToggle}>
-                <CompanyName>{companyName}</CompanyName>
+                <TitleCoulumn>
+                    <CompanyName type="title">{companyName}</CompanyName>
+                    <CompanyName>{companyName}</CompanyName>
+                </TitleCoulumn>
                 <BuyingMoneyContent>
                     <CurrentStockState current={currentState}>{currentState}</CurrentStockState>
                     <StockPrice>

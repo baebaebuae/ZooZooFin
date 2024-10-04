@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Card } from '@components/root/card';
 import { StockTitle } from '@components/stock/common/container/StockTitleContainer';
 import { CarrotIcon } from '@components/stock/common/icon/StockIcons';
+import useStockStore from '@components/stock/common/store/StockStore';
 
 const TotalCardBox = styled(Card)`
     display: flex;
@@ -38,19 +39,21 @@ const TextStyle = styled.div`
 `;
 
 export const TotalCard = () => {
+    const { totalStock, totalPrice } = useStockStore();
+
     return (
         <TotalCardBox>
             <StockTitle companyName={'개굴전자'} stockPrice={'89,000'} currentState={'up'} />
             <RowContainerBox>
                 <TextStyle>구매할 주</TextStyle>
                 <TextStyle type="content" size="large">
-                    4 주
+                    {totalStock} 주
                 </TextStyle>
             </RowContainerBox>
             <RowContainerBox>
                 <TextStyle>총 구매 금액</TextStyle>
                 <TextStyle type="content" size="large">
-                    330,400
+                    {totalPrice !== 0 ? totalPrice.toLocaleString() : 0}
                     <CarrotIcon />
                 </TextStyle>
             </RowContainerBox>

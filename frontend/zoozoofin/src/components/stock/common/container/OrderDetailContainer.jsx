@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { CarrotIcon } from '@components/stock/common/icon/StockIcons';
 import StockInputBox from '@components/stock/common/container/StockInputBox';
-
+import useStockStore from '@components/stock/common/store/StockStore';
 const ColumnContainerBox = styled.div`
     display: flex;
     flex-direction: column;
@@ -90,10 +90,14 @@ export const InputOrder = ({ type, stockPrice }) => {
             SetTotalTitle('총 판매할 금액');
         }
     }, [type]);
-    const [total, SetTotal] = useState(null);
+
+    const { totalPrice, setTotalPrice } = useStockStore();
+
     const handleTotal = (total) => {
-        const totalPrice = total * stockPrice;
-        SetTotal(totalPrice);
+        const calculatedTotalPrice = total * stockPrice;
+        if (calculatedTotalPrice !== totalPrice) {
+            setTotalPrice(calculatedTotalPrice);
+        }
     };
     return (
         <>
@@ -110,7 +114,7 @@ export const InputOrder = ({ type, stockPrice }) => {
                 type={type}
             />
 
-            <TotalPrice title={totalTitle} total={total} />
+            <TotalPrice title={totalTitle} total={totalPrice} />
         </>
     );
 };

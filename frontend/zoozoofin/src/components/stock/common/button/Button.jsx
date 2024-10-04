@@ -56,7 +56,7 @@ export const PlusButton = styled(Button)`
 `;
 
 export const QuestionButton = styled(Button)`
-    background-color: #6d94b6;
+    background-color: ${({ theme }) => theme.colors.primaryShadow};
     font-size: 14px;
     padding: 2px 6px;
     border-radius: 100%;

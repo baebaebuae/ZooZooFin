@@ -52,7 +52,7 @@ export const InputBox = ({
                 unit={isSavings ? ' 원 / 턴' : ' 원'}
                 hasValue={savingsAmount !== 0}
                 onDelete={handleDelete}
-            ></Input>
+            />
             <ButtonBlock>
                 <Button size={'small'} color={'primaryDeep'} onClick={() => addAmount(amount1)}>
                     {`${amount1 / 10000}만`}
@@ -93,11 +93,6 @@ export const InputBoxLoan = ({ title, amount1, amount2, amount3, amount4, onLoan
         setLoanAmount(0);
         onLoanAmountChange(0);
     };
-    // const handleMaxAmount = () => setSavingsAmount(maxAmount);
-
-    // useEffect(() => {
-    //     onSavingsAmountChange(savingsAmount);
-    // }, [savingsAmount, onSavingsAmountChange]);
 
     return (
         <InputBlock>
