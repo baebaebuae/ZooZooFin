@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useStore } from '../store';
+import { useStore, useAnimalStore } from '../store';
+import useStockStore from '@components/stock/common/store/StockStore';
 
 import Bubble from '@components/root/bubble';
 
@@ -9,10 +10,10 @@ import styled from 'styled-components';
 
 import StockChannel from '@components/stock/stockList/StockChannel';
 import StockBuy from '@components/stock/stockList/StockBuy';
+import StockSell from '@components/stock/stockList/StockSell';
 import { StockOrder } from '@components/stock/stockList/StockOrder';
 import StockResult from '@components/stock/stockList/StockResult';
 import StockDetail from '@components/stock/stockList/StockDetail';
-import { div } from 'three/webgpu';
 
 // 첫 진입시 환영 컴포넌트
 
@@ -55,11 +56,14 @@ const Stock = () => {
     const [channel, setChannel] = useState(null);
     const [isDone, setIsDone] = useState(false);
 
+    const { nowAnimal, getAnimalData } = useAnimalStore();
+
     const navigate = useNavigate();
 
     useEffect(() => {
-        setScripts([]); // 스크립트 상태 초기화
-    }, [setScripts]);
+        setScripts([]);
+        getAnimalData();
+    }, [setScripts, getAnimalData]);
 
     // 주식 스크립트 가져오기
     useEffect(() => {
@@ -138,6 +142,13 @@ const Stock = () => {
 
     if (currentScript.type === 'script') {
         // 채널 선택 후 채널 이름 업데이트(2)
+        if (currentScript.content.includes('${name}')) {
+            currentScript.content = currentScript.content.replace(
+                '${name}',
+                `**${nowAnimal.animalName}**야!`
+            );
+        }
+
         if (currentScript.content.includes('${channel}')) {
             currentScript.content = currentScript.content.replace(
                 '${channel}',
@@ -179,7 +190,20 @@ const Stock = () => {
                         {!isDone ? (
                             <StockBuy channel={channel} onOrderCompletion={handleOrderCompletion} />
                         ) : (
-                            <StockResult onComplete={handleCompletion} />
+                            <StockResult onComplete={handleCompletion} type="buy" />
+                        )}
+                    </SampleBlock>
+                );
+            case '주식판매':
+                return (
+                    <SampleBlock>
+                        {!isDone ? (
+                            <StockSell
+                                channel={channel}
+                                onOrderCompletion={handleOrderCompletion}
+                            />
+                        ) : (
+                            <StockResult onComplete={handleCompletion} type="sell" />
                         )}
                     </SampleBlock>
                 );

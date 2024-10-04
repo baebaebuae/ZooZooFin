@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { StockBuyingCard, Divider } from '@components/stock/common/card/StoreCards';
 import StockTitleContainer from '@components/stock/common/container/StockTitleContainer';
 
+// 판매 보유주식 api 연결 후 확인
+
 export const StockProducts = ({ field, onStockSelected, type }) => {
     const [open, setOpen] = useState([false, false, false]);
 

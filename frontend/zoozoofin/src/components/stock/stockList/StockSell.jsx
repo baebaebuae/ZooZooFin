@@ -5,8 +5,9 @@ import StockProducts from '@components/stock/stockItem/StockProducts';
 import { ChannelMessage } from '@components/stock/common/container/ChannelContainer';
 import { MessageIcon } from '@components/stock/common/icon/StockIcons';
 import { StockOrder } from '@components/stock/stockList/StockOrder';
+import OwnedStockCrad from '@components/stock//common/card/OwnedStockCrad';
 
-export const StockBuy = ({ channel, onOrderCompletion }) => {
+export const StockSell = ({ channel, onOrderCompletion }) => {
     // 테스트를 위한 isSelected => 목업 데이터 연결 후 삭제 예정
     const [isFieldSelected, SetisFieldSelected] = useState(false);
     const [field, Setfield] = useState(null);
@@ -36,8 +37,14 @@ export const StockBuy = ({ channel, onOrderCompletion }) => {
         case '국내 주식': {
             return (
                 <>
+                    <h1>주식 판매 테스트</h1>
                     {!isProductChecked ? (
                         <>
+                            <ChannelMessage>
+                                <MessageIcon />
+                                보유한 주식을 확인해줘 개굴!
+                            </ChannelMessage>
+                            <OwnedStockCrad />
                             <ChannelMessage>
                                 <MessageIcon />
                                 주식 분야를 선택해줘 개굴!
@@ -53,14 +60,14 @@ export const StockBuy = ({ channel, onOrderCompletion }) => {
                                     <StockProducts
                                         field={field}
                                         onStockSelected={handleStockClick}
-                                        type={'buy'}
+                                        type={'sell'}
                                     />
                                 </>
                             )}
                         </>
                     ) : (
                         <>
-                            <StockOrder type={'buy'} orderIsDone={handleOrderCompletion} />
+                            <StockOrder type={'sell'} orderIsDone={handleOrderCompletion} />
                         </>
                     )}
                 </>
@@ -69,31 +76,19 @@ export const StockBuy = ({ channel, onOrderCompletion }) => {
         case '해외 주식': {
             return (
                 <>
-                    {!isProductChecked ? (
+                    <ChannelMessage>
+                        <MessageIcon />
+                        주식 분야를 선택해줘 개굴!
+                    </ChannelMessage>
+                    <StockField type={'overseas'} onFieldSelect={handleFieldClick} />
+
+                    {isFieldSelected && (
                         <>
                             <ChannelMessage>
                                 <MessageIcon />
-                                주식 분야를 선택해줘 개굴!
+                                주식 상품을 선택해줘 개굴!
                             </ChannelMessage>
-                            <StockField type={'overseas'} onFieldSelect={handleFieldClick} />
-
-                            {isFieldSelected && (
-                                <>
-                                    <ChannelMessage>
-                                        <MessageIcon />
-                                        주식 상품을 선택해줘 개굴!
-                                    </ChannelMessage>
-                                    <StockProducts
-                                        field={field}
-                                        onStockSelected={handleStockClick}
-                                        type={'buy'}
-                                    />
-                                </>
-                            )}
-                        </>
-                    ) : (
-                        <>
-                            <StockOrder type={'buy'} orderIsDone={handleOrderCompletion} />
+                            <StockProducts field={field} />
                         </>
                     )}
                 </>
@@ -102,31 +97,19 @@ export const StockBuy = ({ channel, onOrderCompletion }) => {
         case 'ETF': {
             return (
                 <>
-                    {!isProductChecked ? (
+                    <ChannelMessage>
+                        <MessageIcon />
+                        주식 분야를 선택해줘 개굴!
+                    </ChannelMessage>
+                    <StockField type={'ETF'} onFieldSelect={handleFieldClick} />
+
+                    {isFieldSelected && (
                         <>
                             <ChannelMessage>
                                 <MessageIcon />
-                                주식 분야를 선택해줘 개굴!
+                                주식 상품을 선택해줘 개굴!
                             </ChannelMessage>
-                            <StockField type={'ETF'} onFieldSelect={handleFieldClick} />
-
-                            {isFieldSelected && (
-                                <>
-                                    <ChannelMessage>
-                                        <MessageIcon />
-                                        주식 상품을 선택해줘 개굴!
-                                    </ChannelMessage>
-                                    <StockProducts
-                                        field={field}
-                                        onStockSelected={handleStockClick}
-                                        type={'buy'}
-                                    />
-                                </>
-                            )}
-                        </>
-                    ) : (
-                        <>
-                            <StockOrder type={'buy'} orderIsDone={handleOrderCompletion} />
+                            <StockProducts field={field} />
                         </>
                     )}
                 </>
@@ -135,4 +118,4 @@ export const StockBuy = ({ channel, onOrderCompletion }) => {
     }
 };
 
-export default StockBuy;
+export default StockSell;

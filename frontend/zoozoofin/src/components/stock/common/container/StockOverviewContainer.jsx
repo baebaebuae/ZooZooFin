@@ -34,8 +34,8 @@ export const OverviewText = styled.p`
     margin: 0;
     font-size: ${({ type }) => (type === 'title' ? '20px' : '15px')};
     font-weight: ${({ type }) => (type === 'title' || type === 'content' ? 'bold' : 'normal')};
-    color: ${({ type }) =>
-        type === 'title' || type === 'list' || type === 'content' ? 'black' : '#6C7377'};
+    color: ${({ theme, type }) =>
+        type === 'title' || type === 'list' || type === 'content' ? 'black' : theme.colors.gray};
 `;
 
 export const Title = ({ quarter }) => {

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Input } from '@components/root/input';
 import { InputButton } from '@components/stock/common/button/Button';
+import useStockStore from '@components/stock/common/store/StockStore';
 
 const InputBlock = styled.div`
     display: flex;
@@ -31,6 +32,7 @@ export const StockInputBox = ({
     const [savingsAmount, setSavingsAmount] = useState(0);
     const [total, SetTotal] = useState(null);
     const [value, SetValue] = useState(null);
+    const { totalStock, setTotalStock } = useStockStore();
 
     const addAmount = (value) =>
         setSavingsAmount((prev) => {
@@ -44,7 +46,10 @@ export const StockInputBox = ({
     useEffect(() => {
         onSavingsAmountChange(savingsAmount);
         SetTotal(savingsAmount);
-    }, [savingsAmount, onSavingsAmountChange]);
+        if (totalStock !== savingsAmount) {
+            setTotalStock(savingsAmount);
+        }
+    }, [savingsAmount, onSavingsAmountChange, totalStock, setTotalStock]);
 
     useEffect(() => {
         if (type === 'buy') {

@@ -1,11 +1,7 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Card } from '@components/root/card';
-import {
-    OrderSubtitle,
-    InputOrder,
-    TotalPrice,
-} from '@components/stock/common/container/OrderDetailContainer';
+import { OrderSubtitle, InputOrder } from '@components/stock/common/container/OrderDetailContainer';
 import { StockTitle } from '@components/stock/common/container/StockTitleContainer';
 
 export const OrderCardBox = styled(Card)`
@@ -23,6 +19,7 @@ export const OrderCard = ({ type }) => {
     const nowPrice = 89000;
     const maxStock = 12;
     const maxMoney = 984000;
+
     return (
         <OrderCardBox>
             <StockTitle
