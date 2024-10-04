@@ -15,6 +15,19 @@ export const Button = styled.button`
     border: ${({ $isBorder }) => ($isBorder ? `5px solid white` : 'none')};
 `;
 
+export const SmallBlankButton = styled.button`
+    color: white;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 28px;
+    background-color: ${({ theme, color }) => theme.colors[color]};
+    padding: 6px 10px;
+    font-size: 10px;
+    border: ${({ $isBorder, color }) =>
+        $isBorder ? `1px solid  ${({ theme }) => theme.colors[color]}` : 'none'};
+`;
+
 export const LoanButton = styled(Button)`
     background-color: ${({ theme, $isSelected }) => ($isSelected ? theme.colors.yellow : 'white')};
     border: ${({ theme, $isSelected }) =>

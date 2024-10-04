@@ -12,6 +12,7 @@ export const theme = {
         orange: '#f7954f',
         lightOrange: '#F2C6A0',
         warn: '#FF3E3E',
+        warnBackground: '#FFE5E5',
         inactive: '#CED1D3',
         bubble: '#EBF4F0',
     },

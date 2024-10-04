@@ -107,7 +107,7 @@ export const Bubble = ({ npc, type, content, responses, onClick }) => {
     return (
         <BubbleContainer2>
             <BubbleContainer onClick={() => handleContainerClick(responses)}>
-                <BadgeNormalStyle>{npc}</BadgeNormalStyle>
+                <BadgeNormalStyle color={'tertiary'}>{npc}</BadgeNormalStyle>
                 <BubbleBlockStyle />
                 <BubbleBox>
                     <LineBlock>{parseContent(content)}</LineBlock>

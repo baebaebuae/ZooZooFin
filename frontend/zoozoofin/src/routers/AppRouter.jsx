@@ -26,6 +26,11 @@ import Auth from '../pages/Auth';
 import TestPaper from '../components/school/TestPaper';
 import Game from '@components/work/Game';
 
+import AppBank from '@pages/laptop/AppBank';
+import AppCapital from '@pages/laptop/AppCapital';
+import AppStock from '@pages/laptop/AppStock';
+import AppRanking from '@pages/laptop/AppRanking';
+
 import startMusic from '@assets/music/start.mp3';
 import VolumeOffRoundedIcon from '@mui/icons-material/VolumeOffRounded';
 import VolumeUpRoundedIcon from '@mui/icons-material/VolumeUpRounded';
@@ -131,6 +136,10 @@ const AppRouter = () => {
                 <Route element={<LayoutInGame />}>
                     <Route path="/bank" element={<Bank />} />
                     <Route path="/laptop" element={<Laptop />} />
+                    <Route path="/laptop/bank" element={<AppBank />} />
+                    <Route path="/laptop/stock" element={<AppStock />} />
+                    <Route path="/laptop/capital" element={<AppCapital />} />
+                    <Route path="/laptop/ranking" element={<AppRanking />} />
                     <Route path="/lender" element={<Lender />} />
                     <Route path="/loan" element={<Loan />} />
                     <Route path="/school" element={<School />} />

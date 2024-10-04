@@ -1,17 +1,18 @@
 // 진행도 바(ex. 대출 상환 진행도)
 import styled from 'styled-components';
 
-const ProgressBoxStyle = styled.div`
+const ProgressBoxContainer = styled.div`
     width: 250px;
+    width: 100%;
     color: gray;
-`;
-
-const ProgressTitle = styled.div`
-    font-size: 12px;
-    margin-bottom: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 `;
 
 const ProgressBarBack = styled.div`
+    width: 250px;
     border-radius: 10px;
     height: 20px;
     background-color: ${({ theme }) => theme.colors.background};
@@ -25,6 +26,7 @@ const ProgressBarFront = styled.div`
 `;
 
 const ProgressInfoBox = styled.div`
+    width: 90%;
     display: flex;
     justify-content: space-between;
     margin-top: 4px;
@@ -43,8 +45,7 @@ const BoldText = styled.span`
 
 export default function ProgressBox({ isLoan, rate, restTurn }) {
     return (
-        <ProgressBoxStyle>
-            {/* <ProgressTitle>Title</ProgressTitle> */}
+        <ProgressBoxContainer>
             <ProgressBarBack>
                 <ProgressBarFront $rate={rate} />
             </ProgressBarBack>
@@ -59,6 +60,6 @@ export default function ProgressBox({ isLoan, rate, restTurn }) {
                     </RestTurn>
                 )}
             </ProgressInfoBox>
-        </ProgressBoxStyle>
+        </ProgressBoxContainer>
     );
 }
