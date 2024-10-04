@@ -1,33 +1,96 @@
 // import React from 'react';
+import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import {
-    BankAppIcon,
-    StockAppIcon,
-    LenderAppIcon,
-    LeaderBoardAppIcon,
-} from '@styles/components/laptop/AppIcons';
+
+import AppBank from '@assets/images/icons/laptop/appBank.png';
+import AppCapital from '@assets/images/icons/laptop/appCapital.png';
+import AppRanking from '@assets/images/icons/laptop/appRanking.png';
+import AppStock from '@assets/images/icons/laptop/appStock.png';
+
+const AppContainer = styled.div`
+    width: 100%;
+    height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const AppBlock = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+`;
+
+const AppSemiBlock = styled.div`
+    width: 200px;
+    height: 100px;
+    display: flex;
+    gap: 20px;
+    margin: 20px;
+`;
+
+const AppBox = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+    text-shadow:
+        -1px 0px white,
+        0px 1px white,
+        1px 0px white,
+        0px -1px white;
+`;
+
+const AppIcon = styled.div`
+    width: 80px;
+    height: 80px;
+    margin: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url(${(props) => props.backgroundimage});
+    background-repeat: no-repeat;
+    filter: drop-shadow(6px 6px 3px gray);
+`;
 
 const Laptop = () => {
     return (
-        <>
-            <h1>Laptop</h1>
-            <div>
-                앱 목록 Block / 임시로 설정해둔 경로. 각 노트북 화면 컴포넌트로 전환되어야함
-                <Link to="/bank">
-                    <BankAppIcon>은행</BankAppIcon>
-                </Link>
-                <Link to="/stock">
-                    <StockAppIcon>주식거래소</StockAppIcon>
-                </Link>
-                <Link to="/lender">
-                    <LenderAppIcon>콩팥캐피탈</LenderAppIcon>
-                </Link>
-                <Link to="/jjhoney">
-                    <LeaderBoardAppIcon>리더보드</LeaderBoardAppIcon>
-                </Link>
-            </div>
-            <div>각 앱 Box</div>
-        </>
+        <AppContainer>
+            <AppBlock>
+                <AppSemiBlock>
+                    <Link to="/laptop/bank">
+                        <AppBox>
+                            <AppIcon backgroundimage={AppBank} />
+                            인터넷 뱅킹
+                        </AppBox>
+                    </Link>
+                    <Link to="/laptop/stock">
+                        <AppBox>
+                            <AppIcon backgroundimage={AppStock} />
+                            My 증권
+                        </AppBox>
+                    </Link>
+                </AppSemiBlock>
+                <AppSemiBlock>
+                    <Link to="/laptop/capital">
+                        <AppBox>
+                            <AppIcon backgroundimage={AppCapital} />
+                            콩팥 캐피탈
+                        </AppBox>
+                    </Link>
+                    <Link to="/laptop/ranking">
+                        <AppBox>
+                            <AppIcon backgroundimage={AppRanking} />
+                            리더보드
+                        </AppBox>
+                    </Link>
+                </AppSemiBlock>
+            </AppBlock>
+        </AppContainer>
     );
 };
 

@@ -3,7 +3,12 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 
-const SwitchBox = styled.div``;
+const SwitchBox = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+`;
 
 const SwitchButton = styled.div`
     width: 150px;
@@ -11,6 +16,7 @@ const SwitchButton = styled.div`
     margin-bottom: 20px;
     font-size: 16px;
     font-weight: bold;
+    text-align: center;
     border-bottom: 5px solid
         ${({ $isActive }) =>
             $isActive
@@ -25,12 +31,18 @@ const SwitchButtonBox = styled.div`
 
 const SwitchContent = styled.div``;
 
-export const Switch = () => {
+export const Switch = ({ onTabChange }) => {
     const switchData = [
-        { id: 1, title: '예적금', content: '예적금 정보' },
-        { id: 2, title: '대출', content: '대출 정보' },
+        { id: 1, content: '예적금' },
+        { id: 2, content: '대출' },
     ];
     const [activeTab, setActiveTab] = useState(switchData[0].id);
+
+    const handleTabChange = (tab) => {
+        setActiveTab(tab.id);
+        onTabChange(tab.content);
+    };
+
     return (
         <>
             <SwitchBox>
@@ -42,13 +54,12 @@ export const Switch = () => {
                             // 경고문
                             // isActive라는 prop이 tyled-component까지는 전달되지만,
                             // html로는 전달되지 않도록 앞에 $ 붙여줘야함
-                            onClick={() => setActiveTab(tab.id)}
+                            onClick={() => handleTabChange(tab)}
                         >
-                            {tab.title}
+                            {tab.content}
                         </SwitchButton>
                     ))}
                 </SwitchButtonBox>
-                <SwitchContent>{switchData[activeTab - 1].content}</SwitchContent>
             </SwitchBox>
         </>
     );

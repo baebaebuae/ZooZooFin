@@ -95,6 +95,7 @@ const ExtraBox = styled.div`
     width: 100%;
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 8px;
     margin: 4px 0;
 `;
@@ -120,5 +121,37 @@ export const ExtraInfo = ({ extraRate, extraAmount }) => {
                 <ExtraContent>{extraAmount.toLocaleString()}원</ExtraContent>
             </ExtraBox>
         </>
+    );
+};
+
+const LaptopBox = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 8px 0;
+`;
+
+const LaptopTitle = styled.div`
+    font-size: 14px;
+    text-align: center;
+    color: ${({ theme }) => theme.colors.gray};
+`;
+
+const LaptopContent = styled.div`
+    font-size: 18px;
+    text-align: center;
+    font-weight: bold;
+    color: ${({ theme, color }) => theme.colors[color]};
+`;
+
+export const LaptopInfo = ({ $isLoan, infoTitle, infoContent, color }) => {
+    return (
+        <LaptopBox>
+            <LaptopTitle $isLoan={$isLoan}>{infoTitle}</LaptopTitle>
+            <LaptopContent color={color} $isLoan={$isLoan}>
+                {infoContent}
+            </LaptopContent>
+        </LaptopBox>
     );
 };

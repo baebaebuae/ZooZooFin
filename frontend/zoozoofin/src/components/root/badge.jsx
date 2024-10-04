@@ -1,20 +1,28 @@
 import styled from 'styled-components';
 
 const Badge = styled.div`
-    font-size: 12px;
+    font-size: 10px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
     border-radius: 20px;
-    background-color: ${({ theme }) => theme.colors.tertiary};
-    color: white;
+    background-color: ${({ theme, color }) => theme.colors[color]};
 `;
 
 export const BadgeNormal = styled(Badge)`
-    padding: 8px 12px;
+    padding: 6px 10px;
+    color: white;
+    background-color: ${({ theme, color }) => theme.colors[color]};
+    border: 2px solid white;
 `;
 
 export const BadgeStroke = styled(Badge)`
-    border: 5px solid var(--White, #fff);
-    padding: 8px 12px;
+    border: 1px solid ${({ theme, color }) => theme.colors[color]};
+    padding: 5px 9px;
+    background-color: transparent;
+    color: black;
 `;
+
+export const WarnBadge = () => {
+    return <BadgeNormal color={'warn'}>경고</BadgeNormal>;
+};
