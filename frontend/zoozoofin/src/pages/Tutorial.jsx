@@ -4,6 +4,10 @@ import styled from 'styled-components';
 
 import Bubble from '@components/root/bubble';
 import { Button } from '@components/root/buttons';
+import MyRoomBackground from '@assets/images/background/tutorial_myroom.png';
+import TutorialLaptop from '@assets/images/background/tutorial_laptop.png';
+import TutorialHeader from '@assets/images/background/tutorial_header.png';
+import TutorialArrow from '@assets/images/background/tutorial_arrow.png';
 
 import { useStore } from '../store.js';
 
@@ -26,6 +30,14 @@ const BubbleBlock = styled(Bubble)`
     position: fixed;
     bottom: 0;
     right: 0;
+`;
+
+const NameModalBLock = styled.div`
+    width: 360px;
+    height: 640px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const NameModal = styled.div`
@@ -58,6 +70,22 @@ const NameModalInput = styled.input`
     border-color: ${({ theme }) => theme.colors.orange};
     margin: 20px 0;
     outline: none;
+`;
+
+const TutorialRoomBackground = styled.img`
+    width: 360px;
+    height: 640px;
+`;
+
+const TutorialHeaderBlock = styled.div`
+    position: relative;
+`;
+
+const ArrowBox = styled.div`
+    position: absolute;
+    width: 360px;
+    left: ${({ left }) => `${left}vw`};
+    top: 100px;
 `;
 
 const NPCModel = () => {
@@ -94,7 +122,8 @@ const Tutorial = () => {
     useEffect(() => {
         if (!scripts || scripts.length === 0) {
             const loadScripts = async () => {
-                await fetchTutorialScript('tutorial');
+                // await fetchTutorialScript('tutorial');
+                fetchTutorialScript('tutorial');
             };
             loadScripts();
         }
@@ -153,18 +182,29 @@ const Tutorial = () => {
 
     if (!currentScript) return <Loader loadingText={'주주시티에 입장하는중'} />;
 
-    const receivedAnimalTypeId = location.state.animalTypeId;
+    // const receivedAnimalTypeId = location.state.animalTypeId;
+    const receivedAnimalTypeId = 1; //임시로 지정
+
+    let backgroundImage;
+
+    if (currentScript.scriptId >= 16 && currentScript.scriptId <= 18) {
+        backgroundImage = TutorialLaptop;
+    } else if (currentScript.scriptId >= 19 && currentScript.scriptId <= 28) {
+        backgroundImage = TutorialHeader;
+    } else {
+        backgroundImage = MyRoomBackground;
+    }
 
     if (currentScript.type === 'action') {
         switch (currentScript.content) {
             case 'INPUT_NAME':
                 return (
-                    <div>
-                        receivedAnimalType: {receivedAnimalTypeId}
+                    <NameModalBLock>
+                        {/* receivedAnimalType: {receivedAnimalTypeId} */}
                         <NameModal>
                             <NameModalMessage>사용할 이름을 입력해줘.</NameModalMessage>
                             <NameModalInput onChange={onChange} />
-                            <div>animalName: {animalName}</div>
+                            {/* <div>animalName: {animalName}</div> */}
                             <Button
                                 color={'orange'}
                                 $isBorder={true}
@@ -181,7 +221,7 @@ const Tutorial = () => {
                                 확인
                             </Button>
                         </NameModal>
-                    </div>
+                    </NameModalBLock>
                 );
             case 'END':
                 return navigate('/myroom');
@@ -198,7 +238,12 @@ const Tutorial = () => {
             case 'NOTEBOOK_DETAIL':
                 return (
                     <div>
-                        노트북 화면
+                        <img
+                            src={backgroundImage}
+                            onClick={() =>
+                                handleResponseClick(currentScript.responses[0].nextScript)
+                            }
+                        />
                         <button
                             onClick={() =>
                                 handleResponseClick(currentScript.responses[0].nextScript)
@@ -211,7 +256,7 @@ const Tutorial = () => {
             case 'NOTEBOOK_FUNCTION':
                 return (
                     <div>
-                        노트북 상세
+                        노트북 상세 // 삭제 예정
                         <button
                             onClick={() =>
                                 handleResponseClick(currentScript.responses[0].nextScript)
@@ -224,72 +269,90 @@ const Tutorial = () => {
             case 'MENU_BAR':
                 return (
                     <div>
-                        메뉴바 화면
-                        <button
+                        <img
+                            src={backgroundImage}
                             onClick={() =>
                                 handleResponseClick(currentScript.responses[0].nextScript)
                             }
-                        >
-                            next
-                        </button>
+                        />
                     </div>
                 );
             case 'MENU_FIRST':
                 return (
-                    <div>
-                        메뉴바 1 : 햄버거
-                        <button
+                    <TutorialHeaderBlock>
+                        <ArrowBox left={6}>
+                            <img src={TutorialArrow} alt="화살표" />
+                        </ArrowBox>
+                        <img
+                            src={backgroundImage}
                             onClick={() =>
                                 handleResponseClick(currentScript.responses[0].nextScript)
                             }
-                        >
-                            next
-                        </button>
-                    </div>
+                        />
+                    </TutorialHeaderBlock>
                 );
             case 'MENU_SECOND':
                 return (
-                    <div>
-                        메뉴바 2 : 지갑
-                        <button
+                    <TutorialHeaderBlock>
+                        <ArrowBox left={21}>
+                            <img src={TutorialArrow} alt="화살표" />
+                        </ArrowBox>
+                        <img
+                            src={backgroundImage}
                             onClick={() =>
                                 handleResponseClick(currentScript.responses[0].nextScript)
                             }
-                        >
-                            next
-                        </button>
-                    </div>
+                        />
+                    </TutorialHeaderBlock>
                 );
             case 'MENU_THIRD':
                 return (
-                    <div>
-                        메뉴바 3: 지도
-                        <button
+                    <TutorialHeaderBlock>
+                        <ArrowBox left={37}>
+                            <img src={TutorialArrow} alt="화살표" />
+                        </ArrowBox>
+                        <img
+                            src={backgroundImage}
                             onClick={() =>
                                 handleResponseClick(currentScript.responses[0].nextScript)
                             }
-                        >
-                            next
-                        </button>
-                    </div>
+                        />
+                    </TutorialHeaderBlock>
                 );
             case 'MENU_LAST':
                 return (
-                    <div>
-                        메뉴바 4 : 턴
-                        <button
+                    <TutorialHeaderBlock>
+                        <ArrowBox left={52}>
+                            <img src={TutorialArrow} alt="화살표" />
+                        </ArrowBox>
+                        <img
+                            src={backgroundImage}
                             onClick={() =>
                                 handleResponseClick(currentScript.responses[0].nextScript)
                             }
-                        >
-                            next
-                        </button>
-                    </div>
+                        />
+                    </TutorialHeaderBlock>
                 );
             default:
                 return <div>해당하는 페이지가 없어요. 현재 Action을 확인해주세요.</div>;
         }
     }
+
+    if (currentScript.scriptId >= 8 && currentScript.scriptId <= 28) {
+        return (
+            <>
+                <TutorialRoomBackground src={backgroundImage} />;
+                <BubbleBlock
+                    npc={'뭉뭉'}
+                    type={currentScript.type}
+                    content={currentScript.content}
+                    responses={currentScript.responses}
+                    onClick={handleResponseClick}
+                />
+            </>
+        );
+    }
+
     return (
         <TutorialContainer>
             {/* NPC 캐릭터 추가 */}

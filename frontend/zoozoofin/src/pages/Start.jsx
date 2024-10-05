@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { KakaoButton, NaverButton, GoogleButton } from '@styles/components/start/Buttons';
 import LogoMain from '@assets/images/icons/logo_main.svg';
 import Google from '@assets/images/icons/start/google.png';
 import Naver from '@assets/images/icons/start/naver.png';
@@ -63,29 +62,28 @@ const Start = () => {
 
     const handleSocialLogin = async (domain) => {
         window.location.href = `${API_URI}/oauth/${domain}`;
+        window.location.href = '/myroom';
     };
 
     return (
         <>
-            <StartBlock>
-                {isEntered ? (
-                    <>
+            {isEntered ? (
+                <>
+                    <StartBlock>
                         <StartTextBox>소셜 로그인</StartTextBox>
                         <LoginButtonBlock>
                             <LoginButton src={Google} onClick={() => handleSocialLogin('google')} />
                             <LoginButton src={Kakao} onClick={() => handleSocialLogin('kakao')} />
                             <LoginButton src={Naver} onClick={() => handleSocialLogin('naver')} />
                         </LoginButtonBlock>
-                    </>
-                ) : (
-                    <>
-                        <img src={LogoMain} width={250} />
-                        <StartTextAnimated onClick={handleEnter}>
-                            - 터치로 주주시티 입장 -{' '}
-                        </StartTextAnimated>
-                    </>
-                )}
-            </StartBlock>
+                    </StartBlock>
+                </>
+            ) : (
+                <StartBlock onClick={handleEnter}>
+                    <img src={LogoMain} width={250} />
+                    <StartTextAnimated>- 터치로 주주시티 입장 -</StartTextAnimated>
+                </StartBlock>
+            )}
         </>
     );
 };

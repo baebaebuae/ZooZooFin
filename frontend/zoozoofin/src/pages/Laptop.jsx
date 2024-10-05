@@ -7,12 +7,16 @@ import AppCapital from '@assets/images/icons/laptop/appCapital.png';
 import AppRanking from '@assets/images/icons/laptop/appRanking.png';
 import AppStock from '@assets/images/icons/laptop/appStock.png';
 
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+
 const AppContainer = styled.div`
     width: 100%;
     height: 600px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 50px;
 `;
 
 const AppBlock = styled.div`
@@ -38,6 +42,8 @@ const AppBox = styled.div`
     align-items: center;
     font-size: 14px;
     font-weight: bold;
+    color: black;
+    text-decoration: none;
     text-shadow:
         -1px 0px white,
         0px 1px white,
@@ -57,39 +63,63 @@ const AppIcon = styled.div`
     filter: drop-shadow(6px 6px 3px gray);
 `;
 
+const StyledLink = styled(Link)`
+    text-decoration: none;
+    color: inherit;
+`;
+
+const ExitButton = styled.div`
+    padding: 10px 20px;
+    border-radius: 30px;
+    background-color: ${({ theme }) => theme.colors.warn};
+    color: white;
+    font-family: 'OneMobilePop';
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+`;
+
 const Laptop = () => {
     return (
         <AppContainer>
             <AppBlock>
                 <AppSemiBlock>
-                    <Link to="/laptop/bank">
+                    <StyledLink to="/laptop/bank">
                         <AppBox>
                             <AppIcon backgroundimage={AppBank} />
                             인터넷 뱅킹
                         </AppBox>
-                    </Link>
-                    <Link to="/laptop/stock">
+                    </StyledLink>
+                    <StyledLink to="/laptop/stock">
                         <AppBox>
                             <AppIcon backgroundimage={AppStock} />
                             My 증권
                         </AppBox>
-                    </Link>
+                    </StyledLink>
                 </AppSemiBlock>
                 <AppSemiBlock>
-                    <Link to="/laptop/capital">
+                    <StyledLink to="/laptop/capital">
                         <AppBox>
                             <AppIcon backgroundimage={AppCapital} />
                             콩팥 캐피탈
                         </AppBox>
-                    </Link>
-                    <Link to="/laptop/ranking">
+                    </StyledLink>
+                    <StyledLink to="/laptop/ranking">
                         <AppBox>
                             <AppIcon backgroundimage={AppRanking} />
                             리더보드
                         </AppBox>
-                    </Link>
+                    </StyledLink>
                 </AppSemiBlock>
             </AppBlock>
+            <StyledLink to="/myroom">
+                <ExitButton>
+                    <PowerSettingsNewIcon />
+                    전원 종료
+                </ExitButton>
+            </StyledLink>
         </AppContainer>
     );
 };
