@@ -6,7 +6,7 @@ import IconFrog from '@assets/images/icons/icon_frog.png';
 
 import { StockTitle } from '@components/stock/common/container/StockTitleContainer';
 
-import { BankSavingsDetail } from './BankSavingsDetail';
+import { StockDetail } from './StockDetail';
 
 const Container = styled.div`
     width: 100%;
@@ -28,7 +28,14 @@ const AppContentH2 = styled.div`
     width: 100%;
     font-weight: bold;
     font-size: 16px;
-    margin-bottom: 20px;
+`;
+
+const ProductBlock = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 20px 0;
 `;
 
 const BlankBlock = styled.div`
@@ -38,35 +45,6 @@ const BlankBlock = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-`;
-
-const ProductBox = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    /* background-color: pink; */
-`;
-
-const ProductTitleBox = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 4px;
-`;
-
-const ProductName = styled.div`
-    font-size: 14px;
-    color: gray;
-`;
-
-const ProductTurn = styled.div`
-    font-size: 10px;
-    color: ${({ theme }) => theme.colors.primaryShadow};
-`;
-
-const ProductAmount = styled.div`
-    font-size: 16px;
-    font-weight: bold;
 `;
 
 export const Stock = () => {
@@ -84,23 +62,40 @@ export const Stock = () => {
             {
                 stockId: 1,
                 stockName: '개굴전자',
-                stockTotal: 30000000,
-                stockRate: 3,
+                stockTotal: 30316000,
+                stockRate: -5,
+                stockCount: 10, // 보유 주식 수
+                purchaseDate: 15, // 매수일자(턴)
+                evaluationProfitLoss: 1234000, // 평가손익
+                tradeHistory: [
+                    {
+                        turnNumber: 1,
+                        tradeType: '매수',
+                        tradeQuantity: 5,
+                        tradePrice: 1000000,
+                    },
+                    {
+                        turnNumber: 6,
+                        tradeType: '매도',
+                        tradeQuantity: 7,
+                        tradePrice: 1400000,
+                    },
+                ], // 매매 내역
             },
             {
                 stockId: 2,
                 stockName: '개굴식품',
-                stockTotal: 50000000,
-                stockRate: 10,
+                stockTotal: 5416000,
+                stockRate: 3,
             },
         ],
         oversea: [
-            // {
-            //     stockId: 1,
-            //     stockName: '멍멍자동차',
-            //     stockTotal: 50000000,
-            //     stockRate: 10,
-            // },
+            {
+                stockId: 1,
+                stockName: '멍멍자동차',
+                stockTotal: 123456700,
+                stockRate: 10,
+            },
         ],
 
         etf: [
@@ -119,15 +114,14 @@ export const Stock = () => {
     return (
         <Container>
             {isSelected ? (
-                <BankSavingsDetail
-                    name={selectedData.name}
-                    warning={selectedData.warning}
-                    rate={selectedData.rate}
-                    amount={selectedData.amount}
-                    endTurn={selectedData.endTurn}
-                    finalReturn={selectedData.finalReturn}
-                    period={selectedData.period}
-                    restTurn={selectedData.restTurn}
+                <StockDetail
+                    name={selectedData.stockName}
+                    stockRate={selectedData.stockRate} // 손익률
+                    stockTotal={selectedData.stockTotal}
+                    stockCount={selectedData.stockCount} // 보유 주식 수
+                    purchaseDate={selectedData.purchaseDate} // 매수일자
+                    evaluationProfitLoss={selectedData.evaluationProfitLoss} // 평가손익
+                    tradeHistory={selectedData.tradeHistory} // 매매 내역
                     handleSelected={() => setIsSelected(false)}
                 />
             ) : (
@@ -138,24 +132,62 @@ export const Stock = () => {
                         infoContent={`${data.totalAmount.toLocaleString()}원`}
                     ></InfoBox>
                     <AppContent>보유 주식</AppContent>
-                    <AppContentH2>국내</AppContentH2>
                     {data.domestic.length > 0 && (
-                        <></>
-                        // <StockTitle
-                        //     // key={index}
-                        //     companyName={item.stockName}
-                        //     stockPrice={item.stockTotal}
-                        //     currentState={item.rate > 0 ? 'up' : 'down'}
-                        //     onToggle={() => {}}
-                        // />
-                        // 주식 파트와 병합 후 진행
+                        <>
+                            <AppContentH2>국내</AppContentH2>
+                            <ProductBlock>
+                                {data.domestic.map((stock, index) => {
+                                    return (
+                                        <StockTitle
+                                            key={index}
+                                            companyName={stock.stockName}
+                                            stockPrice={stock.stockTotal}
+                                            currentState={stock.stockRate > 0 ? 'up' : 'down'}
+                                            onToggle={() => handleSelect(stock)}
+                                        />
+                                    );
+                                })}
+                            </ProductBlock>
+                        </>
                     )}
 
-                    <AppContentH2>해외</AppContentH2>
-                    {data.oversea.length > 0 && <div>해외주식있을때</div>}
+                    {data.oversea.length > 0 && (
+                        <>
+                            <AppContentH2>해외</AppContentH2>
+                            <ProductBlock>
+                                {data.oversea.map((stock, index) => {
+                                    return (
+                                        <StockTitle
+                                            key={index}
+                                            companyName={stock.stockName}
+                                            stockPrice={stock.stockTotal}
+                                            currentState={stock.stockRate > 0 ? 'up' : 'down'}
+                                            onToggle={() => handleSelect(stock)}
+                                        />
+                                    );
+                                })}
+                            </ProductBlock>
+                        </>
+                    )}
 
-                    <AppContentH2>ETF</AppContentH2>
-                    {data.etf.length > 0 && <div>etf 있을때</div>}
+                    {data.etf.length > 0 && (
+                        <>
+                            <AppContentH2>ETF</AppContentH2>
+                            <ProductBlock>
+                                {data.etf.map((stock, index) => {
+                                    return (
+                                        <StockTitle
+                                            key={index}
+                                            companyName={stock.stockName}
+                                            stockPrice={stock.stockTotal}
+                                            currentState={stock.stockRate > 0 ? 'up' : 'down'}
+                                            onToggle={() => handleSelect(stock)}
+                                        />
+                                    );
+                                })}
+                            </ProductBlock>
+                        </>
+                    )}
 
                     {data.domestic.length === 0 &&
                         data.oversea.length === 0 &&
