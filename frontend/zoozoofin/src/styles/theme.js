@@ -11,6 +11,7 @@ export const theme = {
         yellow: '#ffd84e',
         orange: '#f7954f',
         lightOrange: '#F2C6A0',
+        brown: '#70401D',
         warn: '#FF3E3E',
         warnBackground: '#FFE5E5',
         inactive: '#CED1D3',
