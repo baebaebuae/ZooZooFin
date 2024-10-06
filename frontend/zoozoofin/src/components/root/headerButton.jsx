@@ -18,6 +18,8 @@ import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded';
 import FlagRoundedIcon from '@mui/icons-material/FlagRounded';
 
 import MissionDashboard from '../../components/Mission';
+import { useNavigate } from 'react-router-dom';
+
 
 const HeaderButton = styled.div`
     display: flex;
@@ -73,7 +75,9 @@ export const HeaderHamburgerButton = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [isMusicOn, setIsMusicOn] = useState(true);
     const [isMissionOpen, setIsMissionOpen] = useState(false);
+    const [isCharacterHistoryOpen, setIsCharacterHistoryOpen] = useState(false);
     const open = Boolean(anchorEl);
+    const navigate = useNavigate(); 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -82,6 +86,11 @@ export const HeaderHamburgerButton = () => {
     };
     const handleMissionClick = () => {
         setIsMissionOpen(true);
+        handleClose();
+    };
+
+    const handleCharacterHistoryClick = () => {
+        navigate('/character-history'); // 캐릭터 히스토리 페이지
         handleClose();
     };
 
@@ -100,7 +109,7 @@ export const HeaderHamburgerButton = () => {
                 }}
             >
                 {/* UI 구현 예정 */}
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={handleCharacterHistoryClick}>
                     <ListItemIcon>
                         <HistoryRoundedIcon />
                     </ListItemIcon>

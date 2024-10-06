@@ -31,9 +31,12 @@ import AppCapital from '@pages/laptop/AppCapital';
 import AppStock from '@pages/laptop/AppStock';
 import AppRanking from '@pages/laptop/AppRanking';
 
+import CharacterHistory from '../pages/CharacterHistory';
+
 import startMusic from '@assets/music/start.mp3';
 import VolumeOffRoundedIcon from '@mui/icons-material/VolumeOffRounded';
 import VolumeUpRoundedIcon from '@mui/icons-material/VolumeUpRounded';
+
 
 const Background = styled.div`
     width: 360px;
@@ -154,6 +157,8 @@ const AppRouter = () => {
                 </Route>
                 <Route path="/ending" element={<Ending />} />
                 <Route path="/wallet" element={<WalletPage />} />
+
+                <Route path="/character-history" element={<CharacterHistory />} />
 
                 <Route path="/juju" element={<Juju />} />
                 <Route path="/sinijini" element={<Sinijini />} />
