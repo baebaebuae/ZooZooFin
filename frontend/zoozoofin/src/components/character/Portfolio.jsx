@@ -31,10 +31,10 @@ const ModalBackdrop = styled.div`
 
 const StyledModal = styled(Modal)`
   font-family: 'ONE Mobile POP', sans-serif;
-  background-color: ${({ theme }) => theme.colors.yellow};
+  background-color: ${({ theme }) => theme.colors.background};
   border-radius: 20px;
   padding: 10px;
-  width: 200%;
+  width: 100%;
   max-width: 200px;
   height: 80vh;
   margin: 0 auto;
@@ -42,16 +42,15 @@ const StyledModal = styled(Modal)`
   display: flex;
   flex-direction: column;
   z-index: 1001;
-  border: 4px solid white;
 `;
 
 const ModalContent = styled.div`
   font-family: 'ONE Mobile POP', sans-serif;
-  background-color: ${({ theme }) => theme.colors.yellow};
+  background-color: ${({ theme }) => theme.colors.background};
   border-radius: 20px;
   padding: 10px;
   width: 90%;
-  max-width: 200px;
+  max-width: 300px;
   max-height: 80vh;
   overflow: hidden;
   position: relative;
