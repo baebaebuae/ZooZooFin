@@ -1,7 +1,11 @@
 import styled from 'styled-components';
 
 import { useRef, Suspense, useEffect } from 'react';
+import { useFrame } from '@react-three/fiber';
+
 import { useNavigate } from 'react-router-dom';
+
+import CharRabbit from '@assets/images/characters/rabbit.png';
 
 import { useGLTF, OrbitControls } from '@react-three/drei';
 import { Canvas, useThree } from '@react-three/fiber';
@@ -12,6 +16,20 @@ const ModelWrapper = styled.div`
     height: 640px;
 `;
 
+const CharacterImage = () => {
+    const texture = new THREE.TextureLoader().load(CharRabbit); // 이미지 로드
+    return (
+        <mesh
+            position={[1, -0.8, 2.3]} // 위치 설정
+            scale={[1.5, 1.5, 1.5]} // 크기 설정
+            rotation={[0, Math.PI / 4.5, 0]} // Y축으로 180도 회전 (정면을 바라보게)
+        >
+            <planeGeometry args={[1, 1]} /> {/* 평면 지오메트리 생성 */}
+            <meshBasicMaterial map={texture} transparent={true} /> {/* 텍스처 적용 */}
+        </mesh>
+    );
+};
+
 const CharacterModel = () => {
     const modelRef = useRef();
     const { scene } = useGLTF('/models/rabbit.glb');
@@ -20,7 +38,7 @@ const CharacterModel = () => {
             object={scene}
             scale={0.28}
             ref={modelRef}
-            position={[1.2, -1.6, 2]}
+            position={[1.5, -1.6, 2]}
             rotation={[0, Math.PI / 4, 0]}
         />
     );
@@ -78,6 +96,20 @@ const RoomModel = () => {
         }
     };
 
+    useFrame(() => {
+        scene.traverse((child) => {
+            if (child.name === 'Computer') {
+                // Y축 회전 애니메이션 추가
+                const time = Date.now() * 0.005;
+
+                // 좌우 흔들림
+                child.position.y = 0.05 + Math.sin(time) * 0.05;
+                child.rotation.x = Math.sin(time) * 0.02;
+                child.rotation.z = Math.sin(time) * 0.02;
+            }
+        });
+    });
+
     return <primitive object={scene} ref={modelRef} position={-2} onPointerDown={onClick} />;
 };
 
@@ -92,10 +124,11 @@ const Jignonne = () => {
                 }}
                 color="#ffffff"
             >
-                <axesHelper args={[200, 200, 200]} />
+                {/* <axesHelper args={[200, 200, 200]} /> */}
 
                 <Suspense>
-                    <CharacterModel />
+                    {/* <CharacterModel /> */}
+                    <CharacterImage />
                     <RoomModel />
                     {/* 방 사물 전체 조명 , 그림자 X*/}
                     <ambientLight intensity={2.2} color="#fbf8ef" />
@@ -144,8 +177,8 @@ const Jignonne = () => {
                         minDistance={2}
                         maxDistance={7}
                         maxPolarAngle={Math.PI / 2}
-                        minPolarAngle={Math.PI / 3}
-                        maxAzimuthAngle={Math.PI / 2}
+                        minPolarAngle={Math.PI / 2.2}
+                        maxAzimuthAngle={Math.PI / 4}
                         minAzimuthAngle={Math.PI / 5}
                     />
                 </Suspense>
