@@ -1,7 +1,9 @@
 package com.zzf.backend.domain.loan.dto;
 
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 @Builder
 public class MyLoanResponse {
     private Long loanId;

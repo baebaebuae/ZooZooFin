@@ -39,7 +39,6 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
             errorResponse(response, AUTHENTICATION_REQUIRED);
         } catch (Exception e) {
             errorResponse(response, e.getMessage());
-//            errorResponse(response, INTERNAL_SERVER_ERROR);
         }
     }
 

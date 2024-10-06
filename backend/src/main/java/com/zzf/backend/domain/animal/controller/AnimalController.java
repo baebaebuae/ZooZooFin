@@ -29,7 +29,7 @@ public class AnimalController {
     }
 
     @PostMapping
-    public ResponseDto<?> createAnimal(@MemberId String memberId,
+    public ResponseDto<Void> createAnimal(@MemberId String memberId,
                                        @RequestBody AnimalCreateRequest animalCreateRequest) {
         animalService.createAnimal(memberId, animalCreateRequest);
 

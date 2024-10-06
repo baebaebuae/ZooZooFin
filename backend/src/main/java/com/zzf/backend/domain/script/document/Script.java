@@ -1,8 +1,6 @@
 package com.zzf.backend.domain.script.document;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Id;
-import jakarta.persistence.Transient;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -29,10 +27,8 @@ public class Script {
     @AllArgsConstructor
     public static class Responses {
 
-        @Schema(example = "2")
         private Long nextScript;
 
-        @Schema(example = "null")
         private String selection;
     }
 }

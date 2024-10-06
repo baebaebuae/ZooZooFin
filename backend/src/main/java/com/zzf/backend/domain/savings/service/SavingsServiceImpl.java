@@ -25,7 +25,7 @@ import static com.zzf.backend.global.status.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
-public class SavingsServiceImpl implements SavingsService{
+public class SavingsServiceImpl implements SavingsService {
 
     private final SavingsRepository savingsRepository;
     private final SavingsTypeRepository savingsTypeRepository;
@@ -42,7 +42,7 @@ public class SavingsServiceImpl implements SavingsService{
 
         List<SavingsType> savingsTypeList = savingsTypeRepository.findAll();
 
-        for(SavingsType savingsType : savingsTypeList){
+        for (SavingsType savingsType : savingsTypeList) {
             SavingsTypeResponse savingsTypeResponse = SavingsTypeResponse.builder()
                     .typeId(savingsType.getSavingsTypeId())
                     .period(savingsType.getSavingsPeriod())
@@ -65,7 +65,7 @@ public class SavingsServiceImpl implements SavingsService{
         SavingsType savingsType = savingsTypeRepository.findById(savingsRequest.getTypeId()).orElseThrow(() -> new CustomException(SAVINGS_TYPE_NOT_FOUND_EXCEPTION));
 
         // 현금 부족
-        if (animal.getAssets() < savingsRequest.getMoney()){
+        if (animal.getAssets() < savingsRequest.getMoney()) {
             throw new CustomException(CASH_SHORTAGE_EXCEPTION);
         }
 
@@ -107,7 +107,7 @@ public class SavingsServiceImpl implements SavingsService{
 
         List<Savings> savingsList = savingsRepository.findAllByAnimalAndSavingsIsEndFalseOrderBySavingsEndTurnAsc(animal);
 
-        for (Savings savings : savingsList){
+        for (Savings savings : savingsList) {
             SavingsType savingsType = savings.getSavingsType();
 
             // 만기 시 예상 금액 계산
@@ -145,18 +145,18 @@ public class SavingsServiceImpl implements SavingsService{
         Savings savings = savingsRepository.findById(savingsId).orElseThrow(() -> new CustomException(SAVINGS_NOT_FOUND_EXCEPTION));
 
         // 당일 취소 불가능
-        if (savings.getSavingsStartTurn().equals(animal.getTurn())){
+        if (savings.getSavingsStartTurn().equals(animal.getTurn())) {
             throw new CustomException(SAME_DAY_CANCELLATION_NOT_ALLOWED);
         }
 
         savings.changeSavingsIsEnd(true);
-        animal.increaseAnimalAssets( savings.getSavingsAmount() + savings.getSavingsAmount() / 200);
+        animal.increaseAnimalAssets(savings.getSavingsAmount() + savings.getSavingsAmount() / 200);
 
         // 턴 기록에 추가
         TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
         turnRecord.setSavingsFinish(turnRecord.getSavingsFinish() + savings.getSavingsAmount() + savings.getSavingsAmount() / 200);
 
-        if (animal.getTurn() + 1 != savings.getSavingsEndTurn()){
+        if (animal.getTurn() + 1 != savings.getSavingsEndTurn()) {
             // 다음 턴이 만기가 아닌 경우, 다음 턴 기록에서 repayment 빼기
             NextTurnRecord nextTurnRecord = nextTurnRecordRepository.findByAnimalAndNextTurnRecordTurn(animal, animal.getTurn() + 1).orElseThrow(() -> new CustomException(NEXT_TURN_RECORD_NOT_FOUND));
             nextTurnRecord.setNextSavingsRepayment(nextTurnRecord.getNextSavingsRepayment() + savings.getSavingsPayment());

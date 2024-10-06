@@ -125,8 +125,11 @@ public class DepositServiceImpl implements DepositService {
     @Override
     @Transactional
     public void deleteMyDeposit(Long animalId, Long depositId) {
-        Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
-        Deposit deposit = depositRepository.findById(depositId).orElseThrow(() -> new CustomException(DEPOSIT_NOT_FOUND_EXCEPTION));
+        Animal animal = animalRepository.findById(animalId)
+                .orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
+
+        Deposit deposit = depositRepository.findById(depositId)
+                .orElseThrow(() -> new CustomException(DEPOSIT_NOT_FOUND_EXCEPTION));
 
         // 당일 취소 불가능
         if (deposit.getDepositStartTurn().equals(animal.getTurn())) {

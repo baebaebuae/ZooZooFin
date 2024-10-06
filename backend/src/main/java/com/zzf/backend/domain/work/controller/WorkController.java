@@ -17,7 +17,7 @@ public class WorkController {
     private final WorkService workService;
 
     @PatchMapping
-    public ResponseDto<?> doWork(@AnimalId Long animalId,
+    public ResponseDto<Void> doWork(@AnimalId Long animalId,
                                  @RequestBody WorkRequest workRequest) {
         workService.doWork(animalId, workRequest);
 

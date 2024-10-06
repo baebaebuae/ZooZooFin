@@ -1,10 +1,11 @@
 package com.zzf.backend.domain.deposit.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
-@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class DepositRequest {
     private Long typeId;
     private Long money;

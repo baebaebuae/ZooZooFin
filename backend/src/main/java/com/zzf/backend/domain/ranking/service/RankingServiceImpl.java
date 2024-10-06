@@ -24,23 +24,25 @@ public class RankingServiceImpl implements RankingService{
     private final PortfolioRepository portfolioRepository;
 
     @EventListener(ApplicationReadyEvent.class)
+    @Transactional(readOnly = true)
     public void init() {
         cacheRanking();
     }
 
     @Override
     @Scheduled(cron = "0 0/5 * * * ?")
+    @Transactional(readOnly = true)
     public void updateRanking(){
         cacheRanking();
     }
 
     @Transactional(readOnly = true)
-    private void cacheRanking(){
+    protected void cacheRanking(){
         List<Portfolio> portfolioList = portfolioRepository.findTop10ByOrderByPortfolioScoreDesc();
 
         List<Ranking> rankingList = new ArrayList<>();
-
         Long rank = 0L;
+
         for (Portfolio portfolio : portfolioList){
             rankingList.add(new Ranking(++rank, portfolio.getPortfolioScore(), portfolio.getAnimal().getName(), portfolio.getAnimal().getAnimalType().getAnimalImgUrl()));
         }
@@ -57,6 +59,5 @@ public class RankingServiceImpl implements RankingService{
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.convertValue(redisData, new TypeReference<List<Ranking>>() {});
     }
-
 
 }

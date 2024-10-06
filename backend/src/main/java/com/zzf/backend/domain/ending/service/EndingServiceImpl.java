@@ -20,12 +20,14 @@ import com.zzf.backend.domain.stock.repository.StockRepository;
 import com.zzf.backend.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static com.zzf.backend.global.status.ErrorCode.*;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class EndingServiceImpl implements EndingService {
 
@@ -35,7 +37,6 @@ public class EndingServiceImpl implements EndingService {
     private final SavingsRepository savingsRepository;
     private final StockHoldingsRepository stockHoldingsRepository;
     private final ChartRepository chartRepository;
-    private final StockRepository stockRepository;
 
     @Override
     public void createEnding(Long animalId, EndingRequest endingRequest) {
@@ -61,12 +62,12 @@ public class EndingServiceImpl implements EndingService {
 
         List<StockHoldings> stockHoldings = stockHoldingsRepository.findAllByAnimalAndStockIsSoldFalse(animal);
         Long stockTotal = stockHoldings.stream().map(holdings -> {
-            Stock stock = stockRepository.findById(holdings.getStock().getStockId())
-                    .orElseThrow(() -> new CustomException(STOCK_NOT_FOUND_EXCEPTION));
+            Stock stock = holdings.getStock();
+
             Chart chart = chartRepository.findByStockAndTurn(stock, animal.getTurn())
                     .orElseThrow(() -> new CustomException(CHART_NOT_FOUND_EXCEPTION));
-            return chart.getPrice();
 
+            return chart.getPrice();
         }).reduce(0L, Long::sum);
 
 

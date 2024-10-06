@@ -1,5 +1,9 @@
 package com.zzf.backend.global.auth.security;
 
+import com.zzf.backend.global.auth.user.GoogleUserInfo;
+import com.zzf.backend.global.auth.user.KakaoUserInfo;
+import com.zzf.backend.global.auth.user.NaverUserInfo;
+import com.zzf.backend.global.auth.user.UserRole;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
