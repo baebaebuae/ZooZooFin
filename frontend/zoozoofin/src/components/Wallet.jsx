@@ -73,7 +73,6 @@ const CloseButton = styled.button`
   font-size: 24px;
 `;
 
-
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -186,7 +185,7 @@ const nextDayFallbackData = {
   nextCapitalRepayment: 100000,
 };
 
-const Wallet = ({ onClose }) => {
+const Wallet = ({ onClose = () => {} }) => {
   const [walletData, setWalletData] = useState(fallbackData);
   const [nextDayData, setNextDayData] = useState(nextDayFallbackData);
   const [isLoading, setIsLoading] = useState(true);
