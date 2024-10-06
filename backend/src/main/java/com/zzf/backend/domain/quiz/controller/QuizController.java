@@ -8,7 +8,6 @@ import com.zzf.backend.domain.quiz.service.QuizServiceImpl;
 import com.zzf.backend.global.auth.annotation.AnimalId;
 import com.zzf.backend.global.dto.ResponseDto;
 import com.zzf.backend.global.status.SuccessCode;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +21,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
-@Tag(name = "Quiz", description = "Quiz API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/quiz")

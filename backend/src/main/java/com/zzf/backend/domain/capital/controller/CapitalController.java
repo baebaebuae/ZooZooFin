@@ -6,10 +6,6 @@ import com.zzf.backend.domain.capital.service.CapitalService;
 import com.zzf.backend.global.auth.annotation.AnimalId;
 import com.zzf.backend.global.dto.ResponseDto;
 import com.zzf.backend.global.status.SuccessCode;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.zzf.backend.global.status.SuccessCode.*;
+
 @Slf4j
-@Tag(name = "Capital", description = "Capital API, 사채 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/capital")
@@ -27,38 +24,26 @@ public class CapitalController {
     private final CapitalService capitalService;
 
     //사채 있는지 확인 012
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "사채 가능 여부 조회 성공")
-    })
-    @Operation(summary = "사채 가능 여부 조회", description = "사용자가 사채 사용이 가능한지 여부를 보여줌.")
     @GetMapping
     public ResponseDto<Map<String, Boolean>> getCapital(@AnimalId Long animalId){
 
         Map<String, Boolean> mapResponse = new HashMap<>();
         mapResponse.put("capitalExist", capitalService.getCapitalExist(animalId));
 
-        return ResponseDto.success(SuccessCode.READ_SUCCESS, mapResponse);
+        return ResponseDto.success(READ_SUCCESS, mapResponse);
     }
 
     //사채 등록 013
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "사채 등록 성공")
-    })
-    @Operation(summary = "사채 등록", description = "사채를 등록함.")
     @PostMapping
     public ResponseDto<Void> postCapital(@AnimalId Long animalId,
                                          @RequestBody CapitalRequest capitalRequest){
 
         capitalService.postCapital(animalId, capitalRequest);
 
-        return ResponseDto.success(SuccessCode.CREATE_SUCCESS);
+        return ResponseDto.success(CREATE_SUCCESS);
     }
 
     //사채 상환 014
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "사채 상환 성공")
-    })
-    @Operation(summary = "사채 상환", description = "사채를 상환함. 중도상환 가능, 전액 상환만 가능, 일부 상환 불가능")
     @PatchMapping
     public ResponseDto<Void> patchCapital(@AnimalId Long animalId,
                                           @RequestBody CapitalRepayRequest capitalRepayRequest){
@@ -67,6 +52,6 @@ public class CapitalController {
 
         capitalService.patchCapital(animalId, money);
 
-        return ResponseDto.success(SuccessCode.UPDATE_SUCCESS);
+        return ResponseDto.success(UPDATE_SUCCESS);
     }
 }

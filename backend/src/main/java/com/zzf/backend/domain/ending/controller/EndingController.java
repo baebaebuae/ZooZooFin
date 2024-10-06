@@ -17,7 +17,7 @@ public class EndingController {
     private final EndingService endingService;
 
     @PostMapping
-    public ResponseDto<?> createEnding(@AnimalId Long animalId,
+    public ResponseDto<Void> createEnding(@AnimalId Long animalId,
                                        @RequestBody EndingRequest endingRequest) {
         endingService.createEnding(animalId, endingRequest);
 

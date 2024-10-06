@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 import static com.zzf.backend.global.status.ErrorCode.*;
 
+// TODO: Transaction 걸기
 @Service
 @RequiredArgsConstructor
 public class StockServiceImpl implements StockService {
@@ -46,8 +47,7 @@ public class StockServiceImpl implements StockService {
                 .findAllByStockStockTypeAndAnimalAndStockIsSoldFalse(type, animal);
 
         Long totalAmount = stockHoldings.stream().map(holdings -> {
-                    Stock stock = stockRepository.findById(holdings.getStock().getStockId())
-                            .orElseThrow(() -> new CustomException(STOCK_NOT_FOUND_EXCEPTION));
+                    Stock stock = holdings.getStock();
 
                     Chart chart = chartRepository.findByStockAndTurn(stock, animal.getTurn())
                             .orElseThrow(() -> new CustomException(CHART_NOT_FOUND_EXCEPTION));
@@ -222,6 +222,7 @@ public class StockServiceImpl implements StockService {
                     .build();
         }
 
+        // TODO: save 굳이 안써도 됨
         animalRepository.save(animal);
 
         turnRecordRepository.save(turnRecord);
@@ -259,6 +260,7 @@ public class StockServiceImpl implements StockService {
         }
 
 
+        // TODO: overflow
         Long cost = chart.getPrice() * sellStockRequest.getCount();
 
         animal.setAssets(animal.getAssets() + cost);

@@ -1,14 +1,15 @@
 package com.zzf.backend.domain.stock.dto;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Getter
-@RequiredArgsConstructor
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SellStockRequest {
 
-    private final Long stockId;
+    private Long stockId;
 
-    private final Long count;
+    private Long count;
 
 }

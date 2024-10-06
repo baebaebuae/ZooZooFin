@@ -48,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             User principal = new User(jwtProvider.getMemberIdFromAccessToken(accessToken), "", authorities);
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(principal, accessToken, authorities));
         } catch (CustomException e) {
-            log.info("JWT 검증 필터 에러! 에러 메세지: {}", e.getErrorCode().getMessage());
+            log.info("JWT 검증 필터 에러! 요청 URL:{} 에러 메세지: {}", request.getRequestURI(),e.getErrorCode().getMessage());
         }
 
         filterChain.doFilter(request, response);

@@ -152,9 +152,10 @@ public class NextTurnServiceImpl implements NextTurnService {
     public TurnRecordResponse getTurnRecord(long animalId) {
         Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
-        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
+        TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getTurn())
+                .orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
 
-        TurnRecordResponse turnRecordResponse = TurnRecordResponse.builder()
+        return TurnRecordResponse.builder()
                 .dailyCharge(turnRecord.getDailyCharge())
                 .loanMake(turnRecord.getLoanMake())
                 .loanRepay(turnRecord.getLoanRepay())
@@ -168,8 +169,6 @@ public class NextTurnServiceImpl implements NextTurnService {
                 .capitalMake(turnRecord.getCapitalMake())
                 .capitalRepay(turnRecord.getCapitalRepay())
                 .build();
-
-        return turnRecordResponse;
     }
 
     @Override
@@ -177,7 +176,8 @@ public class NextTurnServiceImpl implements NextTurnService {
     public WarningRecordResponse getWarningRecord(long animalId) {
         Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
-        WarningRecord warningRecord = warningRecordRepository.findByAnimalAndWarningRecordTurn(animal, animal.getTurn()).orElseThrow(() -> new CustomException(WARNING_RECORD_NOT_FOUND));
+        WarningRecord warningRecord = warningRecordRepository.findByAnimalAndWarningRecordTurn(animal, animal.getTurn())
+                .orElseThrow(() -> new CustomException(WARNING_RECORD_NOT_FOUND));
 
         WarningRecordResponse warningRecordResponse = WarningRecordResponse.builder()
                 .warningSavingsCount(warningRecord.getWarningSavingsCount())
@@ -198,7 +198,8 @@ public class NextTurnServiceImpl implements NextTurnService {
     public NextTurnRecordResponse getNextTurnRecord(long animalId) {
         Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
-        NextTurnRecord nextTurnRecord = nextTurnRecordRepository.findByAnimalAndNextTurnRecordTurn(animal, animal.getTurn()).orElseThrow(() -> new CustomException(NEXT_TURN_RECORD_NOT_FOUND));
+        NextTurnRecord nextTurnRecord = nextTurnRecordRepository.findByAnimalAndNextTurnRecordTurn(animal, animal.getTurn() + 1)
+                .orElseThrow(() -> new CustomException(NEXT_TURN_RECORD_NOT_FOUND));
 
         NextTurnRecordResponse nextTurnRecordResponse = NextTurnRecordResponse.builder()
                 .nextSavingsRepayment(nextTurnRecord.getNextSavingsRepayment())
@@ -329,9 +330,9 @@ public class NextTurnServiceImpl implements NextTurnService {
         List<Savings> savingsList = savingsRepository.findAllByAnimalAndSavingsIsEndFalse(animal);
         long total = 0L;
 
-        for (Savings savings : savingsList){
+        for (Savings savings : savingsList) {
 
-            if (savings.getSavingsEndTurn().equals(animal.getTurn() + 1)){
+            if (savings.getSavingsEndTurn().equals(animal.getTurn() + 1)) {
                 // 마지막 턴인 경우 넘어감
                 continue;
             }
@@ -523,7 +524,7 @@ public class NextTurnServiceImpl implements NextTurnService {
         // 주식 모두 팔고 판 금액 animal.assets와 money에 더하기.
         List<StockHoldings> stockHoldingsList = stockHoldingsRepository.findAllByAnimalAndStockIsSoldFalse(animal);
 
-        for (StockHoldings stockHoldings : stockHoldingsList){
+        for (StockHoldings stockHoldings : stockHoldingsList) {
             Stock stock = stockHoldings.getStock();
 
             Chart chart = chartRepository.findByStockAndTurn(stock, animal.getTurn())
@@ -533,11 +534,11 @@ public class NextTurnServiceImpl implements NextTurnService {
 
             stockHoldings.setStockIsSold(true);
             stockHistoryRepository.save(StockHistory.builder()
-                            .stock(stock)
-                            .animal(animal)
-                            .tradeCount(stockHoldings.getStockCount())
-                            .isBuy(false)
-                            .turn(animal.getTurn())
+                    .stock(stock)
+                    .animal(animal)
+                    .tradeCount(stockHoldings.getStockCount())
+                    .isBuy(false)
+                    .turn(animal.getTurn())
                     .build());
         }
 
@@ -686,9 +687,9 @@ public class NextTurnServiceImpl implements NextTurnService {
         List<Capital> capitalList = capitalRepository.findAllByAnimalAndCapitalIsEndFalse(animal);
         long total = 0L;
 
-        for (Capital capital : capitalList){
+        for (Capital capital : capitalList) {
             // 마감턴일 경우 money에 추가
-            if (capital.getCapitalEndTurn().equals(animal.getTurn() + 1)){
+            if (capital.getCapitalEndTurn().equals(animal.getTurn() + 1)) {
                 total = capital.getCapitalAmount() + capital.getCapitalAmount() / 10;
             }
         }

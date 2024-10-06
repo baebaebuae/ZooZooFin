@@ -2,10 +2,8 @@ package com.zzf.backend.global.dto;
 
 import com.zzf.backend.global.status.ErrorCode;
 import com.zzf.backend.global.status.SuccessCode;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
 
@@ -13,10 +11,8 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public class ResponseDto<T> {
 
-    @Schema(example = "200")
     private int httpStatus;
-    
-    @Schema(example = "조회 성공")
+
     private String message;
     private T body;
 

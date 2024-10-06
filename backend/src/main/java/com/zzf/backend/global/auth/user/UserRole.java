@@ -1,4 +1,4 @@
-package com.zzf.backend.global.auth.security;
+package com.zzf.backend.global.auth.user;
 
 import org.springframework.security.core.GrantedAuthority;
 

@@ -1,7 +1,6 @@
 package com.zzf.backend.global.auth.entity;
 
 import com.zzf.backend.global.auth.security.OAuth2Provider;
-import com.zzf.backend.global.auth.security.UserRole;
 import com.zzf.backend.global.base.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -9,12 +8,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import static com.zzf.backend.global.auth.security.UserRole.USER;
 
 @Entity
 @Getter

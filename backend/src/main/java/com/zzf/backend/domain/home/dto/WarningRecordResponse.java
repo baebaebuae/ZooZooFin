@@ -10,10 +10,13 @@ import lombok.Getter;
 public class WarningRecordResponse {
     private Long warningSavingsCount;
     private Long warningLoanCount;
+
     private Long depositTotal;
     private Long depositRepay;
+
     private Long savingsTotal;
     private Long savingsRepay;
+
     private Long stockTotal;
     private Long stockRepay;
 }

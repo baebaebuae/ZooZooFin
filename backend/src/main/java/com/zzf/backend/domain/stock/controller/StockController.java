@@ -49,7 +49,7 @@ public class StockController {
     }
 
     @PostMapping("/buy")
-    public ResponseDto<?> buyStock(@AnimalId Long animalId,
+    public ResponseDto<Void> buyStock(@AnimalId Long animalId,
                                    @RequestBody BuyStockRequest buyStockRequest) {
         stockService.buyStock(animalId, buyStockRequest);
 
@@ -57,7 +57,7 @@ public class StockController {
     }
 
     @PostMapping("/sell")
-    public ResponseDto<?> sellStock(@AnimalId Long animalId,
+    public ResponseDto<Void> sellStock(@AnimalId Long animalId,
                                     @RequestBody SellStockRequest sellStockRequest) {
         stockService.sellStock(animalId, sellStockRequest);
 
