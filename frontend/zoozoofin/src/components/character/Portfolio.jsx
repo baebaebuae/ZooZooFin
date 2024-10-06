@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 import { getApiClient } from "@/stores/apiClient";
 import CreditBox from '@components/root/creditBox';
-import { BadgeStroke } from '@components/root/badge';
+import { Button } from '@components/root/buttons';
 import Chart from 'react-apexcharts';
-import { Modal } from "@components/root/modal";
 import { theme } from "@/styles/theme";
 
 const GlobalStyle = createGlobalStyle`
@@ -16,49 +15,47 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const ModalBackdrop = styled.div`
+// 모달의 padding값 때문에 재설정
+const ModalBackground = styled.div`
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
 `;
 
-const StyledModal = styled(Modal)`
-  font-family: 'ONE Mobile POP', sans-serif;
-  background-color: ${({ theme }) => theme.colors.background};
-  border-radius: 20px;
-  padding: 10px;
-  width: 100%;
-  max-width: 200px;
-  height: 80vh;
-  margin: 0 auto;
-  overflow-y: auto;
+const ModalBox = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
-  z-index: 1001;
-`;
-
-const ModalContent = styled.div`
-  font-family: 'ONE Mobile POP', sans-serif;
-  background-color: ${({ theme }) => theme.colors.background};
-  border-radius: 20px;
-  padding: 10px;
-  width: 90%;
-  max-width: 300px;
+  justify-content: flex-start;
+  align-items: center;
+  width: 270px;
+  min-height: 300px;
+  padding: 20px 20px;
+  border-radius: 40px;
+  border: 10px solid white;
+  background: ${({ theme }) => theme.colors.background};
+  z-index: 1000;
+  overflow-y: auto;
   max-height: 80vh;
-  overflow: hidden;
-  position: relative;
 `;
 
+const CustomModal = ({ children, onClose }) => {
+  return (
+    <ModalBackground onClick={onClose}>
+      <ModalBox onClick={(e) => e.stopPropagation()}>{children}</ModalBox>
+    </ModalBackground>
+  );
+};
 
 const ScrollableContent = styled.div`
-  max-height: calc(80vh - 40px);
+  width: 100%;
   overflow-y: auto;
   padding-right: 10px;
   margin-right: -10px;
@@ -88,8 +85,8 @@ const ScrollableContent = styled.div`
 
 const CloseButton = styled.button`
   position: absolute;
-  top: -5px;
-  right: -2px;
+  top: 10px;
+  right: 10px;
   background: none;
   border: none;
   font-size: 24px;
@@ -129,20 +126,20 @@ const Title = styled.h2`
   white-space: nowrap;
 `;
 
-const StyledBadgeStroke = styled(BadgeStroke)`
-  font-size: 12px;
-  padding: 2px 8px;
+const StyledButton = styled(Button)`
   max-width: 45%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  border: 3px solid white;
+  font-weight: bold;
 `;
 
-const RedBadgeStroke = styled(BadgeStroke)`
-  background-color: ${({ theme }) => theme.colors.warn};
-  color: white;
-  text-align: center;
+const RedButton = styled(Button)`
   display: block;
+  width: 100%;
+  margin: 10px 0;
+  border: 5px solid white;
 `;
 
 const CreditSection = styled.div`
@@ -165,8 +162,8 @@ const FullWidthCreditBox = styled(CreditBox)`
 `;
 
 const SectionTitle = styled.h3`
-  font-size: 18px;
-  margin: 40px 0 10px 0;
+  font-size: 20px;
+  margin: 30px 0 15px 0;
   color: ${({ theme }) => theme.colors.primaryDeep};
   text-align: center;
 `;
@@ -225,25 +222,74 @@ const ChartContainer = styled.div`
   justify-content: center;
   align-items: center;
   height: 300px;
+  margin-bottom: 20px;
 `;
 
-const Portfolio = ({ isOpen, onClose }) => {
+const CharacterImageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+`;
+
+const CharacterImage = styled.img`
+  height: 180px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+`;
+
+const PortfolioTitle = styled.div`
+  font-size: 22px;
+  font-weight: bold;
+  color: ${({ theme }) => theme.colors.primaryDeep};
+  margin-bottom: 10px;
+  text-align: center;
+  text-shadow: 
+    -1px -1px 0 white,  
+    1px -1px 0 white,
+    -1px 1px 0 white,
+    1px 1px 0 white;
+`;
+
+const CharacterDate = styled.div`
+  font-size: 16px;
+  color: ${({ theme }) => theme.colors.gray};
+  margin-bottom: 15px;
+  text-align: center;
+  font-weight: bold;
+`;
+
+const Portfolio = ({ isOpen, onClose, animalId, animalImage, createdDate }) => {
   const [characterData, setCharacterData] = useState(null);
   const [portfolioData, setPortfolioData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fallbackPortfolioData = {
-    animalName: "토토",
-    animalAsset: 0,
-    animalCredit: 0,
-    portfolio: {
-      depositPercent: 20,
-      savingsPercent: 30,
-      stockPercent: 50,
-      investmentStyle: "공격투자형",
-      ending: "string",
-      ReturnRate: 12,
-      totalFundsPercent: 34
+  const fallbackData = {
+    characterData: {
+      animalName: "토토",
+      animalHierarchy: "당근 알바생",
+      animalAbility: "예금우대",
+      animalCredit: 5,
+      totalAmount: 1000000,
+      totalAssets: 500000,
+      totalDeposit: 200000,
+      totalSavings: 200000,
+      totalStock: 100000,
+      totalLoan: 0,
+    },
+    portfolioData: {
+      animalName: "토토",
+      animalAsset: 1000000,
+      animalCredit: 650,
+      portfolio: {
+        depositPercent: 20,
+        savingsPercent: 30,
+        stockPercent: 50,
+        investmentStyle: "공격투자형",
+        ending: "string",
+        ReturnRate: 12,
+        totalFundsPercent: 34
+      }
     }
   };
 
@@ -252,45 +298,44 @@ const Portfolio = ({ isOpen, onClose }) => {
       setIsLoading(true);
       try {
         const apiClient = getApiClient();
-        const characterResponse = await apiClient.get('/animal/info');
+        const characterResponse = await apiClient.get(`/animal/info/`);
         setCharacterData(characterResponse.data.body);
 
-        try {
-          const portfolioResponse = await apiClient.get('/animal/1');
-          if (portfolioResponse.data.body) {
-            setPortfolioData(portfolioResponse.data.body);
-          } else {
-            setPortfolioData(fallbackPortfolioData);
-          }
-        } catch (portfolioError) {
-          console.error('Error fetching portfolio data:', portfolioError);
-          setPortfolioData(fallbackPortfolioData);
+        const portfolioResponse = await apiClient.get(`/animal/${animalId}`);
+        if (portfolioResponse.data.body) {
+          setPortfolioData(portfolioResponse.data.body);
+        } else {
+          throw new Error('No portfolio data');
         }
       } catch (error) {
-        console.error('Error fetching character data:', error);
-        setPortfolioData(fallbackPortfolioData);
+        console.error('Error fetching data:', error);
+        setCharacterData(fallbackData.characterData);
+        setPortfolioData(fallbackData.portfolioData);
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [animalId]);
 
   if (!isOpen) return null;
 
-  if (isLoading || !characterData || !portfolioData) {
+  if (isLoading) {
     return (
-      <ModalBackdrop onClick={onClose}>
-        <StyledModal onClose={onClose} onClick={(e) => e.stopPropagation()}>
-          <LoadingIndicator>Loading...</LoadingIndicator>
-        </StyledModal>
-      </ModalBackdrop>
+      <CustomModal onClose={onClose}>
+        <LoadingIndicator>Loading...</LoadingIndicator>
+      </CustomModal>
     );
   }
 
+  const data = {
+    character: characterData || fallbackData.characterData,
+    portfolio: portfolioData || fallbackData.portfolioData
+  };
+
   const chartOptions = {
-    chart: { type: 'donut' },
+    chart: { type: 'pie' },
     labels: ['예금', '적금', '주식'],
     colors: [theme.colors.primary, theme.colors.yellow, theme.colors.orange],
     legend: { position: 'bottom' },
@@ -298,70 +343,73 @@ const Portfolio = ({ isOpen, onClose }) => {
   };
 
   const chartSeries = [
-    portfolioData.portfolio.depositPercent,
-    portfolioData.portfolio.savingsPercent,
-    portfolioData.portfolio.stockPercent
+    data.portfolio.portfolio.depositPercent,
+    data.portfolio.portfolio.savingsPercent,
+    data.portfolio.portfolio.stockPercent
   ];
 
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <ModalBackdrop onClick={onClose}>
-        <StyledModal onClose={onClose} onClick={(e) => e.stopPropagation()}>
-          <ModalContent>
-            <CloseButton onClick={onClose}>&times;</CloseButton>
-            <ScrollableContent>
-              <Header>
-                <Subtitle>{characterData.animalHierarchy}</Subtitle>
-                <TopSection>
-                  <Title title={characterData.animalName}>{characterData.animalName}</Title>
-                  <StyledBadgeStroke title={characterData.animalAbility}>{characterData.animalAbility}</StyledBadgeStroke>
-                </TopSection>
-              </Header>
-              <CreditSection>
-                <FullWidthCreditBox grade={characterData.animalCredit} />
-              </CreditSection>
-              <Section>
-                <AssetRow>
-                  <AssetLabel>순자산</AssetLabel>
-                  <AssetValue bold>{characterData.totalAmount.toLocaleString()}원</AssetValue>
-                </AssetRow>
-              </Section>
-              <Section>
-                {['현금', '예금', '적금', '주식', '대출'].map((label, index) => (
-                  <AssetRow key={index}>
-                    <AssetLabel>{label}</AssetLabel>
-                    <AssetValue color={label === '대출' ? theme.colors.warn : undefined}>
-                      {label === '대출' ? '-' : ''}{characterData[['totalAssets', 'totalDeposit', 'totalSavings', 'totalStock', 'totalLoan'][index]].toLocaleString()}원
-                    </AssetValue>
-                  </AssetRow>
-                ))}
-              </Section>
-              <SectionTitle>내 투자 성향</SectionTitle>
-              <RedBadgeStroke>{portfolioData.portfolio.investmentStyle}</RedBadgeStroke>
-              <SectionTitle>나는 이런 비율로 투자했어요.</SectionTitle>
-              <Section>
-                <ChartContainer>
-                  <Chart 
-                    options={chartOptions} 
-                    series={chartSeries} 
-                    type="donut" 
-                    width="100%" 
-                    height="100%" 
-                  />
-                </ChartContainer>
-              </Section>
-              <SectionTitle>전체 사용자 대비 내 순위</SectionTitle>
-              <PercentageBox>
-                <p>수익률 상위 <PercentValue>{portfolioData.portfolio.ReturnRate}%</PercentValue></p>
-              </PercentageBox>
-              <PercentageBox>
-                <p>총 자금 상위 <PercentValue>{portfolioData.portfolio.totalFundsPercent}%</PercentValue></p>
-              </PercentageBox>
-            </ScrollableContent>
-          </ModalContent>
-        </StyledModal>
-      </ModalBackdrop>
+      <CustomModal onClose={onClose}>
+        <ScrollableContent>
+          <CloseButton onClick={onClose}>&times;</CloseButton>
+          <Header>
+            <CharacterImageContainer>
+              <CharacterImage src={animalImage} alt={characterData.animalName} />
+              <PortfolioTitle>금융 포트폴리오</PortfolioTitle>
+              <CharacterDate>생성일: {new Date(createdDate).toLocaleDateString()}</CharacterDate>
+            </CharacterImageContainer>
+          </Header>
+          <Subtitle>{characterData.animalHierarchy}</Subtitle>
+          <TopSection>
+            <Title title={characterData.animalName}>{characterData.animalName}</Title>
+            <StyledButton size="small" color="primary" title={characterData.animalAbility}>
+              {characterData.animalAbility}
+            </StyledButton>
+          </TopSection>
+          <CreditSection>
+            <FullWidthCreditBox grade={characterData.animalCredit} />
+          </CreditSection>
+          <Section>
+            <AssetRow>
+              <AssetLabel>순자산</AssetLabel>
+              <AssetValue bold>{characterData.totalAmount.toLocaleString()}원</AssetValue>
+            </AssetRow>
+          </Section>
+          <Section>
+            {['현금', '예금', '적금', '주식', '대출'].map((label, index) => (
+              <AssetRow key={index}>
+                <AssetLabel>{label}</AssetLabel>
+                <AssetValue color={label === '대출' ? theme.colors.warn : undefined}>
+                  {label === '대출' ? '-' : ''}{characterData[['totalAssets', 'totalDeposit', 'totalSavings', 'totalStock', 'totalLoan'][index]].toLocaleString()}원
+                </AssetValue>
+              </AssetRow>
+            ))}
+          </Section>
+          <SectionTitle>내 투자 성향</SectionTitle>
+          <RedButton size="normal" color="warn">
+            {portfolioData.portfolio.investmentStyle}
+          </RedButton>
+          <SectionTitle>나는 이런 비율로 투자했어요.</SectionTitle>
+          <ChartContainer>
+            <Chart 
+              options={chartOptions} 
+              series={chartSeries} 
+              type="pie" 
+              width="100%" 
+              height="100%" 
+            />
+          </ChartContainer>
+          <SectionTitle>전체 사용자 대비 내 순위</SectionTitle>
+          <PercentageBox>
+            <p>수익률 상위 <PercentValue>{portfolioData.portfolio.ReturnRate}%</PercentValue></p>
+          </PercentageBox>
+          <PercentageBox>
+            <p>총 자금 상위 <PercentValue>{portfolioData.portfolio.totalFundsPercent}%</PercentValue></p>
+          </PercentageBox>
+        </ScrollableContent>
+      </CustomModal>
     </ThemeProvider>
   );
 };
