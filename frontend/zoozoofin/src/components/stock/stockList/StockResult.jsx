@@ -8,14 +8,14 @@ import useStockStore from '@components/stock/common/store/StockStore';
 // 구매, 판매 post axios 연결 예정
 
 export const StockResult = ({ onComplete, type }) => {
-    const [value, SetValue] = useState(null);
+    const [value, setValue] = useState(null);
 
     useEffect(
         (type) => {
             if (type === 'buy') {
-                SetValue('구매');
+                setValue('구매');
             } else if (type === 'sell') {
-                SetValue('판매');
+                setValue('판매');
             }
         },
         [type]

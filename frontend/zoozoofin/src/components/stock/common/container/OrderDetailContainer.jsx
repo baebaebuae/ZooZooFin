@@ -47,15 +47,15 @@ const ColumnInfoBox = ({ title, content, showIcon }) => {
 
 // 구매 / 판매 => prop으로 받아서 처리할 예정 (변수명 변경 예정)
 export const OrderSubtitle = ({ type, maxStock, maxMoney }) => {
-    const [stockTitle, SetStockTitle] = useState(null);
-    const [priceTitle, SetPriceTitle] = useState(null);
+    const [stockTitle, setStockTitle] = useState(null);
+    const [priceTitle, setPriceTitle] = useState(null);
     useEffect(() => {
         if (type === 'buy') {
-            SetStockTitle('최대 구매 가능 주');
-            SetPriceTitle('최대 구매 가능 금액');
+            setStockTitle('최대 구매 가능 주');
+            setPriceTitle('최대 구매 가능 금액');
         } else {
-            SetStockTitle('최대 판매 가능 주');
-            SetPriceTitle('최대 판매 가능 금액');
+            setStockTitle('최대 판매 가능 주');
+            setPriceTitle('최대 판매 가능 금액');
         }
     }, [type]);
 
@@ -78,16 +78,16 @@ export const TotalPrice = ({ title, total }) => {
 };
 
 export const InputOrder = ({ type, stockPrice }) => {
-    const [title, SetTitle] = useState(0);
-    const [totalTitle, SetTotalTitle] = useState(null);
+    const [title, setTitle] = useState(0);
+    const [totalTitle, setTotalTitle] = useState(null);
 
     useEffect(() => {
         if (type === 'buy') {
-            SetTitle('구매할 주');
-            SetTotalTitle('총 구매할 금액');
+            setTitle('구매할 주');
+            setTotalTitle('총 구매할 금액');
         } else {
-            SetTitle('판매할 주');
-            SetTotalTitle('총 판매할 금액');
+            setTitle('판매할 주');
+            setTotalTitle('총 판매할 금액');
         }
     }, [type]);
 

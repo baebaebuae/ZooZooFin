@@ -38,27 +38,32 @@ export const StockTitleContainer = ({
     // 구매 화면 이동 테스트를 위해 추가 => 데이터 연결 후 삭제 예정
     isStockSelected,
     type,
+    channel,
+    onDetailClick,
 }) => {
-    const [value, SetValue] = useState(null);
-
+    const [value, setValue] = useState(null);
     useEffect(() => {
         if (type === 'buy') {
-            SetValue('구매하기');
+            setValue('구매하기');
         } else {
-            SetValue('판매하기');
+            setValue('판매하기');
         }
     }, [type]);
+
     const handleClickStock = () => {
         isStockSelected(true);
     };
-
-    // 단위 ',' 찍기
+    const handleDetailClick = () => {
+        if (onDetailClick) {
+            onDetailClick(companyName);
+        }
+    };
 
     return (
         <>
             <BuyingContent onClick={onToggle}>
                 <TitleCoulumn>
-                    <CompanyName type="title">{companyName}</CompanyName>
+                    {channel === 'ETF' && <CompanyName type="title">{companyName}</CompanyName>}
                     <CompanyName>{companyName}</CompanyName>
                 </TitleCoulumn>
                 <BuyingMoneyContent>
@@ -71,10 +76,8 @@ export const StockTitleContainer = ({
             <Collapse in={isOpen} timeout="auto" unmountOnExit>
                 <p>{info}</p>
                 <ButtonContainer>
-                    <ActiveButton variant="contained" onClick={handleClickStock}>
-                        {value}
-                    </ActiveButton>
-                    <DetailButton variant="outlined">상세 정보</DetailButton>
+                    <ActiveButton onClick={handleClickStock}>{value}</ActiveButton>
+                    <DetailButton onClick={handleDetailClick}>상세 정보</DetailButton>
                 </ButtonContainer>
             </Collapse>
             <Divider />
