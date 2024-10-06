@@ -59,6 +59,7 @@ const WalletContent = styled.div`
   background-color: ${({ theme }) => theme.colors.yellow};
   border: 8px solid white;
   overflow-y: auto;
+  overflow-x: hidden;
   position: relative;
 `;
 
