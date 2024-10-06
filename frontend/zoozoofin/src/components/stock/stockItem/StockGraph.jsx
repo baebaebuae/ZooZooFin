@@ -32,7 +32,7 @@ const InfoColumn = ({ product, stockPrice, currentState }) => {
     );
 };
 
-export const StockGraph = () => {
+export const StockGraph = ({ onClickDetail, onClickHint }) => {
     const product = '개굴자동차';
     const currentState = 'up';
     const stockPrice = '89,000';
@@ -55,8 +55,8 @@ export const StockGraph = () => {
             <DetailButtonContainer>
                 <Collapse in={isOpened} timeout="auto" unmountOnExit>
                     <ButtonContainer>
-                        <ActiveButton variant="contained">상세 정보</ActiveButton>
-                        <DetailButton variant="outlined">힌트</DetailButton>
+                        <ActiveButton onClick={onClickDetail}>상세 정보</ActiveButton>
+                        <DetailButton onClick={onClickHint}>힌트</DetailButton>
                     </ButtonContainer>
                 </Collapse>
             </DetailButtonContainer>

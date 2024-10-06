@@ -1,6 +1,7 @@
 import CharFrog from '@assets/images/characters/frog.png';
 import IconOverseas from '@assets/images/icons/stocks/icon_overseas.png';
 import IconETF from '@assets/images/icons/stocks/icon_ETF.png';
+import IconLock from '@assets/images/icons/stocks/icon_lock.png';
 import IconCarrot from '@assets/images/icons/icon_carrot.png';
 
 import {
@@ -29,7 +30,9 @@ import {
 const IconWrapper = ({ icon: Icon, width, height }) => {
     return <img src={Icon} width={width} height={height} />;
 };
-
+export const LockedIcon = () => {
+    return <IconWrapper icon={IconLock} width={32} height={32} />;
+};
 export const MessageIcon = () => {
     return <IconWrapper icon={CharFrog} width={35} height={25} />;
 };
@@ -62,9 +65,9 @@ const Icons = {
     Oil: IconOil,
 };
 
-const FieldIcon = ({ field }) => {
+export const FieldIcon = ({ field }) => {
     const IconComponent = Icons[field];
-    return <IconWrapper icon={IconComponent} width={30} height={30} />;
+    return <IconWrapper icon={IconComponent} width={25} height={25} />;
 };
 
 export const DefaultFieldIcon = ({ field }) => {

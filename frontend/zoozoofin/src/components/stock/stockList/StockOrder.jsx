@@ -5,23 +5,23 @@ import { ActiveButton } from '@components/stock/common/button/Button';
 import { useState, useEffect } from 'react';
 
 export const StockOrder = ({ type, orderIsDone }) => {
-    const [value, SetValue] = useState(null);
-    const [button, SetButton] = useState(null);
+    const [value, setValue] = useState(null);
+    const [button, setButton] = useState(null);
 
-    const [isDone, SetIsDone] = useState(false);
+    const [isDone, setIsDone] = useState(false);
 
     const handleOnClick = () => {
-        SetIsDone(true);
+        setIsDone(true);
         orderIsDone(true);
     };
 
     useEffect(() => {
         if (type === 'buy') {
-            SetValue('구매');
-            SetButton('구매하기');
+            setValue('구매');
+            setButton('구매하기');
         } else {
-            SetValue('판매');
-            SetButton('판매하기');
+            setValue('판매');
+            setButton('판매하기');
         }
     }, [type]);
 

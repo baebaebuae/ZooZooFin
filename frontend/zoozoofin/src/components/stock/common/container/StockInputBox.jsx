@@ -30,8 +30,8 @@ export const StockInputBox = ({
     type,
 }) => {
     const [savingsAmount, setSavingsAmount] = useState(0);
-    const [total, SetTotal] = useState(null);
-    const [value, SetValue] = useState(null);
+    const [total, setTotal] = useState(null);
+    const [value, setValue] = useState(null);
     const { totalStock, setTotalStock } = useStockStore();
 
     const addAmount = (value) =>
@@ -45,7 +45,7 @@ export const StockInputBox = ({
 
     useEffect(() => {
         onSavingsAmountChange(savingsAmount);
-        SetTotal(savingsAmount);
+        setTotal(savingsAmount);
         if (totalStock !== savingsAmount) {
             setTotalStock(savingsAmount);
         }
@@ -53,9 +53,9 @@ export const StockInputBox = ({
 
     useEffect(() => {
         if (type === 'buy') {
-            SetValue('구매');
+            setValue('구매');
         } else {
-            SetValue('판매');
+            setValue('판매');
         }
     }, [type]);
 

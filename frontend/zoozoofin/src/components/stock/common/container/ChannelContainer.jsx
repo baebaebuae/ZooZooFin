@@ -15,3 +15,13 @@ export const ChannelInfo = styled.div`
     font-size: 14px;
     gap: 15px;
 `;
+
+export const ChannelExplain = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 18px;
+    gap: 10px;
+    height: 30px;
+    margin-bottom: 20px;
+`;

@@ -4,9 +4,8 @@ import StockTitleContainer from '@components/stock/common/container/StockTitleCo
 
 // 판매 보유주식 api 연결 후 확인
 
-export const StockProducts = ({ field, onStockSelected, type }) => {
+export const StockProducts = ({ field, onStockSelected, type, channel, handleDetailClick }) => {
     const [open, setOpen] = useState([false, false, false]);
-
     const handleToggle = (index) => {
         const newOpen = [...open];
         newOpen[index] = !newOpen[index];
@@ -53,6 +52,8 @@ export const StockProducts = ({ field, onStockSelected, type }) => {
                     onToggle={() => handleToggle(index)}
                     isStockSelected={handleClickStock}
                     type={type}
+                    channel={channel}
+                    onDetailClick={handleDetailClick}
                 />
             ))}
         </StockBuyingCard>

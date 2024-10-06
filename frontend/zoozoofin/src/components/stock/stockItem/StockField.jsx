@@ -9,7 +9,7 @@ import {
 import { DefaultFieldIcon, ActiveFieldIcon } from '@components/stock/common/icon/StockIcons';
 
 // 채널 별 주식 분야 리스트
-const StockFieldList = {
+export const StockFieldList = {
     domestic: {
         Manufacturing: '제조',
         Ship: '조선',

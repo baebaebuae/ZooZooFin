@@ -70,13 +70,13 @@ const ListRow = styled.div`
     gap: 10px;
 `;
 
-export const OverviewList = ({ list, item }) => {
+export const OverviewList = ({ list, item, onClick }) => {
     return (
         <ListColumn>
             <CardRow>
                 <ListRow>
                     <OverviewText type={'list'}>{list}</OverviewText>
-                    <QuestionButton>?</QuestionButton>
+                    <QuestionButton onClick={() => onClick(list)}>?</QuestionButton>
                 </ListRow>
                 <OverviewText type={'content'}>{item}</OverviewText>
             </CardRow>
@@ -85,11 +85,11 @@ export const OverviewList = ({ list, item }) => {
     );
 };
 
-export const GraphTitle = () => {
+export const GraphTitle = ({ onClick }) => {
     return (
         <ListRow>
             <OverviewText type={'title'}>이동평균선</OverviewText>
-            <QuestionButton>?</QuestionButton>
+            <QuestionButton onClick={() => onClick('이동평균선')}>?</QuestionButton>
         </ListRow>
     );
 };

@@ -5,25 +5,26 @@ import StockProducts from '@components/stock/stockItem/StockProducts';
 import { ChannelMessage } from '@components/stock/common/container/ChannelContainer';
 import { MessageIcon } from '@components/stock/common/icon/StockIcons';
 import { StockOrder } from '@components/stock/stockList/StockOrder';
+import StockDetail from '@components/stock/stockList/StockDetail';
 
 export const StockBuy = ({ channel, onOrderCompletion }) => {
     // 테스트를 위한 isSelected => 목업 데이터 연결 후 삭제 예정
-    const [isFieldSelected, SetisFieldSelected] = useState(false);
-    const [field, Setfield] = useState(null);
+    const [isFieldSelected, setIsFieldSelected] = useState(false);
+    const [field, setField] = useState(null);
 
-    const [isStockSelected, SetisStockSelected] = useState(false);
+    const [isStockSelected, setIsStockSelected] = useState(false);
 
     const handleFieldClick = (field) => {
-        SetisFieldSelected(true);
-        Setfield(field);
+        setIsFieldSelected(true);
+        setField(field);
     };
 
     // 상품 구매하기 이동을 위한 상태 설정
-    const [isProductChecked, SetisProductChecked] = useState(false);
+    const [isProductChecked, setIsProductChecked] = useState(false);
 
     const handleStockClick = (isProductChecked) => {
-        SetisStockSelected(true);
-        SetisProductChecked(isProductChecked);
+        setIsStockSelected(true);
+        setIsProductChecked(isProductChecked);
     };
 
     // 구매/판매 완료 후 상태 전달
@@ -32,106 +33,64 @@ export const StockBuy = ({ channel, onOrderCompletion }) => {
         onOrderCompletion(isDone);
     };
 
-    switch (channel) {
-        case '국내 주식': {
-            return (
-                <>
-                    {!isProductChecked ? (
-                        <>
-                            <ChannelMessage>
-                                <MessageIcon />
-                                주식 분야를 선택해줘 개굴!
-                            </ChannelMessage>
-                            <StockField type={'domestic'} onFieldSelect={handleFieldClick} />
+    const [isDetailClicked, setIsDetailClicked] = useState(false);
+    const goToDetailComponent = (companyName) => {
+        console.log(companyName);
+        setIsDetailClicked(true);
+        console.log(isDetailClicked);
+    };
 
-                            {isFieldSelected && (
-                                <>
-                                    <ChannelMessage>
-                                        <MessageIcon />
-                                        주식 상품을 선택해줘 개굴!
-                                    </ChannelMessage>
-                                    <StockProducts
-                                        field={field}
-                                        onStockSelected={handleStockClick}
-                                        type={'buy'}
-                                    />
-                                </>
-                            )}
-                        </>
-                    ) : (
-                        <>
-                            <StockOrder type={'buy'} orderIsDone={handleOrderCompletion} />
-                        </>
-                    )}
-                </>
-            );
-        }
-        case '해외 주식': {
-            return (
-                <>
-                    {!isProductChecked ? (
-                        <>
-                            <ChannelMessage>
-                                <MessageIcon />
-                                주식 분야를 선택해줘 개굴!
-                            </ChannelMessage>
-                            <StockField type={'overseas'} onFieldSelect={handleFieldClick} />
+    let type = '';
 
-                            {isFieldSelected && (
-                                <>
-                                    <ChannelMessage>
-                                        <MessageIcon />
-                                        주식 상품을 선택해줘 개굴!
-                                    </ChannelMessage>
-                                    <StockProducts
-                                        field={field}
-                                        onStockSelected={handleStockClick}
-                                        type={'buy'}
-                                    />
-                                </>
-                            )}
-                        </>
-                    ) : (
-                        <>
-                            <StockOrder type={'buy'} orderIsDone={handleOrderCompletion} />
-                        </>
-                    )}
-                </>
-            );
-        }
-        case 'ETF': {
-            return (
-                <>
-                    {!isProductChecked ? (
-                        <>
-                            <ChannelMessage>
-                                <MessageIcon />
-                                주식 분야를 선택해줘 개굴!
-                            </ChannelMessage>
-                            <StockField type={'ETF'} onFieldSelect={handleFieldClick} />
+    if (channel === '국내 주식') {
+        type = 'domestic';
+    } else if (channel === '해외 주식') {
+        type = 'overseas';
+    } else if (channel === 'ETF') {
+        type = 'ETF';
+    }
 
-                            {isFieldSelected && (
-                                <>
-                                    <ChannelMessage>
-                                        <MessageIcon />
-                                        주식 상품을 선택해줘 개굴!
-                                    </ChannelMessage>
-                                    <StockProducts
-                                        field={field}
-                                        onStockSelected={handleStockClick}
-                                        type={'buy'}
-                                    />
-                                </>
-                            )}
-                        </>
-                    ) : (
-                        <>
-                            <StockOrder type={'buy'} orderIsDone={handleOrderCompletion} />
-                        </>
-                    )}
-                </>
-            );
-        }
+    if (isProductChecked) {
+        return (
+            <>
+                {/* StockOrder 컴포넌트 */}
+                <StockOrder type={'buy'} orderIsDone={handleOrderCompletion} />
+            </>
+        );
+    } else if (isDetailClicked) {
+        return (
+            <>
+                {/* StockDetail 컴포넌트 */}
+                <StockDetail />
+            </>
+        );
+    } else {
+        return (
+            <>
+                {/* 주식 분야 선택 */}
+                <ChannelMessage>
+                    <MessageIcon />
+                    주식 분야를 선택해줘 개굴!
+                </ChannelMessage>
+                <StockField type={type} onFieldSelect={handleFieldClick} />
+
+                {isFieldSelected && (
+                    <>
+                        <ChannelMessage>
+                            <MessageIcon />
+                            주식 상품을 선택해줘 개굴!
+                        </ChannelMessage>
+                        <StockProducts
+                            field={field}
+                            onStockSelected={handleStockClick}
+                            type={'buy'}
+                            channel={channel}
+                            handleDetailClick={goToDetailComponent}
+                        />
+                    </>
+                )}
+            </>
+        );
     }
 };
 
