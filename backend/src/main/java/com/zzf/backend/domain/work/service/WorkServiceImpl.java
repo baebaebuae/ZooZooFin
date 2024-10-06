@@ -25,7 +25,7 @@ public class WorkServiceImpl implements WorkService {
         }
 
         animal.setAssets(animal.getAssets() + workRequest.getPaidAmount());
-        animal.setIsWorked(true);
+//        animal.setIsWorked(true);
 
         animalRepository.save(animal);
     }
