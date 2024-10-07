@@ -15,18 +15,32 @@ import { StockOrder } from '@components/stock/stockList/StockOrder';
 import StockResult from '@components/stock/stockList/StockResult';
 import StockDetail from '@components/stock/stockList/StockDetail';
 
+import Frog from '@/assets/images/characters/characters/Frog.gif';
+
 // 첫 진입시 환영 컴포넌트
 
 // 턴별 화면 전환 예정 - 240926
 
 const SampleBlock = styled.div`
     display: flex;
+    position: relative;
     flex-direction: column;
     align-items: center;
     padding: 10px 0px;
     gap: 21px;
     margin: 0px auto;
     width: 95%;
+`;
+
+const ImageContainer = styled.div`
+    position: fixed;
+    bottom: 28%;
+    right: -5%;
+`;
+
+const NpcImage = styled.img`
+    width: 100%;
+    height: 100%;
 `;
 
 const BubbleBlock = styled(Bubble)`
@@ -165,6 +179,9 @@ const Stock = () => {
 
         return (
             <SampleBlock>
+                <ImageContainer>
+                    <NpcImage src={Frog} />
+                </ImageContainer>
                 <BubbleBlock
                     npc={'개굴'}
                     type={currentScript.type}
