@@ -49,7 +49,7 @@ const CapitalCheckCard = () => {
             <ProductJoinInfo
                 isLoan={true}
                 infoTitle={'가입 금액'}
-                infoContent={`${loanAmount.toLocaleString()}`}
+                infoContent={`${loanAmount.toLocaleString()} 🥕`}
             />
             <ProductJoinInfo
                 isLoan={true}
@@ -61,7 +61,7 @@ const CapitalCheckCard = () => {
             <ProductJoinInfo
                 isLoan={true}
                 infoTitle={'상환 예상 금액'}
-                infoContent={`${expectedFinalAmount.toLocaleString()}`}
+                infoContent={`${expectedFinalAmount.toLocaleString()} 🥕`}
             />
         </CardBlock>
     );

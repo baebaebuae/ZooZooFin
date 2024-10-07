@@ -55,10 +55,7 @@ const ProductCard = () => {
                 <ProductName>{productName}</ProductName>
                 <TextRowContainer>
                     <TextStyle type="list">대출 한도</TextStyle>
-                    <TextStyle type="content">
-                        {maxLoan.toLocaleString()}
-                        <NormalIcon icon={IconCarrot} />
-                    </TextStyle>
+                    <TextStyle type="content">{maxLoan.toLocaleString()} 🥕</TextStyle>
                 </TextRowContainer>
                 <TextRowContainer>
                     <TextStyle type="list">이자율</TextStyle>

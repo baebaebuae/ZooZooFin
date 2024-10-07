@@ -11,6 +11,8 @@ import { TurnSliderLoan } from '@components/root/slider';
 import { LoanCalculator } from '@components/loan/LoanCalculator';
 import useCapitalStore from '@components/lender/store/CapitalStore';
 
+import CapitalCalturator from '@components/lender/CapitalCalcurator';
+
 const InfoTitle = styled.div`
     font-size: 18px;
     color: ${({ theme }) => theme.colors.gray};
@@ -46,7 +48,7 @@ const RepayTypeBox = styled.div`
     margin-top: 20px;
 `;
 
-// 만기균등상환 계산식
+// 만기일시상환 계산식
 const getMaturityInterest = (loanAmount, loanRate, loanPeriod) => {
     // 복리 계산
     const interest = loanAmount * Math.pow(1 + loanRate / 100, loanPeriod) - loanAmount;
@@ -101,11 +103,9 @@ export const ProductDetail = ({ currentTurn }) => {
 
     return (
         <>
-            {isModalOpen && (
-                <LoanCalculator repayType={'만기'} handleCloseModal={handleCloseModal} />
-            )}
+            {isModalOpen && <CapitalCalturator handleCloseModal={handleCloseModal} />}
 
-            <RepayTypeBlock loanType={'만기균등상환'} handleModalOpen={handleModalOpen} />
+            <RepayTypeBlock loanType={'만기일시상환'} handleModalOpen={handleModalOpen} />
             <Divider $isLine={true} />
             <InputBox
                 title={'대출할 금액'}
@@ -126,7 +126,7 @@ export const ProductDetail = ({ currentTurn }) => {
                 infoTitle1={'상환 예상 회차'}
                 infoContent1={`${expectedFinalTurn}턴`}
                 infoTitle2={'상환 예상 금액'}
-                infoContent2={`${expectedFinalAmount.toLocaleString()} 원`}
+                infoContent2={`${expectedFinalAmount.toLocaleString()} 🥕`}
                 $isLoan={true}
                 isEarlyTermination={false}
             />
