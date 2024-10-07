@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import { useState, useEffect } from 'react';
+
 import { Card } from '@components/root/card';
 import { StockTitle } from '@components/stock/common/container/StockTitleContainer';
 import { CarrotIcon } from '@components/stock/common/icon/StockIcons';
@@ -38,23 +40,31 @@ const TextStyle = styled.div`
     font-weight: ${({ type }) => (type === 'content' ? 'bold' : 'normal')};
 `;
 
-export const TotalCard = () => {
+export const TotalCard = ({ type }) => {
     const { totalStock, totalPrice } = useStockStore();
+    const [value, setValue] = useState(null);
 
+    useEffect(() => {
+        if (type === 'buy') {
+            setValue('구매');
+        } else if (type === 'sell') {
+            setValue('판매');
+        }
+    }, [type]);
     return (
         <TotalCardBox>
             <StockTitle companyName={'개굴전자'} stockPrice={'89,000'} currentState={'up'} />
             <RowContainerBox>
-                <TextStyle>구매할 주</TextStyle>
+                <TextStyle>{value}할 주</TextStyle>
                 <TextStyle type="content" size="large">
                     {totalStock} 주
                 </TextStyle>
             </RowContainerBox>
             <RowContainerBox>
-                <TextStyle>총 구매 금액</TextStyle>
+                <TextStyle>총 {value} 금액</TextStyle>
                 <TextStyle type="content" size="large">
                     {totalPrice !== 0 ? totalPrice.toLocaleString() : 0}
-                    <CarrotIcon />
+                    🥕
                 </TextStyle>
             </RowContainerBox>
         </TotalCardBox>

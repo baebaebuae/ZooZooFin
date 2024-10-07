@@ -39,7 +39,7 @@ const ColumnInfoBox = ({ title, content, showIcon }) => {
         <ColumnContainerBox>
             <TextStyle type="title">{title}</TextStyle>
             <TextStyle type="content" size="large">
-                {content} {showIcon && <CarrotIcon />}
+                {content} {showIcon && '🥕'}
             </TextStyle>
         </ColumnContainerBox>
     );
