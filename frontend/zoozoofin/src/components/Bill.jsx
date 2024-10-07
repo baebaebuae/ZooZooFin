@@ -168,6 +168,7 @@ export const Bill = ({ checkBill }) => {
 
     useEffect(() => {
         fetchData();
+        // console.log('test');
     }, []);
 
     const dataTypes = ['deposit', 'savings', 'stock'];

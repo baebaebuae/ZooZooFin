@@ -88,7 +88,7 @@ export const Ranking = () => {
         const apiClient = getApiClient();
 
         try {
-            const res = await apiClient.get('/ranking'); // '/home/ranking' 아니고 '/ranking'?
+            const res = await apiClient.get('/ranking');
             console.log(res.data.body);
             setRankingData(res.data.body);
         } catch (error) {
@@ -110,18 +110,19 @@ export const Ranking = () => {
                 <LoanListTitle>총 자산</LoanListTitle>
             </LoanListTitleBox>
 
-            {rankingData.rankList.map((rank, index) => {
-                return (
-                    <LoanListBox key={index}>
-                        <LoanListContent>{rank.rank}</LoanListContent>
-                        <LoanListNickname>
-                            <img src={IconFrog} width={20} />
-                            {rank.characterName}
-                        </LoanListNickname>
-                        <LoanListContent>{rank.totalAsset.toLocaleString()}</LoanListContent>
-                    </LoanListBox>
-                );
-            })}
+            {rankingData.length > 0 &&
+                rankingData.rankList.map((rank, index) => {
+                    return (
+                        <LoanListBox key={index}>
+                            <LoanListContent>{rank.rank}</LoanListContent>
+                            <LoanListNickname>
+                                <img src={IconFrog} width={20} />
+                                {rank.characterName}
+                            </LoanListNickname>
+                            <LoanListContent>{rank.totalAsset.toLocaleString()}</LoanListContent>
+                        </LoanListBox>
+                    );
+                })}
         </Container>
     );
 };
