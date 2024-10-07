@@ -16,6 +16,7 @@ import { DetailButton } from '@components/stock/common/button/Button';
 import { ChannelModal } from '@components/stock/stockItem/StockModal';
 
 import useUserStore from '../../../stores/useUserStore';
+import useStockStore from '../common/store/StockStore';
 
 const DropdownButton = styled.div`
     display: flex;
@@ -53,10 +54,15 @@ const StockChannel = ({ onChannelSelect }) => {
     };
 
     // header -> turn undefined 문제 확인 24.10.08
+    // turn 별 주식 채널 주식 리스트 fetch
     const { turn, fetchUserProfile } = useUserStore();
+    const { fetchStocklist } = useStockStore();
     useEffect(() => {
         fetchUserProfile();
-    }, [fetchUserProfile]);
+        if (turn) {
+            fetchStocklist(turn);
+        }
+    }, [turn, fetchUserProfile, fetchStocklist]);
 
     return (
         <>
