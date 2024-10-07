@@ -23,9 +23,7 @@ const InfoColumn = ({ product, stockPrice, currentState }) => {
         <StockInfoColumn>
             <StockInfoText type="title">{product}</StockInfoText>
             <StockPriceRow>
-                <StockPrice>
-                    {stockPrice} <CarrotIcon />
-                </StockPrice>
+                <StockPrice>{stockPrice} 🥕</StockPrice>
                 <CurrentStockState current={currentState}>{currentState}</CurrentStockState>
             </StockPriceRow>
         </StockInfoColumn>

@@ -26,7 +26,7 @@ export const InactiveButton = styled(Button)`
     align-items: center;
     padding: 10px 20px;
     gap: 10px;
-    background-color: #ced1d3;
+    background-color: ${({ theme }) => theme.colors.inactive};
 `;
 
 export const InputButton = styled(Button)`

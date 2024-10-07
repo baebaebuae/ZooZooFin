@@ -20,9 +20,7 @@ export const StockTitle = ({ companyName, stockPrice, currentState, onToggle }) 
             <CompanyName>{companyName}</CompanyName>
             <BuyingMoneyContent>
                 <CurrentStockState current={currentState}>{currentState}</CurrentStockState>
-                <StockPrice>
-                    {stockPrice.toLocaleString()} <CarrotIcon />
-                </StockPrice>
+                <StockPrice>{stockPrice.toLocaleString()} 🥕</StockPrice>
             </BuyingMoneyContent>
         </BuyingContent>
     );
@@ -68,9 +66,7 @@ export const StockTitleContainer = ({
                 </TitleCoulumn>
                 <BuyingMoneyContent>
                     <CurrentStockState current={currentState}>{currentState}</CurrentStockState>
-                    <StockPrice>
-                        {stockPrice.toLocaleString()} <CarrotIcon />
-                    </StockPrice>
+                    <StockPrice>{stockPrice.toLocaleString()} 🥕</StockPrice>
                 </BuyingMoneyContent>
             </BuyingContent>
             <Collapse in={isOpen} timeout="auto" unmountOnExit>

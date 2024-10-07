@@ -12,7 +12,7 @@ export const ChannelInfo = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    font-size: 14px;
+    font-size: 16px;
     gap: 15px;
 `;
 

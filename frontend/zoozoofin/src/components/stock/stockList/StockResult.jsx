@@ -31,7 +31,7 @@ export const StockResult = ({ onComplete, type }) => {
                 <MessageIcon />
                 {value} 완료했어 개굴!
             </ChannelMessage>
-            <TotalCard />
+            <TotalCard type={type} />
             <ActiveButton size={'large'} onClick={handleOnClick}>
                 완료!
             </ActiveButton>

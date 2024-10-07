@@ -1,3 +1,6 @@
+import styled from 'styled-components';
+import { Collapse } from '@mui/material';
+
 import { useState } from 'react';
 
 import { ChannelCard, OverlayCard } from '@components/stock/common/card/ChannelCard';
@@ -12,6 +15,21 @@ import {
 import { DetailButton } from '@components/stock/common/button/Button';
 import { ChannelModal } from '@components/stock/stockItem/StockModal';
 
+const DropdownButton = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 15px;
+    height: 15px;
+    padding: 1px 2px;
+    background-color: ${({ theme }) => theme.colors.primary};
+    border-radius: 3px;
+    color: white;
+    font-size: 10px;
+    position: absolute;
+    bottom: -5px;
+    right: 20px;
+`;
 const StockChannel = ({ onChannelSelect }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedChannel, setSelectedChannel] = useState(null);
@@ -26,8 +44,10 @@ const StockChannel = ({ onChannelSelect }) => {
         setIsModalOpen(false);
     };
 
+    const [isClicked, setIsClicked] = useState(false);
     const handleSelectChannel = (channelName) => {
-        onChannelSelect(channelName); // 부모 컴포넌트로 채널 이름 전달
+        // 0.5초 후 채널 이동
+        setTimeout(() => onChannelSelect(channelName), 500);
     };
 
     return (
@@ -37,7 +57,11 @@ const StockChannel = ({ onChannelSelect }) => {
                 <MessageIcon />
                 주식 채널을 선택해줘 개굴!
             </ChannelMessage>
-            <ChannelCard>
+            <ChannelCard
+                onMouseEnter={() => setIsClicked(true)}
+                onMouseLeave={() => setIsClicked(false)}
+                $isClicked={isClicked}
+            >
                 <ChannelInfo onClick={() => handleSelectChannel('국내 주식')}>
                     <DomesticIcon />
                     국내 주식
@@ -63,7 +87,7 @@ const StockChannel = ({ onChannelSelect }) => {
                     ETF
                 </ChannelInfo>
                 <DetailButton onClick={() => handleOpenModal('ETF')}>설명</DetailButton>
-                <OverlayCard $isLocked={false}>
+                <OverlayCard $isLocked={true}>
                     <LockedIcon /> LOCKED
                 </OverlayCard>
             </ChannelCard>

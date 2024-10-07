@@ -90,7 +90,7 @@ const DetailContent = ({ totalPrice, gainLoss, myStock }) => {
             <ListContainer>
                 <TextStyle type="list">총 투자금</TextStyle>
                 <StockPrice>
-                    <TextStyle>{totalPrice.toLocaleString()}</TextStyle> <CarrotIcon />
+                    <TextStyle>{totalPrice.toLocaleString()} 🥕</TextStyle>
                 </StockPrice>
             </ListContainer>
             <ListContainer>
@@ -98,8 +98,7 @@ const DetailContent = ({ totalPrice, gainLoss, myStock }) => {
                 <BuyingMoneyContent>
                     <CurrentStockState current={currentState}>{currentState}</CurrentStockState>
                     <StockPrice>
-                        <TextStyle type={currentState}>{myStock.toLocaleString()}</TextStyle>{' '}
-                        <CarrotIcon />
+                        <TextStyle type={currentState}>{myStock.toLocaleString()} 🥕</TextStyle>
                     </StockPrice>
                 </BuyingMoneyContent>
             </ListContainer>
@@ -113,10 +112,10 @@ export const OwnedStockCrad = () => {
     const totalPrice = 100000000;
     const gainLoss = -127000;
 
-    const [isOpen, SetIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
     const handleToggle = () => {
-        SetIsOpen(!isOpen);
+        setIsOpen(!isOpen);
     };
 
     return (
@@ -124,7 +123,7 @@ export const OwnedStockCrad = () => {
             <ListContainer>
                 <TextStyle type="list">보유 주식</TextStyle>
                 <StockPrice>
-                    <TextStyle type="total">{myStock.toLocaleString()}</TextStyle> <CarrotIcon />
+                    <TextStyle type="total">{myStock.toLocaleString()} 🥕</TextStyle>
                 </StockPrice>
             </ListContainer>
             <DropdownButton onClick={handleToggle}>{!isOpen ? '▼' : '▲'}</DropdownButton>
