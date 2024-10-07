@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Collapse } from '@mui/material';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { ChannelCard, OverlayCard } from '@components/stock/common/card/ChannelCard';
 import { ChannelMessage, ChannelInfo } from '@components/stock/common/container/ChannelContainer';
@@ -14,6 +14,9 @@ import {
 } from '@components/stock/common/icon/StockIcons';
 import { DetailButton } from '@components/stock/common/button/Button';
 import { ChannelModal } from '@components/stock/stockItem/StockModal';
+
+import useUserStore from '../../../stores/useUserStore';
+import useStockStore from '../common/store/StockStore';
 
 const DropdownButton = styled.div`
     display: flex;
@@ -50,6 +53,17 @@ const StockChannel = ({ onChannelSelect }) => {
         setTimeout(() => onChannelSelect(channelName), 500);
     };
 
+    // header -> turn undefined 문제 확인 24.10.08
+    // turn 별 주식 채널 주식 리스트 fetch
+    const { turn, fetchUserProfile } = useUserStore();
+    const { fetchStocklist } = useStockStore();
+    useEffect(() => {
+        fetchUserProfile();
+        if (turn) {
+            fetchStocklist(turn);
+        }
+    }, [turn, fetchUserProfile, fetchStocklist]);
+
     return (
         <>
             {isModalOpen && <ChannelModal channel={selectedChannel} onClose={handleCloseModal} />}
@@ -77,7 +91,7 @@ const StockChannel = ({ onChannelSelect }) => {
                     해외 주식
                 </ChannelInfo>
                 <DetailButton onClick={() => handleOpenModal('해외 주식')}>설명</DetailButton>
-                <OverlayCard $isLocked={false}>
+                <OverlayCard $isLocked={turn >= 5 ? false : true}>
                     <LockedIcon /> LOCKED
                 </OverlayCard>
             </ChannelCard>
@@ -87,7 +101,7 @@ const StockChannel = ({ onChannelSelect }) => {
                     ETF
                 </ChannelInfo>
                 <DetailButton onClick={() => handleOpenModal('ETF')}>설명</DetailButton>
-                <OverlayCard $isLocked={true}>
+                <OverlayCard $isLocked={turn >= 10 ? false : true}>
                     <LockedIcon /> LOCKED
                 </OverlayCard>
             </ChannelCard>

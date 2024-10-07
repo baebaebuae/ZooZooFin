@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StockBuyingCard, Divider } from '@components/stock/common/card/StoreCards';
 import StockTitleContainer from '@components/stock/common/container/StockTitleContainer';
+import useStockStore from '../common/store/StockStore';
 
 // 판매 보유주식 api 연결 후 확인
 
@@ -11,51 +12,48 @@ export const StockProducts = ({ field, onStockSelected, type, channel, handleDet
         newOpen[index] = !newOpen[index];
         setOpen(newOpen);
     };
-
-    // field별 리스트 조회 후 출력 예정
-    const stockItems = [
-        {
-            companyName: '개굴전자',
-            stockPrice: '82,000',
-            currentState: 'test',
-            info: '개굴전자는 해외 5개 지역 총괄, 100개의 종속 기업으로 구성된 글로벌 전자 기업임',
-        },
-        {
-            companyName: 'companyname1',
-            stockPrice: '000,000',
-            currentState: 'down',
-            info: 'Company 1의 상세 설명입니다.',
-        },
-        {
-            companyName: 'companyname2',
-            stockPrice: '000,000',
-            currentState: 'up',
-            info: 'Company 2의 상세 설명입니다.',
-        },
-    ];
-
     const handleClickStock = () => {
         onStockSelected(true);
         console.log('check!');
     };
 
+    // field별 리스트 조회 후 출력
+    // field api 반영 되면 수정 예정, 현재 반영 x
+    const [stockItems, setStockItems] = useState(null); // stockItems 상태 선언
+
+    const { domesticStocks, overseasStocks, ETFStocks } = useStockStore();
+
+    useEffect(() => {
+        if (channel === '국내 주식') {
+            console.log('check channel!!');
+            setStockItems(domesticStocks);
+            console.log(stockItems);
+        } else if (channel === '해외 주식') {
+            setStockItems(overseasStocks);
+        } else if (channel === 'ETF') {
+            setStockItems(ETFStocks);
+        }
+        // console.log(stockItems);
+    }, [channel, stockItems, domesticStocks, overseasStocks, ETFStocks]);
+
     return (
         <StockBuyingCard>
-            {stockItems.map((item, index) => (
-                <StockTitleContainer
-                    key={index}
-                    companyName={item.companyName}
-                    stockPrice={item.stockPrice}
-                    currentState={item.currentState}
-                    info={item.info}
-                    isOpen={open[index]}
-                    onToggle={() => handleToggle(index)}
-                    isStockSelected={handleClickStock}
-                    type={type}
-                    channel={channel}
-                    onDetailClick={handleDetailClick}
-                />
-            ))}
+            {stockItems &&
+                stockItems.map((item, index) => (
+                    <StockTitleContainer
+                        key={index}
+                        stockId={item.stockId}
+                        stockName={item.stockName}
+                        stockRate={item.rate}
+                        stockIntro={item.stockIntro}
+                        isOpen={open[index]}
+                        onToggle={() => handleToggle(index)}
+                        isStockSelected={handleClickStock}
+                        type={type}
+                        channel={channel}
+                        onDetailClick={handleDetailClick}
+                    />
+                ))}
         </StockBuyingCard>
     );
 };

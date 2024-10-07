@@ -33,7 +33,7 @@ const HeaderUserBlock = styled.div`
 
 const Header = () => {
     const [isCharOpen, setIsCharOpen] = useState(false);
-    const { animalAssets, memberGoldBar,turn, fetchUserProfile } = useUserStore();
+    const { animalAssets, memberGoldBar, turn, fetchUserProfile } = useUserStore();
 
     useEffect(() => {
         fetchUserProfile();
@@ -46,7 +46,7 @@ const Header = () => {
 
     // 1,000 형식으로
     const formatNumber = (num) => {
-        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return num ? num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
     };
 
     return (
@@ -65,9 +65,9 @@ const Header = () => {
                 <HeaderUserBlock>
                     <LargeIcon icon={CharRabbit} onClick={openCharInfo} />
                     {isCharOpen && <CharacterInfo onClose={openCharInfo} />}
-                    <PropInfo 
-                        propMoney={formatNumber(animalAssets)} 
-                        propGold={formatNumber(memberGoldBar)} 
+                    <PropInfo
+                        propMoney={formatNumber(animalAssets)}
+                        propGold={formatNumber(memberGoldBar)}
                     />
                 </HeaderUserBlock>
             </HeaderBlock>
