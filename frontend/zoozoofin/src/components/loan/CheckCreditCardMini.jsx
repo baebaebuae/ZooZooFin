@@ -25,12 +25,16 @@ export const CheckCreditCardMini = ({ loanLimit, loanAvailable, characterCredit,
                 infoTitle2={'대출 금리'}
                 // infoContent2={`${productRate}%`}
                 infoContent2={`${characterCredit}%`}
-                isLoan={true}
+                $isLoan={true}
                 isEarlyTermination={false}
             ></ProductDetailInfo>
-            <ProductJoinInfo isLoan={true} infoTitle={'대출 한도'} infoContent={`${loanLimit}🥕`} />
             <ProductJoinInfo
-                isLoan={true}
+                $isLoan={true}
+                infoTitle={'대출 한도'}
+                infoContent={`${loanLimit}🥕`}
+            />
+            <ProductJoinInfo
+                $isLoan={true}
                 infoTitle={'잔여 대출 가능 금액'}
                 infoContent={`${loanAvailable}🥕`}
             />

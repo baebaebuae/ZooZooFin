@@ -72,9 +72,7 @@ export const ProductTerminationDetailCard = ({
                     경고
                 </Button>
             )}
-
-            <InfoBox color={'warn'}>중도해지</InfoBox>
-
+            <InfoBox infoContent={'중도해지'} color={'warn'} />
             <ProductDetailInfo
                 infoTitle1={'기간'}
                 infoContent1={`${period}턴`}
@@ -94,9 +92,7 @@ export const ProductTerminationDetailCard = ({
             />
             <ProductJoinInfo infoTitle={'만기 회차'} infoContent={`${endTurn}턴`} />
             <ProductJoinInfo infoTitle={'남은 회차'} infoContent={`${restTurn}턴`} />
-
             <Divider $isLine={false} />
-
             {/* 예금일 때는 없는 컴포넌트 처리 */}
             {payment && productType === 'savings' && (
                 <ProductJoinInfo
@@ -104,7 +100,6 @@ export const ProductTerminationDetailCard = ({
                     infoContent={`${amount.toLocaleString()}🥕`}
                 />
             )}
-
             <ProductJoinInfo
                 infoTitle={'지급액'}
                 // finalReturn -> 현재 해지시 예상 금액 변수 추가되면 수정

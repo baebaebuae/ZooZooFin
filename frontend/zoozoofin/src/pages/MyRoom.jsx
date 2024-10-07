@@ -3,6 +3,7 @@ import { useState, useEffect, Suspense } from 'react';
 import styled from 'styled-components';
 
 import { Bill } from '@components/Bill';
+import { useBillStore } from '@stores/useBillStore';
 
 import { RoomComponent } from '@components/myroom/Room';
 import { Loader } from '@components/Loader';
@@ -30,26 +31,31 @@ const BillContainer = styled.div`
 `;
 
 const MyRoom = () => {
-    const [isBillShown, setIsBillShown] = useState(true); // 전역으로 관리 예정
+    const { isBillShown, showBill, resetBill } = useBillStore();
 
     // RoomComponent 출력 후 고지서 출력을 위한 처리
     useEffect(() => {
         const timer = setTimeout(() => {
-            setIsBillShown(false); // 1.5초 후 false로 변경
+            // setIsBillShown(false);
         }, 1500);
 
         // 컴포넌트가 언마운트될 때 타이머를 클리어
         return () => clearTimeout(timer);
     }, []);
 
+    if (!isBillShown) {
+        showBill();
+    }
+
     const checkBill = () => {
-        setIsBillShown(true);
+        // setIsBillShown(true);
+        resetBill();
     };
 
     return (
         <>
             <RoomBlock>
-                {!isBillShown && <Bill checkBill={() => checkBill()} />}
+                {!isBillShown && <Bill checkBill={checkBill} />}
                 <RoomComponent />
             </RoomBlock>
         </>

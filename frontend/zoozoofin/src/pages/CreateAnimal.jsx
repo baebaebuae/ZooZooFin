@@ -102,6 +102,7 @@ const CreateAnimal = () => {
     const navigate = useNavigate();
 
     const moveToTutorial = () => {
+        console.log('tutorial 가기 전에 동물 select 됐나요', selectedAnimal);
         navigate('/tutorial', {
             state: {
                 animalTypeId: selectedAnimal.animalTypeId,

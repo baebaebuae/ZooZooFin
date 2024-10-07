@@ -110,8 +110,10 @@ export const Ranking = () => {
                 <LoanListTitle>총 자산</LoanListTitle>
             </LoanListTitleBox>
 
-            {rankingData.length > 0 &&
-                rankingData.rankList.map((rank, index) => {
+            {rankingData &&
+                rankingData.length > 0 &&
+                rankingData &&
+                rankingData.map((rank, index) => {
                     return (
                         <LoanListBox key={index}>
                             <LoanListContent>{rank.rank}</LoanListContent>

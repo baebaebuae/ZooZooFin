@@ -80,7 +80,9 @@ export const ProductJoinCard = ({
             <Button
                 size={'normal'}
                 color={'primaryDeep'}
-                onClick={() => saveAmount(savingsAmount, expectedFinalAmount)}
+                onClick={() => {
+                    savingsAmount > 0 && saveAmount(savingsAmount, expectedFinalAmount);
+                }}
             >
                 다음
             </Button>

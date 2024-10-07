@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 import styled from 'styled-components';
 import Bubble from '@components/root/bubble';
-import { useStore } from '../store.js';
+import { useStore, useAnimalStore } from '../store.js';
 
 import JoinProduct from '@components/bank/actions/JoinProduct';
 import TerminateProduct from '@components/bank/actions/TerminateProduct';
@@ -37,9 +37,16 @@ const Bank = () => {
 
     const location = useLocation();
 
+    const { nowAnimal, getAnimalData } = useAnimalStore();
+
     useEffect(() => {
-        setScripts([]); // 스크립트 상태 초기화
-    }, [location.pathname, setScripts]);
+        const fetchAnimalData = async () => {
+            await getAnimalData();
+            setScripts([]); // 스크립트 상태 초기화
+        };
+
+        fetchAnimalData();
+    }, [location.pathname, setScripts, getAnimalData]);
 
     const navigate = useNavigate();
 
@@ -66,14 +73,23 @@ const Bank = () => {
         if (scripts.length > 0) {
             const script = scripts.find((script) => script.scriptId === currentId);
             setCurrentScript(script);
+
+            if (script?.content.includes('${name}')) {
+                const updatedScript = {
+                    ...script,
+                    content: script.content.replace('${name}', `**${nowAnimal.animalName}**`),
+                };
+                setCurrentScript(updatedScript);
+            }
+
             console.log(script);
         }
     }, [scripts, currentId]);
 
     const handleResponseClick = (nextScript) => {
-        if (!nextScript) {
-            console.error('다음 스크립트 ID가 없습니다');
-        }
+        // if (!nextScript) {
+        //     console.error('다음 스크립트 ID가 없습니다');
+        // }
         setCurrentId(nextScript);
     };
 

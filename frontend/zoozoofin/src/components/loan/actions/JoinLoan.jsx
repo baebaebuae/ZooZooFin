@@ -10,11 +10,27 @@ import { MessageBox } from '@components/root/messageBox';
 import { NormalIcon } from '@components/root/icon';
 import IconChick from '@assets/images/icons/icon_chick.png';
 
+import { useCreditStore } from '@stores/useCreditStore';
+
 const Block = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;
+`;
+
+const FixedMessageBox = styled.div`
+    flex-shrink: 0;
+`;
+
+const ProductBlock = styled.div`
+    flex-grow: 1;
+    width: 100%;
+    overflow-y: auto;
+    /* max-height: 100%; */
+    height: 450px;
+    padding: 10px;
+    box-sizing: border-box;
 `;
 
 const JoinLoan = ({ goToScript }) => {
@@ -28,6 +44,14 @@ const JoinLoan = ({ goToScript }) => {
     const [expectedFinalTurn, setExpectedFinalTurn] = useState(0);
 
     const [repayType, setRepayType] = useState(null);
+
+    const { credit, fetchCredit } = useCreditStore();
+
+    useEffect(() => {
+        if (!credit) {
+            fetchCredit();
+        }
+    }, [credit, fetchCredit]);
 
     // 도장 찍은 후 -로딩중- 모달 뜨고 사라지는 함수
     useEffect(() => {
@@ -68,29 +92,32 @@ const JoinLoan = ({ goToScript }) => {
     return (
         <Block>
             {currentCard < 3 && (
-                <MessageBox>
-                    <NormalIcon icon={IconChick} />
-                    <div>{joinGuideMessages[currentCard]}</div>
-                </MessageBox>
+                <FixedMessageBox>
+                    <MessageBox>
+                        <NormalIcon icon={IconChick} />
+                        <div>{joinGuideMessages[currentCard]}</div>
+                    </MessageBox>
+                </FixedMessageBox>
             )}
 
             {(() => {
                 if (currentCard === 1) {
-                    return (
-                        <>
-                            {/* loanLimit, loanRate 등 각 변수 임의로 지정 */}
+                    return credit ? (
+                        <ProductBlock>
                             <CheckCreditCardMini
-                                loanLimit={500000}
-                                loanAvailable={300000}
-                                characterCredit={5}
+                                loanLimit={credit.loanLimit.toLocaleString()}
+                                loanAvailable={credit.loanAvailable.toLocaleString()}
+                                characterCredit={credit.characterCredit}
                             />
                             <LoanJoinCard
                                 currentTurn={10}
-                                maxAmount={50000000}
+                                maxAmount={credit.loanAvailable}
                                 saveLoanInfo={saveLoanInfo}
-                                loanRate={5}
+                                loanRate={credit.loanRate}
                             />
-                        </>
+                        </ProductBlock>
+                    ) : (
+                        <div>조회된 신용 정보가 없어요.</div>
                     );
                 } else if (currentCard === 2) {
                     return (

@@ -112,7 +112,7 @@ export const LoanRepayDetailCard = ({
                     </InfoContent>
                 </InfoContentBox>
             </InfoTitleBlock>
-            <Divider isLine={true} />
+            <Divider $isLine={true} />
             <ProductJoinInfo
                 $isLoan={true}
                 infoTitle={'대출 원금'}

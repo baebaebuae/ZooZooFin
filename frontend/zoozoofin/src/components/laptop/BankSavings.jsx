@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-import { InfoBox } from '@components/root/infoBox';
+import { LaptopInfoBox } from '@components/root/infoBox';
 import { Divider } from '@components/root/card';
 import { BadgeStroke, WarnBadge } from '@components/root/badge';
 import IconFrog from '@assets/images/icons/icon_frog.png';
@@ -14,8 +14,10 @@ const Container = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
+    height: 400px;
+    overflow-y: auto;
 `;
 
 const AppContent = styled.div`
@@ -35,11 +37,11 @@ const AppContentH2 = styled.div`
 
 const BlankBlock = styled.div`
     color: gray;
-    /* height: 100%; */
-    height: 200px;
+    height: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 50px 0;
 `;
 
 const ProductBox = styled.div`
@@ -83,7 +85,7 @@ export const BankSavings = () => {
 
     const tempData = {
         totalMoney: 12750000,
-        depositList: [
+        myDepositResponseList: [
             {
                 depositId: 1,
                 name: '개굴첫거래우대예금',
@@ -131,7 +133,11 @@ export const BankSavings = () => {
         const apiClient = getApiClient();
 
         try {
-            const res = await apiClient.get('/home/my-deposit-savings');
+            const res = await apiClient.get(
+                '/home/my-deposit-savings',
+                {},
+                { headers: { animalId: 1 } }
+            );
             console.log(res.data.body);
             setSavingsData(res.data.body);
         } catch (error) {
@@ -143,6 +149,8 @@ export const BankSavings = () => {
     useEffect(() => {
         fetchSavingsData();
     }, []);
+
+    useEffect(() => {}, [savingsData]);
 
     return (
         <Container>
@@ -160,15 +168,19 @@ export const BankSavings = () => {
                 />
             ) : (
                 <>
-                    <InfoBox
-                        color={'primaryDeep'}
-                        infoTitle={'님의 저축 총 자산'}
-                        infoContent={`${savingsData.totalMoney.toLocaleString()}원`}
-                    ></InfoBox>
+                    {savingsData && savingsData.totalMoney > 0 && (
+                        <LaptopInfoBox
+                            color={'primaryDeep'}
+                            infoTitle={'님의 저축 총 자산'}
+                            infoContent={`${savingsData.totalMoney.toLocaleString()}원`}
+                        ></LaptopInfoBox>
+                    )}
                     <AppContent>가입한 상품</AppContent>
                     <AppContentH2>적금</AppContentH2>
-                    {savingsData.savingsList.length > 0 &&
-                        savingsData.savingsList.map((saving, index) => {
+                    {savingsData &&
+                        savingsData.mySavingsResponseList &&
+                        savingsData.mySavingsResponseList.length > 0 &&
+                        savingsData.mySavingsResponseList.map((saving, index) => {
                             return (
                                 <div key={index}>
                                     <ProductBox onClick={() => handleSelect(saving)}>
@@ -189,50 +201,62 @@ export const BankSavings = () => {
                                             {saving.amount.toLocaleString()} 🥕
                                         </ProductAmount>
                                     </ProductBox>
-                                    {index + 1 != saving.savingsList.length && (
+                                    {index + 1 != savingsData.mySavingsResponseList.length && (
                                         <Divider $isLine={true} />
                                     )}
                                 </div>
                             );
                         })}
 
-                    {savingsData.savingsList.length === 0 && (
-                        <BlankBlock>아직 가입한 적금 상품이 없어요.</BlankBlock>
-                    )}
+                    {savingsData &&
+                        savingsData.mySavingsResponseList &&
+                        savingsData.mySavingsResponseList.length === 0 && (
+                            <BlankBlock>아직 가입한 적금 상품이 없어요.</BlankBlock>
+                        )}
 
                     <AppContentH2>예금</AppContentH2>
-                    {savingsData.depositList.length > 0 && (
-                        <>
-                            {savingsData.depositList.map((deposit, index) => {
-                                return (
-                                    <div key={index}>
-                                        <ProductBox onClick={() => handleSelect(deposit)}>
-                                            <ProductTitleBox>
-                                                <img src={IconFrog} width={30} />
-                                                <ProductName>{deposit.name}</ProductName>
-                                                <BadgeStroke
-                                                    color={
-                                                        deposit.restTurn === 1 ? 'warn' : 'tertiary'
-                                                    }
-                                                >
-                                                    D-{deposit.restTurn}
-                                                </BadgeStroke>
-                                            </ProductTitleBox>
-                                            <ProductAmount>
-                                                {deposit.amount.toLocaleString()} 🥕
-                                            </ProductAmount>
-                                        </ProductBox>
-                                        {index + 1 != savingsData.depositList.length && (
-                                            <Divider $isLine={true} />
-                                        )}
-                                    </div>
-                                );
-                            })}
-                        </>
-                    )}
-                    {savingsData.depositList.length === 0 && (
-                        <BlankBlock>아직 가입한 예금 상품이 없어요.</BlankBlock>
-                    )}
+                    {savingsData &&
+                        savingsData.myDepositResponseList &&
+                        savingsData.myDepositResponseList.length > 0 && (
+                            <>
+                                {savingsData &&
+                                    savingsData.myDepositResponseList &&
+                                    savingsData.myDepositResponseList.length > 0 &&
+                                    savingsData.myDepositResponseList.map((deposit, index) => {
+                                        return (
+                                            <div key={index}>
+                                                <ProductBox onClick={() => handleSelect(deposit)}>
+                                                    <ProductTitleBox>
+                                                        <img src={IconFrog} width={30} />
+                                                        <ProductName>{deposit.name}</ProductName>
+                                                        <BadgeStroke
+                                                            color={
+                                                                deposit.restTurn === 1
+                                                                    ? 'warn'
+                                                                    : 'tertiary'
+                                                            }
+                                                        >
+                                                            D-{deposit.restTurn}
+                                                        </BadgeStroke>
+                                                    </ProductTitleBox>
+                                                    <ProductAmount>
+                                                        {deposit.amount.toLocaleString()} 🥕
+                                                    </ProductAmount>
+                                                </ProductBox>
+                                                {index + 1 !=
+                                                    savingsData.myDepositResponseList.length && (
+                                                    <Divider $isLine={true} />
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                            </>
+                        )}
+                    {savingsData &&
+                        savingsData.myDepositResponseList &&
+                        savingsData.myDepositResponseList.length === 0 && (
+                            <BlankBlock>아직 가입한 예금 상품이 없어요.</BlankBlock>
+                        )}
                 </>
             )}
         </Container>

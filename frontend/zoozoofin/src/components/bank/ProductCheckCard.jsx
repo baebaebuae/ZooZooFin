@@ -75,21 +75,24 @@ export const ProductCheckCard = ({
             />
             <Divider $isLine={true} />
             <ProductJoinInfo
+                infoTitle={'만기 회차'}
+                infoContent={`${productPeriod + currentTurn}턴`}
+                $isLoan={true}
+            />
+            <ProductJoinInfo
                 infoTitle={'가입 금액'}
                 infoContent={
                     productType === 'savings'
                         ? `${savingsAmount.toLocaleString()}🥕 / 턴`
                         : `${savingsAmount.toLocaleString()}🥕`
                 }
-            />
-            <ProductJoinInfo
-                infoTitle={'만기 회차'}
-                infoContent={`${productPeriod + currentTurn}턴`}
+                $isLoan={true}
             />
             <Divider $isLine={false} />
             <ProductJoinInfo
                 infoTitle={'예상 지급액'}
                 infoContent={`${expectedFinalAmount.toLocaleString()}🥕`}
+                $isLoan={true}
             />
             {/* 임의로 캐릭터 능력 추가 금액을 가입 금액을 기준으로 계산해놓음. 실제 추가 금액 얼마인지 확인 */}
             {specialRate > 0 && (
