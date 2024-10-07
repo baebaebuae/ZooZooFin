@@ -70,24 +70,19 @@ const CheckCreditCard = ({
                 <ModalTitle>신용대출 심사 결과</ModalTitle>
                 <ModalBlock>
                     {isAvailable ? (
-                        <InfoBox color={'tertiary'}>
-                            <div>대출 가능</div>
-                        </InfoBox>
+                        <InfoBox infoContent={'대출 가능'} color={'tertiary'} />
                     ) : (
-                        <InfoBox color={'warn'}>
-                            <div>대출 불가</div>
-                        </InfoBox>
+                        <InfoBox infoContent={'대출 불가'} color={'warn'} />
                     )}
                     <CreditBox grade={characterCredit} />
                     <InfoBlock>
                         <ContentBlock>
                             <ContentTitle>대출 가능 금액(한도)</ContentTitle>
-                            <ContentBox>{loanLimit}🥕</ContentBox>
+                            <ContentBox>{loanLimit} 🥕</ContentBox>
                         </ContentBlock>
                         <ContentBlock>
                             <ContentTitle>잔여 대출 가능 금액</ContentTitle>
-                            {/* <ContentBox>{`${loanAvailable.toLocaleSting()}원`}</ContentBox> */}
-                            <ContentBox>{loanAvailable}🥕</ContentBox>
+                            <ContentBox>{loanAvailable} 🥕</ContentBox>
                         </ContentBlock>
                     </InfoBlock>
                     <Button

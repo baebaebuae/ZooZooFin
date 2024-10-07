@@ -1,5 +1,5 @@
 // 대출 가입 카드
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { ProductDetailInfo } from '@components/root/productDetailInfo';
 import { Card, Divider } from '@components/root/card';
@@ -95,6 +95,7 @@ const getPrincipalRepayment = (loanAmount, loanRate, loanPeriod) => {
 
 export const LoanJoinCard = ({ currentTurn, maxAmount, saveLoanInfo, loanRate }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+
     const handleModalOpen = () => {
         setIsModalOpen(true);
         document.body.style.overflow = 'hidden'; // 외부 스크롤 막기
@@ -215,15 +216,17 @@ export const LoanJoinCard = ({ currentTurn, maxAmount, saveLoanInfo, loanRate })
                 <Button
                     size={'normal'}
                     color={'primaryDeep'}
-                    onClick={() =>
-                        saveLoanInfo(
-                            loanAmount,
-                            expectedFinalAmount,
-                            loanPeriod,
-                            expectedFinalTurn,
-                            selectedRepayType
-                        )
-                    }
+                    onClick={() => {
+                        if (loanAmount > 0 && loanPeriod > 0) {
+                            saveLoanInfo(
+                                loanAmount,
+                                expectedFinalAmount,
+                                loanPeriod,
+                                expectedFinalTurn,
+                                selectedRepayType
+                            );
+                        }
+                    }}
                 >
                     다음
                 </Button>

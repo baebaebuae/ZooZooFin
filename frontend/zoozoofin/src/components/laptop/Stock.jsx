@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import { InfoBox } from '@components/root/infoBox';
+import { LaptopInfoBox } from '@components/root/infoBox';
 import IconFrog from '@assets/images/icons/icon_frog.png';
 
 import { StockTitle } from '@components/stock/common/container/StockTitleContainer';
@@ -12,8 +12,11 @@ const Container = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
+    height: 400px;
+    overflow-y: auto;
+    padding: 20px 0;
 `;
 
 const AppContent = styled.div`
@@ -126,11 +129,11 @@ export const Stock = () => {
                 />
             ) : (
                 <>
-                    <InfoBox
+                    <LaptopInfoBox
                         color={'primaryDeep'}
                         infoTitle={'님의 주식 총 자산'}
                         infoContent={`${data.totalAmount.toLocaleString()}🥕`}
-                    ></InfoBox>
+                    ></LaptopInfoBox>
                     <AppContent>보유 주식</AppContent>
                     {data.domestic.length > 0 && (
                         <>

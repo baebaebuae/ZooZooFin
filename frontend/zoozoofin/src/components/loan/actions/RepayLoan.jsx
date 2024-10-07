@@ -12,6 +12,8 @@ import IconFrog from '@assets/images/icons/icon_frog.png';
 
 import { getApiClient } from '@stores/apiClient';
 
+import { useStore, useAnimalStore } from '../../../store.js';
+
 const Block = styled.div`
     display: flex;
     flex-direction: column;
@@ -19,11 +21,29 @@ const Block = styled.div`
     gap: 20px;
 `;
 
+const FixedMessageBox = styled.div`
+    flex-shrink: 0;
+`;
+
+const ProductContainer = styled.div``;
+const ProductBlock = styled.div`
+    flex-grow: 1;
+    width: 100%;
+    overflow-y: auto;
+    /* max-height: 100%; */
+    height: 450px;
+    padding: 10px;
+    box-sizing: border-box;
+`;
+
 const RepayLoan = ({ goToScript }) => {
     const [currentCard, setCurrentCard] = useState(1);
     const [products, setProducts] = useState([]);
 
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const { nowAnimal } = useAnimalStore();
+
+    // console.log('nowAnimal: ', nowAnimal);
 
     // 대출 상품 받아오기
     const fetchProducts = async () => {
@@ -79,30 +99,22 @@ const RepayLoan = ({ goToScript }) => {
     return (
         <Block>
             {currentCard < 3 && (
-                <MessageBox>
-                    <NormalIcon icon={IconFrog} />
-                    <div>{joinGuideMessages[currentCard]}</div>
-                </MessageBox>
+                <FixedMessageBox>
+                    <MessageBox>
+                        <NormalIcon icon={IconFrog} />
+                        <div>{joinGuideMessages[currentCard]}</div>
+                    </MessageBox>
+                </FixedMessageBox>
             )}
 
             {(() => {
                 if (!selectedProduct && currentCard === 1) {
                     return (
-                        <Block>
+                        <ProductBlock>
                             <LoanInfoCard
-                                charName={'토랭이'}
+                                charName={nowAnimal.animalName}
                                 totalLoan={products.totalLoan}
                                 restLoan={products.restLoan}
-                            />
-
-                            <LoanRepayCard
-                                warning={false}
-                                loanNumber={3}
-                                loanRate={5}
-                                payBackTurn={1}
-                                loanPeriod={7}
-                                loanRemain={300000}
-                                handleClick={() => goToNextCard()}
                             />
 
                             {products.myLoanList && products.myLoanList.length > 0 ? (
@@ -110,44 +122,33 @@ const RepayLoan = ({ goToScript }) => {
                                     <LoanRepayCard
                                         key={index}
                                         warning={false}
-                                        loanNumber={selectedProduct.loanNumber}
-                                        loanRate={selectedProduct.loanRate}
-                                        payBackTurn={selectedProduct.payBackTurn}
-                                        loanPeriod={selectedProduct.loanPeriod}
-                                        loanRemain={selectedProduct.loanRemain}
+                                        loanNumber={product.loanNumber}
+                                        loanRate={product.loanRate}
+                                        payBackTurn={product.payBackTurn}
+                                        loanPeriod={product.loanPeriod}
+                                        loanRemain={product.loanRemain}
                                         handleClick={() => handleClick(product)}
                                     />
                                 ))
                             ) : (
-                                <div>List 비었음</div>
+                                <div>받은 대출이 없어요.</div>
                             )}
-                        </Block>
+                        </ProductBlock>
                     );
                 } else if (currentCard === 2) {
                     return (
                         <>
                             <LoanRepayDetailCard
-                                // loanId={selectedProduct.loanId}
-                                // loanNumber={selectedProduct.loanNumber}
-                                // loanRate={selectedProduct.loanRate}
-                                // payBackTurn={selectedProduct.payBackTurn}
-                                // loanPeriod={selectedProduct.loanPeriod}
-                                // loanAmount={selectedProduct.loanAmount}
-                                // loanRemain={selectedProduct.loanRemain}
-                                // warning={selectedProduct.warning}
-                                // loanType={selectedProduct.loanType}
-                                // isRepayAvailable={isRepayAvailable} // 없음
-                                // ---> 중도 상환 가능한지 여부. ?
-                                loanId={1}
-                                loanNumber={2}
-                                loanType={2}
+                                loanId={selectedProduct.loanId}
+                                loanNumber={selectedProduct.loanNumber}
+                                loanType={selectedProduct.loanType}
                                 isRepayAvailable={true}
-                                loanRate={4}
-                                payBackTurn={8}
-                                loanPeriod={20}
-                                loanAmount={1000000}
-                                loanRemain={300000}
-                                warning={false}
+                                loanRate={selectedProduct.loanType}
+                                payBackTurn={selectedProduct.payBackTurn}
+                                loanPeriod={selectedProduct.loanPeriod}
+                                loanAmount={selectedProduct.loanAmount}
+                                loanRemain={selectedProduct.loanRemain}
+                                warning={selectedProduct.warning}
                                 goToScript={goToNextCard}
                             />
                         </>

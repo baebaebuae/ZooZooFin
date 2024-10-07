@@ -82,28 +82,28 @@ export const LoanCheckCard = ({
                 infoContent1={`${loanPeriod}턴`}
                 infoTitle2={'대출 금리'}
                 infoContent2={`${loanRate}%`}
-                isLoan={true}
+                $isLoan={true}
                 isEarlyTermination={false}
             ></ProductDetailInfo>
             <Divider $isLine={true} />
             <ProductJoinInfo
-                isLoan={true}
+                $isLoan={true}
                 infoTitle={'가입 금액'}
                 infoContent={`${loanAmount.toLocaleString()}🥕`}
             />
             <ProductJoinInfo
-                isLoan={true}
+                $isLoan={true}
                 infoTitle={'상환 예상 회차'}
                 infoContent={`${expectedFinalTurn}턴`}
             />
             <ProductJoinInfo
-                isLoan={true}
+                $isLoan={true}
                 infoTitle={'상환 방식'}
                 infoContent={`${repayType}균등상환`}
             />
             <Divider $isLine={false} />
             <ProductJoinInfo
-                isLoan={true}
+                $isLoan={true}
                 infoTitle={'상환 예상 금액'}
                 infoContent={`${expectedFinalAmount.toLocaleString()}🥕`}
             />

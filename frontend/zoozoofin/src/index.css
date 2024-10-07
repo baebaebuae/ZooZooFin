@@ -52,4 +52,7 @@
         max-height: 640px;
         caret-color: transparent;
     }
+    ::-webkit-scrollbar {
+        display: none;
+    }
 }

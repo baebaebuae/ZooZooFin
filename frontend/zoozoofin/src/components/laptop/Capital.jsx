@@ -62,6 +62,14 @@ const DividerLarge = styled.div`
     height: 16px;
 `;
 
+const BlankBlock = styled.div`
+    color: gray;
+    height: 100px;
+    margin: 50px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
 export const Capital = () => {
     const [isCautionOpened, setIsCautionOpened] = useState(false);
     const [capitalData, setCapitalData] = useState([]);
@@ -126,24 +134,42 @@ export const Capital = () => {
 
             <DividerLarge />
 
-            <LaptopInfo
-                infoTitle={'대출 원금'}
-                infoContent={`${capitalData.capitalOrigin.toLocaleString()}🥕`}
-            />
-            <LaptopInfo infoTitle={'대출 상환일'} infoContent={`${capitalData.capitalEndTurn}턴`} />
-            <LaptopInfo
-                infoTitle={'상환할 금액'}
-                infoContent={`${capitalData.capitalRestMoney.toLocaleString()}🥕`}
-                color={'warn'}
-            />
+            {capitalData.capitalOrigin === null && (
+                <BlankBlock>아직 받은 대출이 없어요.</BlankBlock>
+            )}
+
+            {capitalData &&
+                capitalData.capitalOrigin > 0 &&
+                capitalData.capitalEndTurn > 0 &&
+                capitalData.capitalRestMoney > 0 && (
+                    <div>
+                        <LaptopInfo
+                            infoTitle={'대출 원금'}
+                            infoContent={`${capitalData.capitalOrigin.toLocaleString()}🥕`}
+                        />
+                        <LaptopInfo
+                            infoTitle={'대출 상환일'}
+                            infoContent={`${capitalData.capitalEndTurn}턴`}
+                        />
+                        <LaptopInfo
+                            infoTitle={'상환할 금액'}
+                            infoContent={`${capitalData.capitalRestMoney.toLocaleString()}🥕`}
+                            color={'warn'}
+                        />
+                    </div>
+                )}
 
             <DividerLarge />
 
-            <RateBlock>기준 금리 {10}%</RateBlock>
-            <ProgressBox
-                rate={(capitalData.capitalRestMoney / capitalData.capitalOrigin) * 100}
-                restTurn={capitalData.capitalRestTurn}
-            />
+            {capitalData && capitalData.capitalRestMoney > 0 && capitalData.capitalOrigin > 0 && (
+                <div>
+                    <RateBlock>기준 금리 {10}%</RateBlock>
+                    <ProgressBox
+                        rate={(capitalData.capitalRestMoney / capitalData.capitalOrigin) * 100}
+                        restTurn={capitalData.capitalRestTurn}
+                    />
+                </div>
+            )}
         </Container>
     );
 };

@@ -28,7 +28,17 @@ const InfoValue = styled.div`
     font-weight: bold;
 `;
 
-export const InfoBox = ({ color, infoTitle, infoContent }) => {
+export const InfoBox = ({ color, infoContent }) => {
+    return (
+        <>
+            <InfoBoxBlock color={color}>
+                <InfoValue>{infoContent}</InfoValue>
+            </InfoBoxBlock>
+        </>
+    );
+};
+
+export const LaptopInfoBox = ({ color, infoTitle, infoContent }) => {
     const userName = '토토';
 
     return (

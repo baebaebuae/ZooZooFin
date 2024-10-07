@@ -17,6 +17,21 @@ const Block = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 20px;
+    height: 100vh;
+`;
+
+const FixedMessageBox = styled.div`
+    flex-shrink: 0;
+`;
+
+const ProductBlock = styled.div`
+    flex-grow: 1;
+    width: 100%;
+    overflow-y: auto;
+    /* max-height: 100%; */
+    height: 300px;
+    padding: 10px;
+    box-sizing: border-box;
 `;
 
 const JoinProduct = ({ productType, goToScript }) => {
@@ -84,16 +99,18 @@ const JoinProduct = ({ productType, goToScript }) => {
     return (
         <Block>
             {currentCard < 4 && (
-                <MessageBox>
-                    <NormalIcon icon={IconChick} />
-                    <div>{joinGuideMessages[currentCard]}</div>
-                </MessageBox>
+                <FixedMessageBox>
+                    <MessageBox>
+                        <NormalIcon icon={IconChick} />
+                        <div>{joinGuideMessages[currentCard]}</div>
+                    </MessageBox>
+                </FixedMessageBox>
             )}
 
             {(() => {
                 if (!selectedProduct && currentCard === 1) {
                     return (
-                        <div>
+                        <ProductBlock>
                             {products.map((product) => (
                                 <ProductCard
                                     key={product.typeId}
@@ -103,7 +120,7 @@ const JoinProduct = ({ productType, goToScript }) => {
                                     handleClick={() => handleClick(product)}
                                 />
                             ))}
-                        </div>
+                        </ProductBlock>
                     );
                 } else if (!savingsAmount && currentCard === 2) {
                     return (
@@ -121,18 +138,20 @@ const JoinProduct = ({ productType, goToScript }) => {
                     );
                 } else if (savingsAmount && currentCard === 3) {
                     return (
-                        <ProductCheckCard
-                            productType={productType}
-                            productTypeId={selectedProduct.typeId}
-                            productName={selectedProduct.name}
-                            productPeriod={selectedProduct.period}
-                            productRate={selectedProduct.rate}
-                            currentTurn={5}
-                            savingsAmount={savingsAmount}
-                            expectedFinalAmount={expectedFinalAmount}
-                            specialRate={6} // 캐릭터 특별 능력 없으면 null이거나 0이거나
-                            goToScript={goToNextCard}
-                        />
+                        <ProductBlock>
+                            <ProductCheckCard
+                                productType={productType}
+                                productTypeId={selectedProduct.typeId}
+                                productName={selectedProduct.name}
+                                productPeriod={selectedProduct.period}
+                                productRate={selectedProduct.rate}
+                                currentTurn={5}
+                                savingsAmount={savingsAmount}
+                                expectedFinalAmount={expectedFinalAmount}
+                                specialRate={6} // 캐릭터 특별 능력 없으면 null이거나 0이거나
+                                goToScript={goToNextCard}
+                            />
+                        </ProductBlock>
                     );
                 } else if (currentCard === 4) {
                     return <Loading content={'가입 처리중'} />;

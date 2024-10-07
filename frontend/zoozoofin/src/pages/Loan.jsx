@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 import Bubble from '@components/root/bubble';
-import { useStore } from '../store.js';
+import { useStore, useAnimalStore } from '../store.js';
 
 import CheckCredit from '@components/loan/actions/CheckCredit';
 import RepayLoan from '@components/loan/actions/RepayLoan';
@@ -38,6 +38,8 @@ const Loan = () => {
 
     const navigate = useNavigate();
 
+    const { nowAnimal, getAnimalData } = useAnimalStore();
+
     // scripts 가져오기(비동기)
     useEffect(() => {
         if (!scripts || scripts.length === 0) {
@@ -54,6 +56,14 @@ const Loan = () => {
             const script = scripts.find((script) => script.scriptId === currentId);
             setCurrentScript(script);
             console.log(script);
+
+            if (script?.content.includes('${name}')) {
+                const updatedScript = {
+                    ...script,
+                    content: script.content.replace('${name}', `**${nowAnimal.animalName}**`),
+                };
+                setCurrentScript(updatedScript);
+            }
         }
     }, [scripts, currentId]);
 

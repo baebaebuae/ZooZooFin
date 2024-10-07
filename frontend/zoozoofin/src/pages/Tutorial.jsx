@@ -211,11 +211,9 @@ const Tutorial = () => {
             case 'INPUT_NAME':
                 return (
                     <NameModalBLock>
-                        {/* receivedAnimalType: {receivedAnimalTypeId} */}
                         <NameModal>
                             <NameModalMessage>사용할 이름을 입력해줘.</NameModalMessage>
                             <NameModalInput onChange={onChange} />
-                            {/* <div>animalName: {animalName}</div> */}
                             <Button
                                 color={'orange'}
                                 $isBorder={true}

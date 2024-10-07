@@ -15,14 +15,18 @@ const Container = styled.div`
 const HeaderWrapper = styled.div`
     width: 100%;
     padding: 20px 0;
+    flex-shrink: 0;
+    height: 80px;
 `;
 
 const ContentWrapper = styled.div`
     width: 100%;
-    flex-grow: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: calc(100vh - 80px);
+    overflow: hidden;
+    /* border: 6px solid pink; */
 `;
 
 const LayoutInGame = () => {

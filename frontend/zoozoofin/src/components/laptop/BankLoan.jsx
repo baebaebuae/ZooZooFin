@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { InfoBox } from '@components/root/infoBox';
+import { LaptopInfoBox } from '@components/root/infoBox';
 
 import MuiAccordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -25,8 +25,10 @@ const Container = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
+    height: 400px;
+    overflow-y: auto;
 `;
 
 const AppContent = styled.div`
@@ -114,6 +116,15 @@ const LoanListDetailNoticeAmount = styled(LoanListDetailNotice)`
     font-size: 12px;
 `;
 
+const BlankBlock = styled.div`
+    color: gray;
+    height: 100px;
+    margin: 50px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
 export const BankLoan = () => {
     const [loanData, setLoanData] = useState([]);
 
@@ -167,11 +178,13 @@ export const BankLoan = () => {
 
     return (
         <Container>
-            <InfoBox
-                color={'primaryDeep'}
-                infoTitle={'님의 대출 총 금액'}
-                infoContent={`${loanData.totalLoan.toLocaleString()}🥕`}
-            ></InfoBox>
+            {loanData && loanData.totalLoan > 0 && (
+                <LaptopInfoBox
+                    color={'primaryDeep'}
+                    infoTitle={'님의 대출 총 금액'}
+                    infoContent={`${loanData.totalLoan.toLocaleString()}🥕`}
+                ></LaptopInfoBox>
+            )}
             <AppContent>대출 리스트</AppContent>
             <LoanListTitleBox>
                 <LoanListTitle>대출번호</LoanListTitle>
@@ -180,47 +193,56 @@ export const BankLoan = () => {
                 <div></div>
             </LoanListTitleBox>
 
-            {loanData.myLoanList.map((loan, index) => {
-                return (
-                    <Accordion key={index}>
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="loanList-content"
-                            id="loanList-header"
-                        >
-                            <LoanListContentBox>
-                                <LoanListContent>{loan.loanNumber}</LoanListContent>
-                                <LoanListAmount>
-                                    {loan.loanAmount.toLocaleString()}🥕
-                                </LoanListAmount>
-                                <LoanListContent>{loan.loanRate}%</LoanListContent>
-                            </LoanListContentBox>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <LoanListDetailBox>
-                                <LoanListDetailBoxContent>
-                                    <LoanListDetailContent>대출 기간</LoanListDetailContent>
-                                    <LoanListDetailAmount>{loan.loanPeriod}턴</LoanListDetailAmount>
-                                    <LoanListDetailContent>남은 턴</LoanListDetailContent>
-                                    <LoanListDetailAmount>
-                                        {loan.loanPeriod - loan.payBackTurn}턴
-                                    </LoanListDetailAmount>
-                                    <Loa0nListDetailType>
-                                        {loanType[loan.loanType]}
-                                    </Loa0nListDetailType>
-                                </LoanListDetailBoxContent>
-                                <LoanListDetailBoxContent>
-                                    <LoanListDetailNotice>이번 턴에서</LoanListDetailNotice>
-                                    <LoanListDetailNoticeAmount>
-                                        ????????🥕
-                                    </LoanListDetailNoticeAmount>
-                                    <LoanListDetailNotice>상환 예정</LoanListDetailNotice>
-                                </LoanListDetailBoxContent>
-                            </LoanListDetailBox>
-                        </AccordionDetails>
-                    </Accordion>
-                );
-            })}
+            {loanData && loanData.myLoanList && loanData.myLoanList.length === 0 && (
+                <BlankBlock>아직 받은 대출이 없어요.</BlankBlock>
+            )}
+
+            {loanData &&
+                loanData.length > 0 &&
+                loanData.myLoanList.length > 0 &&
+                loanData.myLoanList.map((loan, index) => {
+                    return (
+                        <Accordion key={index}>
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="loanList-content"
+                                id="loanList-header"
+                            >
+                                <LoanListContentBox>
+                                    <LoanListContent>{loan.loanNumber}</LoanListContent>
+                                    <LoanListAmount>
+                                        {loan.loanAmount.toLocaleString()}🥕
+                                    </LoanListAmount>
+                                    <LoanListContent>{loan.loanRate}%</LoanListContent>
+                                </LoanListContentBox>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <LoanListDetailBox>
+                                    <LoanListDetailBoxContent>
+                                        <LoanListDetailContent>대출 기간</LoanListDetailContent>
+                                        <LoanListDetailAmount>
+                                            {loan.loanPeriod}턴
+                                        </LoanListDetailAmount>
+                                        <LoanListDetailContent>남은 턴</LoanListDetailContent>
+                                        <LoanListDetailAmount>
+                                            {loan.loanPeriod - loan.payBackTurn}턴
+                                        </LoanListDetailAmount>
+                                        <Loa0nListDetailType>
+                                            {loanType[loan.loanType]}
+                                        </Loa0nListDetailType>
+                                    </LoanListDetailBoxContent>
+                                    <LoanListDetailBoxContent>
+                                        <LoanListDetailNotice>이번 턴에서</LoanListDetailNotice>
+                                        <LoanListDetailNoticeAmount>
+                                            ????????🥕
+                                        </LoanListDetailNoticeAmount>
+                                        <LoanListDetailNotice>상환 예정</LoanListDetailNotice>
+                                    </LoanListDetailBoxContent>
+                                </LoanListDetailBox>
+                            </AccordionDetails>
+                        </Accordion>
+                    );
+                })}
         </Container>
     );
 };
