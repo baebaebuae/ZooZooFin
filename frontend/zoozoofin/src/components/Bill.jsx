@@ -150,7 +150,7 @@ export const Bill = ({ checkBill }) => {
         const apiClient = getApiClient();
 
         try {
-            const response = await apiClient.get('/animal/info');
+            const response = await apiClient.get('/home/warning-record');
             if (response.data && response.data.body) {
                 console.log('BillData: ', response.data.body);
                 setBillData(response.data.body);
