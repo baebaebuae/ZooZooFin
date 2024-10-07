@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { LargeIcon } from '@components/root/icon';
 import CharRabbit from '@assets/images/characters/rabbit.png';
-
+import useUserStore from '../stores/useUserStore';
 import styled from 'styled-components';
 import {
     HeaderHamburgerButton,
@@ -33,10 +33,20 @@ const HeaderUserBlock = styled.div`
 
 const Header = () => {
     const [isCharOpen, setIsCharOpen] = useState(false);
+    const { animalAssets, memberGoldBar,turn, fetchUserProfile } = useUserStore();
+
+    useEffect(() => {
+        fetchUserProfile();
+    }, [fetchUserProfile]);
 
     const openCharInfo = () => {
         console.log('캐릭터 클릭됨');
         setIsCharOpen(!isCharOpen);
+    };
+
+    // 1,000 형식으로
+    const formatNumber = (num) => {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
 
     return (
@@ -50,12 +60,15 @@ const Header = () => {
                     <Link to="/wallet">
                         <HeaderWalletButton />
                     </Link>
-                    <HeaderTurnButton currentTurn={30} />
+                    <HeaderTurnButton currentTurn={turn} />
                 </HeaderButtonBlock>
                 <HeaderUserBlock>
                     <LargeIcon icon={CharRabbit} onClick={openCharInfo} />
                     {isCharOpen && <CharacterInfo onClose={openCharInfo} />}
-                    <PropInfo propMoney={'10,000,000'} propGold={'4,230'} />
+                    <PropInfo 
+                        propMoney={formatNumber(animalAssets)} 
+                        propGold={formatNumber(memberGoldBar)} 
+                    />
                 </HeaderUserBlock>
             </HeaderBlock>
         </nav>
