@@ -73,7 +73,7 @@ export const ProductJoinCard = ({
                     infoTitle1={'만기 예상 회차'}
                     infoContent1={`${productPeriod + currentTurn}턴`}
                     infoTitle2={'예상 금액'}
-                    infoContent2={`${expectedFinalAmount.toLocaleString()}원`}
+                    infoContent2={`${expectedFinalAmount.toLocaleString()}🥕`}
                     isLoan={isLoan}
                 ></ProductDetailInfo>
             </Card>

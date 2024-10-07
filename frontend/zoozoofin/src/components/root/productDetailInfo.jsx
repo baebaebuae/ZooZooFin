@@ -118,7 +118,7 @@ export const ExtraInfo = ({ extraRate, extraAmount }) => {
         <>
             <ExtraBox>
                 <ExtraTitle>캐릭터 능력: 추가 +{extraRate}%</ExtraTitle>
-                <ExtraContent>{extraAmount.toLocaleString()}원</ExtraContent>
+                <ExtraContent>{extraAmount.toLocaleString()}🥕</ExtraContent>
             </ExtraBox>
         </>
     );

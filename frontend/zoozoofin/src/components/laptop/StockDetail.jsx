@@ -126,7 +126,7 @@ export const StockDetail = ({
             </DetailTitleBlock>
             <DetailContentBlock>
                 <div>그래프 soon</div>
-                <StockTotal>{stockTotal.toLocaleString()}원</StockTotal>
+                <StockTotal>{stockTotal.toLocaleString()}🥕</StockTotal>
                 <StockRate $stockRate={stockRate}>{stockRate}%</StockRate>
             </DetailContentBlock>
             <DividerLarge />

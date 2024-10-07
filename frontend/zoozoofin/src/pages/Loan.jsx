@@ -125,7 +125,7 @@ const Loan = () => {
                 return navigate('/bank');
 
             case 'END':
-                return navigate('/myroom');
+                return navigate('/map');
 
             default:
                 return (

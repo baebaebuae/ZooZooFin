@@ -5,8 +5,12 @@ import Google from '@assets/images/icons/start/google.png';
 import Naver from '@assets/images/icons/start/naver.png';
 import Kakao from '@assets/images/icons/start/kakao.png';
 
+import { useMusicStore } from '@stores/useMusicStore.js';
+
+import StartMusic from '@components/StartMusic';
+
 const StartBlock = styled.div`
-    height: 500px;
+    height: 640px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -55,6 +59,14 @@ const API_URI = import.meta.env.VITE_URL;
 
 const Start = () => {
     const [isEntered, setIsEntered] = useState(false); // API
+    const [isMusicSelected, setIsMusicSelected] = useState(false);
+
+    const isMusicOn = useMusicStore((state) => state.isMusicOn);
+    const toggleMusic = useMusicStore((state) => state.toggleMusic);
+
+    const handleSelectMusicOn = () => {
+        setIsMusicSelected(true);
+    };
 
     const handleEnter = () => {
         setIsEntered(true);
@@ -67,22 +79,35 @@ const Start = () => {
 
     return (
         <>
-            {isEntered ? (
-                <>
-                    <StartBlock>
-                        <StartTextBox>소셜 로그인</StartTextBox>
-                        <LoginButtonBlock>
-                            <LoginButton src={Google} onClick={() => handleSocialLogin('google')} />
-                            <LoginButton src={Kakao} onClick={() => handleSocialLogin('kakao')} />
-                            <LoginButton src={Naver} onClick={() => handleSocialLogin('naver')} />
-                        </LoginButtonBlock>
+            {isMusicSelected ? (
+                isEntered ? (
+                    <>
+                        <StartBlock>
+                            <StartTextBox>소셜 로그인</StartTextBox>
+                            <LoginButtonBlock>
+                                <LoginButton
+                                    src={Google}
+                                    onClick={() => handleSocialLogin('google')}
+                                />
+                                <LoginButton
+                                    src={Kakao}
+                                    onClick={() => handleSocialLogin('kakao')}
+                                />
+                                <LoginButton
+                                    src={Naver}
+                                    onClick={() => handleSocialLogin('naver')}
+                                />
+                            </LoginButtonBlock>
+                        </StartBlock>
+                    </>
+                ) : (
+                    <StartBlock onClick={handleEnter}>
+                        <img src={LogoMain} width={250} />
+                        <StartTextAnimated>- 터치로 주주시티 입장 -</StartTextAnimated>
                     </StartBlock>
-                </>
+                )
             ) : (
-                <StartBlock onClick={handleEnter}>
-                    <img src={LogoMain} width={250} />
-                    <StartTextAnimated>- 터치로 주주시티 입장 -</StartTextAnimated>
-                </StartBlock>
+                <StartMusic handleSelectMusicOn={handleSelectMusicOn} />
             )}
         </>
     );

@@ -136,7 +136,7 @@ export const LoanRepayDetailCard = ({
             <ProductJoinInfo
                 $isLoan={true}
                 infoTitle={'남은 상환 금액'}
-                infoContent={`${loanRemain}원`}
+                infoContent={`${loanRemain}🥕`}
             />
             <Button
                 size={'normal'}

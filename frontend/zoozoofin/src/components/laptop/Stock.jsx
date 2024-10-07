@@ -129,7 +129,7 @@ export const Stock = () => {
                     <InfoBox
                         color={'primaryDeep'}
                         infoTitle={'님의 주식 총 자산'}
-                        infoContent={`${data.totalAmount.toLocaleString()}원`}
+                        infoContent={`${data.totalAmount.toLocaleString()}🥕`}
                     ></InfoBox>
                     <AppContent>보유 주식</AppContent>
                     {data.domestic.length > 0 && (

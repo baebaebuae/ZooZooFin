@@ -159,7 +159,7 @@ const Bank = () => {
                     />
                 );
             case 'END':
-                return navigate('/myroom');
+                return navigate('/map');
             default:
                 return <div>해당하는 페이지가 없어요. 현재 Action을 확인해주세요.</div>;
         }

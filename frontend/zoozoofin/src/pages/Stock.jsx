@@ -208,7 +208,7 @@ const Stock = () => {
                     </SampleBlock>
                 );
             case 'END':
-                return navigate('/myroom');
+                return navigate('/map');
         }
     }
 };

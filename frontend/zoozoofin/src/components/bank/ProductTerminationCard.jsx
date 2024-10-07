@@ -37,8 +37,8 @@ export const ProductTerminationCard = ({
                 infoTitle={'가입 금액'}
                 infoContent={
                     productType === 'deposit'
-                        ? `${amount.toLocaleString()}원`
-                        : `${payment.toLocaleString()}원 / 턴`
+                        ? `${amount.toLocaleString()}🥕`
+                        : `${payment.toLocaleString()}🥕 / 턴`
                 }
             />
             <ProductJoinInfo infoTitle={'만기 회차'} infoContent={`${endTurn}턴`} />

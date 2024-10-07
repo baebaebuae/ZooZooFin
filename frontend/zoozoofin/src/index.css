@@ -50,5 +50,6 @@
         margin: 0;
         max-width: 360px;
         max-height: 640px;
+        caret-color: transparent;
     }
 }

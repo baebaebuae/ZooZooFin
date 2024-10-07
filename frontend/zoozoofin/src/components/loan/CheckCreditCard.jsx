@@ -82,12 +82,12 @@ const CheckCreditCard = ({
                     <InfoBlock>
                         <ContentBlock>
                             <ContentTitle>대출 가능 금액(한도)</ContentTitle>
-                            <ContentBox>{loanLimit}원</ContentBox>
+                            <ContentBox>{loanLimit}🥕</ContentBox>
                         </ContentBlock>
                         <ContentBlock>
                             <ContentTitle>잔여 대출 가능 금액</ContentTitle>
                             {/* <ContentBox>{`${loanAvailable.toLocaleSting()}원`}</ContentBox> */}
-                            <ContentBox>{loanAvailable}원</ContentBox>
+                            <ContentBox>{loanAvailable}🥕</ContentBox>
                         </ContentBlock>
                     </InfoBlock>
                     <Button
