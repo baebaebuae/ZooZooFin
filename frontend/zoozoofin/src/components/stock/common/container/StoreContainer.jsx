@@ -86,6 +86,34 @@ export const CurrentStockState = styled.div`
         }
     }};
 `;
+export const RateState = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    padding: 1px 0px;
+    border-radius: 30px;
+    background-color: ${({ rate, theme }) => {
+        if (rate > 0) {
+            return '#FBEBEE';
+        } else if (rate < 0) {
+            return '#E8F3FF';
+        } else {
+            return theme.colors.primary;
+        }
+    }};
+    font-size: 12px;
+    color: ${({ current, theme }) => {
+        if (current === 'up') {
+            return '#FF3E3E';
+        } else if (current === 'down') {
+            return theme.colors.primaryDeep;
+        } else {
+            return theme.colors.primaryDeep;
+        }
+    }};
+`;
 
 export const ButtonContainer = styled.div`
     display: flex;
