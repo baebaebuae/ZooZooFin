@@ -177,23 +177,23 @@ const Wallet = ({ onClose = () => {} }) => {
   const navigate = useNavigate();
 
   const fallbackData = {
-    daily_charge: 50000,
-    loan_make: 1000000,
-    loan_repay: 50000,
-    stock_buy: 500000,
-    stock_sell: 600000,
-    deposit_make: 200000,
-    deposit_finish: 1000000,
-    savings_make: 100000,
-    savings_pay: 10000,
-    savings_finish: 500000,
-    capital_make: 2000000,
-    capital_repay: 100000
+    dailyCharge: 50000,
+    loanMake: 1000000,
+    loanRepay: 50000,
+    stockBuy: 500000,
+    stockSell: 600000,
+    depositMake: 200000,
+    depositFinish: 1000000,
+    savingsMake: 100000,
+    savingsPay: 10000,
+    savingsFinish: 500000,
+    capitalMake: 2000000,
+    capitalRepay: 100000
   };
 
   const nextDayFallbackData = {
     nextLoanRepayment: 50000,
-    nextSavingsPayment: 200000,
+    nextSavingsRepayment: 200000,
     nextCapitalRepayment: 100000,
   };
 
@@ -275,8 +275,8 @@ const Wallet = ({ onClose = () => {} }) => {
       icon: BankRacconIcon,
       height: '180px',
       transactions: [
-        { label: '은행대출', value: walletData.loan_make },
-        { label: '은행대출이자', value: -walletData.loan_repay }
+        { label: '은행대출', value: walletData.loanMake },
+        { label: '은행대출이자', value: -walletData.loanRepay }
       ]
     },
     {
@@ -285,7 +285,7 @@ const Wallet = ({ onClose = () => {} }) => {
       icon: WorkIcon,
       height: '180px', 
       transactions: [
-        { label: '근무수당', value: walletData.daily_charge }
+        { label: '근무수당', value: walletData.dailyCharge }
       ]
     },
     {
@@ -294,8 +294,8 @@ const Wallet = ({ onClose = () => {} }) => {
       icon: StockIcon,
       height: '200px',
       transactions: [
-        { label: '주식 매수', value: -walletData.stock_buy },
-        { label: '주식 매도', value: walletData.stock_sell }
+        { label: '주식 매수', value: -walletData.stockBuy },
+        { label: '주식 매도', value: walletData.stockSell }
       ]
     },
     {
@@ -304,11 +304,11 @@ const Wallet = ({ onClose = () => {} }) => {
       icon: BankPigIcon,
       height: '235px',
       transactions: [
-        { label: '적금만기', value: walletData.savings_finish },
-        { label: '예금만기', value: walletData.deposit_finish },
-        { label: '적금신규등록', value: -walletData.savings_make },
-        { label: '예금신규등록', value: -walletData.deposit_make },
-        { label: '적금', value: -walletData.savings_pay },
+        { label: '적금만기', value: walletData.savingsFinish },
+        { label: '예금만기', value: walletData.depositFinish },
+        { label: '적금신규등록', value: -walletData.savingsMake },
+        { label: '예금신규등록', value: -walletData.depositMake },
+        { label: '적금', value: -walletData.savingsPay },
       ]
     },
     {
@@ -317,8 +317,8 @@ const Wallet = ({ onClose = () => {} }) => {
       icon: CapitalIcon,
       height: '170px', 
       transactions: [
-        { label: '캐피탈대출', value: walletData.capital_make },
-        { label: '캐피탈원금상환', value: -walletData.capital_repay }
+        { label: '캐피탈대출', value: walletData.capitalMake },
+        { label: '캐피탈원금상환', value: -walletData.capitalRepay }
       ]
     },
   ];
@@ -339,7 +339,7 @@ const Wallet = ({ onClose = () => {} }) => {
       icon: BankPigIcon,
       height: '140px',
       transactions: [
-        { label: '적금', value: -nextDayData.nextSavingsPayment }
+        { label: '적금', value: -nextDayData.nextSavingsRepayment }
       ]
     },
     {
