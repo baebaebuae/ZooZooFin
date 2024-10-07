@@ -195,7 +195,7 @@ const Lender = () => {
         }
 
         if (currentScript.content === 'END') {
-            return navigate('/myroom');
+            return navigate('/map');
         }
     }
 };

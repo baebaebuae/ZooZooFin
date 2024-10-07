@@ -108,12 +108,12 @@ export const Capital = () => {
 
             <LaptopInfo
                 infoTitle={'대출 원금'}
-                infoContent={`${data.capitalOrigin.toLocaleString()}원`}
+                infoContent={`${data.capitalOrigin.toLocaleString()}🥕`}
             />
             <LaptopInfo infoTitle={'대출 상환일'} infoContent={`${30}턴`} />
             <LaptopInfo
                 infoTitle={'상환할 금액'}
-                infoContent={`${data.capitalRestMoney.toLocaleString()}원`}
+                infoContent={`${data.capitalRestMoney.toLocaleString()}🥕`}
                 color={'warn'}
             />
 

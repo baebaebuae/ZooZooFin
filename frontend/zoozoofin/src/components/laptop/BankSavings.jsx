@@ -163,10 +163,10 @@ export const BankSavings = () => {
                                             {saving.warning && <WarnBadge></WarnBadge>}
                                         </ProductTitleBox>
                                         <ProductTurn>
-                                            {saving.payment.toLocaleString()} 원 / 턴
+                                            {saving.payment.toLocaleString()} 🥕 / 턴
                                         </ProductTurn>
                                         <ProductAmount>
-                                            {saving.amount.toLocaleString()} 원
+                                            {saving.amount.toLocaleString()} 🥕
                                         </ProductAmount>
                                     </ProductBox>
                                     {index + 1 != data.savingsList.length && (
@@ -199,7 +199,7 @@ export const BankSavings = () => {
                                                 </BadgeStroke>
                                             </ProductTitleBox>
                                             <ProductAmount>
-                                                {deposit.amount.toLocaleString()} 원
+                                                {deposit.amount.toLocaleString()} 🥕
                                             </ProductAmount>
                                         </ProductBox>
                                         {index + 1 != data.depositList.length && (

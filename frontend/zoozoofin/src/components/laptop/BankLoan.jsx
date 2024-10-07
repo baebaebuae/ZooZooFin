@@ -150,7 +150,7 @@ export const BankLoan = () => {
             <InfoBox
                 color={'primaryDeep'}
                 infoTitle={'님의 대출 총 금액'}
-                infoContent={`${data.totalLoan.toLocaleString()}원`}
+                infoContent={`${data.totalLoan.toLocaleString()}🥕`}
             ></InfoBox>
             <AppContent>대출 리스트</AppContent>
             <LoanListTitleBox>
@@ -171,7 +171,7 @@ export const BankLoan = () => {
                             <LoanListContentBox>
                                 <LoanListContent>{loan.loanNumber}</LoanListContent>
                                 <LoanListAmount>
-                                    {loan.loanAmount.toLocaleString()}원
+                                    {loan.loanAmount.toLocaleString()}🥕
                                 </LoanListAmount>
                                 <LoanListContent>{loan.loanRate}%</LoanListContent>
                             </LoanListContentBox>
@@ -192,7 +192,7 @@ export const BankLoan = () => {
                                 <LoanListDetailBoxContent>
                                     <LoanListDetailNotice>이번 턴에서</LoanListDetailNotice>
                                     <LoanListDetailNoticeAmount>
-                                        ????????원
+                                        ????????🥕
                                     </LoanListDetailNoticeAmount>
                                     <LoanListDetailNotice>상환 예정</LoanListDetailNotice>
                                 </LoanListDetailBoxContent>

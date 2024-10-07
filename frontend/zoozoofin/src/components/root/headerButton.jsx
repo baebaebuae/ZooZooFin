@@ -20,6 +20,7 @@ import FlagRoundedIcon from '@mui/icons-material/FlagRounded';
 import MissionDashboard from '../../components/Mission';
 import { useNavigate } from 'react-router-dom';
 
+import { useMusicStore } from '@stores/useMusicStore.js';
 
 const HeaderButton = styled.div`
     display: flex;
@@ -73,14 +74,20 @@ export const HeaderButtons = ({ currentTurn }) => {
 
 export const HeaderHamburgerButton = () => {
     const [anchorEl, setAnchorEl] = useState(null);
-    const [isMusicOn, setIsMusicOn] = useState(true);
     const [isMissionOpen, setIsMissionOpen] = useState(false);
     const [isCharacterHistoryOpen, setIsCharacterHistoryOpen] = useState(false);
+
+    const isMusicOn = useMusicStore((state) => state.isMusicOn);
+    const toggleMusic = useMusicStore((state) => state.toggleMusic);
+
     const open = Boolean(anchorEl);
-    const navigate = useNavigate(); 
+
+    const navigate = useNavigate();
+
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
+
     const handleClose = () => {
         setAnchorEl(null);
     };
@@ -121,11 +128,11 @@ export const HeaderHamburgerButton = () => {
                     </ListItemIcon>
                     Mission
                 </MenuItem>
-                <MenuItem onClick={() => setIsMusicOn(!isMusicOn)}>
+                <MenuItem onClick={toggleMusic}>
                     <ListItemIcon>
-                        {isMusicOn ? <VolumeUpRoundedIcon /> : <VolumeOffRoundedIcon />}
+                        {isMusicOn ? <VolumeOffRoundedIcon /> : <VolumeUpRoundedIcon />}
                     </ListItemIcon>
-                    BGM ON/OFF
+                    {isMusicOn ? 'BGM OFF' : 'BGM ON'}
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
                     <ListItemIcon>
@@ -134,10 +141,7 @@ export const HeaderHamburgerButton = () => {
                     로그아웃
                 </MenuItem>
             </Menu>
-            <MissionDashboard 
-                isOpen={isMissionOpen} 
-                onClose={() => setIsMissionOpen(false)} 
-            />
+            <MissionDashboard isOpen={isMissionOpen} onClose={() => setIsMissionOpen(false)} />
         </>
     );
 };

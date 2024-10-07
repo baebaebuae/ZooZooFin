@@ -89,7 +89,7 @@ export const LoanCheckCard = ({
             <ProductJoinInfo
                 isLoan={true}
                 infoTitle={'가입 금액'}
-                infoContent={`${loanAmount.toLocaleString()}원`}
+                infoContent={`${loanAmount.toLocaleString()}🥕`}
             />
             <ProductJoinInfo
                 isLoan={true}
@@ -105,7 +105,7 @@ export const LoanCheckCard = ({
             <ProductJoinInfo
                 isLoan={true}
                 infoTitle={'상환 예상 금액'}
-                infoContent={`${expectedFinalAmount.toLocaleString()}원`}
+                infoContent={`${expectedFinalAmount.toLocaleString()}🥕`}
             />
             <StampButton onClick={() => setIsModalOpen(true)} />
 

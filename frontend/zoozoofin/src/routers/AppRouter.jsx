@@ -33,10 +33,14 @@ import AppRanking from '@pages/laptop/AppRanking';
 
 import CharacterHistory from '../pages/CharacterHistory';
 
+import defaultMusic from '@assets/music/default.mp3';
 import startMusic from '@assets/music/start.mp3';
+import bankMusic from '@assets/music/bank.mp3';
+import capitalMusic from '@assets/music/lender.mp3';
 import VolumeOffRoundedIcon from '@mui/icons-material/VolumeOffRounded';
 import VolumeUpRoundedIcon from '@mui/icons-material/VolumeUpRounded';
 
+import { useMusicStore } from '@stores/useMusicStore.js';
 
 const Background = styled.div`
     width: 360px;
@@ -50,31 +54,45 @@ const Background = styled.div`
 `;
 
 const MusicToggleButton = styled.button`
-    z-index: 1000;
+    position: absolute;
     width: 100%;
     text-align: right;
+    z-index: 1000;
     background-color: transparent;
     border-color: transparent;
+
+    :focus {
+        border: none;
+        outline: none;
+    }
 `;
 
 const AppRouter = () => {
     const [backgroundimage, setBackgroundimage] = useState(null);
-    const [isMusicOn, setIsMusicOn] = useState(false);
-    const [currentMusic, setCurrentMusic] = useState(null);
+    const [currentMusic, setCurrentMusic] = useState(startMusic);
     const audioRef = useRef(null);
 
-    // musicList 지정 **LATER**
-    // const musicList = {
-    //     '/start': startMusic,
-    //     '/bank': bankMusic,
-    // }
+    const isMusicOn = useMusicStore((state) => state.isMusicOn);
+    const toggleMusic = useMusicStore((state) => state.toggleMusic);
+
+    // musicList 지정
+    const musicList = {
+        start: startMusic,
+        bank: bankMusic,
+        lender: capitalMusic,
+        default: defaultMusic,
+    };
 
     //  페이지 넘어갈 때 해당하는 페이지의 pathname을 가져와서 currentMusic에 상태 저장 후 bgm 재생
     // pathname에 해당하는 Music이 없으면 Default BGM 지정 **LATER**
-    // const setMusic = (pathname) => {
-    //     const selectedMusic = musicList[pathname] || defaultMusic;
-    //     setCurrentMusic(selectedMusic)
-    // }
+    const setMusic = (pathname) => {
+        const selectedMusic = musicList[pathname] || musicList.default;
+        // pathname으로 해당하는 음악 땄는데, 재생되어오던 음악과 다르면 새로 재생
+        // if (selectedMusic !== currentMusic || currentMusic === defaultMusic) {
+        if (selectedMusic !== currentMusic) {
+            setCurrentMusic(selectedMusic);
+        }
+    };
 
     const location = useLocation();
 
@@ -84,50 +102,38 @@ const AppRouter = () => {
         setBackgroundimage(image.default);
     };
 
+    useEffect(() => {
+        !isMusicOn && audioRef.current.pause();
+    });
+
     // 페이지 넘어갔을 때 path에서 바로 pathname 찾기
     useEffect(() => {
         const pathname = location.pathname.split('/')[1];
 
         if (pathname) {
             getBackgroundimage(pathname);
-            // setMusic(pathname) // defaultMusic 사용하는 함수 **LATER**
+            setMusic(pathname);
+
+            // defaultMusic으로 계속 연결되는 경우에는 useEffect 안에서 바꾸지 않음
+            if (isMusicOn && audioRef.current && currentMusic != defaultMusic) {
+                audioRef.current.load();
+
+                if (isMusicOn) {
+                    audioRef.current.play();
+                } else {
+                    audioRef.current.pause();
+                }
+            }
         }
-    }, [location.pathname]);
+    }, [location.pathname, isMusicOn, currentMusic]);
 
-    const playAudio = () => {
-        audioRef.current.load();
-        // pause 후 다시 play하면 음원 처음부터 재생되도록 load
-        audioRef.current.loop = true;
-        audioRef.current.play();
-    };
-
-    const pauseAudio = () => {
-        audioRef.current.pause();
-    };
-
-    const handleMusic = () => {
-        // 보안 정책 상 첫 사용자 인터랙션 없이는 음악이 자동으로 재생되지 않는다고 함
-        // 최초의 클릭이 필요 -> 시작 화면 입장하고 테스트
-        setIsMusicOn(!isMusicOn);
-        isMusicOn ? pauseAudio() : playAudio();
-    };
     return (
         <>
             <Background backgroundimage={backgroundimage} />
-            <MusicToggleButton onClick={handleMusic}>
-                {isMusicOn ? <VolumeOffRoundedIcon /> : <VolumeUpRoundedIcon />}
-            </MusicToggleButton>
-            <audio ref={audioRef} src={startMusic} />
-            {/* <audio ref={audioRef} src={currentMusic} /> **TEST LATER**/}
 
-            {/* controls = 오디오 컨트롤러 박스 나타나게 함 */}
-            {/* loop = 반복재생 */}
-            {/* source = 사용할 음악 파일 소스 */}
-            {/* autoPlay는 테스트중 */}
-            <audio loop autoPlay={true} id="audioContainer">
-                <source src={startMusic} type="audio/mp3" />
-                {/* <source src={bankMusic} type="audio/mp3" /> */}
-                {/* <source src={tutorialMusic} type="audio/mp3" /> */}
+            {/* pathname에 따라 음악 바뀌도록 설정 */}
+            <audio ref={audioRef} loop autoPlay={true}>
+                <source src={currentMusic} type="audio/mp3" />
             </audio>
 
             <Routes>

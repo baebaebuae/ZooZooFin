@@ -101,14 +101,14 @@ export const ProductTerminationDetailCard = ({
             {payment && productType === 'savings' && (
                 <ProductJoinInfo
                     infoTitle={'납입 금액'}
-                    infoContent={`${amount.toLocaleString()}원`}
+                    infoContent={`${amount.toLocaleString()}🥕`}
                 />
             )}
 
             <ProductJoinInfo
                 infoTitle={'지급액'}
                 // finalReturn -> 현재 해지시 예상 금액 변수 추가되면 수정
-                infoContent={`${deleteReturn.toLocaleString()}원`}
+                infoContent={`${deleteReturn.toLocaleString()}🥕`}
             />
             <StampButton onClick={() => setIsModalOpen(true)} />
             {isModalOpen && (

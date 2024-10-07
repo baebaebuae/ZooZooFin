@@ -31,12 +31,6 @@ const HeaderUserBlock = styled.div`
     align-items: end;
 `;
 
-const TempWidthLine = styled.div`
-    width: 360px;
-    height: 10px;
-    background-color: black;
-`;
-
 const Header = () => {
     const [isCharOpen, setIsCharOpen] = useState(false);
 

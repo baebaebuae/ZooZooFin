@@ -78,8 +78,8 @@ export const ProductCheckCard = ({
                 infoTitle={'가입 금액'}
                 infoContent={
                     productType === 'savings'
-                        ? `${savingsAmount.toLocaleString()}원 / 턴`
-                        : `${savingsAmount.toLocaleString()}원`
+                        ? `${savingsAmount.toLocaleString()}🥕 / 턴`
+                        : `${savingsAmount.toLocaleString()}🥕`
                 }
             />
             <ProductJoinInfo
@@ -89,7 +89,7 @@ export const ProductCheckCard = ({
             <Divider $isLine={false} />
             <ProductJoinInfo
                 infoTitle={'예상 지급액'}
-                infoContent={`${expectedFinalAmount.toLocaleString()}원`}
+                infoContent={`${expectedFinalAmount.toLocaleString()}🥕`}
             />
             {/* 임의로 캐릭터 능력 추가 금액을 가입 금액을 기준으로 계산해놓음. 실제 추가 금액 얼마인지 확인 */}
             {specialRate > 0 && (

@@ -49,7 +49,7 @@ export const InputBox = ({
             <Input
                 title={title}
                 value={savingsAmount === 0 ? '금액을 입력해줘.' : savingsAmount}
-                unit={isSavings ? ' 원 / 턴' : ' 원'}
+                unit={isSavings ? ' 🥕 / 턴' : ' 🥕'}
                 hasValue={savingsAmount !== 0}
                 onDelete={handleDelete}
             />
@@ -99,7 +99,7 @@ export const InputBoxLoan = ({ title, amount1, amount2, amount3, amount4, onLoan
             <ProductJoinInfo
                 isLoan={true}
                 infoTitle={title}
-                infoContent={`${loanAmount.toLocaleString()} 원`}
+                infoContent={`${loanAmount.toLocaleString()} 🥕`}
             />
 
             <ButtonBlockLoan>

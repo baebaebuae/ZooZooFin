@@ -62,12 +62,12 @@ export const BankSavingsDetail = ({
             </DetailTitleBlock>
             <DetailContentBlock>
                 <LaptopInfo infoTitle={'기준 금리'} infoContent={`${rate}%`} />
-                <LaptopInfo infoTitle={'납입 금액'} infoContent={`${amount.toLocaleString()}원`} />
+                <LaptopInfo infoTitle={'납입 금액'} infoContent={`${amount.toLocaleString()}🥕`} />
                 <LaptopInfo infoTitle={'만기턴'} infoContent={`${endTurn}턴 `} />
                 <Divider $isLine={false} />
                 <LaptopInfo
                     infoTitle={'만기 예상 금액'}
-                    infoContent={`${finalReturn.toLocaleString()}원`}
+                    infoContent={`${finalReturn.toLocaleString()}🥕`}
                     color={'primaryDeep'}
                 />
                 <ExtraInfo

@@ -28,11 +28,11 @@ export const CheckCreditCardMini = ({ loanLimit, loanAvailable, characterCredit,
                 isLoan={true}
                 isEarlyTermination={false}
             ></ProductDetailInfo>
-            <ProductJoinInfo isLoan={true} infoTitle={'대출 한도'} infoContent={`${loanLimit}원`} />
+            <ProductJoinInfo isLoan={true} infoTitle={'대출 한도'} infoContent={`${loanLimit}🥕`} />
             <ProductJoinInfo
                 isLoan={true}
                 infoTitle={'잔여 대출 가능 금액'}
-                infoContent={`${loanAvailable}원`}
+                infoContent={`${loanAvailable}🥕`}
             />
         </CardBlock>
     );

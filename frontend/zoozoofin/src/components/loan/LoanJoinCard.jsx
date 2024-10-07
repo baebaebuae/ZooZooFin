@@ -208,7 +208,7 @@ export const LoanJoinCard = ({ currentTurn, maxAmount, saveLoanInfo, loanRate })
                     infoTitle1={'상환 예상 회차'}
                     infoContent1={`${expectedFinalTurn}턴`}
                     infoTitle2={'상환 예상 금액'}
-                    infoContent2={`${expectedFinalAmount.toLocaleString()} 원`}
+                    infoContent2={`${expectedFinalAmount.toLocaleString()} 🥕`}
                     $isLoan={true}
                     isEarlyTermination={false}
                 ></ProductDetailInfo>
