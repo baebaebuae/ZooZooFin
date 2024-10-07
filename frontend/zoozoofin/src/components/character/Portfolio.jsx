@@ -5,6 +5,7 @@ import CreditBox from '@components/root/creditBox';
 import { Button } from '@components/root/buttons';
 import Chart from 'react-apexcharts';
 import { theme } from "@/styles/theme";
+import { Loading } from '@components/root/loading';
 
 const GlobalStyle = createGlobalStyle`
   @font-face {
@@ -15,7 +16,6 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-// 모달의 padding값 때문에 재설정
 const ModalBackground = styled.div`
   position: fixed;
   top: 0;
@@ -145,11 +145,14 @@ const RedButton = styled(Button)`
 const CreditSection = styled.div`
   margin-bottom: 15px;
   width: 100%;
+  display: flex;
+  justify-content: center;
 `;
 
 const FullWidthCreditBox = styled(CreditBox)`
+  width: 80%;
   .gQkfQu {
-    width: 120% !important;
+    width: 100% !important;
     height: 7px;
     border-radius: 5px;
     background: linear-gradient(
@@ -206,15 +209,6 @@ const PercentageBox = styled.div`
 const PercentValue = styled.span`
   color: ${({ theme }) => theme.colors.primaryDeep};
   font-weight: bold;
-`;
-
-const LoadingIndicator = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  font-size: 18px;
-  color: ${({ theme }) => theme.colors.gray};
 `;
 
 const ChartContainer = styled.div`
@@ -322,11 +316,7 @@ const Portfolio = ({ isOpen, onClose, animalId, animalImage, createdDate }) => {
   if (!isOpen) return null;
 
   if (isLoading) {
-    return (
-      <CustomModal onClose={onClose}>
-        <LoadingIndicator>Loading...</LoadingIndicator>
-      </CustomModal>
-    );
+    return <Loading content="포트폴리오 로딩 중..." />;
   }
 
   const data = {
@@ -356,25 +346,25 @@ const Portfolio = ({ isOpen, onClose, animalId, animalImage, createdDate }) => {
           <CloseButton onClick={onClose}>&times;</CloseButton>
           <Header>
             <CharacterImageContainer>
-              <CharacterImage src={animalImage} alt={characterData.animalName} />
+              <CharacterImage src={animalImage} alt={data.character.animalName} />
               <PortfolioTitle>금융 포트폴리오</PortfolioTitle>
               <CharacterDate>생성일: {new Date(createdDate).toLocaleDateString()}</CharacterDate>
             </CharacterImageContainer>
           </Header>
-          <Subtitle>{characterData.animalHierarchy}</Subtitle>
+          <Subtitle>{data.character.animalHierarchy}</Subtitle>
           <TopSection>
-            <Title title={characterData.animalName}>{characterData.animalName}</Title>
-            <StyledButton size="small" color="primary" title={characterData.animalAbility}>
-              {characterData.animalAbility}
+            <Title title={data.character.animalName}>{data.character.animalName}</Title>
+            <StyledButton size="small" color="primary" title={data.character.animalAbility}>
+              {data.character.animalAbility}
             </StyledButton>
           </TopSection>
           <CreditSection>
-            <FullWidthCreditBox grade={characterData.animalCredit} />
+            <FullWidthCreditBox grade={data.character.animalCredit} />
           </CreditSection>
           <Section>
             <AssetRow>
               <AssetLabel>순자산</AssetLabel>
-              <AssetValue bold>{characterData.totalAmount.toLocaleString()}원</AssetValue>
+              <AssetValue bold>{data.character.totalAmount.toLocaleString()}원</AssetValue>
             </AssetRow>
           </Section>
           <Section>
@@ -382,14 +372,14 @@ const Portfolio = ({ isOpen, onClose, animalId, animalImage, createdDate }) => {
               <AssetRow key={index}>
                 <AssetLabel>{label}</AssetLabel>
                 <AssetValue color={label === '대출' ? theme.colors.warn : undefined}>
-                  {label === '대출' ? '-' : ''}{characterData[['totalAssets', 'totalDeposit', 'totalSavings', 'totalStock', 'totalLoan'][index]].toLocaleString()}원
+                  {label === '대출' ? '-' : ''}{data.character[['totalAssets', 'totalDeposit', 'totalSavings', 'totalStock', 'totalLoan'][index]].toLocaleString()}원
                 </AssetValue>
               </AssetRow>
             ))}
           </Section>
           <SectionTitle>내 투자 성향</SectionTitle>
           <RedButton size="normal" color="warn">
-            {portfolioData.portfolio.investmentStyle}
+            {data.portfolio.portfolio.investmentStyle}
           </RedButton>
           <SectionTitle>나는 이런 비율로 투자했어요.</SectionTitle>
           <ChartContainer>
@@ -403,10 +393,10 @@ const Portfolio = ({ isOpen, onClose, animalId, animalImage, createdDate }) => {
           </ChartContainer>
           <SectionTitle>전체 사용자 대비 내 순위</SectionTitle>
           <PercentageBox>
-            <p>수익률 상위 <PercentValue>{portfolioData.portfolio.ReturnRate}%</PercentValue></p>
+            <p>수익률 상위 <PercentValue>{data.portfolio.portfolio.ReturnRate}%</PercentValue></p>
           </PercentageBox>
           <PercentageBox>
-            <p>총 자금 상위 <PercentValue>{portfolioData.portfolio.totalFundsPercent}%</PercentValue></p>
+            <p>총 자금 상위 <PercentValue>{data.portfolio.portfolio.totalFundsPercent}%</PercentValue></p>
           </PercentageBox>
         </ScrollableContent>
       </CustomModal>

@@ -62,7 +62,7 @@ const Start = () => {
 
     const handleSocialLogin = async (domain) => {
         window.location.href = `${API_URI}/oauth/${domain}`;
-        window.location.href = '/myroom';
+        // window.location.href = '/myroom';
     };
 
     return (

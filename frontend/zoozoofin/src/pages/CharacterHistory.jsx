@@ -6,6 +6,7 @@ import backgroundImage from '@/assets/images/background/start.png';
 import { Button } from '@/components/root/buttons';
 import Portfolio from '../components/character/Portfolio';
 import { useNavigate } from 'react-router-dom'; 
+import { Loading } from '@components/root/loading';
 
 // 캐릭터 이미지 import
 import AnimalType1Image from '@/assets/images/history/1.png';
@@ -26,14 +27,20 @@ const GlobalStyle = createGlobalStyle`
     font-weight: normal;
     font-style: normal;
   }
+
+  body {
+    margin: 0;
+    padding: 0;
+    overflow: ${props => props.modalOpen ? 'hidden' : 'auto'};
+  }
 `;
 
 const PageContainer = styled.div`
   font-family: 'ONE Mobile POP', sans-serif;
-  background-color: white; // 불투명한 흰색 배경 추가
+  background-color: white;
   position: relative;
   min-height: 100%;
-  weight:100%;
+  width: 100%;
 
   &::before {
     content: '';
@@ -134,6 +141,18 @@ const CloseButton = styled.button`
   color: ${({ theme }) => theme.colors.gray};
 `;
 
+const ModalWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+`;
 
 const CharacterHistory = () => {
   const [animalData, setAnimalData] = useState(null);
@@ -175,6 +194,18 @@ const CharacterHistory = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (isPortfolioOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isPortfolioOpen]);
+
   const handleAnimalClick = (animal) => {
     setSelectedAnimal(animal);
     setIsPortfolioOpen(true);
@@ -186,7 +217,7 @@ const CharacterHistory = () => {
   };
 
   const handleGoBack = () => {
-    navigate(-1);  // 이전 페이지로 이동
+    navigate(-1);
   };
 
   if (isLoading) {
@@ -200,7 +231,7 @@ const CharacterHistory = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <GlobalStyle />
+      <GlobalStyle modalOpen={isPortfolioOpen} />
       <PageContainer>
         <ContentWrapper>
           <CloseButton onClick={handleGoBack}>&times;</CloseButton>
@@ -224,7 +255,9 @@ const CharacterHistory = () => {
             );
           })}
         </ContentWrapper>
-        {isPortfolioOpen && selectedAnimal && (
+      </PageContainer>
+      {isPortfolioOpen && selectedAnimal && (
+        <ModalWrapper>
           <Portfolio 
             isOpen={isPortfolioOpen}
             onClose={handleClosePortfolio}
@@ -232,8 +265,8 @@ const CharacterHistory = () => {
             animalImage={animalImages[selectedAnimal.animalTypeId]}
             createdDate={selectedAnimal.createdDate} 
           />
-        )}
-      </PageContainer>
+        </ModalWrapper>
+      )}
     </ThemeProvider>
   );
 };
