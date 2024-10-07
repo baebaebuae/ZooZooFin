@@ -22,7 +22,9 @@ const clearAccessToken = () => localStorage.removeItem('accessToken');
 export const isLoggedIn = () => !!getAccessToken();
 
 export const getApiClient = () => {
+    // const accessToken = TOKEN;
     const accessToken = getAccessToken();
+    console.log(accessToken);
     const refreshToken = getRefreshToken();
     
     if (accessToken) {
