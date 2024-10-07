@@ -5,6 +5,7 @@ import { theme } from "@/styles/theme";
 import backgroundImage from '@/assets/images/background/start.png';
 import { Button } from '@/components/root/buttons';
 import Portfolio from '../components/character/Portfolio';
+import { useNavigate } from 'react-router-dom'; 
 
 // 캐릭터 이미지 import
 import AnimalType1Image from '@/assets/images/history/1.png';
@@ -29,12 +30,30 @@ const GlobalStyle = createGlobalStyle`
 
 const PageContainer = styled.div`
   font-family: 'ONE Mobile POP', sans-serif;
-  background-image: url(${backgroundImage});
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  min-height: 100vh;
+  background-color: white; // 불투명한 흰색 배경 추가
   position: relative;
+  min-height: 100%;
+  weight:100%;
+
+  &::before {
+    content: '';
+    position: fixed; 
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url(${backgroundImage});
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 1;
+    z-index: 1;
+  }
+
+  & > * {
+    position: relative;
+    z-index: 2;
+  }
 `;
 
 const ContentWrapper = styled.div`
@@ -104,11 +123,33 @@ const CustomButton = styled(Button)`
   border: 3px solid white; 
 `;
 
+const CloseButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: ${({ theme }) => theme.colors.gray};
+`;
+
+
 const CharacterHistory = () => {
   const [animalData, setAnimalData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedAnimal, setSelectedAnimal] = useState(null);
   const [isPortfolioOpen, setIsPortfolioOpen] = useState(false);
+  const navigate = useNavigate(); 
+
+  const defaultAnimalData = {
+    animalNumber: 3,
+    animals: [
+      { animalId: 1, animalTypeId: 1, animalName: "토토", animalAssets: 1000000, createdDate: "2024.08.15" },
+      { animalId: 2, animalTypeId: 2, animalName: "삐삐", animalAssets: 2000000, createdDate: "2024.08.15" },
+      { animalId: 3, animalTypeId: 3, animalName: "리치덕", animalAssets: 3000000, createdDate: "2024.08.02" },
+    ]
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -116,17 +157,16 @@ const CharacterHistory = () => {
       try {
         const apiClient = getApiClient();
         const response = await apiClient.get('/member/animal');
-        setAnimalData(response.data);
+        if (response.data && response.data.animals && response.data.animals.length > 0) {
+          setAnimalData(response.data);
+        } else {
+          console.log('No data received from API, using default data');
+          setAnimalData(defaultAnimalData);
+        }
       } catch (error) {
         console.error('Error fetching animal data:', error);
-        setAnimalData({
-          animalNumber: 3,
-          animals: [
-            { animalId: 1, animalTypeId: 1, animalName: "토토", animalAssets: 1000000, createdDate: "2024.08.15" },
-            { animalId: 2, animalTypeId: 2, animalName: "삐삐", animalAssets: 2000000, createdDate: "2024.08.15" },
-            { animalId: 3, animalTypeId: 3, animalName: "리치덕", animalAssets: 3000000, createdDate: "2024.08.02" },
-          ]
-        });
+        console.log('Using default data due to error');
+        setAnimalData(defaultAnimalData);
       } finally {
         setIsLoading(false);
       }
@@ -145,6 +185,10 @@ const CharacterHistory = () => {
     setSelectedAnimal(null);
   };
 
+  const handleGoBack = () => {
+    navigate(-1);  // 이전 페이지로 이동
+  };
+
   if (isLoading) {
     return (
       <ThemeProvider theme={theme}>
@@ -159,6 +203,8 @@ const CharacterHistory = () => {
       <GlobalStyle />
       <PageContainer>
         <ContentWrapper>
+          <CloseButton onClick={handleGoBack}>&times;</CloseButton>
+          
           {animalData.animals.map((animal, index) => {
             const CharacterComponent = index === 0 ? Character1 : index === 1 ? Character2 : Character3;
             const ImageComponent = index === 2 ? SmallerCharacterImage : CharacterImage;
