@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Chart from 'react-apexcharts';
 import { X } from 'lucide-react';
+import IconCarrot from '@assets/images/icons/icon_carrot.png';
+import { NormalIcon } from '@components/root/icon';
 
 const ModalOverlay = styled.div`
     position: fixed;
@@ -40,7 +42,7 @@ const CloseButton = styled.button`
 `;
 
 const Title = styled.h2`
-    font-size: 1.5rem; /* 타이틀 텍스트 크기 */
+    font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 1rem;
     text-align: center;
@@ -48,9 +50,9 @@ const Title = styled.h2`
 
 const Subtitle = styled.p`
     font-size: 1.2rem;
-    color: #333; /* 텍스트 색상 어둡게 */
+    color: #333;
     margin-top: 1rem;
-    font-weight: 400; /* 서브타이틀 가독성 개선 */
+    font-weight: 400;
 `;
 
 const Section = styled.div`
@@ -58,7 +60,7 @@ const Section = styled.div`
 `;
 
 const SectionTitle = styled.h3`
-    font-size: 1.3rem; /* 섹션 타이틀 크기 증가 */
+    font-size: 1.3rem;
     font-weight: bold;
     margin-bottom: 1rem;
 `;
@@ -69,14 +71,14 @@ const ChartContainer = styled.div`
 `;
 
 const HighlightText = styled.div`
-    font-size: 1.5rem; /* 강조 텍스트 크기 증가 */
+    font-size: 1.5rem;
     font-weight: bold;
     color: ${({ color }) => color || '#000'};
     margin-top: 0.5rem;
 `;
 
 const TextContent = styled.p`
-    font-size: 1.2rem; /* 일반 텍스트 크기 증가 */
+    font-size: 1.2rem;
     margin-bottom: 1rem;
 `;
 
@@ -85,24 +87,14 @@ const NewsSection = styled.div`
 `;
 
 const NewsContent = styled.p`
-    font-size: 1.2rem; /* 뉴스 내용 크기 증가 */
+    font-size: 1.2rem;
     margin-left: 1.5rem;
 `;
 
-const OpenButton = styled.button`
-    cursor: pointer;
-    border-radius: 5px;
-    &:hover {
-        background-color: #0066cc;
-    }
-`;
-
 const Modal = ({ onClose, data }) => {
-    // 가격을 소숫점을 제거하고 정수형으로 변환
     const formattedPrice = data.price.map((price) => Math.floor(price));
     const formattedPredictedPrice = Math.floor(data.predicted_price);
 
-    // 가장 높은 퍼센트 감정 선택
     const maxSentiment = Math.max(data.positive_ratio, data.negative_ratio, data.neutral_ratio);
     const maxSentimentLabel =
         maxSentiment === data.positive_ratio
@@ -138,7 +130,7 @@ const Modal = ({ onClose, data }) => {
         annotations: {
             points: [
                 {
-                    x: '7', // 예상 주가에 해당하는 마지막 카테고리
+                    x: '7',
                     y: formattedPredictedPrice,
                     marker: {
                         size: 6,
@@ -163,7 +155,7 @@ const Modal = ({ onClose, data }) => {
     const lineSeries = [
         {
             name: '주가 데이터',
-            data: [...formattedPrice, formattedPredictedPrice], // 소숫점 제거한 price와 predicted_price를 사용
+            data: [...formattedPrice, formattedPredictedPrice],
         },
     ];
 
@@ -173,29 +165,24 @@ const Modal = ({ onClose, data }) => {
                 <CloseButton onClick={onClose}>
                     <X size={24} />
                 </CloseButton>
-                {/* 타이틀 추가 */}
                 <Title>{data.news_title}</Title>
                 <hr />
-                {/* 파이 차트를 상단에 세로로 배치 */}
                 <ChartContainer>
-                    <Chart options={pieOptions} series={pieSeries} type="donut" height={300} />{' '}
-                    {/* 파이 차트 */}
+                    <Chart options={pieOptions} series={pieSeries} type="donut" height={300} />
                 </ChartContainer>
                 <HighlightText color={maxSentimentLabel === '긍정적' ? '#32CD32' : '#FF6347'}>
                     {maxSentimentLabel} {maxSentiment.toFixed(2)}%
                 </HighlightText>
-                <Subtitle>{data.summary}</Subtitle> {/* 감정 분석 요약 */}
+                <Subtitle>{data.summary}</Subtitle>
                 <hr />
-                {/* 주가 예상 그래프 */}
                 <Section>
                     <SectionTitle>주가 예상 그래프</SectionTitle>
-                    <TextContent>예상 주가: {formattedPredictedPrice}원</TextContent>
+                    <TextContent>예상 주가: {formattedPredictedPrice}<NormalIcon icon={IconCarrot}/></TextContent>
                     <ChartContainer>
                         <Chart options={lineOptions} series={lineSeries} type="line" height={300} />
                     </ChartContainer>
                 </Section>
                 <hr />
-                {/* 뉴스 분석 */}
                 <NewsSection>
                     <div>
                         <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>긍정적인 문장</h3>
@@ -219,17 +206,7 @@ const Modal = ({ onClose, data }) => {
     );
 };
 
-const StockHint = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const openModal = () => {
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
-
+const StockHint = ({ isOpen, onClose }) => {
     const apiData = {
         news_title: '지분 860억 받고…삼성전자 기술 中에 빼돌린 전 직원들 구속 기소',
         negative_ratio: 46.58,
@@ -264,13 +241,9 @@ const StockHint = () => {
         price: [98000, 98100, 98300, 98000, 98200, 98000],
     };
 
-    return (
-        <>
-            <h1>StockHint</h1>
-            <OpenButton onClick={openModal}>HINT</OpenButton>
-            {isModalOpen && <Modal onClose={closeModal} data={apiData} />}
-        </>
-    );
+    if (!isOpen) return null;
+
+    return <Modal onClose={onClose} data={apiData} />;
 };
 
 export default StockHint;

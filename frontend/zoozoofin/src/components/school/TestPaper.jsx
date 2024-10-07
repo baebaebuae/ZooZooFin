@@ -15,6 +15,7 @@ const VITE_ACCESS_TOKEN = import.meta.env.VITE_ACCESS_TOKEN;
 const Paper = styled.div`
   background-color: #f9f9f9;
   min-height: 500px;
+  width: 80%;
   margin: 2px auto;
   border: 1px solid #ccc;
   padding: 20px;
