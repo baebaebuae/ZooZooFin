@@ -1,6 +1,9 @@
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import IconFrog from '@assets/images/icons/icon_frog.png';
+
+import { getApiClient } from '@stores/apiClient';
 
 const Container = styled.div`
     width: 100%;
@@ -49,7 +52,9 @@ const LoanListNickname = styled(LoanListContent)`
 `;
 
 export const Ranking = () => {
-    const data = {
+    const [rankingData, setRankingData] = useState([]);
+
+    const tempData = {
         updateTime: '2021-01-01T00:00',
         rankList: [
             {
@@ -79,6 +84,23 @@ export const Ranking = () => {
         ],
     };
 
+    const fetchRankingData = async () => {
+        const apiClient = getApiClient();
+
+        try {
+            const res = await apiClient.get('/ranking'); // '/home/ranking' 아니고 '/ranking'?
+            console.log(res.data.body);
+            setRankingData(res.data.body);
+        } catch (error) {
+            setRankingData(tempData);
+            return error;
+        }
+    };
+
+    useEffect(() => {
+        fetchRankingData();
+    }, []);
+
     return (
         <Container>
             <AppContent>랭킹</AppContent>
@@ -88,7 +110,7 @@ export const Ranking = () => {
                 <LoanListTitle>총 자산</LoanListTitle>
             </LoanListTitleBox>
 
-            {data.rankList.map((rank, index) => {
+            {rankingData.rankList.map((rank, index) => {
                 return (
                     <LoanListBox key={index}>
                         <LoanListContent>{rank.rank}</LoanListContent>

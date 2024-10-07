@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import { InfoBox } from '@components/root/infoBox';
@@ -7,6 +7,8 @@ import { BadgeStroke, WarnBadge } from '@components/root/badge';
 import IconFrog from '@assets/images/icons/icon_frog.png';
 
 import { BankSavingsDetail } from './BankSavingsDetail';
+
+import { getApiClient } from '@stores/apiClient';
 
 const Container = styled.div`
     width: 100%;
@@ -71,6 +73,7 @@ const ProductAmount = styled.div`
 
 export const BankSavings = () => {
     const [isSelected, setIsSelected] = useState(false);
+    const [savingsData, setSavingsData] = useState([]);
     const [selectedData, setSelectedData] = useState(null);
 
     const handleSelect = (data) => {
@@ -78,7 +81,7 @@ export const BankSavings = () => {
         setSelectedData(data);
     };
 
-    const data = {
+    const tempData = {
         totalMoney: 12750000,
         depositList: [
             {
@@ -124,6 +127,23 @@ export const BankSavings = () => {
         ],
     };
 
+    const fetchSavingsData = async () => {
+        const apiClient = getApiClient();
+
+        try {
+            const res = await apiClient.get('/home/my-deposit-savings');
+            console.log(res.data.body);
+            setSavingsData(res.data.body);
+        } catch (error) {
+            setSavingsData(tempData);
+            return error;
+        }
+    };
+
+    useEffect(() => {
+        fetchSavingsData();
+    }, []);
+
     return (
         <Container>
             {isSelected ? (
@@ -143,12 +163,12 @@ export const BankSavings = () => {
                     <InfoBox
                         color={'primaryDeep'}
                         infoTitle={'님의 저축 총 자산'}
-                        infoContent={`${data.totalMoney.toLocaleString()}원`}
+                        infoContent={`${savingsData.totalMoney.toLocaleString()}원`}
                     ></InfoBox>
                     <AppContent>가입한 상품</AppContent>
                     <AppContentH2>적금</AppContentH2>
-                    {data.savingsList.length > 0 &&
-                        data.savingsList.map((saving, index) => {
+                    {savingsData.savingsList.length > 0 &&
+                        savingsData.savingsList.map((saving, index) => {
                             return (
                                 <div key={index}>
                                     <ProductBox onClick={() => handleSelect(saving)}>
@@ -169,21 +189,21 @@ export const BankSavings = () => {
                                             {saving.amount.toLocaleString()} 🥕
                                         </ProductAmount>
                                     </ProductBox>
-                                    {index + 1 != data.savingsList.length && (
+                                    {index + 1 != saving.savingsList.length && (
                                         <Divider $isLine={true} />
                                     )}
                                 </div>
                             );
                         })}
 
-                    {data.savingsList.length === 0 && (
+                    {savingsData.savingsList.length === 0 && (
                         <BlankBlock>아직 가입한 적금 상품이 없어요.</BlankBlock>
                     )}
 
                     <AppContentH2>예금</AppContentH2>
-                    {data.depositList.length > 0 && (
+                    {savingsData.depositList.length > 0 && (
                         <>
-                            {data.depositList.map((deposit, index) => {
+                            {savingsData.depositList.map((deposit, index) => {
                                 return (
                                     <div key={index}>
                                         <ProductBox onClick={() => handleSelect(deposit)}>
@@ -202,7 +222,7 @@ export const BankSavings = () => {
                                                 {deposit.amount.toLocaleString()} 🥕
                                             </ProductAmount>
                                         </ProductBox>
-                                        {index + 1 != data.depositList.length && (
+                                        {index + 1 != savingsData.depositList.length && (
                                             <Divider $isLine={true} />
                                         )}
                                     </div>
@@ -210,7 +230,7 @@ export const BankSavings = () => {
                             })}
                         </>
                     )}
-                    {data.depositList.length === 0 && (
+                    {savingsData.depositList.length === 0 && (
                         <BlankBlock>아직 가입한 예금 상품이 없어요.</BlankBlock>
                     )}
                 </>
