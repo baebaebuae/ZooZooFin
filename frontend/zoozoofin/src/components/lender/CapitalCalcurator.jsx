@@ -7,12 +7,13 @@ import styled from 'styled-components';
 import { Card } from '@components/root/card';
 import { Button } from '@components/root/buttons';
 
-import LoanRepayTable from '@components/loan/LoanRepayTable';
-
 // component로 빼면 import 수정
-import { RepayTypeBlock } from './LoanJoinCard';
+import { RepayTypeBlock } from '@components/loan/LoanJoinCard';
+
 import { TurnSliderInterest } from '@components/root/slider';
 import { InputBoxLoan } from '@components/inputBox';
+
+import CapitalRepayTable from '@components/lender/CapitalRepayTable';
 
 const InfoTitle = styled.div`
     font-size: 18px;
@@ -59,7 +60,7 @@ const ClosedButton = styled(Button)`
     border-radius: 100%;
 `;
 
-export const LoanCalculator = ({ repayType, handleCloseModal }) => {
+const CapitalCalturator = ({ repayType, handleCloseModal }) => {
     const [isModalOpen, setIsModalOpen] = useState(true);
     const [isResultOpen, setIsResultOpen] = useState(false);
 
@@ -83,7 +84,8 @@ export const LoanCalculator = ({ repayType, handleCloseModal }) => {
     };
 
     const handleClick = () => {
-        setIsResultOpen(!isResultOpen);
+        setIsResultOpen(!isResultOpen); // 이전 상태를 기반으로 업데이트
+        console.log(isResultOpen);
     };
 
     return (
@@ -95,19 +97,17 @@ export const LoanCalculator = ({ repayType, handleCloseModal }) => {
                             <ClosedButton onClick={closeModal}>X</ClosedButton>
                         </ButtonRow>
                         <InfoTitle>대출 이자 계산기</InfoTitle>
-                        <RepayTypeBlock
-                            loanType={
-                                repayType === '만기' ? '만기일시상환' : `${repayType}균등상환`
-                            }
-                        />
+                        <RepayTypeBlock loanType={'만기일시상환'} />
                         <InputBoxLoan
                             title={'대출원금'}
                             amount1={500000}
                             amount2={1000000}
                             amount3={5000000}
                             amount4={10000000}
-                            // maxAmount={100000000}
-                            onLoanAmountChange={handleLoanAmountChange}
+                            // 상태 업데이트가 잘못된 시점에 일어나지 않도록 적절한 이벤트에서만 호출
+                            onLoanAmountChange={(newAmount) => {
+                                handleLoanAmountChange(newAmount);
+                            }}
                             isSavings={false}
                         ></InputBoxLoan>{' '}
                         <TurnSliderInterest
@@ -127,20 +127,12 @@ export const LoanCalculator = ({ repayType, handleCloseModal }) => {
                         <Button size={'normal'} color={'primary'} onClick={handleClick}>
                             계산하기
                         </Button>
-                        {/* <div>대출원금: {loanAmount}</div>
-                        <div>대출기간: {loanPeriod}</div>
-                        <div>대출금리: {loanRate}</div> */}
-                        {isResultOpen && (
-                            <LoanRepayTable
-                                repayType={repayType}
-                                loanAmount={loanAmount}
-                                loanPeriod={loanPeriod}
-                                loanRate={loanRate}
-                            />
-                        )}
+                        {isResultOpen && <h1>표 구현중...</h1>}
                     </CardBlock>
                 </ModalBackground>
             )}
         </>
     );
 };
+
+export default CapitalCalturator;

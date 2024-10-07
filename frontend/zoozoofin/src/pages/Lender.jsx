@@ -16,14 +16,34 @@ import JoinCapital from '@components/lender/actions/JoinCapital.jsx';
 import CapitalCheck from '@components/lender/actions/CheckCapital.jsx';
 import useCapitalStore from '@components/lender/store/CapitalStore.js';
 
+import Boar from '@/assets/images/characters/characters/Boar.gif';
+
+import ExplainBubble from '@components/lender/ExplainBubble.jsx';
+import { CapitalModal } from '@components/lender/CapitalModal';
+
 const CapitalBlock = styled.div`
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 10px 0px;
     gap: 21px;
     margin: 0px auto;
-    width: 95%;
+    width: 360px;
+    height: 640px;
+    overflow: hidden;
+`;
+
+const ImageContainer = styled.div`
+    position: fixed;
+    bottom: 30%;
+    right: -30%;
+`;
+
+const NpcImage = styled.img`
+    width: 65%;
+    height: 65%;
+    object-fit: contain;
 `;
 
 const BubbleBlock = styled(Bubble)`
@@ -40,7 +60,7 @@ const ConfirmButton = styled.button`
     justify-content: center;
 
     font-family: 'OneMobilePop';
-    font-size: 20px;
+    font-size: 18px;
     align-items: center;
     border-radius: 28px;
     cursor: pointer;
@@ -51,7 +71,6 @@ const ConfirmButton = styled.button`
     bottom: 7%;
     padding: 10px 20px;
     width: 62%;
-    gap: 5px;
 
     // 가운데 배치
     left: 50%;
@@ -88,14 +107,10 @@ const Lender = () => {
     }, [scripts, currentId]);
 
     const handleResponseClick = (nextScript) => {
-        if (currentScript.scriptId === 14 && !nextScript) {
-            console.log('설명 컴포넌트로 전환 예정.');
-        } else {
-            if (!nextScript) {
-                console.error('다음 스크립트 ID가 없습니다');
-            }
-            setCurrentId(nextScript);
+        if (!nextScript) {
+            console.error('다음 스크립트 ID가 없습니다');
         }
+        setCurrentId(nextScript);
     };
 
     const [isLoading, setIsLoading] = useState(true);
@@ -116,6 +131,25 @@ const Lender = () => {
     // 총 대출 금액
     const { loanAmount } = useCapitalStore();
 
+    // script 14 설명 모달을 위한 코드
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [indexModal, setIndexModal] = useState(null);
+
+    // 설명 모달을 여는 함수
+    const openModal = (index) => {
+        if (index < 4) {
+            setIsModalOpen(true);
+            setIndexModal(index);
+        } else if (index === 4) {
+            handleResponseClick(15);
+        }
+    };
+
+    // 설명 모달을 닫는 함수
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
     // 로딩 중일 때 Loader 컴포넌트 렌더링
     if (isLoading || !currentScript) {
         return <Loader loadingText={'캐피탈로 입장하는 중...'} />;
@@ -127,31 +161,54 @@ const Lender = () => {
                 ? currentScript.responses.map((response) => ({ ...response, selection: null }))
                 : currentScript.responses;
 
-        return (
-            <>
-                <CapitalBlock>
-                    <BubbleBlock
-                        npc={'멧과장'}
-                        type={currentScript.type}
-                        content={currentScript.content}
-                        responses={responses}
-                        onClick={handleResponseClick}
-                    />
-                </CapitalBlock>
-                {currentScript.scriptId === 6 && (
-                    <ConfirmButton
-                        color={'tertiaryDeep'}
-                        onClick={() => {
-                            handleResponseClick(7);
-                        }}
-                    >
-                        {loanAmount.toLocaleString()}
-                        <NormalIcon icon={IconCarrot} />
-                        준비
-                    </ConfirmButton>
-                )}
-            </>
-        );
+        // 설명 모달을 처리하기 위한 조건문 작성
+        if (currentScript.scriptId === 14) {
+            return (
+                <>
+                    {isModalOpen && <CapitalModal index={indexModal} onClose={closeModal} />}
+                    <CapitalBlock>
+                        <ImageContainer>
+                            <NpcImage src={Boar} />
+                        </ImageContainer>
+                        <ExplainBubble
+                            npc={'멧과장'}
+                            type={currentScript.type}
+                            content={currentScript.content}
+                            responses={responses}
+                            onClick={openModal}
+                        />
+                    </CapitalBlock>
+                </>
+            );
+        } else {
+            return (
+                <>
+                    {isModalOpen && <CapitalModal onClose={closeModal} />}
+                    <CapitalBlock>
+                        <ImageContainer>
+                            <NpcImage src={Boar} />
+                        </ImageContainer>
+                        <BubbleBlock
+                            npc={'멧과장'}
+                            type={currentScript.type}
+                            content={currentScript.content}
+                            responses={responses}
+                            onClick={handleResponseClick}
+                        />
+                    </CapitalBlock>
+                    {currentScript.scriptId === 6 && (
+                        <ConfirmButton
+                            color={'tertiaryDeep'}
+                            onClick={() => {
+                                handleResponseClick(7);
+                            }}
+                        >
+                            {loanAmount.toLocaleString()}🥕 준비
+                        </ConfirmButton>
+                    )}
+                </>
+            );
+        }
     }
 
     const handleProductConfirmation = () => {
