@@ -56,23 +56,8 @@ const useStockStore = create((set) => ({
         }
     },
 
-    updateUserProfile: (newData) => {
-        set((state) => ({
-            ...state,
-            ...newData,
-        }));
-    },
-
-    resetStore: () => {
-        set({
-            animalImg: '',
-            animalAssets: 0,
-            memberGoldBar: 0,
-            turn: 1,
-            isLoading: false,
-            error: null,
-        });
-    },
+    // resetStore 구현 중
+    resetStore: () => {},
 }));
 
 export default useStockStore;
