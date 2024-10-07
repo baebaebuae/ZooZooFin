@@ -25,20 +25,31 @@ const ModalOverlay = styled.div`
 `;
 
 const ModalContent = styled.div`
-    background-color: #ffe8b8;
+    background-color: #F4D49B;
     border-radius: 20px;
-    padding: 20px;
+    border: 7px solid white;
     width: 90%;
     max-width: 300px;
     max-height: 80vh;
     overflow: hidden;
     font-family: 'ONE Mobile POP', sans-serif;
     position: relative;
+    display: flex;
+    flex-direction: column;
+`;
+
+const ModalHeader = styled.div`
+    padding: 20px 20px 0;
+    position: relative;
+`;
+
+const ModalBody = styled.div`
+    padding: 0 20px 20px;
+    flex-grow: 1;
+    overflow-y: auto;
 `;
 
 const ScrollableContent = styled.div`
-    max-height: calc(80vh - 40px);
-    overflow-y: auto;
     padding-right: 20px;
     margin-right: -20px;
 
@@ -74,8 +85,8 @@ const Title = styled.h2`
     text-shadow:
         -2px -2px 0 #fff,
         2px -2px 0 #fff,
-        -1px 1px 0 #fff,
-        1px 1px 0 #fff;
+        -2px 2px 0 #fff,
+        2px 2px 0 #fff;
 `;
 
 const Subtitle = styled.p`
@@ -86,13 +97,32 @@ const Subtitle = styled.p`
     font-weight: bold;
 `;
 
+const CompletedMissionTitle = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+    color: #8b4513;
+    font-weight: bold;
+    font-size: 14px;
+
+    &::before,
+    &::after {
+        content: "";
+        flex-grow: 1;
+        background-color: #8b4513;
+        height: 1px;
+        margin: 0 10px;
+    }
+`;
+
 const MissionList = styled.ul`
     list-style-type: none;
     padding: 0;
 `;
 
 const MissionItem = styled.li`
-    background-color: #ffffff;
+    background-color: #FFFAE9;
     border-radius: 15px;
     padding: 15px;
     margin-bottom: 10px;
@@ -119,13 +149,14 @@ const CompletedIcon = styled.img`
 
 const CloseButton = styled.button`
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 0px;
+    right: 0px;
     background: none;
     border: none;
     font-size: 24px;
     cursor: pointer;
     color: #8b4513;
+    z-index: 10;
 `;
 
 const MissionDashboard = ({ isOpen, onClose }) => {
@@ -146,7 +177,7 @@ const MissionDashboard = ({ isOpen, onClose }) => {
     const completedMissions = missions.filter((mission) => mission.completed);
 
     const handleMissionClick = (page) => {
-        window.location.href = `/${page}`; // 페이지 이동
+        window.location.href = `/${page}`;
     };
 
     if (!isOpen) return null;
@@ -156,41 +187,47 @@ const MissionDashboard = ({ isOpen, onClose }) => {
             <GlobalStyle />
             <ModalOverlay onClick={onClose}>
                 <ModalContent onClick={(e) => e.stopPropagation()}>
-                    <CloseButton onClick={onClose}>&times;</CloseButton>
-                    <ScrollableContent>
-                        <Title>미션</Title>
-                        {incompleteMissions.length > 0 && (
-                            <>
-                                <Subtitle>미션을 완료하고 골드를 받아보세요!</Subtitle>
-                                <MissionList>
-                                    {incompleteMissions.map((mission, index) => (
-                                        <MissionItem
-                                            key={index}
-                                            onClick={() => handleMissionClick(mission.page)}
-                                        >
-                                            <MissionText>{mission.name}</MissionText>
-                                        </MissionItem>
-                                    ))}
-                                </MissionList>
-                            </>
-                        )}
-                        {completedMissions.length > 0 && (
-                            <>
-                                <Subtitle>----------------- 완료한 미션 -----------------</Subtitle>
-                                <MissionList>
-                                    {completedMissions.map((mission, index) => (
-                                        <MissionItem
-                                            key={index}
-                                            onClick={() => handleMissionClick(mission.page)}
-                                        >
-                                            <CompletedIcon src={CorrectSVG} />
-                                            <MissionText>{mission.name}</MissionText>
-                                        </MissionItem>
-                                    ))}
-                                </MissionList>
-                            </>
-                        )}
-                    </ScrollableContent>
+                    <ModalHeader>
+                        <CloseButton onClick={onClose}>&times;</CloseButton>
+                    </ModalHeader>
+                    <ModalBody>
+                    <Title>미션</Title>
+                        <ScrollableContent>
+                            {incompleteMissions.length > 0 && (
+                                <>
+                                    <Subtitle>미션을 완료해보세요!</Subtitle>
+                                    <MissionList>
+                                        {incompleteMissions.map((mission, index) => (
+                                            <MissionItem
+                                                key={index}
+                                                onClick={() => handleMissionClick(mission.page)}
+                                            >
+                                                <MissionText>{mission.name}</MissionText>
+                                            </MissionItem>
+                                        ))}
+                                    </MissionList>
+                                </>
+                            )}
+                            {completedMissions.length > 0 && (
+                                <>
+                                    <CompletedMissionTitle>
+                                        완료한 미션
+                                    </CompletedMissionTitle>
+                                    <MissionList>
+                                        {completedMissions.map((mission, index) => (
+                                            <MissionItem
+                                                key={index}
+                                                onClick={() => handleMissionClick(mission.page)}
+                                            >
+                                                <CompletedIcon src={CorrectSVG} />
+                                                <MissionText>{mission.name}</MissionText>
+                                            </MissionItem>
+                                        ))}
+                                    </MissionList>
+                                </>
+                            )}
+                        </ScrollableContent>
+                    </ModalBody>
                 </ModalContent>
             </ModalOverlay>
         </>
