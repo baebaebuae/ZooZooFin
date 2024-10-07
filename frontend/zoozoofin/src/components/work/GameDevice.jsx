@@ -2,94 +2,129 @@ import React, {useState, useEffect} from 'react'
 import styled from 'styled-components'
 import GameOverModal from './GameOverModal'
 import TimeBar from './TimeBar'
-import leftBtn from '@assets/images/work/Arrow_drop_left.png'
-import rightBtn from '@assets/images/work/Arrow_drop_right.png'
-import OrangeLeftBtn from '@assets/images/work/orangeLeftBtn.svg?react'
-import OrangeRightBtn from '@assets/images/work/orangeRightBtn.svg?react'
+
+import BtnSvg from '@assets/images/work/button.svg?react'
+import BlackCarrot from '@assets/images/work/bad_carrot.svg?react'
+import GoldCarrot from '@assets/images/work/gold_carrot.svg?react'
+import Carrot from '@assets/images/work/good_carrot.svg?react'
+import BasketIcon from '@assets/images/work/bag-dynamic-color.svg?react'
+
 
 const GameContainer = styled.div`
-  position: relative;
-  width: 300px;
-  height: 400px;
-  background-color: #f0f0f0;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 270px;
+  height: 385px;
   margin: 0 auto;
-  border: 2px solid black;
+  transform: translate(44px, 40px);
 `
 const Basket = styled.div`
   position: absolute;
-  bottom: 0;
-  width: 100px;
-  height: 20px;
-  background-color: blue;
+  bottom: -8px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  margin: 0;
 `
 const Object = styled.div`
   position: absolute;
   width: 20px;
   height: 20px;
-  background-color: ${(props) => props.$carrot ? props.$carrot : 'blue'};
   border-radius: 50%;
 `
 const ButtonContainer = styled.div`
-  margin: 10px auto;
+  position: absolute;
+  top: 405px;
+  margin: auto;
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 30px;
+  transform: translate(27%);
 `
-const LeftBtn = styled(OrangeLeftBtn)`
-  width: 30px;
-  height: 30px;
+const Btn = styled(BtnSvg)`
+  width: 100px;
+  cursor: pointer;
+  &:active {
+    transform: scale(0.95);
+  }
 `
-const RightBtn = styled(OrangeRightBtn)`
-  width: 30px;
-  height: 30px;
+const BasketSvg = styled(BasketIcon)`
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  margin: 0;
+`
+const Info = styled.div`
+  color: white;
+  font-family: 'neodgm_code';
+  text-align: end;
+  margin: 0 8px;
+  z-index: 1;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  > svg {
+    /* border: 1px solid black; */
+    height: 20px;
+    width: 20px;
+    margin-bottom: 2px;
+  }
 `
 
-const GameDevice = ({gameOver, setScore, time}) => {
-  const [basketX, setBasketX] = useState(100)
-  const [objectScore, setObjectScore] = useState(Math.floor(Math.random() * 10))
-  const [objectX, setObjectX] = useState(Math.random() * 300)
-  const [objectY, setObjectY] = useState(0)
-  const [carrot, setCarrot] = useState("red")
-
-  // mouse event
+const GameDevice = ({isGameActive, gameOver, time}) => {
+  const [basketX, setBasketX] = useState(110)
+  const [score, setScore] = useState(0);
   const [intervalId, setIntervalId] = useState(null);
+
+  const [objects, setObjects] = useState([]);
 
   // 당근 점수 랜덤으로 구현 -> 랜덤 비율 존재해야함
   // 꽝:당근:황금당근 = 1:8:1
-
+  const createObject = () => {
+    const objectX = Math.random() * 240;
+    const objectScore = Math.floor(Math.random() * 10);
+    const carrot = objectScore === 0 ? 'black' : objectScore === 9 ? 'gold' : 'red';
+    
+    return { id: Date.now(), x: objectX, y: 0, carrot };
+  }
+  
    // 물체 떨어지기
    useEffect(() => {
-    const interval = setInterval(async() => {
-        if (!gameOver){
-          setObjectY((prevY) => prevY + 5);
-        if (objectY > 380) {
-          resetObjectPosition();
-        }
-    }
-      // 충돌 판정 (물체가 바구니 안에 들어왔는지 확인)
-      if (objectY > 350 && objectX > basketX && objectX < basketX + 100) {
-        updateScore();
-        resetObjectPosition();
+    const interval = setInterval(() => {
+      if (!gameOver && isGameActive) {
+        // 각 물체의 위치 업데이트
+        setObjects((prevObjects) =>
+          prevObjects.map((obj) => ({ ...obj, y: obj.y + 5 }))
+        );
+
+        // 충돌 체크
+        setObjects((prevObjects) =>
+          prevObjects.filter((obj) => {
+            if (obj.y > 320 && obj.x > basketX - 25 && obj.x < basketX + 25) {
+              updateScore(obj.carrot);
+              return false; // 충돌한 물체는 제거
+            }
+            return obj.y <= 350; // 화면을 벗어난 물체는 제거
+          })
+        );
       }
     }, 25);
     return () => clearInterval(interval);
-  }, [objectY, objectX, basketX, gameOver]);
-
-  // 당근 위치 리셋
-  const resetObjectPosition = () => {
-    setObjectY(0);
-    setObjectX(Math.random() * 300);
-    
-    const newScore = Math.floor(Math.random() * 10);
-    setObjectScore(newScore);
-
-    const newCarrot = newScore === 0 ? 'black' : newScore === 9 ? 'gold' : 'red';
-
-    setCarrot(newCarrot);
-  };
+  }, [isGameActive, basketX, gameOver, objects]);
+  
+  // 새로운 물체를 일정 간격으로 생성
+  useEffect(() => {
+    const spawnInterval = setInterval(() => {
+      if (!gameOver && isGameActive) {
+        setObjects((prevObjects) => [...prevObjects, createObject()]);
+      }
+    }, 1000); // 1초마다 새로운 물체 생성
+    return () => clearInterval(spawnInterval);
+  }, [isGameActive, gameOver]);
 
   // 점수 업데이트
-  const updateScore = () => {
+  const updateScore = (carrot) => {
     if (carrot === 'black') {
       setScore((prevScore) => Math.max(prevScore - 1000000, 0));
     } else if (carrot === 'gold') {
@@ -98,17 +133,18 @@ const GameDevice = ({gameOver, setScore, time}) => {
       setScore((prevScore) => prevScore + 100000);
     }
   };
+
   // 바구니 이동
   const moveBasket = (dir) => {
-    if (!gameOver && dir === 'left') {
+    if (!gameOver && isGameActive && dir === 'left') {
       const leftInterval = setInterval(() => {
         setBasketX((prevX) => Math.max(prevX - 10, 0));
       }, 100);
       setIntervalId(leftInterval);
     }
-    if (!gameOver && dir === "right") {
+    if (!gameOver && isGameActive && dir === "right") {
       const rightInterval = setInterval(() => {
-        setBasketX((prevX) => Math.min(prevX + 10, 200));
+        setBasketX((prevX) => Math.min(prevX + 10, 220));
       }, 100);
       setIntervalId(rightInterval);
     }
@@ -121,24 +157,47 @@ const GameDevice = ({gameOver, setScore, time}) => {
     }
   };
 
+  const renderCarrot = (carrot) => {
+    if (carrot === 'black') {
+      return <BlackCarrot />
+    }
+    if (carrot === 'gold') {
+      return <GoldCarrot />;
+    }
+    return <Carrot />;
+  }
   return (
     <>
-    <TimeBar time={time}/>
-    <GameContainer>
-      {gameOver && <GameOverModal/>}
-      <Basket style={{ left: `${basketX}px` }} />
-      <Object style={{ top: `${objectY}px`, left: `${objectX}px` }} $carrot={carrot}/>
-    </GameContainer>
-    <ButtonContainer>
-      <LeftBtn onMouseDown={()=>moveBasket("left")}
-        onMouseUp={stopMove}
-        onMouseLeave={stopMove}>
-      </LeftBtn>
-      <RightBtn onMouseDown={()=>moveBasket("right")}
-        onMouseUp={stopMove}
-        onMouseLeave={stopMove}>
-      </RightBtn>
-    </ButtonContainer>
+      <GameContainer>
+        {gameOver && <GameOverModal score={score}/>}
+        <TimeBar time={time}/>
+        
+        <Info>
+          <Carrot/>
+          {score.toLocaleString()}
+        </Info>
+        
+        <Basket style={{ left: `${basketX}px` }}>
+          <BasketSvg />
+        </Basket>
+        
+        {objects.map((obj) => (
+          <Object key={obj.id} style={{ top: `${obj.y}px`, left: `${obj.x}px` }}>
+            {renderCarrot(obj.carrot)}
+          </Object>
+        ))}
+      </GameContainer>
+      <ButtonContainer>
+        <Btn onMouseDown={()=>moveBasket("left")}
+          onMouseUp={stopMove}
+          onMouseLeave={stopMove}>←
+        </Btn>
+        <Btn onMouseDown={()=>moveBasket("right")}
+          onMouseUp={stopMove}
+          onMouseLeave={stopMove}>
+        </Btn>
+      </ButtonContainer>
+    
     </>
   )
 }
