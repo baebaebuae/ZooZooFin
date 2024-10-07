@@ -6,6 +6,8 @@ import { Button } from '@components/root/buttons';
 import Chart from 'react-apexcharts';
 import { theme } from "@/styles/theme";
 import { Loading } from '@components/root/loading';
+import IconCarrot from '@assets/images/icons/icon_carrot.png';
+import { NormalIcon } from '@components/root/icon';
 
 const GlobalStyle = createGlobalStyle`
   @font-face {
@@ -184,6 +186,7 @@ const AssetRow = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 8px;
+  align-items: flex-end;
 `;
 
 const AssetLabel = styled.span`
@@ -364,7 +367,7 @@ const Portfolio = ({ isOpen, onClose, animalId, animalImage, createdDate }) => {
           <Section>
             <AssetRow>
               <AssetLabel>순자산</AssetLabel>
-              <AssetValue bold>{data.character.totalAmount.toLocaleString()}원</AssetValue>
+              <AssetValue bold>{data.character.totalAmount.toLocaleString()}<NormalIcon icon={IconCarrot}/></AssetValue>
             </AssetRow>
           </Section>
           <Section>
@@ -372,7 +375,7 @@ const Portfolio = ({ isOpen, onClose, animalId, animalImage, createdDate }) => {
               <AssetRow key={index}>
                 <AssetLabel>{label}</AssetLabel>
                 <AssetValue color={label === '대출' ? theme.colors.warn : undefined}>
-                  {label === '대출' ? '-' : ''}{data.character[['totalAssets', 'totalDeposit', 'totalSavings', 'totalStock', 'totalLoan'][index]].toLocaleString()}원
+                  {label === '대출' ? '-' : ''}{data.character[['totalAssets', 'totalDeposit', 'totalSavings', 'totalStock', 'totalLoan'][index]].toLocaleString()}<NormalIcon icon={IconCarrot}/>
                 </AssetValue>
               </AssetRow>
             ))}

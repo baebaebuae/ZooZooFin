@@ -5,6 +5,8 @@ import { theme } from "@/styles/theme";
 import { X } from 'lucide-react';
 import { Button } from '@components/root/buttons';
 import { useNavigate } from 'react-router-dom';
+import IconCarrot from '@assets/images/icons/icon_carrot.png';
+import { NormalIcon } from '@components/root/icon';
 
 // Today card background images
 import LoanCardBg from '@/assets/images/wallet/card/today/loan.png';
@@ -165,35 +167,35 @@ const TransactionValue = styled.span`
   font-weight: bold;
 `;
 
-const fallbackData = {
-  daily_charge: 50000,
-  loan_make: 1000000,
-  loan_repay: 50000,
-  stock_buy: 500000,
-  stock_sell: 600000,
-  deposit_make: 200000,
-  deposit_finish: 1000000,
-  savings_make: 100000,
-  savings_pay: 10000,
-  savings_finish: 500000,
-  capital_make: 2000000,
-  capital_repay: 100000
-};
-
-const nextDayFallbackData = {
-  nextLoanRepayment: 50000,
-  nextSavingsPayment: 200000,
-  nextCapitalRepayment: 100000,
-};
-
 const Wallet = ({ onClose = () => {} }) => {
-  const [walletData, setWalletData] = useState(fallbackData);
-  const [nextDayData, setNextDayData] = useState(nextDayFallbackData);
+  const [walletData, setWalletData] = useState(null);
+  const [nextDayData, setNextDayData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('today');
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const navigate = useNavigate();
+
+  const fallbackData = {
+    daily_charge: 50000,
+    loan_make: 1000000,
+    loan_repay: 50000,
+    stock_buy: 500000,
+    stock_sell: 600000,
+    deposit_make: 200000,
+    deposit_finish: 1000000,
+    savings_make: 100000,
+    savings_pay: 10000,
+    savings_finish: 500000,
+    capital_make: 2000000,
+    capital_repay: 100000
+  };
+
+  const nextDayFallbackData = {
+    nextLoanRepayment: 50000,
+    nextSavingsPayment: 200000,
+    nextCapitalRepayment: 100000,
+  };
 
   const handleClose = () => {
     onClose();
@@ -211,15 +213,18 @@ const Wallet = ({ onClose = () => {} }) => {
         if (todayResponse.data && todayResponse.data.body) {
           setWalletData(todayResponse.data.body);
         } else {
+          console.log('No today data received from API, using fallback data');
           setWalletData(fallbackData);
         }
 
         if (nextDayResponse.data && nextDayResponse.data.body) {
           setNextDayData(nextDayResponse.data.body);
         } else {
+          console.log('No next day data received from API, using fallback data');
           setNextDayData(nextDayFallbackData);
         }
       } catch (error) {
+        console.error('Error fetching data:', error);
         setError(error.message);
         setWalletData(fallbackData);
         setNextDayData(nextDayFallbackData);
@@ -259,6 +264,9 @@ const Wallet = ({ onClose = () => {} }) => {
       });
   }, []);
 
+  if (isLoading || !imagesLoaded) {
+    return <div>Loading...</div>;
+  }
 
   const todayCards = [
     {
@@ -345,10 +353,6 @@ const Wallet = ({ onClose = () => {} }) => {
     },
   ];
 
-  if (isLoading || !imagesLoaded) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
@@ -394,7 +398,7 @@ const Wallet = ({ onClose = () => {} }) => {
                       <TransactionItem key={tIndex}>
                         <TransactionLabel>{transaction.label}</TransactionLabel>
                         <TransactionValue>
-                          {transaction.value >= 0 ? '+' : ''}{transaction.value.toLocaleString()}원
+                          {transaction.value >= 0 ? '+' : ''}{transaction.value.toLocaleString()}<NormalIcon icon={IconCarrot}/>
                         </TransactionValue>
                       </TransactionItem>
                     ))}
@@ -417,7 +421,7 @@ const Wallet = ({ onClose = () => {} }) => {
                       <TransactionItem key={tIndex}>
                         <TransactionLabel>{transaction.label}</TransactionLabel>
                         <TransactionValue>
-                          {transaction.value.toLocaleString()}원
+                          {transaction.value.toLocaleString()}<NormalIcon icon={IconCarrot}/>
                         </TransactionValue>
                       </TransactionItem>
                     ))}

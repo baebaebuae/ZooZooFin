@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import IconGold from '@assets/images/icons/icon_gold.png';
-import IconMoney from '@assets/images/icons/icon_money.png';
+import IconCarrot from '@assets/images/icons/icon_carrot.png';
 import { NormalIcon } from '@components/root/icon';
 
 const PropInfoBox = styled.div``;
@@ -13,6 +13,7 @@ const PropValue = styled.div`
 `;
 
 const PropMoney = styled(PropValue)`
+    //background: linear-gradient(180deg, #FFD1A1, #FF8C00);
     background: linear-gradient(180deg, #d1d9d1, #08c600);
     background-clip: text;
     -webkit-background-clip: text;
@@ -36,7 +37,7 @@ export const PropInfo = ({ propMoney, propGold }) => {
                 <PropMoney>
                     {propMoney}
                     {/* 형식 문제로(10,000,000) 문자열 처리되어있음 */}
-                    <NormalIcon icon={IconMoney} />
+                    <NormalIcon icon={IconCarrot}/>
                 </PropMoney>
                 <PropGold>
                     {propGold}

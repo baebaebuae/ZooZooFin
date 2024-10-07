@@ -4,9 +4,12 @@ import { Modal } from '@components/root/modal';
 import { Check, X } from 'lucide-react';
 import { getApiClient } from '@/stores/apiClient';
 import CreditBox from '@components/root/creditBox';
-import { BadgeStroke } from '@components/root/badge';
+import { Button } from '@components/root/buttons';
 import { useNavigate } from 'react-router-dom';
 import { theme } from "@/styles/theme"; //테마 파일(색상코드)
+import IconCarrot from '@assets/images/icons/icon_carrot.png';
+import IconSheep from '@assets/images/icons/icon_sheep.png'
+import { NormalIcon } from '@components/root/icon';
 
 const GlobalStyle = createGlobalStyle`
   @font-face {
@@ -89,13 +92,14 @@ const Title = styled.h2`
   white-space: nowrap;
 `;
 
-const StyledBadgeStroke = styled(BadgeStroke)`
-    font-size: 12px;
-    padding: 2px 8px;
-    max-width: 45%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+
+const StyledButton = styled(Button)`
+  max-width: 45%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border: 3px solid white;
+  font-weight: bold;
 `;
 
 const CreditSection = styled.div`
@@ -174,6 +178,7 @@ const AssetRow = styled.div`
     display: flex;
     justify-content: space-between;
     margin-bottom: 8px;
+    align-items: flex-end;
 `;
 
 const AssetLabel = styled.span`
@@ -191,18 +196,53 @@ const Spacer = styled.div`
   height: 15px;
 `;
 
+const CloseButton = styled.button`
+  position: absolute;
+  top: -5px;
+  right: 0px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: ${({ theme }) => theme.colors.gray};
+`;
+
+
 const CharacterInfo = ({ onClose }) => {
     const [characterData, setCharacterData] = useState(null);
     const navigate = useNavigate();
+
+    // 임시데이터
+    const fallbackData = {
+      animalHierarchy: "당근 알바생",
+      animalName: "토토",
+      animalAbility: "예금우대",
+      animalCredit: 5,
+      isSolveQuizToday: false,
+      isWorkToday: false,
+      totalAmount: 1000000,
+      totalAssets: 500000,
+      totalDeposit: 200000,
+      totalSavings: 200000,
+      totalStock: 100000,
+      totalLoan: 0,
+    };
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const apiClient = getApiClient();
                 const response = await apiClient.get('/animal/info');
-                setCharacterData(response.data.body);
+                if (response.data && response.data.body) {
+                    setCharacterData(response.data.body);
+                } else {
+                    console.log('No data received from API, using fallback data');
+                    setCharacterData(fallbackData);
+                }
             } catch (error) {
                 console.error('Error fetching character data:', error);
+                console.log('Using fallback data due to error');
+                setCharacterData(fallbackData);
             }
         };
 
@@ -233,11 +273,12 @@ const CharacterInfo = ({ onClose }) => {
       <ModalBackdrop onClick={onClose}>
         <StyledModal onClose={onClose} onClick={(e) => e.stopPropagation()}>
           <ModalContent>
+          <CloseButton onClick={onClose}>&times;</CloseButton>
             <Header>
               <Subtitle>{characterData.animalHierarchy}</Subtitle>
               <TopSection>
                 <Title title={characterData.animalName}>{characterData.animalName}</Title>
-                <StyledBadgeStroke title={characterData.animalAbility}>{characterData.animalAbility}</StyledBadgeStroke>
+                <StyledButton size="small" color="primary" title={characterData.animalAbility}>{characterData.animalAbility}</StyledButton>
               </TopSection>
             </Header>
             <CreditSection>
@@ -265,7 +306,7 @@ const CharacterInfo = ({ onClose }) => {
                     onClick={() => handleBadgeClick('quiz')}
                   >
                     <BadgeIcon>
-                      {characterData.isSolveQuizToday ? <Check size={20} color={theme.colors.primary} /> : '✏️'}
+                      {characterData.isSolveQuizToday ? <Check size={20} color={theme.colors.primary} /> : <NormalIcon icon={IconSheep}/>}
                     </BadgeIcon>
                     <BadgeText completed={characterData.isSolveQuizToday} activeColor={theme.colors.primary}>
                       GO
@@ -277,7 +318,7 @@ const CharacterInfo = ({ onClose }) => {
                     onClick={() => handleBadgeClick('work')}
                   >
                     <BadgeIcon>
-                      {characterData.isWorkToday ? <Check size={20} color={theme.colors.orange} /> : '🥕'}
+                      {characterData.isWorkToday ? <Check size={20} color={theme.colors.orange} /> : <NormalIcon icon={IconCarrot}/>}
                     </BadgeIcon>
                     <BadgeText completed={characterData.isWorkToday} activeColor={theme.colors.orange}>
                       GO
@@ -289,30 +330,30 @@ const CharacterInfo = ({ onClose }) => {
             <AssetSection>
               <AssetRow>
                 <AssetLabel>순자산</AssetLabel>
-                <AssetValue bold>{characterData.totalAmount.toLocaleString()}원</AssetValue>
+                <AssetValue bold>{characterData.totalAmount.toLocaleString()}<NormalIcon icon={IconCarrot}/></AssetValue>
               </AssetRow>
             </AssetSection>
             <Spacer />
             <AssetSection>
               <AssetRow>
                 <AssetLabel>현금</AssetLabel>
-                <AssetValue>{characterData.totalAssets.toLocaleString()}원</AssetValue>
+                <AssetValue>{characterData.totalAssets.toLocaleString()}<NormalIcon icon={IconCarrot}/></AssetValue>
               </AssetRow>
               <AssetRow>
                 <AssetLabel>예금</AssetLabel>
-                <AssetValue>{characterData.totalDeposit.toLocaleString()}원</AssetValue>
+                <AssetValue>{characterData.totalDeposit.toLocaleString()}<NormalIcon icon={IconCarrot}/></AssetValue>
               </AssetRow>
               <AssetRow>
                 <AssetLabel>적금</AssetLabel>
-                <AssetValue>{characterData.totalSavings.toLocaleString()}원</AssetValue>
+                <AssetValue>{characterData.totalSavings.toLocaleString()}<NormalIcon icon={IconCarrot}/></AssetValue>
               </AssetRow>
               <AssetRow>
                 <AssetLabel>주식</AssetLabel>
-                <AssetValue>{characterData.totalStock.toLocaleString()}원</AssetValue>
+                <AssetValue>{characterData.totalStock.toLocaleString()}<NormalIcon icon={IconCarrot}/></AssetValue>
               </AssetRow>
               <AssetRow>
                 <AssetLabel>대출</AssetLabel>
-                <AssetValue color={theme.colors.warn}>-{characterData.totalLoan.toLocaleString()}원</AssetValue>
+                <AssetValue color={theme.colors.warn}>-{characterData.totalLoan.toLocaleString()}<NormalIcon icon={IconCarrot}/></AssetValue>
               </AssetRow>
             </AssetSection>
           </ModalContent>
