@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useStore, useAnimalStore } from '../store';
-import useStockStore from '@components/stock/common/store/StockStore';
 
 import Bubble from '@components/root/bubble';
 
@@ -11,15 +10,9 @@ import styled from 'styled-components';
 import StockChannel from '@components/stock/stockList/StockChannel';
 import StockBuy from '@components/stock/stockList/StockBuy';
 import StockSell from '@components/stock/stockList/StockSell';
-import { StockOrder } from '@components/stock/stockList/StockOrder';
 import StockResult from '@components/stock/stockList/StockResult';
-import StockDetail from '@components/stock/stockList/StockDetail';
 
 import Frog from '@/assets/images/characters/characters/Frog.gif';
-
-// 첫 진입시 환영 컴포넌트
-
-// 턴별 화면 전환 예정 - 240926
 
 const SampleBlock = styled.div`
     display: flex;
