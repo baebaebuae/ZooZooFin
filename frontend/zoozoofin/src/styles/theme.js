@@ -21,5 +21,8 @@ export const theme = {
         billRedBack: '#FDE8CD',
         billBlueText: '#20A3CD',
         billRedText: '#FA8271',
+        // work
+        green: '#08C600',
+        lightGreen: '#F0F6F0'
     },
 };
