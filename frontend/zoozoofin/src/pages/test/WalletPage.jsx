@@ -3,10 +3,7 @@ import Wallet from '../../components/Wallet';
 
 const WalletPage = () => {
     return (
-        <>
-            <h1>지갑</h1>
-            <Wallet />
-        </>
+        <Wallet/>
     );
 };
 
