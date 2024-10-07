@@ -1,7 +1,10 @@
 // 말풍선
+import { useState } from 'react';
 import BubbleBlock from '@assets/images/components/bubbleBlock.svg?react';
 import styled from 'styled-components';
 import { BadgeNormal } from './badge';
+
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 
 const BubbleContainer2 = styled.div`
     position: fixed;
@@ -81,6 +84,15 @@ const ResponseSymbol = styled.span`
     margin-right: 5px;
 `;
 
+const NextButtonBlock = styled.div`
+    position: absolute;
+    width: 100%;
+    right: 10%;
+    bottom: 15%;
+    display: flex;
+    justify-content: end;
+`;
+
 export const Bubble = ({ npc, type, content, responses, onClick }) => {
     const parseContent = (content) => {
         const splitLines = content.split(/\n/);
@@ -136,6 +148,11 @@ export const Bubble = ({ npc, type, content, responses, onClick }) => {
                         ))}
                     </ResponseBlock>
                 </BubbleBox>
+                {responses[0].selection === null && (
+                    <NextButtonBlock>
+                        <KeyboardDoubleArrowRightIcon sx={{ fontSize: 36 }} />
+                    </NextButtonBlock>
+                )}
             </BubbleContainer>
         </BubbleContainer2>
     );

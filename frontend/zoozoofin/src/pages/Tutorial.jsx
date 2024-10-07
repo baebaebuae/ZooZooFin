@@ -9,7 +9,7 @@ import TutorialLaptop from '@assets/images/background/tutorial_laptop.png';
 import TutorialHeader from '@assets/images/background/tutorial_header.png';
 import TutorialArrow from '@assets/images/background/tutorial_arrow.png';
 
-import { useStore } from '../store.js';
+import { useStore, useAnimalStore } from '../store.js';
 
 import { useGLTF, OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
@@ -62,6 +62,7 @@ const NameModalMessage = styled.div`
 `;
 
 const NameModalInput = styled.input`
+    caret-color: black;
     width: 150px;
     height: 30px;
     background-color: white;
@@ -111,12 +112,15 @@ const Tutorial = () => {
     const [currentScript, setCurrentScript] = useState(null);
     const [animalName, setAnimalName] = useState(null);
 
+    const { nowAnimal, getAnimalData } = useAnimalStore();
+
     const navigate = useNavigate();
     const location = useLocation();
 
     useEffect(() => {
         setScripts([]); // 스크립트 상태 초기화
-    }, [location.pathname, setScripts]);
+        getAnimalData();
+    }, [location.pathname, setScripts, getAnimalData]);
 
     // scripts 가져오기(비동기)
     useEffect(() => {
@@ -182,8 +186,8 @@ const Tutorial = () => {
 
     if (!currentScript) return <Loader loadingText={'주주시티에 입장하는중'} />;
 
-    // const receivedAnimalTypeId = location.state.animalTypeId;
-    const receivedAnimalTypeId = 1; //임시로 지정
+    const receivedAnimalTypeId = location.state.animalTypeId;
+    // const receivedAnimalTypeId = 1; //임시로 지정
 
     let backgroundImage;
 
@@ -193,6 +197,13 @@ const Tutorial = () => {
         backgroundImage = TutorialHeader;
     } else {
         backgroundImage = MyRoomBackground;
+    }
+
+    if (currentScript.content.includes('${name}')) {
+        currentScript.content = currentScript.content.replace(
+            '${name}',
+            `**${nowAnimal.animalName}**`
+        );
     }
 
     if (currentScript.type === 'action') {
@@ -225,15 +236,18 @@ const Tutorial = () => {
                 );
             case 'END':
                 return navigate('/myroom');
-            case 'ROOM_GUIDE':
+            case '듣고싶은 설명을 골라봐.':
                 return (
-                    <BubbleBlock
-                        npc={'뭉뭉'}
-                        type={currentScript.type}
-                        content={currentScript.content}
-                        responses={currentScript.responses}
-                        onClick={handleResponseClick}
-                    />
+                    <>
+                        <TutorialRoomBackground src={backgroundImage} />;
+                        <BubbleBlock
+                            npc={'뭉뭉'}
+                            type={currentScript.type}
+                            content={currentScript.content}
+                            responses={currentScript.responses}
+                            onClick={handleResponseClick}
+                        />
+                    </>
                 );
             case 'NOTEBOOK_DETAIL':
                 return (
