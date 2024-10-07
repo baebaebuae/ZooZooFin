@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import CorrectSVG from '@assets/images/school/correct.svg?react';
 import IncorrectSVG from '@assets/images/school/incorrect.svg?react';
+import { Button } from '@components/root/buttons';
 
 // 환경 변수 import
 const VITE_URL = import.meta.env.VITE_URL;
@@ -13,7 +14,7 @@ const VITE_ACCESS_TOKEN = import.meta.env.VITE_ACCESS_TOKEN;
 // 시험지 전체 컨테이너
 const Paper = styled.div`
   background-color: #f9f9f9;
-  min-height: 700px;
+  min-height: 500px;
   margin: 2px auto;
   border: 1px solid #ccc;
   padding: 20px;
@@ -252,7 +253,7 @@ QuestionSection.propTypes = {
 
 const TestPaper = () => {
   const [quizData, setQuizData] = useState([]);
-  const [user] = useState({ name: '토 토', date: '2024.09.03' });
+  const [user] = useState({ name: '토 토', date: 'ZooZooCity' });
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [userAnswers, setUserAnswers] = useState({});
