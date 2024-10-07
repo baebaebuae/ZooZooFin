@@ -250,4 +250,38 @@ class AnimalControllerTest {
                         )
                 );
     }
+
+    @Test
+    @DisplayName("퀘스트 조회 - 성공")
+    public void get_quest_success() throws Exception {
+        // given
+
+        // when
+        ResultActions actions = mockMvc.perform(
+                get("/api/v1/animal/quest")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON));
+
+        // then
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.httpStatus").value(ANIMAL_QUEST_SUCCESS.getHttpStatus()))
+                .andExpect(jsonPath("$.message").value(ANIMAL_QUEST_SUCCESS.getMessage()))
+                .andDo(
+                        document("퀘스트 조회",
+                                ResourceSnippetParameters.builder()
+                                        .tag("동물")
+                                        .summary("퀘스트 조회 API")
+                                        .description("퀘스트를 조회할 때 사용하는 API"),
+                                responseFields(
+                                        fieldWithPath("httpStatus").type(JsonFieldType.NUMBER).description("응답 상태코드"),
+                                        fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
+                                        fieldWithPath("body.questList[]").type(JsonFieldType.ARRAY).description("퀘스트 리스트"),
+                                        fieldWithPath("body.questList[].name").type(JsonFieldType.STRING).description("퀘스트명"),
+                                        fieldWithPath("body.questList[].completed").type(JsonFieldType.BOOLEAN).description("클리어 여부"),
+                                        fieldWithPath("body.questList[].page").type(JsonFieldType.STRING).description("분류")
+                                )
+                        )
+                );
+    }
 }

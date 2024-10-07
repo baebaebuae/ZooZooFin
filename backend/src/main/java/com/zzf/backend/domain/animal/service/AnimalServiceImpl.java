@@ -1,9 +1,6 @@
 package com.zzf.backend.domain.animal.service;
 
-import com.zzf.backend.domain.animal.dto.AnimalCreateRequest;
-import com.zzf.backend.domain.animal.dto.AnimalInfoResponse;
-import com.zzf.backend.domain.animal.dto.AnimalPortfolioResponse;
-import com.zzf.backend.domain.animal.dto.AnimalTypeResponse;
+import com.zzf.backend.domain.animal.dto.*;
 import com.zzf.backend.domain.animal.entity.Animal;
 import com.zzf.backend.domain.animal.entity.AnimalType;
 import com.zzf.backend.domain.animal.repository.AnimalRepository;
@@ -24,6 +21,10 @@ import com.zzf.backend.domain.loan.entity.Loan;
 import com.zzf.backend.domain.loan.repository.LoanRepository;
 import com.zzf.backend.domain.portfolio.entity.Portfolio;
 import com.zzf.backend.domain.portfolio.repository.PortfolioRepository;
+import com.zzf.backend.domain.quest.entity.Quest;
+import com.zzf.backend.domain.quest.entity.QuestHistory;
+import com.zzf.backend.domain.quest.repository.QuestHistoryRepository;
+import com.zzf.backend.domain.quest.repository.QuestRepository;
 import com.zzf.backend.domain.savings.entity.Savings;
 import com.zzf.backend.domain.savings.repository.SavingsRepository;
 import com.zzf.backend.global.auth.entity.Member;
@@ -33,6 +34,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.zzf.backend.global.status.ErrorCode.*;
@@ -52,6 +55,8 @@ public class AnimalServiceImpl implements AnimalService {
     private final TurnRecordRepository turnRecordRepository;
     private final WarningRecordRepository warningRecordRepository;
     private final NextTurnRecordRepository nextTurnRecordRepository;
+    private final QuestRepository questRepository;
+    private final QuestHistoryRepository questHistoryRepository;
 
     @Override
     public List<AnimalTypeResponse> getAnimalTypes() {
@@ -209,6 +214,30 @@ public class AnimalServiceImpl implements AnimalService {
                 .totalStock(savingsTotal)
                 .totalLoan(loanTotal)
                 .totalCapital(capitalTotal)
+                .build();
+    }
+
+    @Override
+    public AnimalQuestResponse getAnimalQuest(Long animalId) {
+        Animal animal = animalRepository.findById(animalId)
+                .orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
+
+        List<Quest> questList = questRepository.findAll();
+
+        List<QuestHistory> questHistoryList = questHistoryRepository.findAllByAnimalWithQuest(animal);
+
+        Set<Long> completedQuestIds = questHistoryList.stream()
+                .map(qh -> qh.getQuest().getId())
+                .collect(Collectors.toSet());
+
+        return AnimalQuestResponse.builder()
+                .questList(questList.stream()
+                        .map(quest -> AnimalQuestResponse.Quest.builder()
+                                .name(quest.getName())
+                                .completed(completedQuestIds.contains(quest.getId()))
+                                .page(quest.getPage())
+                                .build())
+                        .toList())
                 .build();
     }
 }

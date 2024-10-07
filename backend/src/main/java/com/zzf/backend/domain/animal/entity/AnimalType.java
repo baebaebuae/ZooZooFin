@@ -6,6 +6,7 @@ import lombok.*;
 
 @Entity
 @Getter
+@Table(name = "animal_type")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AnimalType {
     @Id
