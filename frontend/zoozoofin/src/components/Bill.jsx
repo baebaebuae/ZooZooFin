@@ -127,7 +127,10 @@ const CheckButton = styled.div`
 `;
 
 export const Bill = ({ checkBill }) => {
-    const [billData, setBillData] = useState(null);
+    const [billData, setBillData] = useState([]);
+
+    console.log('hello?');
+    console.log(billData);
 
     const warnTexts = [
         '연체시 해당 상품에 대해 경고 1회 부과됩니다. (노트북 확인)',
@@ -174,7 +177,8 @@ export const Bill = ({ checkBill }) => {
             <BillTitle>고지서</BillTitle>
             <BillWarnBlock>
                 <BillTitleSmall>신규 연체 내역</BillTitleSmall>
-                {billData.warningLoanCount || billData.warningSavingsCount ? (
+
+                {billData && billData.warningLoanCount && billData.warningSavingsCount ? (
                     <>
                         {billData.warningSavingsCount ? (
                             <BillWarnBox>적금 {billData.warningSavingsCount}회</BillWarnBox>

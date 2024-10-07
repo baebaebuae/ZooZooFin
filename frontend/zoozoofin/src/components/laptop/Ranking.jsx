@@ -88,7 +88,7 @@ export const Ranking = () => {
         const apiClient = getApiClient();
 
         try {
-            const res = await apiClient.get('/home/ranking'); // '/home/ranking' 아니고 '/ranking'?
+            const res = await apiClient.get('/ranking'); // '/home/ranking' 아니고 '/ranking'?
             console.log(res.data.body);
             setRankingData(res.data.body);
         } catch (error) {
