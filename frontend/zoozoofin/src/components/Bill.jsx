@@ -178,7 +178,9 @@ export const Bill = ({ checkBill }) => {
             <BillWarnBlock>
                 <BillTitleSmall>신규 연체 내역</BillTitleSmall>
 
-                {billData && billData.warningLoanCount && billData.warningSavingsCount ? (
+                {billData.length > 0 &&
+                billData.warningLoanCount &&
+                billData.warningSavingsCount ? (
                     <>
                         {billData.warningSavingsCount ? (
                             <BillWarnBox>적금 {billData.warningSavingsCount}회</BillWarnBox>
