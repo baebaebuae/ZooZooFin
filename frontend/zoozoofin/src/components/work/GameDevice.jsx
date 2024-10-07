@@ -35,7 +35,7 @@ const Object = styled.div`
 `
 const ButtonContainer = styled.div`
   position: absolute;
-  top: 405px;
+  top: 380px;
   margin: auto;
   display: flex;
   justify-content: center;
@@ -189,11 +189,16 @@ const GameDevice = ({isGameActive, gameOver, time}) => {
       </GameContainer>
       <ButtonContainer>
         <Btn onMouseDown={()=>moveBasket("left")}
+          onTouchStart={()=>moveBasket("left")}
           onMouseUp={stopMove}
-          onMouseLeave={stopMove}>←
+          onTouchEnd={stopMove}
+          onMouseLeave={stopMove}>
         </Btn>
-        <Btn onMouseDown={()=>moveBasket("right")}
+        <Btn 
+          onMouseDown={()=>moveBasket("right")}
+          onTouchStart={()=>moveBasket("right")}
           onMouseUp={stopMove}
+          onTouchEnd={stopMove}
           onMouseLeave={stopMove}>
         </Btn>
       </ButtonContainer>

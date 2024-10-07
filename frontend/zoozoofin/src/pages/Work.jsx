@@ -26,11 +26,11 @@ const Work = () => {
         setOpenModal(true)
     }
     const handleGameExit = () => {
-        navigate('/map')
+    navigate('/map')
     }
     return (
         <>
-        {openModal && <GameDescription/>}
+        {openModal && <GameDescription setOpenModal={setOpenModal}/>}
             <ButtonContainer>
                 <GameButton
                     emoji="🥕"

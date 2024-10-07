@@ -5,6 +5,8 @@ import DeviceImg from '@assets/images/work/device.png'
 
 const Container = styled.div`
     display: flex;
+    position: absolute;
+    top: 30px;
 `;
 const Device = styled.img`
     width: 350px;
