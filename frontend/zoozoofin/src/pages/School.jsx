@@ -1,37 +1,43 @@
-import React, { useRef, useState, Suspense, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Bubble from '@components/root/bubble';
 import styled from 'styled-components';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useGLTF, OrbitControls } from '@react-three/drei';
-import { Canvas } from '@react-three/fiber';
+import Sheep from '@/assets/images/characters/characters/Sheep.gif';
 
 const SchoolContainer = styled.div`
     display: flex;
-    justify-content: start;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     width: 360px;
     height: 640px;
+    position: relative;
+    overflow: hidden; 
+`;
+
+const ImageContainer = styled.div`
+    position: absolute;
+    bottom: 32%;
+    right: -17%;
+    width: 100%;
+    height: 40%;
+
+`;
+
+const SheepImage = styled.img`
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
 `;
 
 const BubbleBlock = styled(Bubble)`
-    position: fixed;
-    bottom: 0;
-    right: 0;
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    z-index: 1; 
 `;
-
-const NPCModel = () => {
-    const modelRef = useRef();
-    const { scene } = useGLTF('/models/mungmung.glb');
-
-    return (
-        <primitive
-            object={scene}
-            scale={1.3}
-            ref={modelRef}
-            position={[0.4, -2, -0.3]}
-            rotation={[0, Math.PI / 6, 0]}
-        />
-    );
-};
 
 const School = () => {
     const [name, setName] = useState('토토');
@@ -81,38 +87,9 @@ const School = () => {
 
     return (
         <SchoolContainer>
-            <Canvas>
-                <axesHelper args={[200, 200, 200]} />
-                <Suspense fallback={null}>
-                    <ambientLight intensity={2.2} color="#fbf8ef" />
-                    <pointLight
-                        castShadow
-                        color="#ffffff"
-                        intensity={10}
-                        position={[0, 1, 3]}
-                        distance={0}
-                    />
-                    <pointLight
-                        castShadow
-                        color="#ffffff"
-                        intensity={10}
-                        position={[4, 1, 2]}
-                        distance={0}
-                    />
-                    <NPCModel />
-                    <OrbitControls
-                        enableZoom={false}
-                        enablePan={false}
-                        enableRotate={true}
-                        minDistance={2}
-                        maxDistance={7}
-                        maxPolarAngle={Math.PI / 2}
-                        minPolarAngle={Math.PI / 3}
-                        maxAzimuthAngle={Math.PI / 2}
-                        minAzimuthAngle={Math.PI / 5}
-                    />
-                </Suspense>
-            </Canvas>
+            <ImageContainer>
+                <SheepImage src={Sheep} alt="Sheep Teacher" />
+            </ImageContainer>
             <BubbleBlock
                 npc={'양티처'}
                 type={'dialogue'}

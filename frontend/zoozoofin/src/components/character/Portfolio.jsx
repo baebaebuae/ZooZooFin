@@ -257,36 +257,28 @@ const CharacterDate = styled.div`
 `;
 
 const Portfolio = ({ isOpen, onClose, animalId, animalImage, createdDate }) => {
-  const [characterData, setCharacterData] = useState(null);
   const [portfolioData, setPortfolioData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const fallbackData = {
-    characterData: {
-      animalName: "토토",
-      animalHierarchy: "당근 알바생",
-      animalAbility: "예금우대",
-      animalCredit: 5,
-      totalAmount: 1000000,
-      totalAssets: 500000,
-      totalDeposit: 200000,
-      totalSavings: 200000,
-      totalStock: 100000,
-      totalLoan: 0,
-    },
-    portfolioData: {
-      animalName: "토토",
-      animalAsset: 1000000,
-      animalCredit: 650,
-      portfolio: {
-        depositPercent: 20,
-        savingsPercent: 30,
-        stockPercent: 50,
-        investmentStyle: "공격투자형",
-        ending: "string",
-        ReturnRate: 12,
-        totalFundsPercent: 34
-      }
+    animalName: "토토",
+    animalHierarchy: "당근 알바생",
+    animalAbility: "예금우대",
+    animalCredit: 5,
+    totalAmount: 1000000,
+    totalAssets: 500000,
+    totalDeposit: 200000,
+    totalSavings: 200000,
+    totalStock: 100000,
+    totalLoan: 0,
+    portfolio: {
+      depositPercent: 20,
+      savingsPercent: 30,
+      stockPercent: 50,
+      investmentStyle: "공격투자형",
+      ending: "string",
+      ReturnRate: 12,
+      totalFundsPercent: 34
     }
   };
 
@@ -295,19 +287,15 @@ const Portfolio = ({ isOpen, onClose, animalId, animalImage, createdDate }) => {
       setIsLoading(true);
       try {
         const apiClient = getApiClient();
-        const characterResponse = await apiClient.get(`/animal/info/`);
-        setCharacterData(characterResponse.data.body);
-
-        const portfolioResponse = await apiClient.get(`/animal/${animalId}`);
-        if (portfolioResponse.data.body) {
-          setPortfolioData(portfolioResponse.data.body);
+        const response = await apiClient.get(`/animal/${animalId}`);
+        if (response.data && response.data.body) {
+          setPortfolioData(response.data.body);
         } else {
           throw new Error('No portfolio data');
         }
       } catch (error) {
         console.error('Error fetching data:', error);
-        setCharacterData(fallbackData.characterData);
-        setPortfolioData(fallbackData.portfolioData);
+        setPortfolioData(fallbackData);
       } finally {
         setIsLoading(false);
       }
@@ -322,10 +310,7 @@ const Portfolio = ({ isOpen, onClose, animalId, animalImage, createdDate }) => {
     return <Loading content="포트폴리오 로딩 중..." />;
   }
 
-  const data = {
-    character: characterData || fallbackData.characterData,
-    portfolio: portfolioData || fallbackData.portfolioData
-  };
+  const data = portfolioData || fallbackData;
 
   const chartOptions = {
     chart: { type: 'pie' },
@@ -336,9 +321,9 @@ const Portfolio = ({ isOpen, onClose, animalId, animalImage, createdDate }) => {
   };
 
   const chartSeries = [
-    data.portfolio.portfolio.depositPercent,
-    data.portfolio.portfolio.savingsPercent,
-    data.portfolio.portfolio.stockPercent
+    data.portfolio.depositPercent,
+    data.portfolio.savingsPercent,
+    data.portfolio.stockPercent
   ];
 
   return (
@@ -349,25 +334,25 @@ const Portfolio = ({ isOpen, onClose, animalId, animalImage, createdDate }) => {
           <CloseButton onClick={onClose}>&times;</CloseButton>
           <Header>
             <CharacterImageContainer>
-              <CharacterImage src={animalImage} alt={data.character.animalName} />
+              <CharacterImage src={animalImage} alt={data.animalName} />
               <PortfolioTitle>금융 포트폴리오</PortfolioTitle>
               <CharacterDate>생성일: {new Date(createdDate).toLocaleDateString()}</CharacterDate>
             </CharacterImageContainer>
           </Header>
-          <Subtitle>{data.character.animalHierarchy}</Subtitle>
+          <Subtitle>{data.animalHierarchy}</Subtitle>
           <TopSection>
-            <Title title={data.character.animalName}>{data.character.animalName}</Title>
-            <StyledButton size="small" color="primary" title={data.character.animalAbility}>
-              {data.character.animalAbility}
+            <Title title={data.animalName}>{data.animalName}</Title>
+            <StyledButton size="small" color="primary" title={data.animalAbility}>
+              {data.animalAbility}
             </StyledButton>
           </TopSection>
           <CreditSection>
-            <FullWidthCreditBox grade={data.character.animalCredit} />
+            <FullWidthCreditBox grade={data.animalCredit} />
           </CreditSection>
           <Section>
             <AssetRow>
               <AssetLabel>순자산</AssetLabel>
-              <AssetValue bold>{data.character.totalAmount.toLocaleString()}<NormalIcon icon={IconCarrot}/></AssetValue>
+              <AssetValue bold>{data.totalAmount.toLocaleString()}<NormalIcon icon={IconCarrot}/></AssetValue>
             </AssetRow>
           </Section>
           <Section>
@@ -375,14 +360,14 @@ const Portfolio = ({ isOpen, onClose, animalId, animalImage, createdDate }) => {
               <AssetRow key={index}>
                 <AssetLabel>{label}</AssetLabel>
                 <AssetValue color={label === '대출' ? theme.colors.warn : undefined}>
-                  {label === '대출' ? '-' : ''}{data.character[['totalAssets', 'totalDeposit', 'totalSavings', 'totalStock', 'totalLoan'][index]].toLocaleString()}<NormalIcon icon={IconCarrot}/>
+                  {label === '대출' ? '-' : ''}{data[['totalAssets', 'totalDeposit', 'totalSavings', 'totalStock', 'totalLoan'][index]].toLocaleString()}<NormalIcon icon={IconCarrot}/>
                 </AssetValue>
               </AssetRow>
             ))}
           </Section>
           <SectionTitle>내 투자 성향</SectionTitle>
           <RedButton size="normal" color="warn">
-            {data.portfolio.portfolio.investmentStyle}
+            {data.portfolio.investmentStyle}
           </RedButton>
           <SectionTitle>나는 이런 비율로 투자했어요.</SectionTitle>
           <ChartContainer>
@@ -396,10 +381,10 @@ const Portfolio = ({ isOpen, onClose, animalId, animalImage, createdDate }) => {
           </ChartContainer>
           <SectionTitle>전체 사용자 대비 내 순위</SectionTitle>
           <PercentageBox>
-            <p>수익률 상위 <PercentValue>{data.portfolio.portfolio.ReturnRate}%</PercentValue></p>
+            <p>수익률 상위 <PercentValue>{data.portfolio.ReturnRate}%</PercentValue></p>
           </PercentageBox>
           <PercentageBox>
-            <p>총 자금 상위 <PercentValue>{data.portfolio.portfolio.totalFundsPercent}%</PercentValue></p>
+            <p>총 자금 상위 <PercentValue>{data.portfolio.totalFundsPercent}%</PercentValue></p>
           </PercentageBox>
         </ScrollableContent>
       </CustomModal>
