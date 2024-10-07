@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "stock")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Stock extends BaseEntity {
+public class Stock {
 
     @Id
     @Column(name = "stock_id")
@@ -22,6 +22,10 @@ public class Stock extends BaseEntity {
     @NotNull
     @Column(name = "stock_type")
     private String stockType;
+
+    @NotNull
+    @Column(name = "stock_original_name")
+    private String stockOriginalName;
 
     @NotNull
     @Column(name = "stock_name")
@@ -48,8 +52,9 @@ public class Stock extends BaseEntity {
     private String stockField;
 
     @Builder
-    public Stock(String stockType, String stockName, String stockCode, String stockInfo, String stockDescription, String stockImg, String stockField) {
+    public Stock(String stockType, String stockOriginalName, String stockName, String stockCode, String stockInfo, String stockDescription, String stockImg, String stockField) {
         this.stockType = stockType;
+        this.stockOriginalName = stockOriginalName;
         this.stockName = stockName;
         this.stockCode = stockCode;
         this.stockInfo = stockInfo;

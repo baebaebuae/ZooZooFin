@@ -1,6 +1,5 @@
 package com.zzf.backend.domain.stock.entity;
 
-import com.zzf.backend.global.base.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -14,7 +13,7 @@ import java.util.Date;
 @Getter
 @Table(name = "news")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class News extends BaseEntity {
+public class News {
 
     @Id
     @Column(name = "news_id")

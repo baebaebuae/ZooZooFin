@@ -2,7 +2,8 @@
 insert into member(id, provider_name, provider_id, username, gold_bar, is_solved_quiz, bank_count,
                    loan_count, stock_count,
                    created_date, modified_date)
-values (10000, 'google', '110717068153166490640', 'b60e8cbc-9c20-4f53-bf68-cfeaf285d3d5', 0, false, 0, 0, 0, now(), now()),
+values (10000, 'google', '110717068153166490640', 'b60e8cbc-9c20-4f53-bf68-cfeaf285d3d5', 0, false, 0, 0, 0, now(),
+        now()),
        (10001, 'naver', 'asdfasdfsadsafdasfd', '913418af-6b2e-11ef-929f-28c5d21eabf4', 0, false, 0, 0, 0, now(), now())
 ;
 
@@ -111,14 +112,11 @@ values (10000, 1, 1, 1000000, 1000000, 1, 50, 49, false, false, 10001, now(), no
 ;
 
 -- Stock
-insert into stock(stock_id, stock_type, stock_name, stock_code, stock_info, stock_description, stock_img, stock_field,
-                  created_date, modified_date)
-values (10000, '국내', '개굴전자', '005930', '개굴전자는 개굴 반도체 개굴', '개굴전자 설명이다 개굴 개굴개굴 반도체 너무 조타 개굴', 'img.url', '제조',
-        now(), now()),
-       (10001, '해외', '해외 테스트', '005931', '해외도 테스트는 해야지', '대체 이 부분을 뭐라고 채워야 잘 채웠다고 소문이 날까?', 'img.url', '제조',
-        now(), now()),
-       (10002, 'ETF', 'ETF 테스트', '005932', 'ETF도 테스트는 해야지', '난 아직도 뭐라고 적어야 할 지 모르겠다.', 'img.url', '제조',
-        now(), now())
+insert into stock(stock_id, stock_type, stock_original_name, stock_name, stock_code, stock_info, stock_description,
+                  stock_img, stock_field)
+values (10000, '국내', '국내 원제목', '개굴전자', '005930', '개굴전자는 개굴 반도체 개굴', '개굴전자 설명이다 개굴 개굴개굴 반도체 너무 조타 개굴', 'img.url', '제조'),
+       (10001, '해외', '해외 원제목', '해외 테스트', '005931', '해외도 테스트는 해야지', '대체 이 부분을 뭐라고 채워야 잘 채웠다고 소문이 날까?', 'img.url', '제조'),
+       (10002, 'ETF', 'ETF 원제목', 'ETF 테스트', '005932', 'ETF도 테스트는 해야지', '난 아직도 뭐라고 적어야 할 지 모르겠다.', 'img.url', '제조')
 ;
 
 insert into stock_holdings(stock_holdings_id, stock_id, animal_id, stock_count, stock_average_price, stock_is_sold,
@@ -172,9 +170,26 @@ values (10000, -25, 0, 78100, 79800, 76400, 79400, 78300, now(), now()),
 ;
 
 -- News
-insert into news(news_id, stock_id, turn, title, provider, content, date,
-                 created_date, modified_date)
-values (10000, 10000, 10, '대박 진짜 꼭 읽어야하는 뉴스', '개굴일보', '낚시 성공', '2024-10-03', now(), now()),
-       (10001, 10001, 10, '대박 진짜 꼭 읽어야하는 뉴스', '개굴일보', '낚시 성공', '2024-10-03', now(), now()),
-       (10002, 10002, 10, '대박 진짜 꼭 읽어야하는 뉴스', '개굴일보', '낚시 성공', '2024-10-03', now(), now())
+insert into news(news_id, stock_id, turn, title, provider, content, date)
+values (10000, 10000, 10, '대박 진짜 꼭 읽어야하는 뉴스', '개굴일보', '낚시 성공', '2024-10-03'),
+       (10001, 10001, 10, '대박 진짜 꼭 읽어야하는 뉴스', '개굴일보', '낚시 성공', '2024-10-03'),
+       (10002, 10002, 10, '대박 진짜 꼭 읽어야하는 뉴스', '개굴일보', '낚시 성공', '2024-10-03')
+;
+
+-- Quest
+insert into quest(quest_id, name, page)
+values (1, '은행 방문하기', 'bank'),
+       (2, '퀴즈 풀기', 'school'),
+       (3, '일하러가기', 'work'),
+       (4, '주식 거래하기', 'stock'),
+       (5, 'ETF 거래하기', 'stock'),
+       (6, '대출거래소 방문하기', 'loan'),
+       (7, '콩팥 캐피탈 방문하기', 'lender'),
+       (8, '노트북 열어보기', 'laptop'),
+       (9, '예적금 상품 확인하기', 'bank'),
+       (10, '신용도 확인하기', 'loan')
+;
+
+insert into quest_history(quest_history_id, animal_id, quest_id, created_date, modified_date)
+values (1, 10001, 1, now(), now())
 ;

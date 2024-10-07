@@ -29,6 +29,7 @@ public enum SuccessCode {
     ANIMAL_CREATE_SUCCESS(201, "동물 생성 성공"),
     PORTFOLIO_SUCCESS(200, "포트폴리오 조회 성공"),
     ANIMAL_INFO_SUCCESS(200, "동물 정보 조회 성공"),
+    ANIMAL_QUEST_SUCCESS(200, "퀘스트 조회 성공"),
     ENDING_SUCCESS(201, "엔딩 성공"),
 
     READ_SUCCESS(200, "조회 성공"),
