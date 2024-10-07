@@ -123,7 +123,7 @@ const Stock = () => {
     // 채널 선택 후 스크립트 이동(1)
     const handleChannelSelection = (channelName) => {
         setChannel(channelName); // 선택한 채널을 상태에 저장
-        // 채널 이동
+        // 채널 이동ff
         handleResponseClick(currentScript.responses[0].nextScript);
     };
     const parseContent = (content) => {

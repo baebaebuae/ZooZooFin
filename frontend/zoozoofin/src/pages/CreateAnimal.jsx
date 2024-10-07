@@ -146,7 +146,7 @@ const CreateAnimal = () => {
                             <AnimalCard
                                 key={index}
                                 // isSelected={animal === selectedAnimal}
-                                $sSelected={animal.animalTypeId === selectedAnimal?.animalTypeId}
+                                $isSelected={animal.animalTypeId === selectedAnimal?.animalTypeId}
                                 onClick={() => handleClick(animal)}
                             >
                                 <AnimalPhoto>
