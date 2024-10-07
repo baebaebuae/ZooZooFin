@@ -4,9 +4,9 @@
 
 ## Information
 
-### [Stock](./01_Stock)
+### [Stock](./01_Chart)
 
-주식 데이터 크롤링
+주식 chart 데이터 크롤링
 
 - stock data
 - exchange rate
@@ -15,10 +15,6 @@
 
 db 구축 시 필요한 script 데이터
 
-### [R3F](./03_R3F)
-
-R3F 테스트
-
-### [News](./04_News)
+### [News](./03_Stock&Finance)
 
 뉴스 데이터 크롤링

@@ -63,7 +63,7 @@ def crawler(turn, query, sort, s_date, e_date):
 def main():
 
     # 검색어
-    query = "애플"
+    query = input()
     sort = 0
     
     # 일주일 단위로, 뉴스를 3개씩 뽑아서 저장하는 알고리즘
