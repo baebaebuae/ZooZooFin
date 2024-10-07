@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import { LaptopInfo } from '@components/root/productDetailInfo';
 import ProgressBox from '@components/root/progressBar';
 
 import CheckIcon from '@mui/icons-material/Check';
+
+import { getApiClient } from '@stores/apiClient';
 
 const Container = styled.div`
     width: 100%;
@@ -62,13 +64,31 @@ const DividerLarge = styled.div`
 
 export const Capital = () => {
     const [isCautionOpened, setIsCautionOpened] = useState(false);
+    const [capitalData, setCapitalData] = useState([]);
 
-    const data = {
+    const tempData = {
         capitalOrigin: 300000000,
         capitalEndTurn: 16,
         capitalRestTurn: 10,
         capitalRestMoney: 62000000,
     };
+
+    const fetchCapitalData = async () => {
+        const apiClient = getApiClient();
+
+        try {
+            const res = await apiClient.get('/home/capital');
+            console.log(res.data.body);
+            setCapitalData(res.data.body);
+        } catch (error) {
+            setCapitalData(tempData);
+            return error;
+        }
+    };
+
+    useEffect(() => {
+        fetchCapitalData();
+    }, []);
 
     const CautionTexts = [
         '정해진 상환일에 대출금을 갚지 못할 경우, 캐피탈 경고 1회 후 자산이 압류됩니다.',
@@ -108,19 +128,22 @@ export const Capital = () => {
 
             <LaptopInfo
                 infoTitle={'대출 원금'}
-                infoContent={`${data.capitalOrigin.toLocaleString()}🥕`}
+                infoContent={`${capitalData.capitalOrigin.toLocaleString()}🥕`}
             />
-            <LaptopInfo infoTitle={'대출 상환일'} infoContent={`${30}턴`} />
+            <LaptopInfo infoTitle={'대출 상환일'} infoContent={`${capitalData.capitalEndTurn}턴`} />
             <LaptopInfo
                 infoTitle={'상환할 금액'}
-                infoContent={`${data.capitalRestMoney.toLocaleString()}🥕`}
+                infoContent={`${capitalData.capitalRestMoney.toLocaleString()}🥕`}
                 color={'warn'}
             />
 
             <DividerLarge />
 
             <RateBlock>기준 금리 {10}%</RateBlock>
-            <ProgressBox rate={80} restTurn={10} />
+            <ProgressBox
+                rate={(capitalData.capitalRestMoney / capitalData.capitalOrigin) * 100}
+                restTurn={capitalData.capitalRestTurn}
+            />
         </Container>
     );
 };

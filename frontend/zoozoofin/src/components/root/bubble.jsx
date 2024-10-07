@@ -20,11 +20,20 @@ const BubbleBlockStyle = styled(BubbleBlock)`
     position: relative;
 `;
 
-const BadgeNormalStyle = styled(BadgeNormal)`
-    position: absolute;
+const BadgeNormalStyle = styled.div`
     top: -20px;
     left: 40px;
     z-index: 1;
+    font-size: 14px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    padding: 10px 14px;
+    color: white;
+    background-color: ${({ theme, color }) => theme.colors[color]};
+    border: 2px solid white;
+    position: absolute;
 `;
 
 const BubbleBox = styled.div`

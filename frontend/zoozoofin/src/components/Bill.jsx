@@ -1,5 +1,7 @@
-import { Checkbox } from '@mui/material';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
+
+import { getApiClient } from '@/stores/apiClient';
 
 const BillContainer = styled.div`
     width: 320px;
@@ -125,13 +127,15 @@ const CheckButton = styled.div`
 `;
 
 export const Bill = ({ checkBill }) => {
+    const [billData, setBillData] = useState(null);
+
     const warnTexts = [
         '연체시 해당 상품에 대해 경고 1회 부과됩니다. (노트북 확인)',
         '다음 턴까지 연체된 대출이자를 납부하지 않으면',
         '보유 중인 자산이 압류 처리됩니다. (예금-적금-자산 순)',
     ];
 
-    const data = {
+    const tempData = {
         warningSavingsCount: 0,
         warningLoanCount: 1,
         depositTotal: 39036700,
@@ -142,6 +146,27 @@ export const Bill = ({ checkBill }) => {
         stockRepay: 55237000,
     };
 
+    const fetchData = async () => {
+        const apiClient = getApiClient();
+
+        try {
+            const response = await apiClient.get('/animal/info');
+            if (response.data && response.data.body) {
+                console.log('BillData: ', response.data.body);
+                setBillData(response.data.body);
+            } else {
+                setBillData(tempData);
+            }
+        } catch (error) {
+            console.error(error);
+            setBillData(tempData);
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
     const dataTypes = ['deposit', 'savings', 'stock'];
 
     return (
@@ -149,13 +174,13 @@ export const Bill = ({ checkBill }) => {
             <BillTitle>고지서</BillTitle>
             <BillWarnBlock>
                 <BillTitleSmall>신규 연체 내역</BillTitleSmall>
-                {data.warningLoanCount || data.warningSavingsCount ? (
+                {billData.warningLoanCount || billData.warningSavingsCount ? (
                     <>
-                        {data.warningSavingsCount ? (
-                            <BillWarnBox>적금 {data.warningSavingsCount}회</BillWarnBox>
+                        {billData.warningSavingsCount ? (
+                            <BillWarnBox>적금 {billData.warningSavingsCount}회</BillWarnBox>
                         ) : null}
-                        {data.warningLoanCount ? (
-                            <BillWarnBox>대출이자 {data.warningLoanCount}회</BillWarnBox>
+                        {billData.warningLoanCount ? (
+                            <BillWarnBox>대출이자 {billData.warningLoanCount}회</BillWarnBox>
                         ) : null}
                     </>
                 ) : null}
@@ -183,20 +208,21 @@ export const Bill = ({ checkBill }) => {
                         <BillAttachContentBox>
                             <BillAttachContentType>현금화 총액</BillAttachContentType>
                             <BillAttachValue>
-                                {data[`${type}Total`]?.toLocaleString() || '0'}
+                                {billData[`${type}Total`]?.toLocaleString() || '0'}
                             </BillAttachValue>
                         </BillAttachContentBox>
                         <BillAttachContentBox>
                             <BillAttachContentType>상환 금액</BillAttachContentType>
                             <BillAttachValue>
-                                {data[`${type}Repay`]?.toLocaleString() || '0'}
+                                {billData[`${type}Repay`]?.toLocaleString() || '0'}
                             </BillAttachValue>
                         </BillAttachContentBox>
                         <BillAttachContentBox>
                             <BillAttachContentType>입금 금액</BillAttachContentType>
                             <BillAttachValue>
-                                {(data[`${type}Total`] - data[`${type}Repay`])?.toLocaleString() ||
-                                    '0'}
+                                {(
+                                    billData[`${type}Total`] - billData[`${type}Repay`]
+                                )?.toLocaleString() || '0'}
                             </BillAttachValue>
                         </BillAttachContentBox>
                     </BillAttachContentBlock>

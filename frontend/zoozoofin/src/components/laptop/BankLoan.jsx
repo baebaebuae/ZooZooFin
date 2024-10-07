@@ -1,12 +1,13 @@
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { styled as S } from '@mui/material/styles';
-
 import { InfoBox } from '@components/root/infoBox';
 
 import MuiAccordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+import { getApiClient } from '@stores/apiClient';
 
 const Accordion = styled((props) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -114,10 +115,12 @@ const LoanListDetailNoticeAmount = styled(LoanListDetailNotice)`
 `;
 
 export const BankLoan = () => {
-    const data = {
+    const [loanData, setLoanData] = useState([]);
+
+    const tempData = {
         totalLoan: 1292735000,
         restLoan: 820943500,
-        loanList: [
+        myLoanList: [
             {
                 loanId: 1,
                 loanNumber: 1,
@@ -126,8 +129,8 @@ export const BankLoan = () => {
                 loanPeriod: 14,
                 loanAmount: 300000000,
                 loanRemain: 200000000,
-                warning: true,
                 loanType: 3,
+                warning: true,
             },
             {
                 loanId: 2,
@@ -137,11 +140,28 @@ export const BankLoan = () => {
                 loanPeriod: 20,
                 loanAmount: 1357530000,
                 loanRemain: 294800000,
-                warning: false,
                 loanType: 2,
+                warning: false,
             },
         ],
     };
+
+    const fetchLoanData = async () => {
+        const apiClient = getApiClient();
+
+        try {
+            const res = await apiClient.get('/loan/my');
+            console.log(res.data.body);
+            setLoanData(res.data.body);
+        } catch (error) {
+            setLoanData(tempData);
+            return error;
+        }
+    };
+
+    useEffect(() => {
+        fetchLoanData();
+    }, []);
 
     const loanType = { 1: '만기일시상환', 2: '원금균등상환', 3: '원리금균등상환' };
 
@@ -150,7 +170,7 @@ export const BankLoan = () => {
             <InfoBox
                 color={'primaryDeep'}
                 infoTitle={'님의 대출 총 금액'}
-                infoContent={`${data.totalLoan.toLocaleString()}🥕`}
+                infoContent={`${loanData.totalLoan.toLocaleString()}🥕`}
             ></InfoBox>
             <AppContent>대출 리스트</AppContent>
             <LoanListTitleBox>
@@ -160,7 +180,7 @@ export const BankLoan = () => {
                 <div></div>
             </LoanListTitleBox>
 
-            {data.loanList.map((loan, index) => {
+            {loanData.myLoanList.map((loan, index) => {
                 return (
                     <Accordion key={index}>
                         <AccordionSummary
