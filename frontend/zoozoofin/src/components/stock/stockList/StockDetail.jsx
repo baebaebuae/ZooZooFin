@@ -9,7 +9,7 @@ import StockHint from '@components/stock/stockItem/StockHint';
 
 export const StockDetail = () => {
     const [goToOverview, setGoToOverview] = useState(false);
-    const [goToHint, setGoToHint] = useState(false);
+    const [isHintOpen, setIsHintOpen] = useState(false);
 
     const onClickDetail = () => {
         setGoToOverview(true);
@@ -17,14 +17,17 @@ export const StockDetail = () => {
     };
 
     const onClickHint = () => {
-        setGoToHint(true);
-        console.log('go To Hint Page!');
+        setIsHintOpen(true);
+        console.log('Opening Hint Modal!');
+    };
+
+    const closeHint = () => {
+        setIsHintOpen(false);
+        console.log('Closing Hint Modal!');
     };
 
     if (goToOverview) {
         return <StockOverview />;
-    } else if (goToHint) {
-        return <StockHint />;
     } else {
         return (
             <>
@@ -34,6 +37,7 @@ export const StockDetail = () => {
                 </ChannelMessage>
                 <StockGraph onClickDetail={onClickDetail} onClickHint={onClickHint} />
                 <StockNews />
+                <StockHint isOpen={isHintOpen} onClose={closeHint} />
             </>
         );
     }
