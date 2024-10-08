@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "chart")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Chart extends BaseEntity {
+public class Chart {
 
     @Id
     @Column(name = "chart_id")

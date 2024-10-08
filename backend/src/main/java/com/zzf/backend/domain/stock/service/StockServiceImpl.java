@@ -106,6 +106,7 @@ public class StockServiceImpl implements StockService {
                         .map(stock -> StockListResponse.StockDetails.builder()
                                 .stockId(stock.getStockId())
                                 .stockName(stock.getStockName())
+                                .stockField(stock.getStockField())
                                 .stockIntro(stock.getStockInfo())
                                 .stockImage(stock.getStockImg())
                                 .rate(chartRepository.findByStockAndTurn(stock, animal.getTurn())
