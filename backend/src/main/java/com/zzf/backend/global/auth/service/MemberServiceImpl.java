@@ -10,6 +10,7 @@ import com.zzf.backend.global.auth.repository.MemberRepository;
 import com.zzf.backend.global.auth.security.CustomOAuth2User;
 import com.zzf.backend.global.auth.security.OAuth2Provider;
 import com.zzf.backend.global.exception.CustomException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ import static com.zzf.backend.global.status.ErrorCode.ANIMAL_NOT_FOUND_EXCEPTION
 import static com.zzf.backend.global.status.ErrorCode.MEMBER_NOT_FOUND_EXCEPTION;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
