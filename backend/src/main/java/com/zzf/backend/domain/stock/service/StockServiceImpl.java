@@ -8,6 +8,7 @@ import com.zzf.backend.domain.stock.dto.*;
 import com.zzf.backend.domain.stock.entity.*;
 import com.zzf.backend.domain.stock.repository.*;
 import com.zzf.backend.global.exception.CustomException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +17,8 @@ import java.util.stream.Collectors;
 
 import static com.zzf.backend.global.status.ErrorCode.*;
 
-// TODO: Transaction 걸기
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class StockServiceImpl implements StockService {
 
@@ -199,7 +200,7 @@ public class StockServiceImpl implements StockService {
 
         animal.setAssets(animal.getAssets() - cost);
 
-        turnRecord.setStockBuy(cost);
+        turnRecord.setStockBuy(turnRecord.getStockBuy() - cost);
 
         StockHoldings stockHoldings;
         if (stockHoldingsRepository.existsByStockAndAnimalAndStockIsSoldFalse(stock, animal)) {
@@ -220,14 +221,9 @@ public class StockServiceImpl implements StockService {
                     .stockAveragePrice((double) chart.getPrice())
                     .stockIsSold(false)
                     .build();
+
+            stockHoldingsRepository.save(stockHoldings);
         }
-
-        // TODO: save 굳이 안써도 됨
-        animalRepository.save(animal);
-
-        turnRecordRepository.save(turnRecord);
-
-        stockHoldingsRepository.save(stockHoldings);
 
         stockHistoryRepository.save(StockHistory.builder()
                 .stock(stock)
@@ -259,26 +255,17 @@ public class StockServiceImpl implements StockService {
             throw new CustomException(LACK_STOCK_EXCEPTION);
         }
 
-
-        // TODO: overflow
         Long cost = chart.getPrice() * sellStockRequest.getCount();
 
         animal.setAssets(animal.getAssets() + cost);
 
-        turnRecord.setStockSell(cost);
+        turnRecord.setStockSell(turnRecord.getStockSell() + cost);
 
         stockHoldings.setStockCount(stockHoldings.getStockCount() - sellStockRequest.getCount());
 
         if (stockHoldings.getStockCount() == 0) {
             stockHoldings.setStockIsSold(true);
         }
-
-
-        animalRepository.save(animal);
-
-        turnRecordRepository.save(turnRecord);
-
-        stockHoldingsRepository.save(stockHoldings);
 
         stockHistoryRepository.save(StockHistory.builder()
                 .stock(stock)
