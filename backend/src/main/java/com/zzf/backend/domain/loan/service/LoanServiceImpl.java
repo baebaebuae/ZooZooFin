@@ -94,6 +94,7 @@ public class LoanServiceImpl implements LoanService {
                 .loanToEnd(loanRequest.getLoanPeriod()) // 남은 턴
                 .loanWarning(false)
                 .loanIsEnd(false)
+                .animal(animal)
                 .build();
 
         loanRepository.save(loan);

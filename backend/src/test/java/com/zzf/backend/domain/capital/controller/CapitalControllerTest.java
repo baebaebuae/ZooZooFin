@@ -127,12 +127,18 @@ class CapitalControllerTest {
                 .build();
         String content = gson.toJson(capitalRepayRequest);
 
+        CapitalRequest capitalRequest = CapitalRequest.builder()
+                .capitalAmounts(1000000L)
+                .capitalPeriod(10L)
+                .build();
+        String content2 = gson.toJson(capitalRequest);
+
         // when
         ResultActions postActions = mockMvc.perform(
                 post("/api/v1/capital")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(content)
+                        .content(content2)
         );
 
         ResultActions actions = mockMvc.perform(

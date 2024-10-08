@@ -50,7 +50,6 @@ public class HomeController {
                 .build());
     }
 
-    // 다음 턴으로 넘어가기
     // 내 사채 조회 004
     @GetMapping("/capital")
     public ResponseDto<CapitalResponse> getMyCapital(@AnimalId Long animalId){
