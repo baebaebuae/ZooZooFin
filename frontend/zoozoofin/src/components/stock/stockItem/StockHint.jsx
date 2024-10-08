@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Chart from 'react-apexcharts';
 import { X } from 'lucide-react';
@@ -206,9 +206,13 @@ const Modal = ({ onClose, data }) => {
     );
 };
 
-const StockHint = ({ isOpen, onClose }) => {
-    const apiData = {
-        news_title: '지분 860억 받고…삼성전자 기술 中에 빼돌린 전 직원들 구속 기소',
+const StockHint = ({ isOpen, onClose, stockId }) => {
+    const [stockData, setStockData] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const defaultData = {
+        news_title: '지분 860억 받고…개굴전자 기술 해외에 빼돌린 전 직원들 구속 기소',
         negative_ratio: 46.58,
         neutral_ratio: 44.17,
         positive_ratio: 9.25,
@@ -216,16 +220,16 @@ const StockHint = ({ isOpen, onClose }) => {
             {
                 score: 0.9997,
                 sentence:
-                    '삼성전자가 약 4조 원을 투입해 개발한 반도체 핵심 기술을 중국에 빼돌린 혐의를 받는 삼성전자 전 직원들이 구속 상태로 재판에 넘겨 졌다.',
+                    '개굴전자가 약 4조 원을 투입해 개발한 반도체 핵심 기술을 해외에 빼돌린 혐의를 받는 개굴전자 전 직원들이 구속 상태로 재판에 넘겨졌다.',
             },
             {
                 score: 0.9996,
                 sentence:
-                    '서울 중앙 지검 정보기술범죄 수사부는 중국 반도체 회사 청두가 오전(CHJS) 대표 최 모 씨와 개발실장 오 모 씨를 구속 기소했다.',
+                    '서울 중앙 지검 정보기술범죄 수사부는 해외 반도체 회사 청두가 오전(CHJS) 대표 최 모 씨와 개발실장 오 모 씨를 구속 기소했다.',
             },
             {
                 score: 0.9994,
-                sentence: '삼성전자가 독자 개발한 20 나노급 D램 기술을 부정 사용한 혐의를 받는다.',
+                sentence: '개굴전자가 독자 개발한 20 나노급 D램 기술을 부정 사용한 혐의를 받는다.',
             },
         ],
         positive_sentences: [
@@ -237,13 +241,40 @@ const StockHint = ({ isOpen, onClose }) => {
         ],
         predicted_price: 97830.52,
         summary:
-            '삼성전자가 개발한 반도체 핵심 기술을 중국에 빼돌린 혐의를 받는 삼성전자 전 직원들이 구속 상태로 재판에 넘겨 졌다.',
+            '개굴전자가 개발한 반도체 핵심 기술을 해외에 빼돌린 혐의를 받는 개굴전자 전 직원들이 구속 상태로 재판에 넘겨졌다.',
         price: [98000, 98100, 98300, 98000, 98200, 98000],
     };
 
-    if (!isOpen) return null;
+    useEffect(() => {
+        const fetchStockData = async () => {
+            if (!isOpen) return;
 
-    return <Modal onClose={onClose} data={apiData} />;
+            setIsLoading(true);
+            try {
+                const response = await fetch(`/stock/hint/${stockId}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch stock data');
+                }
+                const data = await response.json();
+                setStockData(data);
+            } catch (err) {
+                console.error('Error fetching stock data:', err);
+                setError(err);
+                // API 호출 실패 시 임시 데이터 사용
+                setStockData(defaultData);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchStockData();
+    }, [isOpen, stockId]);
+
+    if (!isOpen) return null;
+    if (isLoading) return <div>Loading...</div>;
+    if (error) console.error('Error occurred, using default data');
+
+    return <Modal onClose={onClose} data={stockData || defaultData} />;
 };
 
 export default StockHint;

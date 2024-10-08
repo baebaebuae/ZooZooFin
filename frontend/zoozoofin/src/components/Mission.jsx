@@ -176,8 +176,10 @@ const MissionDashboard = ({ isOpen, onClose }) => {
     const incompleteMissions = missions.filter((mission) => !mission.completed);
     const completedMissions = missions.filter((mission) => mission.completed);
 
-    const handleMissionClick = (page) => {
-        window.location.href = `/${page}`;
+    const handleMissionClick = (mission) => {
+        if (!mission.completed) {
+            window.location.href = `/${mission.page}`;
+        }
     };
 
     if (!isOpen) return null;
@@ -200,7 +202,8 @@ const MissionDashboard = ({ isOpen, onClose }) => {
                                         {incompleteMissions.map((mission, index) => (
                                             <MissionItem
                                                 key={index}
-                                                onClick={() => handleMissionClick(mission.page)}
+                                                completed={mission.completed}
+                                                onClick={() => handleMissionClick(mission)}
                                             >
                                                 <MissionText>{mission.name}</MissionText>
                                             </MissionItem>
@@ -217,7 +220,8 @@ const MissionDashboard = ({ isOpen, onClose }) => {
                                         {completedMissions.map((mission, index) => (
                                             <MissionItem
                                                 key={index}
-                                                onClick={() => handleMissionClick(mission.page)}
+                                                completed={mission.completed}
+                                                onClick={() => handleMissionClick(mission)}
                                             >
                                                 <CompletedIcon src={CorrectSVG} />
                                                 <MissionText>{mission.name}</MissionText>

@@ -166,6 +166,12 @@ const TransactionLabel = styled.span`
 const TransactionValue = styled.span`
   font-size: 14px;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+`;
+
+const CarrotIcon = styled(NormalIcon)`
+  transform: translateY(-2px);
 `;
 
 const Wallet = ({ onClose = () => {} }) => {
@@ -277,7 +283,7 @@ const Wallet = ({ onClose = () => {} }) => {
       height: '180px',
       transactions: [
         { label: '은행대출', value: walletData.loanMake },
-        { label: '은행대출이자', value: -walletData.loanRepay }
+        { label: '은행대출이자', value: walletData.loanRepay }
       ]
     },
     {
@@ -295,7 +301,7 @@ const Wallet = ({ onClose = () => {} }) => {
       icon: StockIcon,
       height: '200px',
       transactions: [
-        { label: '주식 매수', value: -walletData.stockBuy },
+        { label: '주식 매수', value: walletData.stockBuy },
         { label: '주식 매도', value: walletData.stockSell }
       ]
     },
@@ -307,9 +313,9 @@ const Wallet = ({ onClose = () => {} }) => {
       transactions: [
         { label: '적금만기', value: walletData.savingsFinish },
         { label: '예금만기', value: walletData.depositFinish },
-        { label: '적금신규등록', value: -walletData.savingsMake },
-        { label: '예금신규등록', value: -walletData.depositMake },
-        { label: '적금', value: -walletData.savingsPay },
+        { label: '적금신규등록', value: walletData.savingsMake },
+        { label: '예금신규등록', value: walletData.depositMake },
+        { label: '적금', value: walletData.savingsPay },
       ]
     },
     {
@@ -319,7 +325,7 @@ const Wallet = ({ onClose = () => {} }) => {
       height: '170px', 
       transactions: [
         { label: '캐피탈대출', value: walletData.capitalMake },
-        { label: '캐피탈원금상환', value: -walletData.capitalRepay }
+        { label: '캐피탈원금상환', value: walletData.capitalRepay }
       ]
     },
   ];
@@ -399,7 +405,13 @@ const Wallet = ({ onClose = () => {} }) => {
                       <TransactionItem key={tIndex}>
                         <TransactionLabel>{transaction.label}</TransactionLabel>
                         <TransactionValue>
-                          {transaction.value >= 0 ? '+' : ''}{transaction.value.toLocaleString()}<NormalIcon icon={IconCarrot}/>
+                          {transaction.value === 0 
+                            ? '0'
+                            : transaction.value > 0
+                              ? `+${transaction.value.toLocaleString()}`
+                              : transaction.value.toLocaleString()
+                          }
+                          <CarrotIcon icon={IconCarrot}/>
                         </TransactionValue>
                       </TransactionItem>
                     ))}
@@ -422,7 +434,13 @@ const Wallet = ({ onClose = () => {} }) => {
                       <TransactionItem key={tIndex}>
                         <TransactionLabel>{transaction.label}</TransactionLabel>
                         <TransactionValue>
-                          {transaction.value.toLocaleString()}<NormalIcon icon={IconCarrot}/>
+                          {transaction.value === 0 
+                            ? '0'
+                            : transaction.value < 0 
+                              ? `-${Math.abs(transaction.value).toLocaleString()}`
+                              : Math.abs(transaction.value).toLocaleString()
+                          }
+                          <NormalIcon icon={IconCarrot}/>
                         </TransactionValue>
                       </TransactionItem>
                     ))}

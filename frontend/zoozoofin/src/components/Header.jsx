@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { LargeIcon } from '@components/root/icon';
-import CharRabbit from '@assets/images/characters/rabbit.png';
+import { ProfileIcon } from '@components/root/icon';
+import CharRabbit from '@assets/images/characters/rabbitProfile.png';
 import useUserStore from '../stores/useUserStore';
 import styled from 'styled-components';
 import {
@@ -32,7 +32,9 @@ const HeaderUserBlock = styled.div`
     display: flex;
     flex-direction: column;
     align-items: end;
+    max-width: 640px;
 `;
+
 
 const Header = () => {
     const [isCharOpen, setIsCharOpen] = useState(false);
@@ -66,7 +68,7 @@ const Header = () => {
                     <HeaderTurnButton currentTurn={turn} />
                 </HeaderButtonBlock>
                 <HeaderUserBlock>
-                    <LargeIcon icon={CharRabbit} onClick={openCharInfo} />
+                    <ProfileIcon icon={CharRabbit} onClick={openCharInfo} />
                     {isCharOpen && <CharacterInfo onClose={openCharInfo} />}
                     <PropInfo
                         propMoney={formatNumber(animalAssets)}

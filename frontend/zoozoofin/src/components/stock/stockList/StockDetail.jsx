@@ -10,7 +10,8 @@ import StockHint from '@components/stock/stockItem/StockHint';
 export const StockDetail = () => {
     const [goToOverview, setGoToOverview] = useState(false);
     const [isHintOpen, setIsHintOpen] = useState(false);
-
+    // 임시 주식 아이디 > 바꿔야함
+    const stockId = "1";
     const onClickDetail = () => {
         setGoToOverview(true);
         console.log('go To Overview Page!');
@@ -37,7 +38,7 @@ export const StockDetail = () => {
                 </ChannelMessage>
                 <StockGraph onClickDetail={onClickDetail} onClickHint={onClickHint} />
                 <StockNews />
-                <StockHint isOpen={isHintOpen} onClose={closeHint} />
+                <StockHint isOpen={isHintOpen} onClose={closeHint} stockId={stockId} />
             </>
         );
     }
