@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Getter
@@ -40,6 +41,7 @@ public class Stock {
     private String stockInfo;
 
     @NotNull
+    @Length(max = 1000)
     @Column(name = "stock_description")
     private String stockDescription;
 

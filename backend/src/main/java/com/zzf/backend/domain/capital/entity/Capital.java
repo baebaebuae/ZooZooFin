@@ -39,7 +39,7 @@ public class Capital extends BaseEntity {
 
     // FK
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "character_id")
+    @JoinColumn(name = "animal_id")
     private Animal animal;
 
     public void changeCapitalRemain(Long money){

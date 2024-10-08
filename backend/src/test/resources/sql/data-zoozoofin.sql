@@ -84,7 +84,7 @@ values (10000, 5, 3, '주주예금', 'https://ssafy.com'),
 ;
 
 -- Deposit
-insert into deposit(deposit_id, character_id, deposit_type_id, deposit_amount, deposit_start_turn, deposit_end_turn,
+insert into deposit(deposit_id, animal_id, deposit_type_id, deposit_amount, deposit_start_turn, deposit_end_turn,
                     deposit_is_end,
                     created_date, modified_date)
 values (10000, 10001, 10000, 1000000, 1, 50, false, now(), now())
@@ -98,7 +98,7 @@ values (10000, 5, 4, '주주적금', 'https://ssafy.com'),
 ;
 
 -- Savings
-insert into savings(savings_id, character_id, savings_type_id, savings_payment, savings_amount, savings_interest,
+insert into savings(savings_id, animal_id, savings_type_id, savings_payment, savings_amount, savings_interest,
                     savings_start_turn, savings_end_turn, savings_warning, savings_is_end,
                     created_date, modified_date)
 values (10000, 10001, 10000, 100000, 1000000, 0, 1, 50, false, false, now(), now())
@@ -106,7 +106,7 @@ values (10000, 10001, 10000, 100000, 1000000, 0, 1, 50, false, false, now(), now
 
 -- Loan
 insert into loan(loan_id, loan_type, loan_rate, loan_amount, loan_remain, loan_start_turn, loan_period, loan_to_end,
-                 loan_warning, loan_is_end, character_id,
+                 loan_warning, loan_is_end, animal_id,
                  created_date, modified_date)
 values (10000, 1, 1, 1000000, 1000000, 1, 50, 49, false, false, 10001, now(), now())
 ;
@@ -127,10 +127,9 @@ values (10000, 10000, 10001, 100, 75000, false, now(), now()),
 ;
 
 -- Financial Statements
-insert into financial_statements(stock_id, period, revenue, market_cap, divided_yield, pbr, per, roe, psr,
-                                 created_date, modified_date)
-values (10000, 1, 429978, 954551, 1.18, 1.45, 9.93, 16.84, 2.22, now(), now()),
-       (10000, 2, 446216, 544383, 1.60, 0.82, 24.49, 3.55, 1.22, now(), now())
+insert into financial_statements(stock_id, period, revenue, market_cap, divided_yield, pbr, per, roe, psr)
+values (10000, 1, 429978, 954551, 1.18, 1.45, 9.93, 16.84, 2.22),
+       (10000, 2, 446216, 544383, 1.60, 0.82, 24.49, 3.55, 1.22)
 ;
 
 -- Quiz
@@ -150,23 +149,22 @@ VALUES (1, '2024-09-26',
 ;
 
 -- Chart
-insert into chart (stock_id, turn, rate, price, high_price, low_price, start_price, end_price,
-                   created_date, modified_date)
-values (10000, -25, 0, 78100, 79800, 76400, 79400, 78300, now(), now()),
-       (10000, -24, 0.32, 78350, 79600, 77100, 78100, 77300, now(), now()),
-       (10000, -23, -2.75, 76250, 77800, 74700, 77600, 75600, now(), now()),
-       (10000, -22, -3.74, 73500, 75800, 71200, 75400, 73300, now(), now()),
-       (10000, 10, -0.81, 74100, 74900, 73300, 74900, 74000, now(), now()),
-       (10001, -25, 0, 78100, 79800, 76400, 79400, 78300, now(), now()),
-       (10001, -24, 0.32, 78350, 79600, 77100, 78100, 77300, now(), now()),
-       (10001, -23, -2.75, 76250, 77800, 74700, 77600, 75600, now(), now()),
-       (10001, -22, -3.74, 73500, 75800, 71200, 75400, 73300, now(), now()),
-       (10001, 10, -0.81, 74100, 74900, 73300, 74900, 74000, now(), now()),
-       (10002, -25, 0, 78100, 79800, 76400, 79400, 78300, now(), now()),
-       (10002, -24, 0.32, 78350, 79600, 77100, 78100, 77300, now(), now()),
-       (10002, -23, -2.75, 76250, 77800, 74700, 77600, 75600, now(), now()),
-       (10002, -22, -3.74, 73500, 75800, 71200, 75400, 73300, now(), now()),
-       (10002, 10, -0.81, 74100, 74900, 73300, 74900, 74000, now(), now())
+insert into chart (stock_id, turn, rate, price, high_price, low_price, start_price, end_price)
+values (10000, -25, 0, 78100, 79800, 76400, 79400, 78300),
+       (10000, -24, 0.32, 78350, 79600, 77100, 78100, 77300),
+       (10000, -23, -2.75, 76250, 77800, 74700, 77600, 75600),
+       (10000, -22, -3.74, 73500, 75800, 71200, 75400, 73300),
+       (10000, 10, -0.81, 74100, 74900, 73300, 74900, 74000),
+       (10001, -25, 0, 78100, 79800, 76400, 79400, 78300),
+       (10001, -24, 0.32, 78350, 79600, 77100, 78100, 77300),
+       (10001, -23, -2.75, 76250, 77800, 74700, 77600, 75600),
+       (10001, -22, -3.74, 73500, 75800, 71200, 75400, 73300),
+       (10001, 10, -0.81, 74100, 74900, 73300, 74900, 74000),
+       (10002, -25, 0, 78100, 79800, 76400, 79400, 78300),
+       (10002, -24, 0.32, 78350, 79600, 77100, 78100, 77300),
+       (10002, -23, -2.75, 76250, 77800, 74700, 77600, 75600),
+       (10002, -22, -3.74, 73500, 75800, 71200, 75400, 73300),
+       (10002, 10, -0.81, 74100, 74900, 73300, 74900, 74000)
 ;
 
 -- News

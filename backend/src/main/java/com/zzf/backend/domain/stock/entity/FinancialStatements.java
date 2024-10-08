@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "financial_statements")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FinancialStatements extends BaseEntity {
+public class FinancialStatements {
 
     @Id
     @Column(name = "fs_id")

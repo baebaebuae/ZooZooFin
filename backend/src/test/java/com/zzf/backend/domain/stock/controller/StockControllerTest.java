@@ -176,6 +176,7 @@ class StockControllerTest {
                                         fieldWithPath("body.stockDetails[]").type(JsonFieldType.ARRAY).description("주식 리스트"),
                                         fieldWithPath("body.stockDetails[].stockId").type(JsonFieldType.NUMBER).description("주식 ID"),
                                         fieldWithPath("body.stockDetails[].stockName").type(JsonFieldType.STRING).description("이름"),
+                                        fieldWithPath("body.stockDetails[].stockField").type(JsonFieldType.STRING).description("분류"),
                                         fieldWithPath("body.stockDetails[].stockIntro").type(JsonFieldType.STRING).description("간단 소개"),
                                         fieldWithPath("body.stockDetails[].stockImage").type(JsonFieldType.STRING).description("이미지"),
                                         fieldWithPath("body.stockDetails[].rate").type(JsonFieldType.NUMBER).description("상승률")

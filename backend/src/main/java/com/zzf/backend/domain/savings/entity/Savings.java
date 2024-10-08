@@ -47,7 +47,7 @@ public class Savings extends BaseEntity {
 
     // FK
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "character_id")
+    @JoinColumn(name = "animal_id")
     @NotNull
     private Animal animal;
 
