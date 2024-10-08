@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useStore, useAnimalStore } from '../store';
 
 import Bubble from '@components/root/bubble';
+import { Loader } from '@components/Loader';
 
 import styled from 'styled-components';
 
@@ -27,6 +28,7 @@ const SampleBlock = styled.div`
 
 const ImageContainer = styled.div`
     position: fixed;
+    max-width: 360px;
     bottom: 28%;
     right: -5%;
 `;
@@ -34,6 +36,7 @@ const ImageContainer = styled.div`
 const NpcImage = styled.img`
     width: 100%;
     height: 100%;
+    object-fit: contain;
 `;
 
 const BubbleBlock = styled(Bubble)`
@@ -110,7 +113,7 @@ const Stock = () => {
 
     // 로딩 중일 때 Loader 컴포넌트 렌더링
     if (isLoading || !currentScript) {
-        return <div>주식 거래소 입장중...</div>;
+        return <Loader loadingText={'주식거래소에 입장하는 중...'} />;
     }
 
     // 채널 선택 후 스크립트 이동(1)
@@ -187,6 +190,7 @@ const Stock = () => {
     }
 
     if (currentScript.type === 'action') {
+        console.log(currentScript.content);
         switch (currentScript.content) {
             case '주식거래소':
                 return (

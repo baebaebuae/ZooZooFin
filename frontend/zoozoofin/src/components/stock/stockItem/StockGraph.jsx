@@ -18,6 +18,8 @@ import { PlusButton, ActiveButton, DetailButton } from '@components/stock/common
 import { Collapse } from '@mui/material';
 import LineGraph from '../common/graph/LineGraph';
 
+import useUserStore from '../../../stores/useUserStore';
+
 const InfoColumn = ({ product, stockPrice, currentState }) => {
     return (
         <StockInfoColumn>
@@ -34,6 +36,7 @@ export const StockGraph = ({ onClickDetail, onClickHint }) => {
     const product = '개굴자동차';
     const currentState = 'up';
     const stockPrice = '89,000';
+    const { turn } = useUserStore();
 
     // + 버튼 활성화
     const [isExpanded, setIsExpanded] = useState(false);
@@ -49,7 +52,7 @@ export const StockGraph = ({ onClickDetail, onClickHint }) => {
                 <InfoColumn product={product} currentState={currentState} stockPrice={stockPrice} />
                 <PlusButton onClick={handleToggle}> {!isExpanded ? '+' : '-'}</PlusButton>
             </StockDetailRow>
-            <LineGraph turn={0} />
+            <LineGraph turn={turn} />
             <DetailButtonContainer>
                 <Collapse in={isOpened} timeout="auto" unmountOnExit>
                     <ButtonContainer>

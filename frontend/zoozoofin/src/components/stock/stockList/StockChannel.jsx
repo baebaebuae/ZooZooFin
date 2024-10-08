@@ -17,6 +17,7 @@ import { ChannelModal } from '@components/stock/stockItem/StockModal';
 
 import useUserStore from '../../../stores/useUserStore';
 import useStockStore from '../common/store/StockStore';
+import { useUserStockStore } from '@components/stock/common/store/StockStore';
 
 const DropdownButton = styled.div`
     display: flex;
@@ -38,6 +39,7 @@ const StockChannel = ({ onChannelSelect }) => {
     const [selectedChannel, setSelectedChannel] = useState(null);
 
     const handleOpenModal = (channel) => {
+        // 주식 리스트 및 보유 주식 불러오기
         setIsModalOpen(true);
         setSelectedChannel(channel);
         console.log(isModalOpen);
@@ -56,13 +58,15 @@ const StockChannel = ({ onChannelSelect }) => {
     // header -> turn undefined 문제 확인 24.10.08
     // turn 별 주식 채널 주식 리스트 fetch
     const { turn, fetchUserProfile } = useUserStore();
+    const { fetchMyStocklist } = useUserStockStore();
     const { fetchStocklist } = useStockStore();
     useEffect(() => {
         fetchUserProfile();
         if (turn) {
             fetchStocklist(turn);
+            fetchMyStocklist(turn);
         }
-    }, [turn, fetchUserProfile, fetchStocklist]);
+    }, [turn, fetchUserProfile, fetchStocklist, fetchMyStocklist]);
 
     return (
         <>

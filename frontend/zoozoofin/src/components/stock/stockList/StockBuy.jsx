@@ -34,10 +34,8 @@ export const StockBuy = ({ channel, onOrderCompletion }) => {
     };
 
     const [isDetailClicked, setIsDetailClicked] = useState(false);
-    const goToDetailComponent = (companyName) => {
-        console.log(companyName);
+    const goToDetailComponent = () => {
         setIsDetailClicked(true);
-        console.log(isDetailClicked);
     };
 
     let type = '';

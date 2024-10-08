@@ -41,7 +41,11 @@ const TextStyle = styled.div`
 `;
 
 export const TotalCard = ({ type }) => {
-    const { totalStock, totalPrice } = useStockStore();
+    const { totalStock, totalPrice, clickedStockId, clickedStockInfo } = useStockStore();
+    const [nowStock, setNowStock] = useState(null);
+    const [nowPrice, setNowPrice] = useState(null);
+    const [nowRate, setNowRate] = useState(null);
+
     const [value, setValue] = useState(null);
 
     useEffect(() => {
@@ -51,9 +55,26 @@ export const TotalCard = ({ type }) => {
             setValue('판매');
         }
     }, [type]);
+
+    useEffect(() => {
+        if (clickedStockId) {
+            // 현재 턴을 기준으로 가져올 예정
+            const pricecharts = clickedStockInfo.chart;
+            const stockPrice = pricecharts ? pricecharts[pricecharts.length - 1]['endPrice'] : 0;
+            setNowPrice(stockPrice);
+            const stockRate = pricecharts ? pricecharts[pricecharts.length - 1]['rate'] : 0;
+            setNowRate(stockRate);
+        }
+    });
+
     return (
         <TotalCardBox>
-            <StockTitle companyName={'개굴전자'} stockPrice={'89,000'} currentState={'up'} />
+            <StockTitle
+                stockName={clickedStockInfo ? clickedStockInfo.stockName : 'stockName'}
+                stockPrice={nowPrice}
+                stockRate={nowRate}
+                type={type}
+            />
             <RowContainerBox>
                 <TextStyle>{value}할 주</TextStyle>
                 <TextStyle type="content" size="large">

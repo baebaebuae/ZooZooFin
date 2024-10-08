@@ -4,12 +4,14 @@ import { CarrotIcon } from '@components/stock/common/icon/StockIcons';
 import {
     BuyingMoneyContent,
     CurrentStockState,
+    RateState,
     StockPrice,
 } from '@components/stock/common/container/StoreContainer';
 import { Divider } from '@components/stock/common/card/StoreCards';
 
 import { Collapse } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useUserStockStore } from '@components/stock/common/store/StockStore';
 
 const StockCard = styled(Card)`
     padding: 25px 30px;
@@ -84,21 +86,24 @@ const DetailContent = ({ totalPrice, gainLoss, myStock }) => {
     } else {
         currentState = 'new';
     }
+
     return (
         <DetailContainer>
             <StyledDivier />
             <ListContainer>
                 <TextStyle type="list">총 투자금</TextStyle>
                 <StockPrice>
-                    <TextStyle>{totalPrice.toLocaleString()} 🥕</TextStyle>
+                    <TextStyle>{totalPrice ? totalPrice.toLocaleString() : 0} 🥕</TextStyle>
                 </StockPrice>
             </ListContainer>
             <ListContainer>
                 <TextStyle type="list">총 손익</TextStyle>
                 <BuyingMoneyContent>
-                    <CurrentStockState current={currentState}>{currentState}</CurrentStockState>
+                    <RateState rate={gainLoss}>{gainLoss} %</RateState>
                     <StockPrice>
-                        <TextStyle type={currentState}>{myStock.toLocaleString()} 🥕</TextStyle>
+                        <TextStyle type={currentState}>
+                            {myStock ? myStock.toLocaleString() : 0} 🥕
+                        </TextStyle>
                     </StockPrice>
                 </BuyingMoneyContent>
             </ListContainer>
@@ -106,11 +111,49 @@ const DetailContent = ({ totalPrice, gainLoss, myStock }) => {
     );
 };
 
-export const OwnedStockCrad = () => {
+export const OwnedStockCrad = ({ channel }) => {
+    const [totalAmount, setTotalAmount] = useState(null);
+    const [totalInvestment, setTotalInvestment] = useState(null);
+    const [gainLoss, setGainLoss] = useState(null);
+
+    const [stockData, setStockData] = useState(null);
+    const { domesticStocks, overseasStocks, ETFStocks } = useUserStockStore();
+
+    useEffect(() => {
+        let type = '';
+
+        if (channel === '국내 주식') {
+            type = 'domestic';
+            setStockData(domesticStocks);
+        } else if (channel === '해외 주식') {
+            type = 'overseas';
+            setStockData(overseasStocks);
+        } else if (channel === 'ETF') {
+            type = 'ETF';
+            setStockData(ETFStocks);
+        }
+    }, [channel, domesticStocks, overseasStocks, ETFStocks]);
+
+    useEffect(() => {
+        // 보유 주식 확인 후 출력
+        if (stockData) {
+            const myTotalAmount = stockData.totalAmount;
+            const myTotalInvestment = stockData.totalInvestment;
+            const myTotalProfit = stockData.totalProfit;
+
+            setTotalAmount(myTotalAmount);
+            setTotalInvestment(myTotalInvestment);
+
+            // 손익률 계산 (손익률 = (이익 / 투자금) * 100)
+            const mygainLoss =
+                myTotalInvestment !== 0
+                    ? parseFloat(((myTotalProfit / myTotalInvestment) * 100).toFixed(2))
+                    : 0;
+            setGainLoss(mygainLoss);
+        }
+    }, [stockData]);
+
     // api 연결 예정
-    const myStock = 873000;
-    const totalPrice = 100000000;
-    const gainLoss = -127000;
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -123,12 +166,18 @@ export const OwnedStockCrad = () => {
             <ListContainer>
                 <TextStyle type="list">보유 주식</TextStyle>
                 <StockPrice>
-                    <TextStyle type="total">{myStock.toLocaleString()} 🥕</TextStyle>
+                    <TextStyle type="total">
+                        {totalAmount ? `${totalAmount.toLocaleString()} 🥕` : '로딩중..'}
+                    </TextStyle>
                 </StockPrice>
             </ListContainer>
             <DropdownButton onClick={handleToggle}>{!isOpen ? '▼' : '▲'}</DropdownButton>
             <StyledCollapse in={isOpen}>
-                <DetailContent totalPrice={totalPrice} gainLoss={gainLoss} myStock={myStock} />
+                <DetailContent
+                    totalPrice={totalInvestment ? totalInvestment : 0}
+                    gainLoss={gainLoss ? gainLoss : 0}
+                    myStock={totalAmount ? totalAmount : 0}
+                />
             </StyledCollapse>
         </StockCard>
     );

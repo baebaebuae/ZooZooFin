@@ -49,8 +49,84 @@ const useStockStore = create((set) => ({
         }
     },
 
+    // 상세 정보 조회를 위한 선택된 stockId, stockRate 저장
+    clickedStockId: null,
+    clickedStockInfo: {},
+    clickedStockDetail: {},
+    setClickedStockId: (stockid) => set({ clickedStockId: stockid }),
+    // fetchStockInfo
+    fetchStockInfo: async (stockId) => {
+        try {
+            const apiClient = getApiClient();
+            const response = await apiClient.get(`/stock/info/${stockId}`);
+            // console.log(response);
+            set({ clickedStockInfo: response.data.body });
+        } catch (error) {
+            console.error(`Failed to fetch stock detail for stockId: ${stockId}`, error);
+        }
+    },
+
+    fetchStockDetail: async (stockId) => {
+        try {
+            const apiClient = getApiClient();
+            const response = await apiClient.get(`/stock/statements/${stockId}`);
+            // console.log(response);
+            set({ clickedStockDetail: response.data.body });
+        } catch (error) {
+            console.error(`Failed to fetch stock detail for stockId: ${stockId}`, error);
+        }
+    },
+
     // resetStore 구현 중
     resetStore: () => {},
+}));
+
+// 보유 주식 관련 store 생성
+export const useUserStockStore = create((set) => ({
+    // 주식 채널 주식 리스트 확인
+    domesticStocks: [],
+    overseasStocks: [],
+    ETFStocks: [],
+
+    fetchMyStocklist: async ({ turn }) => {
+        try {
+            const apiClient = getApiClient();
+            const requests = [];
+
+            // 기본적으로 domestic 주식 목록을 가져옴
+            requests.push(apiClient.get('/stock/domestic'));
+            // turn이 5 이상이면 해외 주식 목록도 가져옴
+            if (turn >= 5) {
+                requests.push(apiClient.get('/stock/oversea'));
+            }
+            // turn이 10 이상이면 ETF 목록도 가져옴
+            if (turn >= 10) {
+                requests.push(apiClient.get('/stock/etf'));
+            }
+            // Promise.all을 사용해 모든 요청을 병렬로 처리
+            const responses = await Promise.all(requests);
+            const [domesticResponse, overseaResponse, etfResponse] = responses;
+
+            console.log(responses);
+            console.log('myDomesticResponse', domesticResponse);
+            if (domesticResponse) {
+                set({ domesticStocks: domesticResponse.data.body });
+            }
+
+            // 해외 주식 업데이트 (turn >= 5일 때만)
+            if (overseaResponse) {
+                set({ overseasStocks: overseaResponse.data.body });
+            }
+
+            // ETF 주식 업데이트 (turn >= 10일 때만)
+            if (etfResponse) {
+                set({ ETFStocks: etfResponse.data.body });
+            }
+        } catch (error) {
+            console.error('Failed to fetch user profile:', error);
+            set({ error: error.message, isLoading: false });
+        }
+    },
 }));
 
 export default useStockStore;

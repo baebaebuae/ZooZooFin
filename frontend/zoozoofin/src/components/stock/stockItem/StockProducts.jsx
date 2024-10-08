@@ -14,7 +14,7 @@ export const StockProducts = ({ field, onStockSelected, type, channel, handleDet
     };
     const handleClickStock = () => {
         onStockSelected(true);
-        console.log('check!');
+        // console.log('check!');
     };
 
     // field별 리스트 조회 후 출력
