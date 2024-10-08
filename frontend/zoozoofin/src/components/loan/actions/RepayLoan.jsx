@@ -75,6 +75,7 @@ const RepayLoan = ({ goToScript }) => {
         if (currentCard > 2) {
             const timer = setTimeout(() => {
                 goToNextCard();
+                goToScript();
             }, 2000); // 대출 가능 여부 평가
 
             return () => clearTimeout(timer);
