@@ -4,11 +4,33 @@ import { MessageIcon } from '@components/stock/common/icon/StockIcons';
 import { ActiveButton } from '@components/stock/common/button/Button';
 import { useState, useEffect } from 'react';
 import useStockStore from '@components/stock/common/store/StockStore';
+import { getApiClient } from '@stores/apiClient';
 
 // 구매, 판매 post axios 연결 예정
 
+const postStock = async (type, stockId, stockCount, onComplete) => {
+    const apiClient = getApiClient();
+    const stockData = {
+        stockId: stockId,
+        count: stockCount,
+    };
+
+    try {
+        const res = await apiClient.post(`/stock/${type}`, stockData);
+        if (res.status === 200) {
+            onComplete();
+        } else {
+            console.error('Unexpected status code:', res.status);
+        }
+    } catch (error) {
+        console.error('Stock Post Error: ', error);
+        return error;
+    }
+};
+
 export const StockResult = ({ onComplete, type }) => {
     const [value, setValue] = useState(null);
+    const { totalStock, clickedStockId } = useStockStore();
 
     useEffect(
         (type) => {
@@ -22,7 +44,9 @@ export const StockResult = ({ onComplete, type }) => {
     );
 
     const handleOnClick = () => {
-        onComplete();
+        if (clickedStockId && totalStock) {
+            postStock(type, clickedStockId, totalStock, onComplete);
+        }
     };
 
     return (

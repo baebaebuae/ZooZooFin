@@ -71,17 +71,17 @@ export const StockSell = ({ channel, onOrderCompletion }) => {
                 {/* 주식 분야 선택 */}
                 <ChannelMessage>
                     <MessageIcon />
+                    보유한 주식을 확인해줘 개굴!
+                </ChannelMessage>
+                <OwnedStockCrad channel={channel} />
+                <ChannelMessage>
+                    <MessageIcon />
                     주식 분야를 선택해줘 개굴!
                 </ChannelMessage>
                 <StockField type={type} onFieldSelect={handleFieldClick} />
 
                 {isFieldSelected && (
                     <>
-                        <ChannelMessage>
-                            <MessageIcon />
-                            보유한 주식을 확인해줘 개굴!
-                        </ChannelMessage>
-                        <OwnedStockCrad />
                         <ChannelMessage>
                             <MessageIcon />
                             주식 상품을 선택해줘 개굴!
