@@ -8,7 +8,7 @@ import java.util.List;
 @Getter
 @Setter
 public class QuizResponse {
-    private Integer score;
+    private Long score;
     private List<QuizGrading> quizResults;
 
     @Getter
