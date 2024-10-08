@@ -1,4 +1,4 @@
-from etf_financial_statements import data
+from etf_chart import data
 
 def generate_bulk_insert_query(table, data_list):
     if not data_list:
@@ -27,12 +27,18 @@ def generate_bulk_insert_query(table, data_list):
     
     return query
 
+# 예시: users 테이블에 새로운 여러 레코드 삽입
+data_list = [
+    {'name': 'Alice', 'age': 25},
+    {'name': 'Bob', 'age': 30},
+    {'name': 'Charlie', 'age': 35}
+]
 
 sql_query = generate_bulk_insert_query(
-    table='creation_unit', 
+    table='stock', 
     data_list=data
 )
 
 print(sql_query)
-with open('sql_etf_finance.txt', 'w', encoding='utf-8') as file:
+with open('sql_etf_chart.txt', 'w', encoding='utf-8') as file:
     file.write(sql_query)
