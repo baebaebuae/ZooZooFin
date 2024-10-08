@@ -129,7 +129,13 @@ const Loan = () => {
                     />
                 );
             case '대출 안내':
-                return <InstructLoan />;
+                return (
+                    <InstructLoan
+                        goToScript={() =>
+                            handleResponseClick(currentScript.responses[0].nextScript)
+                        }
+                    />
+                );
 
             case '은행으로 이동':
                 return navigate('/bank');

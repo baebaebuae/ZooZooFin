@@ -130,9 +130,9 @@ export const LoanRepayDetailCard = ({
                           : '원리금균등상환'
                 }
             />
-            {isRepayAvailable && (
-                <WarningText>중도상환시 원금에 대해 1%의 수수료가 부과됩니다.</WarningText>
-            )}
+
+            <WarningText>중도상환시 원금에 대해 1%의 수수료가 부과됩니다.</WarningText>
+
             <ProductJoinInfo
                 $isLoan={true}
                 infoTitle={'남은 상환 금액'}
