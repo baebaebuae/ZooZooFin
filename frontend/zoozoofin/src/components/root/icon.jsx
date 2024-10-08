@@ -8,8 +8,13 @@ const IconWrapper = ({ icon: Icon, width, height, onClick }) => {
     return <img src={Icon} width={width} height={height} onClick={onClick} />;
 };
 
-// 아이콘 크기에 따라 LargeIcon, NormalIcon으로 세분화
 
+// Header의 캐릭터 프로필
+export const ProfileIcon = ({ icon, onClick }) => {
+    return <img src={icon} width={55} height={55} onClick={onClick} />;
+};
+
+// 아이콘 크기에 따라 LargeIcon, NormalIcon으로 세분화
 export const LargeIcon = ({ icon, onClick }) => {
     // return <img width={30} height={30} onClick={onClick} />;
     return <img src={icon} width={30} height={30} onClick={onClick} />;

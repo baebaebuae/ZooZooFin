@@ -15,11 +15,11 @@ const useUserStore = create((set) => ({
         try {
             const apiClient = getApiClient();
             const response = await apiClient.get('/member/profile');
-            // turn api 반영 전 - 24.10.08 정진영
+            console.log(response.data)
             set({
-                animalImg: response.data.animalImg,
-                animalAssets: response.data.animalAssets,
-                memberGoldBar: response.data.memberGoldBar,
+                animalImg: response.data.body.animalImg,
+                animalAssets: response.data.body.animalAssets,
+                memberGoldBar: response.data.body.memberGoldBar,
                 // turn: response.data.turn,
                 isLoading: false,
             });

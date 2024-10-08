@@ -17,10 +17,9 @@ const SchoolContainer = styled.div`
 
 const ImageContainer = styled.div`
     position: absolute;
-    bottom: 32%;
-    right: -17%;
-    width: 100%;
-    height: 40%;
+    bottom: 38%;
+    right: 1%;
+    height: 50%;
 
 `;
 

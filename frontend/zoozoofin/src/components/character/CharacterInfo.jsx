@@ -29,8 +29,9 @@ const ModalBackdrop = styled.div`
     background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
-    align-items: center;
-    z-index: 1000;
+    align-items: flex-start;
+    z-index: 10000;
+    z-index: 1;
 `;
 
 const StyledModal = styled(Modal)`
@@ -45,7 +46,8 @@ const StyledModal = styled(Modal)`
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  z-index: 1001;
+  z-index: 10001; // ModalBackdrop보다 높은 z-index
+  position: relative; // 추가
 `;
 
 const ModalContent = styled.div`
@@ -103,8 +105,8 @@ const StyledButton = styled(Button)`
 `;
 
 const CreditSection = styled.div`
-    margin-bottom: 15px;
-    width: 100%;
+  margin-bottom: 15px;
+  width: 100%;
 `;
 
 const FullWidthCreditBox = styled(CreditBox)`
@@ -146,22 +148,21 @@ const BadgeItem = styled.div`
   border: 2px solid ${props => props.activeColor};
   border-radius: 20px;
   padding: 5px 15px;
-  cursor: pointer;
+  cursor: ${props => props.completed ? 'default' : 'pointer'};
   transition: all 0.3s ease;
 
-    &:hover {
-        opacity: 0.8;
-    }
+  &:hover {
+    opacity: ${props => props.completed ? 1 : 0.5};
+  }
 `;
-
 const BadgeIcon = styled.div`
     margin-right: 5px;
     font-size: 20px;
 `;
 
 const BadgeText = styled.span`
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 15px;
+  font-weight: bold;
   color: ${props => props.completed ? 'white' : props.activeColor};
 `;
 
@@ -219,7 +220,7 @@ const CharacterInfo = ({ onClose }) => {
       animalAbility: "예금우대",
       animalCredit: 5,
       isSolveQuizToday: false,
-      isWorkToday: false,
+      isWorkToday: true,
       totalAmount: 1000000,
       totalAssets: 500000,
       totalDeposit: 200000,
@@ -285,47 +286,30 @@ const CharacterInfo = ({ onClose }) => {
               <FullWidthCreditBox grade={characterData.animalCredit} />
             </CreditSection>
             <BadgeContainer>
-              {allTasksCompleted ? (
-                <BadgeItem 
-                  completed={true}
-                  activeColor="#4CAF50"
-                  onClick={() => console.log('모든 작업이 완료되었습니다.')}
-                >
-                  <BadgeIcon>
-                    <Check size={20} color="white" />
-                  </BadgeIcon>
-                  <BadgeText completed={true} activeColor={theme.colors.secondary}>
-                    완료
-                  </BadgeText>
-                </BadgeItem>
-              ) : (
-                <>
-                  <BadgeItem 
-                    completed={characterData.isSolveQuizToday}
-                    activeColor={theme.colors.primary}
-                    onClick={() => handleBadgeClick('quiz')}
-                  >
-                    <BadgeIcon>
-                      {characterData.isSolveQuizToday ? <Check size={20} color={theme.colors.primary} /> : <NormalIcon icon={IconSheep}/>}
-                    </BadgeIcon>
-                    <BadgeText completed={characterData.isSolveQuizToday} activeColor={theme.colors.primary}>
-                      GO
-                    </BadgeText>
-                  </BadgeItem>
-                  <BadgeItem 
-                    completed={characterData.isWorkToday}
-                    activeColor={theme.colors.orange}
-                    onClick={() => handleBadgeClick('work')}
-                  >
-                    <BadgeIcon>
-                      {characterData.isWorkToday ? <Check size={20} color={theme.colors.orange} /> : <NormalIcon icon={IconCarrot}/>}
-                    </BadgeIcon>
-                    <BadgeText completed={characterData.isWorkToday} activeColor={theme.colors.orange}>
-                      GO
-                    </BadgeText>
-                  </BadgeItem>
-                </>
-              )}
+              <BadgeItem 
+                completed={characterData.isSolveQuizToday}
+                activeColor={theme.colors.primary}
+                onClick={() => !characterData.isSolveQuizToday && handleBadgeClick('quiz')}
+              >
+                <BadgeIcon>
+                  {'✏️'}
+                </BadgeIcon>
+                <BadgeText completed={characterData.isSolveQuizToday} activeColor={theme.colors.primary}>
+                  {characterData.isSolveQuizToday ? '완료' : 'GO'}
+                </BadgeText>
+              </BadgeItem>
+              <BadgeItem 
+                completed={characterData.isWorkToday}
+                activeColor={theme.colors.orange}
+                onClick={() => !characterData.isWorkToday && handleBadgeClick('work')}
+              >
+                <BadgeIcon>
+                  <NormalIcon icon={IconCarrot}/>
+                </BadgeIcon>
+                <BadgeText completed={characterData.isWorkToday} activeColor={theme.colors.orange}>
+                  {characterData.isWorkToday ? '완료' : 'GO'}
+                </BadgeText>
+              </BadgeItem>
             </BadgeContainer>
             <AssetSection>
               <AssetRow>
