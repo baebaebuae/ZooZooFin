@@ -1,4 +1,4 @@
-[
+exchange = [
   {
     "date": "2022-01-10",
     "exchange_rate": "1,202"
