@@ -63,4 +63,8 @@ public class Member extends BaseEntity {
         this.loanCount = loanCount;
         this.stockCount = stockCount;
     }
+
+    public void addGoldBar(Long score) {
+        this.goldBar += score;
+    }
 }

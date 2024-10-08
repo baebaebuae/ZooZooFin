@@ -8,6 +8,8 @@ import com.zzf.backend.domain.quiz.entity.Quiz;
 import com.zzf.backend.domain.quiz.entity.QuizResult;
 import com.zzf.backend.domain.quiz.repository.QuizRepository;
 import com.zzf.backend.domain.quiz.repository.QuizResultRepository;
+import com.zzf.backend.global.auth.entity.Member;
+import com.zzf.backend.global.auth.repository.MemberRepository;
 import com.zzf.backend.global.exception.CustomException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ public class QuizServiceImpl implements QuizService {
     private final AnimalRepository animalRepository;
     private final QuizRepository quizRepository;
     private final QuizResultRepository quizResultRepository;
+    private final MemberRepository memberRepository;
 
     // 해당 일자 퀴즈 결과 조회
     @Override
@@ -44,9 +47,15 @@ public class QuizServiceImpl implements QuizService {
     // 퀴즈 채점
     @Override
     @Transactional
-    public QuizResponse gradeQuizzes(Long animalId, QuizRequest quizRequest)
+    public QuizResponse gradeQuizzes(String memberId, Long animalId, QuizRequest quizRequest)
     {
-        // quiz validator 필요 - 중복 확인
+        Member member = memberRepository.findByUsername(memberId)
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND_EXCEPTION));
+
+        Animal animal = animalRepository.findById(animalId)
+                .orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
+
+        // quiz validator
         Set<Long> setQuizIds = new HashSet<>();
         for (QuizRequest.AnswerDto answerDto : quizRequest.getAnswerList()) {
             Long quizId = answerDto.getQuizId();
@@ -56,14 +65,11 @@ public class QuizServiceImpl implements QuizService {
             setQuizIds.add(quizId);
         }
 
-        // animal ID 필요함
-        Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
         QuizResponse quizResponse = new QuizResponse();
         List<QuizResponse.QuizGrading> quizGradingList = new ArrayList<>();
-        int score = 0;
+        long score = 0;
 
-        // quiz validator 필요 - 중복 확인
         for (QuizRequest.AnswerDto answerDto : quizRequest.getAnswerList()) {
             Quiz quiz = quizRepository.findByQuizId(answerDto.getQuizId()).orElseThrow(() -> new CustomException(QUIZ_NOT_FOUND_EXCEPTION));
 
@@ -91,8 +97,10 @@ public class QuizServiceImpl implements QuizService {
             quizGrading.setQuizAnswer(quiz.getQuizAnswer());
             quizGrading.setAnimalAnswer(animalAnswer);
             quizGrading.setIsCorrect(isCorrect);
-
             quizGradingList.add(quizGrading);
+            
+            // goldBar 추가
+            member.addGoldBar(score);
         }
         quizResponse.setQuizResults(quizGradingList);
         quizResponse.setScore(score);

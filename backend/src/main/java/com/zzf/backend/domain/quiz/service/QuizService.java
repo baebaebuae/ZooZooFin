@@ -10,5 +10,5 @@ import java.util.List;
 public interface QuizService {
     List<Quiz> findQuizByQuizDate(Date quizDate);
     Quiz findQuizByQuizId(Long quizId);
-    QuizResponse gradeQuizzes(Long animalId, QuizRequest quizRequest);
+    QuizResponse gradeQuizzes(String memberId, Long animalId, QuizRequest quizRequest);
 }
