@@ -15,10 +15,13 @@ import { PropInfo } from './root/headerCharInfo';
 import CharacterInfo from './character/CharacterInfo';
 
 const HeaderBlock = styled.div`
+    width: 94%;
     position: fixed;
-    width: 340px;
     display: flex;
     justify-content: space-between;
+    padding: 0 3%;
+    margin: 20px 0;
+    z-index: 10;
 `;
 
 const HeaderButtonBlock = styled.div`

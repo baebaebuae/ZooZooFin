@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import { Suspense, useRef } from 'react';
+import { Suspense, useRef, useEffect } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls, useGLTF, Environment } from '@react-three/drei';
 import { useNavigate } from 'react-router-dom';
@@ -12,7 +12,8 @@ const MapSample = () => {
     const modelRef = useRef();
     const navigate = useNavigate();
 
-    const { scene } = useGLTF('/maphier.glb');
+    // const { scene } = useGLTF('/realfinal.glb');
+    const { scene } = useGLTF('/floor_final.glb');
     // Selected Objects는 ground만 뽑히고 나머지는 사라짐 - 실패
 
     //// --------------------------------- ////
@@ -23,6 +24,42 @@ const MapSample = () => {
 
     // 똑같은 파일인데 렌더링 실패(include에서 collection, objects 설정한 상태)
     // --> 파일 다시 만들었더니 렌더링 성공. maptest3에서만 뭔가 문제가 있었던 듯
+
+    const textureLoader = new THREE.TextureLoader();
+    const roadTexture = textureLoader.load('/images/materials/texture_road.png');
+    const grassTexture = textureLoader.load('/images/materials/texture_grass.png');
+
+    roadTexture.wrapS = THREE.RepeatWrapping;
+    roadTexture.wrapT = THREE.RepeatWrapping;
+    roadTexture.repeat.set(5, 10);
+
+    grassTexture.wrapS = THREE.RepeatWrapping;
+    grassTexture.wrapT = THREE.RepeatWrapping;
+    grassTexture.repeat.set(1, 3);
+
+    useEffect(() => {
+        scene.traverse((child) => {
+            if (child.isMesh) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+                if (child.parent.name === 'Scene_Collection') {
+                    child.material = new THREE.MeshStandardMaterial({
+                        map: roadTexture,
+                        color: 0x6c7377,
+                    });
+                    child.receiveShadow = true;
+                }
+                if (child.parent.name === 'Floors') {
+                    child.material = new THREE.MeshStandardMaterial({
+                        map: grassTexture,
+                        // color: 0x147952,
+                        color: 0x558b2f,
+                    });
+                    child.receiveShadow = true;
+                }
+            }
+        });
+    }, [scene]);
 
     //// --------------------------------- ////
     //// ------------raycaster------------ ////
@@ -47,14 +84,16 @@ const MapSample = () => {
             const clickedObject = intersects[0].object;
             // console.log(`clickedObject.name: ${clickedObject.name}`);
             console.log(`clickedObject's PARENT : ${clickedObject.parent.name}`);
-            if (clickedObject.parent.name === 'BuildingBank') {
+            if (clickedObject.parent.name === 'Bank') {
                 navigate('/bank');
-            } else if (clickedObject.parent.name === 'BuildingCapital') {
+            } else if (clickedObject.parent.name === 'Capital') {
                 navigate('/lender');
-            } else if (clickedObject.parent.name === 'BuildingStock') {
+            } else if (clickedObject.parent.name === 'Stock') {
                 navigate('/stock');
             } else if (clickedObject.parent.name === 'House') {
                 navigate('/myroom');
+            } else if (clickedObject.parent.name === 'Carrots') {
+                navigate('/work');
             }
             // 객체로 묶어서 ex.{'BuildingBank' : 'bank', 'BuildingStock': 'stock'}
             // 순회하기?
@@ -83,6 +122,9 @@ const MapSample = () => {
 const CanvasBoard = styled.div`
     width: 360px;
     height: 640px;
+    position: fixed;
+    top: 0;
+    left: 0;
 `;
 
 // const cubeTextureLoader = new THREE.CubeTextureLoader();
@@ -96,27 +138,44 @@ const CanvasBoard = styled.div`
 // ]);
 const Sinijini = () => {
     return (
-        <>
-            <CanvasBoard>
-                <Canvas camera={{ fov: 60, position: [3, 3, 4] }} style={{ background: 'none' }}>
-                    <axesHelper args={[200, 200, 200]} />
-                    {/* x,y,z축 확인하는거임 */}
-                    <ambientLight intensity={5} />
-                    <directionalLight position={[10, 10, 5]} intensity={1.5} />
-                    <Suspense fallback={null}>
-                        <MapSample />
-                    </Suspense>
-                    <OrbitControls
-                        enablePan={false}
-                        enableZoom={false}
-                        enableRotate={false}
-                        minDistance={6}
-                        maxDistance={6}
-                        // maxPolarAngle={Math.PI / 2}
-                    />
-                </Canvas>
-            </CanvasBoard>
-        </>
+        <CanvasBoard>
+            <Canvas
+                shadows
+                camera={{ fov: 40, position: [4, 5.3, 4.9] }}
+                style={{ background: 'none' }}
+            >
+                <axesHelper args={[200, 200, 200]} />
+                {/* x,y,z축 확인하는거임 */}
+                <ambientLight color={'#EBF4F0'} intensity={3} />
+                {/* <directionalLight color={'#f7954f'} position={[10, 10, 30]} intensity={0.5} /> */}
+                <directionalLight
+                    castShadow
+                    position={(-1, 1, 1)}
+                    color={'#cdcdcd'}
+                    intensity={4}
+                    // shadow-mapSize-width={2048}
+                    // shadow-mapSize-height={2048}
+                    // shadow-camera-far={10}
+                    // shadow-camera-left={-5}
+                    // shadow-camera-right={5}
+                    // shadow-camera-top={5}
+                    // shadow-camera-bottom={-5}
+                    shadow-bias={-0.0001}
+                    shadow-normalBias={0.01}
+                />
+                <Suspense fallback={null}>
+                    <MapSample castShadow />
+                </Suspense>
+                <OrbitControls
+                    enablePan={true}
+                    enableZoom={false}
+                    enableRotate={false}
+                    minDistance={6}
+                    maxDistance={6}
+                    maxPolarAngle={Math.PI / 2}
+                />
+            </Canvas>
+        </CanvasBoard>
     );
 };
 
