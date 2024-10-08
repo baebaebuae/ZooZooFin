@@ -53,6 +53,7 @@ public class CapitalServiceImpl implements CapitalService{
                 .capitalStartTurn(animal.getTurn())
                 .capitalEndTurn(animal.getTurn() + capitalRequest.getCapitalPeriod())
                 .capitalIsEnd(false)
+                .animal(animal)
                 .build();
 
         capitalRepository.save(capital);
@@ -83,7 +84,6 @@ public class CapitalServiceImpl implements CapitalService{
         CapitalResponse capitalResponse = CapitalResponse.builder().build();
 
         for (Capital capital : capitalList){
-
             capitalResponse.setCapitalOrigin(capital.getCapitalAmount());
             capitalResponse.setCapitalRestMoney(capital.getCapitalRemain());
             capitalResponse.setCapitalRestTurn(capital.getCapitalEndTurn() - animal.getTurn());
