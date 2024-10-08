@@ -17,4 +17,7 @@ export default defineConfig({
             { find: '@stores', replacement: '/src/stores' },
         ],
     },
+    build: {
+        assetsInlineLimit: 0,
+    },
 });
