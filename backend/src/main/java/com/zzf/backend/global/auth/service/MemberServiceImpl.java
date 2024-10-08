@@ -2,6 +2,7 @@ package com.zzf.backend.global.auth.service;
 
 import com.zzf.backend.domain.animal.entity.Animal;
 import com.zzf.backend.domain.animal.repository.AnimalRepository;
+import com.zzf.backend.domain.animal.status.HierarchyStatus;
 import com.zzf.backend.domain.member.dto.MyAnimalResponse;
 import com.zzf.backend.domain.member.dto.ProfileResponse;
 import com.zzf.backend.global.auth.entity.Member;
@@ -59,6 +60,8 @@ public class MemberServiceImpl implements MemberService {
 
         Animal animal = animalRepository.findByMemberAndIsEndFalse(member)
                 .orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
+
+        animal.setHierarchy(HierarchyStatus.getHierarchy(animal.getAssets()).getHierarchyName());
 
         return ProfileResponse.builder()
                 .animalImg(animal.getAnimalType().getAnimalImgUrl())
