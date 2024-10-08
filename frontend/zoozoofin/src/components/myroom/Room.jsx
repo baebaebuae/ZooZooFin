@@ -14,7 +14,8 @@ import CharacterImage from '@components/myroom/common/RoomCharacter';
 const ModelWrapper = styled.div`
     width: 360px;
     height: 640px;
-    z-index: -1;
+    /* z-index: -1; */
+    z-index: 1;
     position: fixed;
     top: 0;
 `;

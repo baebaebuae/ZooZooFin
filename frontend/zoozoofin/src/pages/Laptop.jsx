@@ -11,10 +11,11 @@ import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 
 const AppContainer = styled.div`
     width: 100%;
-    height: 600px;
+    /* height: 600px; */
+    padding: 30px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     gap: 50px;
 `;

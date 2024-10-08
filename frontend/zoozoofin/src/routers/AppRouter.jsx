@@ -141,8 +141,8 @@ const AppRouter = () => {
                 <Route path="/start" element={<Start />} />
                 <Route path="/tutorial" element={<Tutorial />} />
                 <Route path="/createanimal" element={<CreateAnimal />} />
-                <Route path="/map" element={<Map />} />
                 <Route element={<LayoutInGame />}>
+                    <Route path="/map" element={<Map />} />
                     <Route path="/bank" element={<Bank />} />
                     <Route path="/laptop" element={<Laptop />} />
                     <Route path="/laptop/bank" element={<AppBank />} />
