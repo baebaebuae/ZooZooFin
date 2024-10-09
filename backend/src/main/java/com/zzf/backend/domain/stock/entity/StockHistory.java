@@ -35,6 +35,10 @@ public class StockHistory extends BaseEntity {
     private Long tradeCount;
 
     @NotNull
+    @Column(name = "trade_amount")
+    private Long tradeAmount;
+
+    @NotNull
     @Column(name = "is_buy")
     private Boolean isBuy;
 
@@ -43,10 +47,11 @@ public class StockHistory extends BaseEntity {
     private Long turn;
 
     @Builder
-    public StockHistory(Stock stock, Animal animal, Long tradeCount, Boolean isBuy, Long turn) {
+    public StockHistory(Stock stock, Animal animal, Long tradeCount, Long tradeAmount, Boolean isBuy, Long turn) {
         this.stock = stock;
         this.animal = animal;
         this.tradeCount = tradeCount;
+        this.tradeAmount = tradeAmount;
         this.isBuy = isBuy;
         this.turn = turn;
     }

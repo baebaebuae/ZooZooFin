@@ -11,8 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface StockHoldingsRepository extends JpaRepository<StockHoldings, Long> {
-    Optional<StockHoldings> findByStock(Stock stock);
-
     Optional<StockHoldings> findByStockAndAnimalAndStockIsSoldFalse(Stock stock, Animal animal);
 
     boolean existsByStockAndAnimalAndStockIsSoldFalse(Stock stock, Animal animal);

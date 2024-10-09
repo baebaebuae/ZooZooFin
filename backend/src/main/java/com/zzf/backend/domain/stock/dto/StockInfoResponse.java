@@ -7,7 +7,8 @@ import lombok.Builder;
 import java.util.List;
 
 @Builder
-public record StockInfoResponse(String stockName,
+public record StockInfoResponse(Long stockId,
+                                String stockName,
                                 List<ChartInfo> chart,
                                 List<NewsInfo> news) {
 

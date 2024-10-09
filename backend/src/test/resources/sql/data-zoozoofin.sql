@@ -126,6 +126,18 @@ values (10000, 10000, 10001, 100, 75000, false, now(), now()),
        (10002, 10002, 10001, 100, 75000, false, now(), now())
 ;
 
+insert into stock_history(stock_history_id, stock_id, animal_id, trade_count, trade_amount, is_buy, turn, created_date, modified_date)
+values (10000, 10000, 10001, 100, -7500000, true, 9, now(), now()),
+       (10001, 10000, 10001, 200, 15000000, false, 8, now(), now()),
+       (10002, 10000, 10001, 200, -15000000, true, 7, now(), now()),
+       (10003, 10001, 10001, 100, -7500000, true, 9, now(), now()),
+       (10004, 10001, 10001, 200, 15000000, false, 8, now(), now()),
+       (10005, 10001, 10001, 200, -15000000, true, 7, now(), now()),
+       (10006, 10002, 10001, 100, -7500000, true, 9, now(), now()),
+       (10007, 10002, 10001, 200, 15000000, false, 8, now(), now()),
+       (10008, 10002, 10001, 200, -15000000, true, 7, now(), now())
+;
+
 -- Financial Statements
 insert into financial_statements(stock_id, period, revenue, market_cap, dividend_yield, pbr, per, roe, psr)
 values (10000, 1, 429978, 954551, 1.18, 1.45, 9.93, 16.84, 2.22),

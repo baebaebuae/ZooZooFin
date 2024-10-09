@@ -12,7 +12,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.zzf.backend.global.status.ErrorCode.*;
@@ -135,6 +137,7 @@ public class StockServiceImpl implements StockService {
         List<News> newsList = newsRepository.findAllByStockAndTurn(stock, animal.getTurn());
 
         return StockInfoResponse.builder()
+                .stockId(stock.getStockId())
                 .stockName(stock.getStockName())
                 .chart(chartList.stream()
                         .map(StockInfoResponse::getChartInfo)
@@ -219,6 +222,97 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
+    public StockHintResponse getStockHint(Long animalId, Long stockId) {
+        return null;
+    }
+
+    @Override
+    public NotebookStockListResponse getStockListNotebook(Long animalId) {
+        Animal animal = animalRepository.findById(animalId)
+                .orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
+
+        List<StockHoldings> stockHoldings = stockHoldingsRepository.findAllByAnimalAndStockIsSoldFalse(animal);
+
+
+        List<NotebookStockListResponse.NotebookStock> domesticList = new ArrayList<>();
+        List<NotebookStockListResponse.NotebookStock> overseaList = new ArrayList<>();
+        List<NotebookStockListResponse.NotebookStock> etfList = new ArrayList<>();
+
+        long totalAmount = 0;
+        for (StockHoldings stockHolding : stockHoldings) {
+            Chart chart = chartRepository.findByStockAndTurn(stockHolding.getStock(), animal.getTurn())
+                    .orElseThrow(() -> new CustomException(CHART_NOT_FOUND_EXCEPTION));
+            totalAmount += stockHolding.getStockCount() * chart.getPrice();
+
+            switch (stockHolding.getStock().getStockType()) {
+                case "국내" -> domesticList.add(NotebookStockListResponse.NotebookStock.builder()
+                        .stockId(stockHolding.getStock().getStockId())
+                        .stockName(stockHolding.getStock().getStockName())
+                        .stockTotal(stockHolding.getStockCount() * chart.getPrice())
+                        .stockRate(chart.getRate())
+                        .build());
+                case "해외" -> overseaList.add(NotebookStockListResponse.NotebookStock.builder()
+                        .stockId(stockHolding.getStock().getStockId())
+                        .stockName(stockHolding.getStock().getStockName())
+                        .stockTotal(stockHolding.getStockCount() * chart.getPrice())
+                        .stockRate(chart.getRate())
+                        .build());
+                case "ETF" -> etfList.add(NotebookStockListResponse.NotebookStock.builder()
+                        .stockId(stockHolding.getStock().getStockId())
+                        .stockName(stockHolding.getStock().getStockName())
+                        .stockTotal(stockHolding.getStockCount() * chart.getPrice())
+                        .stockRate(chart.getRate())
+                        .build());
+            }
+        }
+
+        return NotebookStockListResponse.builder()
+                .totalAmount(totalAmount)
+                .domesticList(domesticList)
+                .overseaList(overseaList)
+                .etfList(etfList)
+                .build();
+    }
+
+    @Override
+    public NotebookStockInfoResponse getStockInfoNotebook(Long animalId, Long stockId) {
+        Animal animal = animalRepository.findById(animalId)
+                .orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
+
+        Stock stock = stockRepository.findById(stockId)
+                .orElseThrow(() -> new CustomException(STOCK_NOT_FOUND_EXCEPTION));
+
+        StockHoldings stockHolding = stockHoldingsRepository.findByStockAndAnimalAndStockIsSoldFalse(stock, animal)
+                .orElseThrow(() -> new CustomException(HOLDINGS_NOT_FOUND_EXCEPTION));
+
+        Chart chart = chartRepository.findByStockAndTurn(stock, animal.getTurn())
+                .orElseThrow(() -> new CustomException(CHART_NOT_FOUND_EXCEPTION));
+
+        List<Chart> chartList = chartRepository.findAllByStockAndTurnLessThanEqual(stock, animal.getTurn());
+
+        List<StockHistory> stockHistoryList = stockHistoryRepository.findAllByAnimalAndStockOrderByTurnDesc(animal, stock);
+        if (stockHistoryList.isEmpty()) {
+            throw new CustomException(STOCK_HISTORY_NOT_FOUND);
+        }
+
+        return NotebookStockInfoResponse.builder()
+                .stockName(stock.getStockName())
+                .stockPrice(chart.getPrice())
+                .stockRate(chart.getRate())
+                .chart(chartList.stream()
+                        .map(NotebookStockInfoResponse::getChartInfo)
+                        .collect(Collectors.toList()))
+                .stockCount(stockHolding.getStockCount())
+                .buyTurn(stockHistoryList.getFirst().getTurn())
+                .rate(getStockRate(stockHolding.getStockAveragePrice(), chart.getPrice()))
+                .profit((long) (chart.getPrice() - stockHolding.getStockAveragePrice()) * stockHolding.getStockCount())
+                .stockHistory(stockHistoryList.stream()
+                        .map(NotebookStockInfoResponse::getStockHistoryInfo)
+                        .collect(Collectors.toList()))
+                .build();
+    }
+
+    @Override
     public void buyStock(Long animalId, BuyStockRequest buyStockRequest) {
         Animal animal = animalRepository.findById(animalId)
                 .orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
@@ -270,6 +364,7 @@ public class StockServiceImpl implements StockService {
                 .stock(stock)
                 .animal(animal)
                 .tradeCount(buyStockRequest.getCount())
+                .tradeAmount(-buyStockRequest.getCount() * chart.getPrice())
                 .isBuy(true)
                 .turn(animal.getTurn())
                 .build());
@@ -312,6 +407,7 @@ public class StockServiceImpl implements StockService {
                 .stock(stock)
                 .animal(animal)
                 .tradeCount(sellStockRequest.getCount())
+                .tradeAmount(sellStockRequest.getCount() * chart.getPrice())
                 .isBuy(false)
                 .turn(animal.getTurn())
                 .build());

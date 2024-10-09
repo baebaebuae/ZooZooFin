@@ -25,7 +25,6 @@ import com.zzf.backend.domain.stock.entity.StockHoldings;
 import com.zzf.backend.domain.stock.repository.ChartRepository;
 import com.zzf.backend.domain.stock.repository.StockHistoryRepository;
 import com.zzf.backend.domain.stock.repository.StockHoldingsRepository;
-import com.zzf.backend.domain.stock.repository.StockRepository;
 import com.zzf.backend.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -538,6 +537,7 @@ public class NextTurnServiceImpl implements NextTurnService {
                     .stock(stock)
                     .animal(animal)
                     .tradeCount(stockHoldings.getStockCount())
+                    .tradeAmount(stockHoldings.getStockCount() * chart.getPrice())
                     .isBuy(false)
                     .turn(animal.getTurn())
                     .build());

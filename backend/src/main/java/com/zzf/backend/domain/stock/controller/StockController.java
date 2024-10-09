@@ -50,15 +50,38 @@ public class StockController {
 
     @GetMapping("/creation/{stockId}")
     public ResponseDto<CreationUnitResponse> getCreationUnit(@AnimalId Long animalId,
-                                          @PathVariable Long stockId) {
+                                                             @PathVariable Long stockId) {
         CreationUnitResponse creationUnit = stockService.getCreationUnit(animalId, stockId);
 
         return ResponseDto.success(CREATION_UNIT_SUCCESS, creationUnit);
     }
 
+    @GetMapping("/hint/{stockId}")
+    public ResponseDto<StockHintResponse> getStockHint(@AnimalId Long animalId,
+                                                       @PathVariable Long stockId) {
+        StockHintResponse stockHint = stockService.getStockHint(animalId, stockId);
+
+        return ResponseDto.success(CREATION_UNIT_SUCCESS, stockHint);
+    }
+
+    @GetMapping("/notebook")
+    public ResponseDto<NotebookStockListResponse> getStockListNotebook(@AnimalId Long animalId) {
+        NotebookStockListResponse stockList = stockService.getStockListNotebook(animalId);
+
+        return ResponseDto.success(GET_STOCK_LIST_NOTEBOOK_SUCCESS, stockList);
+    }
+
+    @GetMapping("/notebook/{stockId}")
+    public ResponseDto<NotebookStockInfoResponse> getStockInfoNotebook(@AnimalId Long animalId,
+                                                                       @PathVariable Long stockId) {
+        NotebookStockInfoResponse stockInfo = stockService.getStockInfoNotebook(animalId, stockId);
+
+        return ResponseDto.success(STOCK_INFO_NOTEBOOK_SUCCESS, stockInfo);
+    }
+
     @PostMapping("/buy")
     public ResponseDto<Void> buyStock(@AnimalId Long animalId,
-                                   @RequestBody BuyStockRequest buyStockRequest) {
+                                      @RequestBody BuyStockRequest buyStockRequest) {
         stockService.buyStock(animalId, buyStockRequest);
 
         return ResponseDto.success(BUY_STOCK_SUCCESS);
@@ -66,7 +89,7 @@ public class StockController {
 
     @PostMapping("/sell")
     public ResponseDto<Void> sellStock(@AnimalId Long animalId,
-                                    @RequestBody SellStockRequest sellStockRequest) {
+                                       @RequestBody SellStockRequest sellStockRequest) {
         stockService.sellStock(animalId, sellStockRequest);
 
         return ResponseDto.success(SELL_STOCK_SUCCESS);
