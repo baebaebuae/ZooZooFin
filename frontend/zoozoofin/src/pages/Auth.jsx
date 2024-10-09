@@ -14,6 +14,7 @@ const Auth = () => {
         const fetchUserState = async () => {
             if (accessToken && accessToken.length > 0) {
                 try {
+                    console.log(accessToken, refreshToken);
                     localStorage.setItem('accessToken', accessToken);
                     localStorage.setItem('refreshToken', refreshToken);
 
