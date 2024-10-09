@@ -19,6 +19,7 @@ public class FinancialStatements {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fsId;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stock_id")
     private Stock stock;

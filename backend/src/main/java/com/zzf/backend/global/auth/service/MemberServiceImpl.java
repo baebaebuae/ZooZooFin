@@ -69,6 +69,7 @@ public class MemberServiceImpl implements MemberService {
                 .animalImg(animal.getAnimalType().getAnimalImgUrl())
                 .animalAssets(animal.getAssets())
                 .memberGoldBar(member.getGoldBar())
+                .turn(animal.getTurn())
                 .build();
     }
 

@@ -11,7 +11,8 @@ public record GetHoldingsResponse(Long totalAmount,
                                   List<Holdings> holdingsList) {
 
     @Builder
-    public record Holdings(String stockField,
+    public record Holdings(Long stockId,
+                           String stockField,
                            String stockName,
                            Double stockRate,
                            Long stockTotal,

@@ -68,7 +68,8 @@ class MemberControllerTest {
                                         fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
                                         fieldWithPath("body.animalImg").type(JsonFieldType.STRING).description("이미지"),
                                         fieldWithPath("body.animalAssets").type(JsonFieldType.NUMBER).description("가용 자산"),
-                                        fieldWithPath("body.memberGoldBar").type(JsonFieldType.NUMBER).description("골드바")
+                                        fieldWithPath("body.memberGoldBar").type(JsonFieldType.NUMBER).description("골드바"),
+                                        fieldWithPath("body.turn").type(JsonFieldType.NUMBER).description("턴")
                                 )
                         )
                 );

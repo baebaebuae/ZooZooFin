@@ -68,8 +68,10 @@ public enum ErrorCode {
 
     // Stock
     STOCK_NOT_FOUND_EXCEPTION(404, "존재하지 않는 주식입니다."),
-    CHART_NOT_FOUND_EXCEPTION(404, "존재하지 않는 주식 차트입니다."),
+    CHART_NOT_FOUND_EXCEPTION(404, "주식 차트가 존재하지 않습니다."),
+    CREATION_UNIT_NOT_FOUND_EXCEPTION(404, "CU가 존재하지 않습니다."),
     STOCK_TYPE_NOT_FOUND_EXCEPTION(404, "존재하지 않는 주식 타입입니다."),
+    STOCK_TYPE_NOT_ALLOWED_EXCEPTION(400, "해당 타입은 이 요청에 허용되지 않습니다."),
     LACK_ASSETS_EXCEPTION(400, "주식을 구매할 자금이 부족합니다."),
     HOLDINGS_NOT_FOUND_EXCEPTION(400, "해당 주식을 보유하고 있지 않습니다."),
     LACK_STOCK_EXCEPTION(400, "보유중인 주식이 부족합니다."),
