@@ -71,6 +71,12 @@ public class CapitalServiceImpl implements CapitalService{
         // 턴 기록 추가
         TurnRecord turnRecord = turnRecordRepository.findByAnimalAndTurnRecordTurn(animal, animal.getTurn()).orElseThrow(() -> new CustomException(TURN_RECORD_NOT_FOUND));
         turnRecord.setCapitalMake(turnRecord.getCapitalMake() + capitalRequest.getCapitalAmounts() * 9 / 10);
+
+        // 다음 턴 기록 추가
+        if (capitalRequest.getCapitalAmounts().equals(1L)){
+            NextTurnRecord nextTurnRecord = nextTurnRecordRepository.findByAnimalAndNextTurnRecordTurn(animal, animal.getTurn() + 1).orElseThrow(() -> new CustomException(NEXT_TURN_RECORD_NOT_FOUND));
+            nextTurnRecord.setNextCapitalRepayment(-capitalRequest.getCapitalAmounts() * 11 / 10);
+        }
     }
 
     // 내 사채 조회

@@ -544,7 +544,7 @@ public class NextTurnServiceImpl implements NextTurnService {
         }
 
         animal.increaseAnimalAssets(money);
-        loanWarningDTO.setSavingsTotal(money);
+        loanWarningDTO.setStockTotal(money);
     }
 
     // 대출금 계산 함수
