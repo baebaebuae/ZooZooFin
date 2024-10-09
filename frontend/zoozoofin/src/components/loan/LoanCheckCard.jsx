@@ -9,6 +9,8 @@ import { StampModal } from '@components/root/stampModal';
 
 import { getApiClient } from '@stores/apiClient';
 
+import { useAnimalStore } from '../../store.js';
+
 const InfoTitle = styled.div`
     font-size: 18px;
     color: ${({ theme }) => theme.colors.gray};
@@ -30,7 +32,7 @@ const CardBlock = styled(Card)`
 // loanAmounts : 대출 원금
 // loanPeriod : 대출 기간
 
-const joinLoan = async (loanType, loanAmounts, loanPeriod) => {
+const joinLoan = async (animalId, loanType, loanAmounts, loanPeriod) => {
     const apiClient = getApiClient();
 
     console.log('joinProducts - loanType:', loanType);
@@ -47,7 +49,7 @@ const joinLoan = async (loanType, loanAmounts, loanPeriod) => {
         console.log('Request Data:', productData);
 
         const res = await apiClient.post('/loan', productData, {
-            headers: { animalId: 1 },
+            headers: { animalId: animalId },
         });
 
         if (res.status === 200) {
@@ -73,6 +75,8 @@ export const LoanCheckCard = ({
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const RepayTypes = { 만기: 1, 원금: 2, 원리금: 3 };
+
+    const { nowAnimal } = useAnimalStore();
 
     return (
         <CardBlock>
@@ -111,7 +115,9 @@ export const LoanCheckCard = ({
 
             {isModalOpen && (
                 <StampModal
-                    action={() => joinLoan(RepayTypes[repayType], loanAmount, loanPeriod)}
+                    action={() =>
+                        joinLoan(nowAnimal.animalId, RepayTypes[repayType], loanAmount, loanPeriod)
+                    }
                     goToScript={goToNextCard}
                     handleCloseModal={() => setIsModalOpen(false)}
                 />

@@ -11,6 +11,7 @@ const InfoBlock = styled.div`
 const InfoBox = styled.div`
     display: flex;
     flex-direction: column;
+
     gap: 8px;
 `;
 
@@ -66,6 +67,7 @@ const JoinBox = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin: 4px 0px;
 `;
 

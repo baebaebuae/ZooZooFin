@@ -150,7 +150,7 @@ export const Bubble = ({ npc, type, content, responses, onClick }) => {
                 </BubbleBox>
                 {responses[0].selection === null && (
                     <NextButtonBlock>
-                        <KeyboardDoubleArrowRightIcon sx={{ fontSize: 36 }} />
+                        <KeyboardDoubleArrowRightIcon color="action" sx={{ fontSize: 36 }} />
                     </NextButtonBlock>
                 )}
             </BubbleContainer>

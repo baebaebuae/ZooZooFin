@@ -12,12 +12,14 @@ import { StampModal } from '@components/root/stampModal';
 
 import { getApiClient } from '@stores/apiClient';
 
+import { useAnimalStore } from '../../store.js';
+
 const ProductName = styled.div`
     font-size: 14px;
     color: ${({ theme }) => theme.colors.gray};
 `;
 
-const terminateProduct = async (productType, productId) => {
+const terminateProduct = async (animalId, productType, productId) => {
     const apiClient = getApiClient();
 
     console.log('joinProducts - productType:', productType);
@@ -33,7 +35,7 @@ const terminateProduct = async (productType, productId) => {
         console.log('Request Data:', productData);
 
         const res = await apiClient.patch(`/${productType}/my`, productData, {
-            headers: { animalId: 1 },
+            headers: { animalId: animalId },
         });
 
         if (res.status === 200) {
@@ -62,6 +64,8 @@ export const ProductTerminationDetailCard = ({
     goToScript,
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const { nowAnimal } = useAnimalStore();
 
     return (
         <Card>
@@ -108,7 +112,7 @@ export const ProductTerminationDetailCard = ({
             <StampButton onClick={() => setIsModalOpen(true)} />
             {isModalOpen && (
                 <StampModal
-                    action={() => terminateProduct(productType, productId)}
+                    action={() => terminateProduct(nowAnimal.animalId, productType, productId)}
                     goToScript={goToScript}
                     handleCloseModal={() => setIsModalOpen(false)}
                 />

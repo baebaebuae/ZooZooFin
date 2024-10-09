@@ -11,12 +11,14 @@ import { StampModal } from '@components/root/stampModal';
 
 import { getApiClient } from '@stores/apiClient';
 
+import { useAnimalStore } from '../../store.js';
+
 const ProductName = styled.div`
     font-size: 14px;
     color: ${({ theme }) => theme.colors.gray};
 `;
 
-const joinProduct = async (productType, typeId, money) => {
+const joinProduct = async (animalId, productType, typeId, money) => {
     const apiClient = getApiClient();
 
     console.log('joinProducts - productType:', productType);
@@ -33,7 +35,7 @@ const joinProduct = async (productType, typeId, money) => {
         console.log('Request Data:', productData);
 
         const res = await apiClient.post(`/${productType}`, productData, {
-            headers: { animalId: 1 },
+            headers: { animalId: animalId },
         });
 
         if (res.status === 200) {
@@ -61,6 +63,8 @@ export const ProductCheckCard = ({
     goToScript,
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const { nowAnimal } = useAnimalStore();
 
     return (
         <Card>
@@ -105,7 +109,9 @@ export const ProductCheckCard = ({
 
             {isModalOpen && (
                 <StampModal
-                    action={() => joinProduct(productType, productTypeId, savingsAmount)}
+                    action={() =>
+                        joinProduct(nowAnimal.animalId, productType, productTypeId, savingsAmount)
+                    }
                     goToScript={goToScript}
                     handleCloseModal={() => setIsModalOpen(false)}
                 />

@@ -8,6 +8,8 @@ import { StampModal } from '@components/root/stampModal';
 
 import { getApiClient } from '@stores/apiClient';
 
+import { useAnimalStore } from '../../store.js';
+
 const InfoTitleBlock = styled.div`
     width: 100%;
     display: flex;
@@ -46,7 +48,7 @@ const WarningText = styled.div`
     color: ${({ theme }) => theme.colors.warn};
 `;
 
-const repayLoan = async (loanId) => {
+const repayLoan = async (animalId, loanId) => {
     const apiClient = getApiClient();
 
     console.log('joinProducts - productId:', loanId);
@@ -59,7 +61,7 @@ const repayLoan = async (loanId) => {
         console.log('Request Data:', productData);
 
         const res = await apiClient.patch('/loan/my', productData, {
-            headers: { animalId: 1 },
+            headers: { animalId: animalId },
         });
 
         if (res.status === 200) {
@@ -89,6 +91,8 @@ export const LoanRepayDetailCard = ({
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    const { nowAnimal } = useAnimalStore();
+
     return (
         <CardBlock onClick={handleClick}>
             <InfoTitleBlock>
@@ -116,7 +120,7 @@ export const LoanRepayDetailCard = ({
             <ProductJoinInfo
                 $isLoan={true}
                 infoTitle={'대출 원금'}
-                infoContent={`${loanAmount}원`}
+                infoContent={`${loanAmount}🥕`}
             />
             <ProductJoinInfo $isLoan={true} infoTitle={'대출 금리'} infoContent={`${loanRate}%`} />
             <ProductJoinInfo
@@ -147,7 +151,7 @@ export const LoanRepayDetailCard = ({
             </Button>
             {isModalOpen && (
                 <StampModal
-                    action={() => repayLoan(loanId)}
+                    action={() => repayLoan(nowAnimal.animalId, loanId)}
                     goToScript={goToScript}
                     handleCloseModal={() => setIsModalOpen(false)}
                 />
