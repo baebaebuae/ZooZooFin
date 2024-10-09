@@ -48,6 +48,14 @@ public class StockController {
         return ResponseDto.success(STOCK_DETAIL_SUCCESS, stockDetail);
     }
 
+    @GetMapping("/creation/{stockId}")
+    public ResponseDto<CreationUnitResponse> getCreationUnit(@AnimalId Long animalId,
+                                          @PathVariable Long stockId) {
+        CreationUnitResponse creationUnit = stockService.getCreationUnit(animalId, stockId);
+
+        return ResponseDto.success(CREATION_UNIT_SUCCESS, creationUnit);
+    }
+
     @PostMapping("/buy")
     public ResponseDto<Void> buyStock(@AnimalId Long animalId,
                                    @RequestBody BuyStockRequest buyStockRequest) {

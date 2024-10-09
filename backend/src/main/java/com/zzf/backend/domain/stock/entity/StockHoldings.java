@@ -18,10 +18,12 @@ public class StockHoldings extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long stockHoldingsId;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stock_id")
     private Stock stock;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "animal_id")
     private Animal animal;

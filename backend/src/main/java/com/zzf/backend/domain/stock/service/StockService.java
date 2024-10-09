@@ -11,6 +11,8 @@ public interface StockService {
 
     StockDetailResponse getStockDetail(Long animalId, Long stockId);
 
+    CreationUnitResponse getCreationUnit(Long animalId, Long stockId);
+
     void buyStock(Long animalId, BuyStockRequest buyStockRequest);
 
     void sellStock(Long animalId, SellStockRequest sellStockRequest);

@@ -27,6 +27,7 @@ public class StockServiceImpl implements StockService {
     private final StockRepository stockRepository;
     private final StockHoldingsRepository stockHoldingsRepository;
     private final FinancialStatementsRepository financialRepository;
+    private final CreationUnitRepository creationUnitRepository;
     private final NewsRepository newsRepository;
     private final StockHistoryRepository stockHistoryRepository;
     private final TurnRecordRepository turnRecordRepository;
@@ -77,6 +78,7 @@ public class StockServiceImpl implements StockService {
                             Long stockTotal = stockPrice * holdings.getStockCount();
 
                             return GetHoldingsResponse.Holdings.builder()
+                                    .stockId(holdings.getStock().getStockId())
                                     .stockField(holdings.getStock().getStockField())
                                     .stockName(holdings.getStock().getStockName())
                                     .stockRate(stockRate)
@@ -150,6 +152,10 @@ public class StockServiceImpl implements StockService {
 
         Stock stock = stockRepository.findById(stockId)
                 .orElseThrow(() -> new CustomException(STOCK_NOT_FOUND_EXCEPTION));
+        if (stock.getStockType().equals("ETF")) {
+            throw new CustomException(STOCK_TYPE_NOT_ALLOWED_EXCEPTION);
+        }
+
 
         List<Chart> chartList = chartRepository.findAllByStockAndTurnLessThanEqual(stock, animal.getTurn());
         if (chartList.isEmpty()) {
@@ -172,6 +178,40 @@ public class StockServiceImpl implements StockService {
                 .PER(fs.getPER())
                 .ROE(fs.getROE())
                 .PSR(fs.getPSR())
+                .chartDetail(chartList.stream()
+                        .map(StockDetailResponse::getChartDetail)
+                        .collect(Collectors.toList()))
+                .build();
+    }
+
+    @Override
+    public CreationUnitResponse getCreationUnit(Long animalId, Long stockId) {
+        Animal animal = animalRepository.findById(animalId)
+                .orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
+
+        Stock stock = stockRepository.findById(stockId)
+                .orElseThrow(() -> new CustomException(STOCK_NOT_FOUND_EXCEPTION));
+        if (!stock.getStockType().equals("ETF")) {
+            throw new CustomException(STOCK_TYPE_NOT_ALLOWED_EXCEPTION);
+        }
+
+        List<Chart> chartList = chartRepository.findAllByStockAndTurnLessThanEqual(stock, animal.getTurn());
+        if (chartList.isEmpty()) {
+            throw new CustomException(CHART_NOT_FOUND_EXCEPTION);
+        }
+
+        List<CreationUnit> creationUnitList = creationUnitRepository.findAllByStockOrderByElemPercentageDesc(stock);
+        if (creationUnitList.isEmpty()) {
+            throw new CustomException(CREATION_UNIT_NOT_FOUND_EXCEPTION);
+        }
+
+        return CreationUnitResponse.builder()
+                .elements(creationUnitList.stream()
+                        .map(cu -> CreationUnitResponse.Element.builder()
+                                .name(cu.getElemName())
+                                .percentage(cu.getElemPercentage())
+                                .build())
+                        .collect(Collectors.toList()))
                 .chartDetail(chartList.stream()
                         .map(StockDetailResponse::getChartDetail)
                         .collect(Collectors.toList()))
@@ -211,8 +251,8 @@ public class StockServiceImpl implements StockService {
             stockHoldings.setStockCount(stockHoldings.getStockCount() + buyStockRequest.getCount());
             stockHoldings.setStockAveragePrice(
                     (stockHoldings.getStockAveragePrice() * stockHoldings.getStockCount()
-                            + chart.getPrice() * buyStockRequest.getCount())
-                            / (stockHoldings.getStockCount() + buyStockRequest.getCount()));
+                     + chart.getPrice() * buyStockRequest.getCount())
+                    / (stockHoldings.getStockCount() + buyStockRequest.getCount()));
 
         } else {
             stockHoldings = StockHoldings.builder()

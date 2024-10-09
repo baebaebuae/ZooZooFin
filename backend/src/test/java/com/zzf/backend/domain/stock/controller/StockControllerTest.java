@@ -94,6 +94,7 @@ class StockControllerTest {
                                         fieldWithPath("body.totalInvestment").type(JsonFieldType.NUMBER).description("총 투자액"),
                                         fieldWithPath("body.totalProfit").type(JsonFieldType.NUMBER).description("이율"),
                                         fieldWithPath("body.holdingsList[]").type(JsonFieldType.ARRAY).description("보유 주식 리스트"),
+                                        fieldWithPath("body.holdingsList[].stockId").type(JsonFieldType.NUMBER).description("주식 ID"),
                                         fieldWithPath("body.holdingsList[].stockField").type(JsonFieldType.STRING).description("분야"),
                                         fieldWithPath("body.holdingsList[].stockName").type(JsonFieldType.STRING).description("이름"),
                                         fieldWithPath("body.holdingsList[].stockRate").type(JsonFieldType.NUMBER).description("상승률"),
@@ -271,7 +272,7 @@ class StockControllerTest {
     }
 
     @Test
-    @DisplayName("주식 상세정보 조회 - 성공")
+    @DisplayName("주식 상세정보 조회(국내, 해외) - 성공")
     public void stock_detail_success() throws Exception {
         // given
         long stockId = 10000;
@@ -319,7 +320,27 @@ class StockControllerTest {
     }
 
     @Test
-    @DisplayName("주식 상세정보 조회 - 존재하지 않는 주식")
+    @DisplayName("주식 상세정보 조회(국내, 해외) - ETF")
+    public void stock_detail_type_not_allowed() throws Exception {
+        // given
+        long stockId = 10002;
+
+        // when
+        ResultActions actions = mockMvc.perform(
+                get("/api/v1/stock/statements/{stockId}", stockId)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        actions
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.httpStatus").value(STOCK_TYPE_NOT_ALLOWED_EXCEPTION.getHttpStatus()))
+                .andExpect(jsonPath("$.message").value(STOCK_TYPE_NOT_ALLOWED_EXCEPTION.getMessage()));
+    }
+
+    @Test
+    @DisplayName("주식 상세정보 조회(국내, 해외) - 존재하지 않는 주식")
     public void stock_detail_stock_not_found() throws Exception {
         // given
         long stockId = 20000;
@@ -336,6 +357,88 @@ class StockControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.httpStatus").value(STOCK_NOT_FOUND_EXCEPTION.getHttpStatus()))
                 .andExpect(jsonPath("$.message").value(STOCK_NOT_FOUND_EXCEPTION.getMessage()));
+    }
+
+    @Test
+    @DisplayName("ETF CU 조회 - 성공")
+    public void creation_unit_success() throws Exception {
+        // given
+        long stockId = 10002;
+
+        // when
+        ResultActions actions = mockMvc.perform(
+                get("/api/v1/stock/creation/{stockId}", stockId)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.httpStatus").value(CREATION_UNIT_SUCCESS.getHttpStatus()))
+                .andExpect(jsonPath("$.message").value(CREATION_UNIT_SUCCESS.getMessage()))
+                .andDo(
+                        document("ETF CU 조회",
+                                ResourceSnippetParameters.builder()
+                                        .tag("주식")
+                                        .summary("ETF CU 조회 API")
+                                        .description("CU와 이동평균선을 위한 API"),
+                                responseFields(
+                                        fieldWithPath("httpStatus").type(JsonFieldType.NUMBER).description("응답 상태코드"),
+                                        fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
+                                        fieldWithPath("body.elements[]").type(JsonFieldType.ARRAY).description("구성"),
+                                        fieldWithPath("body.elements[].name").type(JsonFieldType.STRING).description("회사명"),
+                                        fieldWithPath("body.elements[].percentage").type(JsonFieldType.NUMBER).description("지분"),
+                                        fieldWithPath("body.chartDetail[]").type(JsonFieldType.ARRAY).description("차트"),
+                                        fieldWithPath("body.chartDetail[].price").type(JsonFieldType.NUMBER).description("가격"),
+                                        fieldWithPath("body.chartDetail[].highPrice").type(JsonFieldType.NUMBER).description("고가"),
+                                        fieldWithPath("body.chartDetail[].lowPrice").type(JsonFieldType.NUMBER).description("저가"),
+                                        fieldWithPath("body.chartDetail[].startPrice").type(JsonFieldType.NUMBER).description("시가"),
+                                        fieldWithPath("body.chartDetail[].endPrice").type(JsonFieldType.NUMBER).description("종가")
+                                )
+                        )
+                );
+
+    }
+
+    @Test
+    @DisplayName("ETF CU 조회 - 존재하지 않는 주식")
+    public void creation_unit_stock_not_found() throws Exception {
+        // given
+        long stockId = 20000;
+
+        // when
+        ResultActions actions = mockMvc.perform(
+                get("/api/v1/stock/creation/{stockId}", stockId)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        actions
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.httpStatus").value(STOCK_NOT_FOUND_EXCEPTION.getHttpStatus()))
+                .andExpect(jsonPath("$.message").value(STOCK_NOT_FOUND_EXCEPTION.getMessage()));
+    }
+
+    @Test
+    @DisplayName("ETF CU 조회 - ETF가 아님")
+    public void creation_unit_type_not_allowed() throws Exception {
+        // given
+        long stockId = 10000;
+
+        // when
+        ResultActions actions = mockMvc.perform(
+                get("/api/v1/stock/creation/{stockId}", stockId)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        actions
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.httpStatus").value(STOCK_TYPE_NOT_ALLOWED_EXCEPTION.getHttpStatus()))
+                .andExpect(jsonPath("$.message").value(STOCK_TYPE_NOT_ALLOWED_EXCEPTION.getMessage()));
     }
 
     @Test

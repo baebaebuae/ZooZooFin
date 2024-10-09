@@ -20,10 +20,12 @@ public class StockHistory extends BaseEntity {
     @Column(name = "stock_history_id")
     private Long stockHistoryId;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stock_id")
     private Stock stock;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "animal_id")
     private Animal animal;

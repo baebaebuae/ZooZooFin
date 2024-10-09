@@ -22,6 +22,7 @@ public enum SuccessCode {
     GET_STOCK_LIST_SUCCESS(200, "주식 리스트 조회 성공"),
     STOCK_INFO_SUCCESS(200, "주식 상세 정보 조회 성공"),
     STOCK_DETAIL_SUCCESS(200, "주식 재무제표 조회 성공"),
+    CREATION_UNIT_SUCCESS(200, "CU 조회 성공"),
     BUY_STOCK_SUCCESS(201, "주식 구매 성공"),
     SELL_STOCK_SUCCESS(204, "주식 판매 성공"),
 
