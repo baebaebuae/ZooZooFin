@@ -15,7 +15,7 @@ import StockResult from '@components/stock/stockList/StockResult';
 
 import Frog from '@/assets/images/characters/characters/Frog.gif';
 
-const SampleBlock = styled.div`
+const StockBlock = styled.div`
     display: flex;
     position: relative;
     flex-direction: column;
@@ -23,12 +23,14 @@ const SampleBlock = styled.div`
     padding: 10px 0px;
     gap: 21px;
     margin: 0px auto;
-    width: 95%;
+    margin-top: 20px;
+    width: 100%;
+    /* overflow-x: hidden; */
+    overflow-y: auto;
 `;
 
 const ImageContainer = styled.div`
     position: fixed;
-    max-width: 360px;
     bottom: 28%;
     right: -5%;
 `;
@@ -174,7 +176,7 @@ const Stock = () => {
         }
 
         return (
-            <SampleBlock>
+            <StockBlock>
                 <ImageContainer>
                     <NpcImage src={Frog} />
                 </ImageContainer>
@@ -185,7 +187,7 @@ const Stock = () => {
                     responses={currentScript.responses} // 볼드 처리된 responses
                     onClick={handleResponseClick}
                 />
-            </SampleBlock>
+            </StockBlock>
         );
     }
 
@@ -194,23 +196,23 @@ const Stock = () => {
         switch (currentScript.content) {
             case '주식거래소':
                 return (
-                    <SampleBlock>
+                    <StockBlock>
                         <StockChannel onChannelSelect={handleChannelSelection} />
-                    </SampleBlock>
+                    </StockBlock>
                 );
             case '주식구매':
                 return (
-                    <SampleBlock>
+                    <StockBlock>
                         {!isDone ? (
                             <StockBuy channel={channel} onOrderCompletion={handleOrderCompletion} />
                         ) : (
                             <StockResult onComplete={handleCompletion} type="buy" />
                         )}
-                    </SampleBlock>
+                    </StockBlock>
                 );
             case '주식판매':
                 return (
-                    <SampleBlock>
+                    <StockBlock>
                         {!isDone ? (
                             <StockSell
                                 channel={channel}
@@ -219,7 +221,7 @@ const Stock = () => {
                         ) : (
                             <StockResult onComplete={handleCompletion} type="sell" />
                         )}
-                    </SampleBlock>
+                    </StockBlock>
                 );
             case 'END':
                 return navigate('/map');

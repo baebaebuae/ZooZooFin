@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import styled from 'styled-components';
 
 import { ChannelMessage } from '@components/stock/common/container/ChannelContainer';
 import { MessageIcon } from '@components/stock/common/icon/StockIcons';

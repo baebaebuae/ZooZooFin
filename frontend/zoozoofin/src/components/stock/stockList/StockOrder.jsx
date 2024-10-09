@@ -4,6 +4,7 @@ import { OrderCard } from '@components/stock/common/card/OrderCard';
 import { ActiveButton } from '@components/stock/common/button/Button';
 import { useState, useEffect } from 'react';
 import useStockStore from '../common/store/StockStore';
+import styled from 'styled-components';
 
 export const StockOrder = ({ type, orderIsDone }) => {
     const [value, setValue] = useState(null);

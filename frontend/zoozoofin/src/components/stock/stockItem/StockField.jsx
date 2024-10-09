@@ -103,7 +103,7 @@ const TextStyle = styled.div`
 const FieldBox = styled.div`
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: ${({ count }) => (count > 3 ? 'flex-start' : 'center')};
     align-items: flex-start;
     width: 110%;
     padding: 25px 0;
@@ -144,6 +144,7 @@ const StockField = ({ field, type, onFieldSelect }) => {
     const [loading, setLoading] = useState(true); // 로딩 상태
     const [items, setItems] = useState(null);
     const [activeIndex, setActiveIndex] = useState(null); // 활성화된 필드의 인덱스를 관리
+    const [fieldCount, setFieldCount] = useState(8);
 
     const { myDomesticStocks, myOverseasStocks, myETFStocks } = useUserStockStore();
     // 데이터 로드 함수
@@ -167,6 +168,7 @@ const StockField = ({ field, type, onFieldSelect }) => {
 
             result = getMyStockFields(nowItems, field);
             setItems(Object.entries(result)); // 객체를 배열로 변환
+            setFieldCount(Object.entries(result).length); // 배열의 길이로 분야 개수 count
             setLoading(false);
         }
     };
@@ -223,7 +225,7 @@ const StockField = ({ field, type, onFieldSelect }) => {
                     </TextStyle>
                 </PriceContainer>
             </ExchangeRatebox>
-            <FieldBox ref={fieldBoxRef}>
+            <FieldBox ref={fieldBoxRef} count={fieldCount}>
                 <Wrapper>
                     {loading ? (
                         <div>주식 분야 확인 중 . . .</div>

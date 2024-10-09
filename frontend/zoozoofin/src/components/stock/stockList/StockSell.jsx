@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import styled from 'styled-components';
 
 import StockField from '@components/stock/stockItem/StockField';
 import StockProducts from '@components/stock/stockItem/StockProducts';
@@ -7,6 +8,15 @@ import { MessageIcon } from '@components/stock/common/icon/StockIcons';
 import { StockOrder } from '@components/stock/stockList/StockOrder';
 import OwnedStockCrad from '@components/stock/common/card/OwnedStockCrad';
 import StockDetail from '@components/stock/stockList/StockDetail';
+
+const StoreWrapper = styled.div`
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 21px;
+    margin: 0px auto;
+`;
 
 export const StockSell = ({ channel, onOrderCompletion }) => {
     // 테스트를 위한 isSelected => 목업 데이터 연결 후 삭제 예정
@@ -50,21 +60,21 @@ export const StockSell = ({ channel, onOrderCompletion }) => {
 
     if (isProductChecked) {
         return (
-            <>
+            <StoreWrapper>
                 {/* StockOrder 컴포넌트 */}
                 <StockOrder type={'sell'} orderIsDone={handleOrderCompletion} />
-            </>
+            </StoreWrapper>
         );
     } else if (isDetailClicked) {
         return (
-            <>
+            <StoreWrapper>
                 {/* StockDetail 컴포넌트 */}
                 <StockDetail />
-            </>
+            </StoreWrapper>
         );
     } else {
         return (
-            <>
+            <StoreWrapper>
                 {/* 주식 분야 선택 */}
                 <ChannelMessage>
                     <MessageIcon />
@@ -92,7 +102,7 @@ export const StockSell = ({ channel, onOrderCompletion }) => {
                         />
                     </>
                 )}
-            </>
+            </StoreWrapper>
         );
     }
 };

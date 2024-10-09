@@ -19,21 +19,15 @@ import useUserStore from '../../../stores/useUserStore';
 import useStockStore from '../common/store/StockStore';
 import { useUserStockStore } from '@components/stock/common/store/StockStore';
 
-const DropdownButton = styled.div`
+const StoreWrapper = styled.div`
+    width: 95%;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    width: 15px;
-    height: 15px;
-    padding: 1px 2px;
-    background-color: ${({ theme }) => theme.colors.primary};
-    border-radius: 3px;
-    color: white;
-    font-size: 10px;
-    position: absolute;
-    bottom: -5px;
-    right: 20px;
+    gap: 21px;
+    margin: 0px auto;
 `;
+
 const StockChannel = ({ onChannelSelect }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedChannel, setSelectedChannel] = useState(null);
@@ -69,7 +63,7 @@ const StockChannel = ({ onChannelSelect }) => {
     };
 
     return (
-        <>
+        <StoreWrapper>
             {isModalOpen && <ChannelModal channel={selectedChannel} onClose={handleCloseModal} />}
             <ChannelMessage>
                 <MessageIcon />
@@ -109,7 +103,7 @@ const StockChannel = ({ onChannelSelect }) => {
                     <LockedIcon /> LOCKED
                 </OverlayCard>
             </ChannelCard>
-        </>
+        </StoreWrapper>
     );
 };
 

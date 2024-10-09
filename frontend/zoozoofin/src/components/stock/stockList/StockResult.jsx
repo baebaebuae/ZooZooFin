@@ -5,8 +5,16 @@ import { ActiveButton } from '@components/stock/common/button/Button';
 import { useState, useEffect } from 'react';
 import useStockStore from '@components/stock/common/store/StockStore';
 import { getApiClient } from '@stores/apiClient';
+import styled from 'styled-components';
 
-// 구매, 판매 post axios 연결 예정
+const StoreWrapper = styled.div`
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 21px;
+    margin: 0px auto;
+`;
 
 const postStock = async (type, stockId, stockCount, onComplete) => {
     const apiClient = getApiClient();
@@ -50,7 +58,7 @@ export const StockResult = ({ onComplete, type }) => {
     };
 
     return (
-        <>
+        <StoreWrapper>
             <ChannelMessage>
                 <MessageIcon />
                 {value} 완료했어 개굴!
@@ -59,7 +67,7 @@ export const StockResult = ({ onComplete, type }) => {
             <ActiveButton size={'large'} onClick={handleOnClick}>
                 완료!
             </ActiveButton>
-        </>
+        </StoreWrapper>
     );
 };
 
