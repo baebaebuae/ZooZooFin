@@ -76,6 +76,17 @@ const StyledDivier = styled(Divider)`
     margin: 15px 0px 0px 0px;
 `;
 
+const formatStockRate = (stockRate) => {
+    const rate = Math.abs(stockRate);
+    if (stockRate < 0) {
+        return `▼ ${parseFloat(rate).toFixed(1)} %`; // 음수일 경우 부호를 빼고 ▼를 붙임
+    } else if (stockRate > 0) {
+        return `▲ ${parseFloat(rate).toFixed(1)} %`; // 양수일 경우 + 부호를 붙이고 ▲를 붙임
+    } else {
+        return 'new'; // 0일 경우 그대로 출력
+    }
+};
+
 const DetailContent = ({ totalPrice, gainLoss, myStock }) => {
     let currentState = '';
 
@@ -99,7 +110,7 @@ const DetailContent = ({ totalPrice, gainLoss, myStock }) => {
             <ListContainer>
                 <TextStyle type="list">총 손익</TextStyle>
                 <BuyingMoneyContent>
-                    <RateState rate={gainLoss}>{gainLoss} %</RateState>
+                    <RateState rate={gainLoss}>{formatStockRate(gainLoss)}</RateState>
                     <StockPrice>
                         <TextStyle type={currentState}>
                             {myStock ? myStock.toLocaleString() : 0} 🥕
