@@ -103,7 +103,7 @@ public class NextTurnServiceImpl implements NextTurnService {
         // 적금 다음 턴으로 넘어가기
         SavingsNextTurnDTO savingsNextTurnDTO = savingsGoToNextTurn(animal);
         turnRecord.setSavingsFinish(savingsNextTurnDTO.getSavingsFinishTotal());
-        turnRecord.setSavingsPay(savingsNextTurnDTO.getSavingsPayTotal());
+        turnRecord.setSavingsPay(-savingsNextTurnDTO.getSavingsPayTotal());
         warningRecord.setWarningSavingsCount(savingsNextTurnDTO.getWarningSavingsCount());
 
         // 대출 다음 턴으로 넘어가기
