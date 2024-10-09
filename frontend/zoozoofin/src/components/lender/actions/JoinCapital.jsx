@@ -21,7 +21,7 @@ const JoinCapital = ({ onProductConfirm }) => {
         <>
             <Message>
                 <NormalIcon icon={CharBoar} />
-                얼마를 대출할거야?
+                얼마나 대출할거야?
             </Message>
             <ProductCard />
 

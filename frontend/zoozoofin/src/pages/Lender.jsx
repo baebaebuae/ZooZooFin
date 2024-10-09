@@ -142,7 +142,7 @@ const Lender = () => {
         }, 1500);
 
         return () => clearTimeout(timer);
-    });
+    }, [checkCaptial]);
 
     // 대출 상품 선택 완료 확인 변수
     const [isProductConfirmed, setIsProductConfirmed] = useState(false);
@@ -190,11 +190,11 @@ const Lender = () => {
         return <Loader loadingText={'캐피탈로 입장하는 중...'} />;
     }
     if (currentScript.scriptId === 2 && capitalExist) {
-        currentScript.content = '뭐야 이전 대출부터 갚고 오라고!';
+        currentScript.content = '뭐야! 이전 대출금부터 갚고 오라고!';
         currentScript.responses = [
             {
                 nextScript: 0,
-                selection: '헉! 알겠습니다!',
+                selection: '헉! 알겠습니다...',
             },
         ];
     }
@@ -206,6 +206,7 @@ const Lender = () => {
 
         // 설명 모달을 처리하기 위한 조건문 작성
 
+        // 캐피탈 설명
         if (currentScript.scriptId === 14) {
             return (
                 <CapitalBlock>
@@ -242,16 +243,21 @@ const Lender = () => {
                             />
                         </CapitalWrapper>
                     </CapitalBlock>
+
+                    {/* 캐피탈 가입 : 선이자  */}
                     {currentScript.scriptId === 6 && (
                         <ConfirmButton
                             color={'tertiaryDeep'}
                             onClick={() => {
-                                handleResponseClick(7);
+                                animalAssets >= loanAmount * 0.1
+                                    ? handleResponseClick(7)
+                                    : handleResponseClick(22);
                             }}
                         >
                             {(loanAmount * 0.1).toLocaleString()}🥕 준비
                         </ConfirmButton>
                     )}
+                    {/* 캐피탈 상환 */}
                     {currentScript.scriptId === 18 &&
                         (turn === totalTurn ? (
                             <ConfirmButton
@@ -281,34 +287,30 @@ const Lender = () => {
         setIsProductConfirmed(true);
     };
 
-    const handleScript = () => {
-        const PostCaptialInfo = async (capitalAmounts, capitalPeriod) => {
-            const apiClient = getApiClient();
-            const capitalData = {
-                capitalAmounts: capitalAmounts,
-                capitalPeriod: capitalPeriod,
-            };
-
-            try {
-                console.log(capitalData);
-                if (capitalData) {
-                    const res = await apiClient.post('/capital', capitalData);
-                    if (res.status === 200) {
-                        console.log('Capital Done!');
-                        setIsDone(true);
-                    } else {
-                        console.error('Unexpected status code:', res.status);
-                    }
-                }
-            } catch (error) {
-                console.error('Capital Post Error: ', error);
-                return error;
-            }
+    const PostCaptialInfo = async (capitalAmounts, capitalPeriod) => {
+        const apiClient = getApiClient();
+        const capitalData = {
+            capitalAmounts: capitalAmounts,
+            capitalPeriod: capitalPeriod,
         };
 
-        if (loanAmount && loanPeriod) {
-            PostCaptialInfo(loanAmount, loanPeriod);
+        try {
+            console.log(capitalData);
+            if (capitalData) {
+                const res = await apiClient.post('/capital', capitalData);
+                if (res.status === 200) {
+                    console.log('Capital Done!');
+                    setIsDone(true);
+                } else {
+                    console.error('Unexpected status code:', res.status);
+                }
+            }
+        } catch (error) {
+            console.error('Capital Post Error: ', error);
+            return error;
         }
+    };
+    const handleScript = () => {
         // 3초의 서류 처리 중
         setTimeout(() => {
             handleResponseClick(currentScript.responses[0].nextScript);
@@ -337,9 +339,15 @@ const Lender = () => {
         }
         if (currentScript.content === '대출 처리 중') {
             // 3초의 대출 처리 중
-            setTimeout(() => {
-                handleResponseClick(currentScript.responses[0].nextScript);
-            }, 3000);
+
+            if (loanAmount && loanPeriod) {
+                console.log('대출 처리 중 . . .');
+                PostCaptialInfo(loanAmount, loanPeriod);
+                setTimeout(() => {
+                    handleResponseClick(currentScript.responses[0].nextScript);
+                }, 3000);
+            }
+
             return <Loading content={'대출 처리중'} />;
         }
 

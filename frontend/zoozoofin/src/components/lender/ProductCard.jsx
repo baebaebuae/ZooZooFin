@@ -7,6 +7,7 @@ import IconCarrot from '@assets/images/icons/icon_carrot.png';
 import { Card } from '@components/root/card';
 
 import { ProductDetail } from '@components/lender/ProductDetail';
+import useUserStore from '../../stores/useUserStore';
 
 const ProductName = styled.div`
     font-size: 14px;
@@ -43,10 +44,11 @@ const TextStyle = styled.div`
 `;
 
 const ProductCard = () => {
+    const { turn } = useUserStore();
     const productName = '콩팥 캐피탈';
     const maxLoan = 100000000;
     // 테스트를 위한 현재턴 임의 값 설정
-    const currentTurn = 30;
+    const currentTurn = turn ? turn : 0;
 
     return (
         <>
