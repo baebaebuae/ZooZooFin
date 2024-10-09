@@ -83,7 +83,7 @@ export const ProductDetail = ({ currentTurn }) => {
     // 대출 금액 변경 시 최종 상환 금액 계산
     useEffect(() => {
         if (loanAmount > 0 && loanPeriod > 0) {
-            const loanRate = 10; // 이자율
+            const loanRate = 10; // 복리 10
             const expectedLoanReturn = getMaturityInterest(loanAmount, loanRate, loanPeriod);
             setExpectedFinalAmount(expectedLoanReturn);
         } else {
