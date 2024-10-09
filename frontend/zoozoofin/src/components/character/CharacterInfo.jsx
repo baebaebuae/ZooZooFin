@@ -263,7 +263,7 @@ const CharacterInfo = ({ onClose }) => {
     };
 
     if (!characterData) {
-        return <div>Loading...</div>;
+        return <div></div>;
     }
 
     const allTasksCompleted = characterData.isSolveQuizToday && characterData.isWorkToday;
@@ -304,7 +304,7 @@ const CharacterInfo = ({ onClose }) => {
                 onClick={() => !characterData.isWorkToday && handleBadgeClick('work')}
               >
                 <BadgeIcon>
-                  <NormalIcon icon={IconCarrot}/>
+                  🥕
                 </BadgeIcon>
                 <BadgeText completed={characterData.isWorkToday} activeColor={theme.colors.orange}>
                   {characterData.isWorkToday ? '완료' : 'GO'}
@@ -314,30 +314,32 @@ const CharacterInfo = ({ onClose }) => {
             <AssetSection>
               <AssetRow>
                 <AssetLabel>순자산</AssetLabel>
-                <AssetValue bold>{characterData.totalAmount.toLocaleString()}<NormalIcon icon={IconCarrot}/></AssetValue>
+                <AssetValue bold>{characterData.totalAmount.toLocaleString()}🥕</AssetValue>
               </AssetRow>
             </AssetSection>
             <Spacer />
             <AssetSection>
               <AssetRow>
                 <AssetLabel>현금</AssetLabel>
-                <AssetValue>{characterData.totalAssets.toLocaleString()}<NormalIcon icon={IconCarrot}/></AssetValue>
+                <AssetValue>{characterData.totalAssets.toLocaleString()}🥕</AssetValue>
               </AssetRow>
               <AssetRow>
                 <AssetLabel>예금</AssetLabel>
-                <AssetValue>{characterData.totalDeposit.toLocaleString()}<NormalIcon icon={IconCarrot}/></AssetValue>
+                <AssetValue>{characterData.totalDeposit.toLocaleString()}🥕</AssetValue>
               </AssetRow>
               <AssetRow>
                 <AssetLabel>적금</AssetLabel>
-                <AssetValue>{characterData.totalSavings.toLocaleString()}<NormalIcon icon={IconCarrot}/></AssetValue>
+                <AssetValue>{characterData.totalSavings.toLocaleString()}🥕</AssetValue>
               </AssetRow>
               <AssetRow>
                 <AssetLabel>주식</AssetLabel>
-                <AssetValue>{characterData.totalStock.toLocaleString()}<NormalIcon icon={IconCarrot}/></AssetValue>
+                <AssetValue>{characterData.totalStock.toLocaleString()}🥕</AssetValue>
               </AssetRow>
               <AssetRow>
                 <AssetLabel>대출</AssetLabel>
-                <AssetValue color={theme.colors.warn}>-{characterData.totalLoan.toLocaleString()}<NormalIcon icon={IconCarrot}/></AssetValue>
+                <AssetValue color={theme.colors.warn}>
+                  {characterData.totalLoan > 0 ? `-${characterData.totalLoan.toLocaleString()}` : characterData.totalLoan.toLocaleString()}🥕
+                </AssetValue>
               </AssetRow>
             </AssetSection>
           </ModalContent>

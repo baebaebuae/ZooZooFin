@@ -16,10 +16,12 @@ import VolumeUpRoundedIcon from '@mui/icons-material/VolumeUpRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded';
 import FlagRoundedIcon from '@mui/icons-material/FlagRounded';
-
+import BedIcon from '@mui/icons-material/Bed';  // 잠자기 아이콘 추가
 import MissionDashboard from '../../components/Mission';
-import { useNavigate } from 'react-router-dom';
+import NextTurn from '../NextTurn';
 
+import { getApiClient } from '@/stores/apiClient';
+import { useNavigate } from 'react-router-dom';
 import { useMusicStore } from '@stores/useMusicStore.js';
 
 const HeaderButton = styled.div`
@@ -76,7 +78,7 @@ export const HeaderHamburgerButton = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [isMissionOpen, setIsMissionOpen] = useState(false);
     const [isCharacterHistoryOpen, setIsCharacterHistoryOpen] = useState(false);
-
+    const [isSleepModalOpen, setIsSleepModalOpen] = useState(false);
     const isMusicOn = useMusicStore((state) => state.isMusicOn);
     const toggleMusic = useMusicStore((state) => state.toggleMusic);
 
@@ -99,6 +101,22 @@ export const HeaderHamburgerButton = () => {
     const handleCharacterHistoryClick = () => {
         navigate('/character-history'); // 캐릭터 히스토리 페이지
         handleClose();
+    };
+
+    const handleSleepClick = () => {
+        setIsSleepModalOpen(true);
+        handleClose();
+    };
+
+    const handleConfirmSleep = async () => {
+        try {
+            const apiClient = getApiClient();
+            await apiClient.patch('/home/next');
+            setIsSleepModalOpen(false);
+            window.location.reload();
+        } catch (error) {
+            console.error('Failed to progress to next turn:', error);
+        }
     };
 
     return (
@@ -128,6 +146,12 @@ export const HeaderHamburgerButton = () => {
                     </ListItemIcon>
                     Mission
                 </MenuItem>
+                <MenuItem onClick={handleSleepClick}>
+                    <ListItemIcon>
+                        <BedIcon />
+                    </ListItemIcon>
+                    잠자기
+                </MenuItem>
                 <MenuItem onClick={toggleMusic}>
                     <ListItemIcon>
                         {isMusicOn ? <VolumeOffRoundedIcon /> : <VolumeUpRoundedIcon />}
@@ -142,6 +166,11 @@ export const HeaderHamburgerButton = () => {
                 </MenuItem>
             </Menu>
             <MissionDashboard isOpen={isMissionOpen} onClose={() => setIsMissionOpen(false)} />
+            <NextTurn 
+                isOpen={isSleepModalOpen}
+                onClose={() => setIsSleepModalOpen(false)}
+                onConfirm={handleConfirmSleep}
+            />
         </>
     );
 };

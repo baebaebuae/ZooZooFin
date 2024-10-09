@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import CorrectSVG from '@assets/images/mission/complete.png';
+import { getApiClient } from '@/stores/apiClient';
 
 const GlobalStyle = createGlobalStyle`
   @font-face {
@@ -160,7 +161,11 @@ const CloseButton = styled.button`
 `;
 
 const MissionDashboard = ({ isOpen, onClose }) => {
-    const missions = [
+    const [missions, setMissions] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const fallbackMissions = [
         { name: '은행 방문하기', completed: true, page: 'bank' },
         { name: '퀴즈 풀기', completed: false, page: 'school' },
         { name: '일하러가기', completed: false, page: 'work' },
@@ -172,6 +177,33 @@ const MissionDashboard = ({ isOpen, onClose }) => {
         { name: '예적금 상품 확인하기', completed: false, page: 'bank' },
         { name: '신용도 확인하기', completed: false, page: 'loan' },
     ];
+
+
+    useEffect(() => {
+        const fetchMissions = async () => {
+            setIsLoading(true);
+            try {
+                const apiClient = getApiClient();
+                const response = await apiClient.get('/animal/quest');
+                if (response.data && response.data.body && response.data.body.questList) {
+                    setMissions(response.data.body.questList);
+                } else {
+                    throw new Error('Invalid data structure');
+                }
+            } catch (error) {
+                console.error('Error fetching missions:', error);
+                setError('Failed to load missions. Using fallback data.');
+                setMissions(fallbackMissions);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        if (isOpen) {
+            fetchMissions();
+        }
+    }, [isOpen]);
+    
 
     const incompleteMissions = missions.filter((mission) => !mission.completed);
     const completedMissions = missions.filter((mission) => mission.completed);

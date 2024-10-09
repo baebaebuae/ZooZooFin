@@ -10,6 +10,8 @@ import TerminateProduct from '@components/bank/actions/TerminateProduct';
 import Bankrupt from '@components/bank/actions/Bankrupt';
 import { Loader } from '@components/Loader';
 
+import Pig from '@/assets/images/characters/characters/Pig.gif';
+
 const BankBlock = styled.div`
     display: flex;
     flex-direction: column;
@@ -27,6 +29,18 @@ const BubbleBlock = styled(Bubble)`
     position: fixed;
     bottom: 0;
     right: 0;
+`;
+
+const ImageContainer = styled.div`
+    position: fixed;
+    bottom: 16%;
+    right: -69%;
+`;
+
+const NpcImage = styled.img`
+    width: 700px; 
+    height: 325px;
+    object-fit: contain;
 `;
 
 const Bank = () => {
@@ -109,9 +123,13 @@ const Bank = () => {
         return <Loader loadingText={'은행으로 입장하는 중...'} />;
     }
 
+    // NPC
     if (currentScript.type === 'script') {
         return (
             <BankBlock>
+                <ImageContainer>
+                    <NpcImage src={Pig} alt="NPC" /> 
+                </ImageContainer>
                 <BubbleBlock
                     npc={'꿀찌'}
                     type={currentScript.type}

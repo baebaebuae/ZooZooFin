@@ -9,6 +9,8 @@ import TutorialLaptop from '@assets/images/background/tutorial_laptop.png';
 import TutorialHeader from '@assets/images/background/tutorial_header.png';
 import TutorialArrow from '@assets/images/background/tutorial_arrow.png';
 
+import Puppy from '@/assets/images/characters/characters/Puppy.gif';
+
 import { useStore, useAnimalStore } from '../store.js';
 
 import { useGLTF, OrbitControls } from '@react-three/drei';
@@ -89,22 +91,35 @@ const ArrowBox = styled.div`
     top: 100px;
 `;
 
-const NPCModel = () => {
-    const modelRef = useRef();
-    // 3d 모델 불러오기
-    const { scene } = useGLTF('/models/mungmung.glb');
+const ImageContainer = styled.div`
+    position: fixed;
+    bottom: 26%;
+    right: -13%;
+`;
 
-    // mungmung 버전
-    return (
-        <primitive
-            object={scene}
-            scale={1.3}
-            ref={modelRef}
-            position={[0.4, -2, -0.3]}
-            rotation={[0, Math.PI / 6, 0]}
-        />
-    );
-};
+const NpcImage = styled.img`
+    width: 300px;
+    height: 250px;
+    object-fit: contain;
+`;
+
+
+// const NPCModel = () => {
+//     const modelRef = useRef();
+//     // 3d 모델 불러오기
+//     const { scene } = useGLTF('/models/mungmung.glb');
+
+//     // mungmung 버전
+//     return (
+//         <primitive
+//             object={scene}
+//             scale={1.3}
+//             ref={modelRef}
+//             position={[0.4, -2, -0.3]}
+//             rotation={[0, Math.PI / 6, 0]}
+//         />
+//     );
+// };
 
 const Tutorial = () => {
     const { setScripts, scripts, fetchTutorialScript } = useStore();
@@ -186,8 +201,8 @@ const Tutorial = () => {
 
     if (!currentScript) return <Loader loadingText={'주주시티에 입장하는중'} />;
 
-    const receivedAnimalTypeId = location.state.animalTypeId;
-    // const receivedAnimalTypeId = 1; //임시로 지정
+    // const receivedAnimalTypeId = location.state.animalTypeId;
+    const receivedAnimalTypeId = 1; //임시로 지정
 
     let backgroundImage;
 
@@ -368,7 +383,7 @@ const Tutorial = () => {
     return (
         <TutorialContainer>
             {/* NPC 캐릭터 추가 */}
-            <Canvas>
+            {/* <Canvas>
                 <axesHelper args={[200, 200, 200]} />
                 <Suspense>
                     <ambientLight intensity={2.2} color="#fbf8ef" />
@@ -399,7 +414,10 @@ const Tutorial = () => {
                         minAzimuthAngle={Math.PI / 5}
                     />
                 </Suspense>
-            </Canvas>
+            </Canvas> */}
+            <ImageContainer>
+                <NpcImage src={Puppy} alt="NPC" />
+            </ImageContainer>
             <BubbleBlock
                 npc={'뭉뭉'}
                 type={currentScript.type}

@@ -1,8 +1,7 @@
-// {} 수정 완료 - 24.10.08 정진영
 import { create } from 'zustand';
 import { getApiClient } from './apiClient';
 
-const useUserStore = create((set) => ({
+const useUserStore = create((set, get) => ({
     animalImg: '',
     animalAssets: 0,
     memberGoldBar: 0,
@@ -15,12 +14,11 @@ const useUserStore = create((set) => ({
         try {
             const apiClient = getApiClient();
             const response = await apiClient.get('/member/profile');
-            console.log(response.data)
             set({
                 animalImg: response.data.body.animalImg,
                 animalAssets: response.data.body.animalAssets,
                 memberGoldBar: response.data.body.memberGoldBar,
-                // turn: response.data.turn,
+                // turn: response.data.body.turn,
                 isLoading: false,
             });
         } catch (error) {
@@ -29,11 +27,13 @@ const useUserStore = create((set) => ({
         }
     },
 
-    updateUserProfile: (newData) => {
+    updateUserProfile: async (newData) => {
         set((state) => ({
             ...state,
             ...newData,
         }));
+        // 로컬 업데이트 후 서버와 동기화
+        await get().fetchUserProfile();
     },
 
     resetStore: () => {

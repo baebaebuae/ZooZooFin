@@ -12,6 +12,8 @@ import InstructLoan from '@components/loan/actions/InstructLoan';
 
 import { Loader } from '@components/Loader';
 
+import Raccoon from '@/assets/images/characters/characters/Raccoon.gif';
+
 const LoanBlock = styled.div`
     display: flex;
     flex-direction: column;
@@ -29,6 +31,18 @@ const BubbleBlock = styled(Bubble)`
     position: fixed;
     bottom: 0;
     right: 0;
+`;
+
+const ImageContainer = styled.div`
+    position: fixed;
+    bottom: 20%;
+    right: -64%;
+`;
+
+const NpcImage = styled.img`
+    width: 700px; 
+    height: 290px;
+    object-fit: contain;
 `;
 
 const Loan = () => {
@@ -91,6 +105,9 @@ const Loan = () => {
     if (currentScript.type === 'script') {
         return (
             <LoanBlock>
+                <ImageContainer>
+                    <NpcImage src={Raccoon} alt="NPC" /> 
+                </ImageContainer>
                 <BubbleBlock
                     npc={'너굴맨'}
                     type={currentScript.type}

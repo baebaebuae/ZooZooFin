@@ -21,7 +21,7 @@ import Stock from '@pages/Stock';
 import Tutorial from '@pages/Tutorial';
 import CreateAnimal from '@pages/CreateAnimal';
 import Work from '@pages/Work';
-import WalletPage from '@pages/test/WalletPage';
+import Wallet from '../components/Wallet';
 import Auth from '../pages/Auth';
 import TestPaper from '../components/school/TestPaper';
 import Game from '@components/work/Game';
@@ -162,7 +162,7 @@ const AppRouter = () => {
                     <Route path="inGame" element={<Game />} />
                 </Route>
                 <Route path="/ending" element={<Ending />} />
-                <Route path="/wallet" element={<WalletPage />} />
+                <Route path="/wallet" element={<Wallet />} />
 
                 <Route path="/character-history" element={<CharacterHistory />} />
 
