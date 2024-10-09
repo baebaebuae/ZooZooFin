@@ -88,7 +88,7 @@ const Title = styled.h2`
   font-weight: bold;
   color: ${({ theme }) => theme.colors.primaryDeep};
   margin: 0;
-  max-width: 45%;
+  max-width: 80%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -96,7 +96,7 @@ const Title = styled.h2`
 
 
 const StyledButton = styled(Button)`
-  max-width: 45%;
+  max-width: 20%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

@@ -23,6 +23,8 @@ import NextTurn from '../NextTurn';
 import { getApiClient } from '@/stores/apiClient';
 import { useNavigate } from 'react-router-dom';
 import { useMusicStore } from '@stores/useMusicStore.js';
+4
+import useUserStore from '@/stores/useUserStore';
 
 const HeaderButton = styled.div`
     display: flex;
@@ -81,7 +83,8 @@ export const HeaderHamburgerButton = () => {
     const [isSleepModalOpen, setIsSleepModalOpen] = useState(false);
     const isMusicOn = useMusicStore((state) => state.isMusicOn);
     const toggleMusic = useMusicStore((state) => state.toggleMusic);
-
+    const fetchUserProfile = useUserStore((state) => state.fetchUserProfile);
+    
     const open = Boolean(anchorEl);
 
     const navigate = useNavigate();
@@ -112,12 +115,14 @@ export const HeaderHamburgerButton = () => {
         try {
             const apiClient = getApiClient();
             await apiClient.patch('/home/next');
+            await fetchUserProfile();  // 사용자 정보 새로고침
             setIsSleepModalOpen(false);
-            window.location.reload();
+            navigate('/myroom');
         } catch (error) {
             console.error('Failed to progress to next turn:', error);
         }
     };
+    
 
     return (
         <>
@@ -144,7 +149,7 @@ export const HeaderHamburgerButton = () => {
                     <ListItemIcon>
                         <FlagRoundedIcon />
                     </ListItemIcon>
-                    Mission
+                    미션
                 </MenuItem>
                 <MenuItem onClick={handleSleepClick}>
                     <ListItemIcon>
@@ -156,7 +161,7 @@ export const HeaderHamburgerButton = () => {
                     <ListItemIcon>
                         {isMusicOn ? <VolumeOffRoundedIcon /> : <VolumeUpRoundedIcon />}
                     </ListItemIcon>
-                    {isMusicOn ? 'BGM OFF' : 'BGM ON'}
+                    {isMusicOn ? 'BGM 켜기' : 'BGM 끄기'}
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
                     <ListItemIcon>

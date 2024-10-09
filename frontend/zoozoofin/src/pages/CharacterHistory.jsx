@@ -8,6 +8,8 @@ import Portfolio from '../components/character/Portfolio';
 import { useNavigate } from 'react-router-dom'; 
 import { Loading } from '@components/root/loading';
 
+import mungmung from '@assets/images/characters/mungmungprofile.png';
+
 // 캐릭터 이미지 import
 import AnimalType1Image from '@/assets/images/history/1.png';
 import AnimalType2Image from '@/assets/images/history/2.png';
@@ -154,21 +156,46 @@ const ModalWrapper = styled.div`
   z-index: 1000;
 `;
 
+const NoCharacterWrapper = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
+  max-width: 400px;
+`;
+
+const MessageContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  width: 100%;
+`;
+
+const IconWrapper = styled.div`
+  margin-right: 20px;
+  padding-bottom:50px;
+`;
+
+const NoCharacterMessage = styled.div`
+  color: black;
+  font-size: 22px;
+  font-weight: bold;
+  flex: 1;
+  text-align: left;
+  white-space: pre-line;  // 줄바꿈
+  padding-bottom:50px;
+`;
+
 const CharacterHistory = () => {
   const [animalData, setAnimalData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedAnimal, setSelectedAnimal] = useState(null);
   const [isPortfolioOpen, setIsPortfolioOpen] = useState(false);
   const navigate = useNavigate(); 
-
-  const defaultAnimalData = {
-    animalNumber: 3,
-    animals: [
-      { animalId: 1, animalTypeId: 1, animalName: "토토", animalAssets: 1000000, createdDate: "2024.08.15" },
-      { animalId: 2, animalTypeId: 2, animalName: "삐삐", animalAssets: 2000000, createdDate: "2024.08.15" },
-      { animalId: 3, animalTypeId: 3, animalName: "리치덕", animalAssets: 3000000, createdDate: "2024.08.02" },
-    ]
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -179,13 +206,12 @@ const CharacterHistory = () => {
         if (response.data && response.data.animals && response.data.animals.length > 0) {
           setAnimalData(response.data);
         } else {
-          console.log('No data received from API, using default data');
-          setAnimalData(defaultAnimalData);
+          console.log('No data received from API or no animals available');
+          setAnimalData({ animals: [] });
         }
       } catch (error) {
         console.error('Error fetching animal data:', error);
-        console.log('Using default data due to error');
-        setAnimalData(defaultAnimalData);
+        setAnimalData({ animals: [] });
       } finally {
         setIsLoading(false);
       }
@@ -236,24 +262,45 @@ const CharacterHistory = () => {
         <ContentWrapper>
           <CloseButton onClick={handleGoBack}>&times;</CloseButton>
           
-          {animalData.animals.map((animal, index) => {
-            const CharacterComponent = index === 0 ? Character1 : index === 1 ? Character2 : Character3;
-            const ImageComponent = index === 2 ? SmallerCharacterImage : CharacterImage;
-            
-            return (
-              <CharacterComponent key={animal.animalId}>
-                <ImageComponent src={animalImages[animal.animalTypeId]} alt={animal.animalName} />
-                <CharacterDate>{new Date(animal.createdDate).toLocaleDateString()}</CharacterDate>
-                <CustomButton 
-                  size="large" 
-                  color="primaryDeep"
-                  onClick={() => handleAnimalClick(animal)}
-                >
-                  {animal.animalName}
-                </CustomButton>
-              </CharacterComponent>
-            );
-          })}
+          {animalData.animals.length === 0 ? (
+            <NoCharacterWrapper>
+              <MessageContainer>
+                <IconWrapper>
+                  <img src={mungmung} alt="Mungmung Character" width="80" height="80" />
+                </IconWrapper>
+                <NoCharacterMessage>
+                  아직 완료된{'\n'}캐릭터가 없어!
+                </NoCharacterMessage>
+              </MessageContainer>
+              <div></div>
+              <CustomButton 
+                size="large" 
+                color="primaryDeep"
+                onClick={handleGoBack}
+              >
+                돌아가기
+              </CustomButton>
+            </NoCharacterWrapper>
+          ) : (
+            animalData.animals.map((animal, index) => {
+              const CharacterComponent = index === 0 ? Character1 : index === 1 ? Character2 : Character3;
+              const ImageComponent = index === 2 ? SmallerCharacterImage : CharacterImage;
+              
+              return (
+                <CharacterComponent key={animal.animalId}>
+                  <ImageComponent src={animalImages[animal.animalTypeId]} alt={animal.animalName} />
+                  <CharacterDate>{new Date(animal.createdDate).toLocaleDateString()}</CharacterDate>
+                  <CustomButton 
+                    size="large" 
+                    color="primaryDeep"
+                    onClick={() => handleAnimalClick(animal)}
+                  >
+                    {animal.animalName}
+                  </CustomButton>
+                </CharacterComponent>
+              );
+            })
+          )}
         </ContentWrapper>
       </PageContainer>
       {isPortfolioOpen && selectedAnimal && (
