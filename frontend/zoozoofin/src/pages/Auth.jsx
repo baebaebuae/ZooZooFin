@@ -12,7 +12,7 @@ const Auth = () => {
     useEffect(() => {
         const apiClient = getApiClient();
         const fetchUserState = async () => {
-            if (accessToken.length !== 0) {
+            if (accessToken && accessToken.length > 0) {
                 try {
                     localStorage.setItem('accessToken', accessToken);
                     localStorage.setItem('refreshToken', refreshToken);
@@ -37,7 +37,7 @@ const Auth = () => {
             }
         };
         fetchUserState();
-    }, []);
+    }, [accessToken, refreshToken]);
 
     return <div>Loading</div>;
 };
