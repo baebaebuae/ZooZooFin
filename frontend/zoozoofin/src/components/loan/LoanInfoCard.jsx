@@ -33,7 +33,7 @@ export const LoanInfoCard = ({ charName, totalLoan, restLoan, handleClick }) => 
                 infoTitle={'총 대출 원금'}
                 infoContent={`${totalLoan}🥕`}
             />
-            <ProductJoinInfo $isLoan={true} infoTitle={'남은 원금'} infoContent={`${restLoan}원`} />
+            <ProductJoinInfo $isLoan={true} infoTitle={'남은 원금'} infoContent={`${restLoan}🥕`} />
             <ProgressBox $isLoan={true} rate={55} />
         </CardBlock>
     );

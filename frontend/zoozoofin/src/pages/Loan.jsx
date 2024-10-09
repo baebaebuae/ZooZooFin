@@ -40,19 +40,29 @@ const ImageContainer = styled.div`
 `;
 
 const NpcImage = styled.img`
-    width: 700px; 
+    width: 700px;
     height: 290px;
     object-fit: contain;
 `;
 
 const Loan = () => {
-    const { scripts, fetchTutorialScript } = useStore();
+    const { setScripts, scripts, fetchTutorialScript } = useStore();
     const [currentId, setCurrentId] = useState(1);
     const [currentScript, setCurrentScript] = useState(null);
 
     const navigate = useNavigate();
 
     const { nowAnimal, getAnimalData } = useAnimalStore();
+
+    // animalName 가져오기
+    useEffect(() => {
+        const fetchAnimalData = async () => {
+            await getAnimalData();
+            setScripts([]); // 스크립트 상태 초기화
+        };
+
+        fetchAnimalData();
+    }, [location.pathname, setScripts, getAnimalData]);
 
     // scripts 가져오기(비동기)
     useEffect(() => {
@@ -106,7 +116,7 @@ const Loan = () => {
         return (
             <LoanBlock>
                 <ImageContainer>
-                    <NpcImage src={Raccoon} alt="NPC" /> 
+                    <NpcImage src={Raccoon} alt="NPC" />
                 </ImageContainer>
                 <BubbleBlock
                     npc={'너굴맨'}

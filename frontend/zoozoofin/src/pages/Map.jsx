@@ -1,14 +1,27 @@
 import { styled } from 'styled-components';
-import { Suspense, useRef, useEffect } from 'react';
+import { Suspense, useRef, useEffect, useState } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls, useGLTF, Environment } from '@react-three/drei';
 import { useNavigate } from 'react-router-dom';
 import * as THREE from 'three';
 
+import { Bill } from '@components/Bill';
+
+const BillContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+`;
+
 // Environment 설정
 // https://drei.docs.pmnd.rs/staging/environment
 
-const MapSample = () => {
+const MapSample = ({ setIsPostboxClicked }) => {
     const modelRef = useRef();
     const navigate = useNavigate();
 
@@ -94,9 +107,10 @@ const MapSample = () => {
                 navigate('/myroom');
             } else if (clickedObject.parent.name === 'Carrots') {
                 navigate('/work');
+            } else if (clickedObject.parent.name === 'Postbox') {
+                setIsPostboxClicked(true);
+                // navigate('/work');
             }
-            // 객체로 묶어서 ex.{'BuildingBank' : 'bank', 'BuildingStock': 'stock'}
-            // 순회하기?
         }
     };
     // useFrame(() => {s
@@ -136,46 +150,43 @@ const CanvasBoard = styled.div`
 //     '/environmentMaps/0/pz.png',
 //     '/environmentMaps/0/nz.png',
 // ]);
+
 const Sinijini = () => {
+    const [isPostboxClicked, setIsPostboxClicked] = useState(false);
+
     return (
-        <CanvasBoard>
-            <Canvas
-                shadows
-                camera={{ fov: 40, position: [4, 5.3, 4.9] }}
-                style={{ background: 'none' }}
-            >
-                <axesHelper args={[200, 200, 200]} />
-                {/* x,y,z축 확인하는거임 */}
-                <ambientLight color={'#EBF4F0'} intensity={3} />
-                {/* <directionalLight color={'#f7954f'} position={[10, 10, 30]} intensity={0.5} /> */}
-                <directionalLight
-                    castShadow
-                    position={(-1, 1, 1)}
-                    color={'#cdcdcd'}
-                    intensity={4}
-                    // shadow-mapSize-width={2048}
-                    // shadow-mapSize-height={2048}
-                    // shadow-camera-far={10}
-                    // shadow-camera-left={-5}
-                    // shadow-camera-right={5}
-                    // shadow-camera-top={5}
-                    // shadow-camera-bottom={-5}
-                    shadow-bias={-0.0001}
-                    shadow-normalBias={0.01}
-                />
-                <Suspense fallback={null}>
-                    <MapSample castShadow />
-                </Suspense>
-                <OrbitControls
-                    enablePan={true}
-                    enableZoom={false}
-                    enableRotate={false}
-                    minDistance={6}
-                    maxDistance={6}
-                    maxPolarAngle={Math.PI / 2}
-                />
-            </Canvas>
-        </CanvasBoard>
+        <>
+            {isPostboxClicked && <Bill checkBill={() => setIsPostboxClicked(false)} />}
+            <CanvasBoard>
+                <Canvas
+                    shadows
+                    camera={{ fov: 40, position: [4, 5.3, 4.9] }}
+                    style={{ background: 'none' }}
+                >
+                    <ambientLight color={'#EBF4F0'} intensity={3} />
+                    {/* <directionalLight color={'#f7954f'} position={[10, 10, 30]} intensity={0.5} /> */}
+                    <directionalLight
+                        castShadow
+                        position={(-1, 1, 1)}
+                        color={'#cdcdcd'}
+                        intensity={4}
+                        shadow-bias={-0.0001}
+                        shadow-normalBias={0.01}
+                    />
+                    <Suspense fallback={null}>
+                        <MapSample castShadow setIsPostboxClicked={setIsPostboxClicked} />
+                    </Suspense>
+                    <OrbitControls
+                        enablePan={true}
+                        enableZoom={false}
+                        enableRotate={false}
+                        minDistance={6}
+                        maxDistance={6}
+                        maxPolarAngle={Math.PI / 2}
+                    />
+                </Canvas>
+            </CanvasBoard>
+        </>
     );
 };
 

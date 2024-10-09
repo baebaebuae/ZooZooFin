@@ -38,7 +38,7 @@ const ImageContainer = styled.div`
 `;
 
 const NpcImage = styled.img`
-    width: 700px; 
+    width: 700px;
     height: 325px;
     object-fit: contain;
 `;
@@ -98,7 +98,7 @@ const Bank = () => {
 
             console.log(script);
         }
-    }, [scripts, currentId]);
+    }, [scripts, currentId, nowAnimal.animalName]);
 
     const handleResponseClick = (nextScript) => {
         // if (!nextScript) {
@@ -128,7 +128,7 @@ const Bank = () => {
         return (
             <BankBlock>
                 <ImageContainer>
-                    <NpcImage src={Pig} alt="NPC" /> 
+                    <NpcImage src={Pig} alt="NPC" />
                 </ImageContainer>
                 <BubbleBlock
                     npc={'꿀찌'}

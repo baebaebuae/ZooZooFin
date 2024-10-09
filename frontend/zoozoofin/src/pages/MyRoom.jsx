@@ -31,7 +31,7 @@ const BillContainer = styled.div`
 `;
 
 const MyRoom = () => {
-    const { isBillShown, showBill, resetBill } = useBillStore();
+    const { billTurn, isBillShown, showBill, resetBill } = useBillStore();
 
     // RoomComponent 출력 후 고지서 출력을 위한 처리
     useEffect(() => {
@@ -43,19 +43,24 @@ const MyRoom = () => {
         return () => clearTimeout(timer);
     }, []);
 
-    if (!isBillShown) {
-        showBill();
-    }
+    // if (!isBillShown) {
+    //     showBill();
+    // }
 
     const checkBill = () => {
         // setIsBillShown(true);
-        resetBill();
+        // resetBill();
+        showBill();
     };
 
     return (
         <>
             <RoomBlock>
-                {!isBillShown && <Bill checkBill={checkBill} />}
+                {
+                    // 현재 턴과 비교한 조건 추가하기
+                    // currentTurn != billTurn &&
+                    !isBillShown && <Bill checkBill={checkBill} />
+                }
                 <RoomComponent />
             </RoomBlock>
         </>

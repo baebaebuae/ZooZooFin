@@ -11,6 +11,8 @@ const BillContainer = styled.div`
     align-items: center;
     letter-spacing: 2px;
 
+    z-index: 1000;
+
     gap: 4px;
     padding: 6px;
     background-color: ${({ theme }) => theme.colors.billBack};

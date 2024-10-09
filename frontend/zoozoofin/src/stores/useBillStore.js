@@ -3,7 +3,9 @@ import { create } from 'zustand';
 export const useBillStore = create((set) => ({
     isBillShown: false,
 
-    showBill: () => set({ isBillShown: true }),
+    billTurn: 1,
+
+    showBill: () => set((state) => ({ billTurn: state.billTurn + 1, isBillShown: true })),
 
     resetBill: () => set({ isBillShown: false }),
 }));

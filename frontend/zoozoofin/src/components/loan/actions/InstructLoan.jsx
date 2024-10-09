@@ -5,7 +5,13 @@ import { Loading } from '@components/root/loading';
 import { InstructionCard } from '@components/loan/InstructionCard';
 import { Button } from '@components/root/buttons';
 
-// import { getApiClient } from '@stores/apiClient';
+import loan0 from '@assets/images/loan/0.png';
+import loan1 from '@assets/images/loan/1.png';
+import loan2 from '@assets/images/loan/2.png';
+import loan3 from '@assets/images/loan/3.png';
+import loan4 from '@assets/images/loan/4.png';
+import loan5 from '@assets/images/loan/5.png';
+import loan6 from '@assets/images/loan/6.png';
 
 const Block = styled.div`
     display: flex;
@@ -42,9 +48,10 @@ const InstructLoan = ({ goToScript }) => {
     const questions = [
         '▶ 대출이자는 왜 따로 갚지?',
         '▶ 단리가 뭐야?',
-        '▶ 원금균등상환이 뭐야?',
-        '▶ 원리금균등상환이 뭐야?',
-        '▶ 만기일시상환이 뭐야?',
+        '▶ 원금 균등 상환이 뭐야?',
+        '▶ 원리금 균등 상환이 뭐야?',
+        '▶ 만기 일시 상환이 뭐야?',
+        '▶ 대출 상환 방식을 비교해줘.',
         '▶ 대출금을 갚지 못하면 어떻게 돼?',
         '▶ 다 확인했어.',
     ];
@@ -56,7 +63,10 @@ const InstructLoan = ({ goToScript }) => {
         '원리금균등상환은 매턴 약정된 원금과 이자가 정액으로 나가는 방식이다. 매턴 원금은 늘어나기 때문에, 이자는 그만큼 줄어들지. 쉽게 말해서, 매달 일정한 돈을 내는거다. ',
         '만기일시상환은 매 턴 원금에 대한 이자만 납부하고 원금은 만기에 모두 상환하는 방식이다. 매달 내는 금액은 적지만, 대출 기간 동안 내야 하는 이자 금액은 가장 높지.',
         '대출금을 갚지 못하면 자동으로 파산 절차가 진행된다. ',
+        '',
     ];
+
+    const answerImages = [loan0, loan1, loan2, loan3, loan4, loan5, loan6];
 
     const getAnswer = (index) => {
         setSelectedQuestionIndex(index);
@@ -89,9 +99,10 @@ const InstructLoan = ({ goToScript }) => {
                 } else if (currentCard === 2) {
                     return (
                         <Block>
-                            <TitleBlock>{questions[selectedQuestionIndex]}</TitleBlock>
-                            <div>이미지</div>
-                            <AnswerBlock>{answers[selectedQuestionIndex]}</AnswerBlock>
+                            {/* <TitleBlock>{questions[selectedQuestionIndex]}</TitleBlock> */}
+
+                            <img src={answerImages[selectedQuestionIndex]} width={250} />
+                            {/* <AnswerBlock>{answers[selectedQuestionIndex]}</AnswerBlock> */}
                             <Button color={'primaryDeep'} onClick={() => backToPrevCard()}>
                                 닫기
                             </Button>

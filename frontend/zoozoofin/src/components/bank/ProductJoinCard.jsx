@@ -7,6 +7,8 @@ import { InputBox } from '@components/inputBox';
 import { Card } from '@components/root/card';
 import { Button } from '@components/root/buttons';
 
+import useUserStore from '@stores/useUserStore';
+
 const Block = styled.div`
     display: flex;
     flex-direction: column;
@@ -31,6 +33,8 @@ export const ProductJoinCard = ({
 }) => {
     const [savingsAmount, setSavingsAmount] = useState(0);
     const [expectedFinalAmount, setExpectedFinalAmount] = useState(0);
+
+    const { animalAssets } = useUserStore();
 
     function handleSavingsAmountChange(newAmount) {
         setSavingsAmount(newAmount);
@@ -65,7 +69,7 @@ export const ProductJoinCard = ({
                     amount2={isSavings ? 50000 : 500000}
                     amount3={isSavings ? 100000 : 1000000}
                     amount4={isSavings ? 500000 : 5000000}
-                    maxAmount={maxAmount}
+                    maxAmount={animalAssets}
                     onSavingsAmountChange={handleSavingsAmountChange}
                     isSavings={isSavings}
                 ></InputBox>
