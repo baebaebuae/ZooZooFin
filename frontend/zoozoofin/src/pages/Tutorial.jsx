@@ -103,7 +103,6 @@ const NpcImage = styled.img`
     object-fit: contain;
 `;
 
-
 // const NPCModel = () => {
 //     const modelRef = useRef();
 //     // 3d 모델 불러오기
@@ -201,8 +200,8 @@ const Tutorial = () => {
 
     if (!currentScript) return <Loader loadingText={'주주시티에 입장하는중'} />;
 
-    // const receivedAnimalTypeId = location.state.animalTypeId;
-    const receivedAnimalTypeId = 1; //임시로 지정
+    const receivedAnimalTypeId = location.state.animalTypeId;
+    // const receivedAnimalTypeId = 1; //임시로 지정
 
     let backgroundImage;
 

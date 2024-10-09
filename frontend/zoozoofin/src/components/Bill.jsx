@@ -131,9 +131,6 @@ const CheckButton = styled.div`
 export const Bill = ({ checkBill }) => {
     const [billData, setBillData] = useState([]);
 
-    console.log('hello?');
-    console.log(billData);
-
     const warnTexts = [
         '연체시 해당 상품에 대해 경고 1회 부과됩니다. (노트북 확인)',
         '다음 턴까지 연체된 대출이자를 납부하지 않으면',

@@ -15,7 +15,7 @@ const Bankrupt = ({ action, goToScript }) => {
     return (
         <Block>
             <StampModal
-                action={() => {}}
+                action={action}
                 goToScript={goToScript}
                 handleCloseModal={() => setIsModalOpen(false)}
             />

@@ -36,7 +36,6 @@ const HeaderUserBlock = styled.div`
     max-width: 640px;
 `;
 
-
 const Header = () => {
     const [isCharOpen, setIsCharOpen] = useState(false);
     const { animalAssets, memberGoldBar, turn, fetchUserProfile } = useUserStore();
