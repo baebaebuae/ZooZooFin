@@ -233,6 +233,7 @@ class StockControllerTest {
                                 responseFields(
                                         fieldWithPath("httpStatus").type(JsonFieldType.NUMBER).description("응답 상태코드"),
                                         fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
+                                        fieldWithPath("body.stockId").type(JsonFieldType.NUMBER).description("이름"),
                                         fieldWithPath("body.stockName").type(JsonFieldType.STRING).description("이름"),
                                         fieldWithPath("body.chart[]").type(JsonFieldType.ARRAY).description("차트"),
                                         fieldWithPath("body.chart[].rate").type(JsonFieldType.NUMBER).description("등락률"),
@@ -439,6 +440,106 @@ class StockControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.httpStatus").value(STOCK_TYPE_NOT_ALLOWED_EXCEPTION.getHttpStatus()))
                 .andExpect(jsonPath("$.message").value(STOCK_TYPE_NOT_ALLOWED_EXCEPTION.getMessage()));
+    }
+
+    @Test
+    @DisplayName("노트북 보유 주식 조회 - 성공")
+    public void stock_list_notebook_success() throws Exception {
+        // given
+
+        // when
+        ResultActions actions = mockMvc.perform(
+                get("/api/v1/stock/notebook")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.httpStatus").value(GET_STOCK_LIST_NOTEBOOK_SUCCESS.getHttpStatus()))
+                .andExpect(jsonPath("$.message").value(GET_STOCK_LIST_NOTEBOOK_SUCCESS.getMessage()))
+                .andDo(
+                        document("노트북 보유 주식 조회",
+                                ResourceSnippetParameters.builder()
+                                        .tag("주식")
+                                        .summary("노트북 보유 주식 조회 API")
+                                        .description("노트북에서 현재 보유한 주식을 확인할때 사용하는 API"),
+                                responseFields(
+                                        fieldWithPath("httpStatus").type(JsonFieldType.NUMBER).description("응답 상태코드"),
+                                        fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
+                                        fieldWithPath("body.totalAmount").type(JsonFieldType.NUMBER).description("주식 리스트"),
+                                        fieldWithPath("body.domesticList[]").type(JsonFieldType.ARRAY).description("주식 리스트"),
+                                        fieldWithPath("body.domesticList[].stockId").type(JsonFieldType.NUMBER).description("주식 리스트"),
+                                        fieldWithPath("body.domesticList[].stockName").type(JsonFieldType.STRING).description("주식 리스트"),
+                                        fieldWithPath("body.domesticList[].stockTotal").type(JsonFieldType.NUMBER).description("주식 리스트"),
+                                        fieldWithPath("body.domesticList[].stockRate").type(JsonFieldType.NUMBER).description("주식 리스트"),
+                                        fieldWithPath("body.overseaList[]").type(JsonFieldType.ARRAY).description("주식 리스트"),
+                                        fieldWithPath("body.overseaList[].stockId").type(JsonFieldType.NUMBER).description("주식 리스트"),
+                                        fieldWithPath("body.overseaList[].stockName").type(JsonFieldType.STRING).description("주식 리스트"),
+                                        fieldWithPath("body.overseaList[].stockTotal").type(JsonFieldType.NUMBER).description("주식 리스트"),
+                                        fieldWithPath("body.overseaList[].stockRate").type(JsonFieldType.NUMBER).description("주식 리스트"),
+                                        fieldWithPath("body.etfList[]").type(JsonFieldType.ARRAY).description("주식 리스트"),
+                                        fieldWithPath("body.etfList[].stockId").type(JsonFieldType.NUMBER).description("주식 리스트"),
+                                        fieldWithPath("body.etfList[].stockName").type(JsonFieldType.STRING).description("주식 리스트"),
+                                        fieldWithPath("body.etfList[].stockTotal").type(JsonFieldType.NUMBER).description("주식 리스트"),
+                                        fieldWithPath("body.etfList[].stockRate").type(JsonFieldType.NUMBER).description("주식 리스트")
+                                )
+                        )
+                );
+
+    }
+
+    @Test
+    @DisplayName("노트북 주식 정보 조회 - 성공")
+    public void stock_info_notebook_success() throws Exception {
+        // given
+        long stockId = 10000;
+
+        // when
+        ResultActions actions = mockMvc.perform(
+                get("/api/v1/stock/notebook/{stockId}", stockId)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.httpStatus").value(STOCK_INFO_NOTEBOOK_SUCCESS.getHttpStatus()))
+                .andExpect(jsonPath("$.message").value(STOCK_INFO_NOTEBOOK_SUCCESS.getMessage()))
+                .andDo(
+                        document("노트북 주식 정보 조회",
+                                ResourceSnippetParameters.builder()
+                                        .tag("주식")
+                                        .summary("노트북 주식 정보 조회 API")
+                                        .description("노트북에서 주식 상세 정보를 확인할때 사용하는 API"),
+                                responseFields(
+                                        fieldWithPath("httpStatus").type(JsonFieldType.NUMBER).description("응답 상태코드"),
+                                        fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
+                                        fieldWithPath("body.stockName").type(JsonFieldType.STRING).description("이름"),
+                                        fieldWithPath("body.stockPrice").type(JsonFieldType.NUMBER).description("가격"),
+                                        fieldWithPath("body.stockRate").type(JsonFieldType.NUMBER).description("등락률"),
+                                        fieldWithPath("body.chart[]").type(JsonFieldType.ARRAY).description("차트"),
+                                        fieldWithPath("body.chart[].rate").type(JsonFieldType.NUMBER).description("등락률"),
+                                        fieldWithPath("body.chart[].price").type(JsonFieldType.NUMBER).description("가격"),
+                                        fieldWithPath("body.chart[].highPrice").type(JsonFieldType.NUMBER).description("고가"),
+                                        fieldWithPath("body.chart[].lowPrice").type(JsonFieldType.NUMBER).description("저가"),
+                                        fieldWithPath("body.chart[].startPrice").type(JsonFieldType.NUMBER).description("시가"),
+                                        fieldWithPath("body.chart[].endPrice").type(JsonFieldType.NUMBER).description("종가"),
+                                        fieldWithPath("body.stockCount").type(JsonFieldType.NUMBER).description("보유 주식 수"),
+                                        fieldWithPath("body.buyTurn").type(JsonFieldType.NUMBER).description("매수일자"),
+                                        fieldWithPath("body.rate").type(JsonFieldType.NUMBER).description("손익률"),
+                                        fieldWithPath("body.profit").type(JsonFieldType.NUMBER).description("평가손익"),
+                                        fieldWithPath("body.stockHistory[]").type(JsonFieldType.ARRAY).description("매매내역"),
+                                        fieldWithPath("body.stockHistory[].turn").type(JsonFieldType.NUMBER).description("회차"),
+                                        fieldWithPath("body.stockHistory[].type").type(JsonFieldType.STRING).description("거래 유형"),
+                                        fieldWithPath("body.stockHistory[].count").type(JsonFieldType.NUMBER).description("거래 수량"),
+                                        fieldWithPath("body.stockHistory[].price").type(JsonFieldType.NUMBER).description("거래가")
+                                )
+                        )
+                );
+
     }
 
     @Test

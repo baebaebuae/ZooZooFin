@@ -101,8 +101,7 @@ public class QuizServiceImpl implements QuizService {
             
         }
         // goldBar 추가
-        member.addGoldBar(score);
-        memberRepository.save(member);
+        member.setGoldBar(member.getGoldBar() + score);
 
         quizResponse.setQuizResults(quizGradingList);
         quizResponse.setScore(score);

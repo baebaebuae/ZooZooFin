@@ -13,6 +13,12 @@ public interface StockService {
 
     CreationUnitResponse getCreationUnit(Long animalId, Long stockId);
 
+    StockHintResponse getStockHint(Long animalId, Long stockId);
+
+    NotebookStockListResponse getStockListNotebook(Long animalId);
+
+    NotebookStockInfoResponse getStockInfoNotebook(Long animalId, Long stockId);
+
     void buyStock(Long animalId, BuyStockRequest buyStockRequest);
 
     void sellStock(Long animalId, SellStockRequest sellStockRequest);

@@ -4,13 +4,11 @@ import com.zzf.backend.global.auth.security.OAuth2Provider;
 import com.zzf.backend.global.base.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
+@Setter
 @Table(name = "member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
@@ -62,9 +60,5 @@ public class Member extends BaseEntity {
         this.bankCount = bankCount;
         this.loanCount = loanCount;
         this.stockCount = stockCount;
-    }
-
-    public void addGoldBar(Long score) {
-        this.goldBar += score;
     }
 }
