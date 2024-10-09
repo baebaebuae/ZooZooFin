@@ -10,14 +10,14 @@ const Auth = () => {
     const refreshToken = url.searchParams.get('refreshToken');
     
     useEffect(() => {
-        const apiClient = getApiClient();
+        
         const fetchUserState = async () => {
             if (accessToken && accessToken.length > 0) {
                 try {
-                    console.log(accessToken, refreshToken);
+                    // console.log(accessToken, refreshToken);
                     localStorage.setItem('accessToken', accessToken);
                     localStorage.setItem('refreshToken', refreshToken);
-
+                    const apiClient = getApiClient();
                     const res = await apiClient.get('/member/animal');
                     if (res.status === 200){
                         const animalNumber = res.data.body.animalNumber;
