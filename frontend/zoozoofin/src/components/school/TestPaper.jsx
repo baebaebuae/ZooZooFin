@@ -6,6 +6,13 @@ import CorrectSVG from '@assets/images/school/correct.svg?react';
 import IncorrectSVG from '@assets/images/school/incorrect.svg?react';
 import { Button } from '@components/root/buttons';
 import { getApiClient } from '@/stores/apiClient';
+// 점수 이미지
+import score0 from '@assets/images/school/0.png';
+import score20 from '@assets/images/school/20.png';
+import score40 from '@assets/images/school/40.png';
+import score60 from '@assets/images/school/60.png';
+import score80 from '@assets/images/school/80.png';
+import score100 from '@assets/images/school/100.png';
 
 // 시험지 전체 컨테이너
 const Paper = styled.div`
@@ -156,20 +163,38 @@ const SubmitButton = styled.button`
   }
 `;
 
-const ScoreDisplay = styled.div`
-  position: absolute;
-  top: 30px;
-  right: 40px;
-  font-size: 36px;
-  font-weight: bold;
-  color: red;
-`;
 
 const GradeMarker = styled.div`
   position: absolute;
   top: -10px;
   left: -10px;
 `;
+
+const ScoreImage = styled.img`
+  position: absolute;
+  top: 0px;
+  right: 20px;
+  width: 100px;
+  height: auto;
+`;
+
+const ScoreDisplay = ({ score }) => {
+  const getScoreImage = (score) => {
+    if (score === 0) return score0;
+    if (score <= 20) return score20;
+    if (score <= 40) return score40;
+    if (score <= 60) return score60;
+    if (score <= 80) return score80;
+    return score100;
+  };
+
+  return <ScoreImage src={getScoreImage(score)} alt={`Score: ${score}`} />;
+};
+
+ScoreDisplay.propTypes = {
+  score: PropTypes.number.isRequired,
+};
+
 
 const QuestionSection = ({ question, index, onAnswerChange, userAnswer, isSubmitted, isCorrect }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -262,13 +287,25 @@ const fallbackData = [
 
 const TestPaper = () => {
   const [quizData, setQuizData] = useState([]);
-  const [user] = useState({ name: '토 토' });
+  const [characterInfo, setCharacterInfo] = useState({ animalName: '' });
   const [isLoading, setIsLoading] = useState(false);
   const [userAnswers, setUserAnswers] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [score, setScore] = useState(null);
   const [correctAnswers, setCorrectAnswers] = useState({});
   const navigate = useNavigate();
+
+  const fetchCharacterInfo = useCallback(async () => {
+    try {
+      const apiClient = getApiClient();
+      const response = await apiClient.get('/animal/info');
+      if (response.data && response.data.body) {
+        setCharacterInfo(response.data.body);
+      }
+    } catch (error) {
+      console.error('캐릭터 정보 가져오기 실패:', error);
+    }
+  }, []);
 
   const fetchQuizData = useCallback(async () => {
     setIsLoading(true);
@@ -291,7 +328,8 @@ const TestPaper = () => {
 
   useEffect(() => {
     fetchQuizData();
-  }, [fetchQuizData]);
+    fetchCharacterInfo();
+  }, [fetchQuizData, fetchCharacterInfo]);
 
   const handleAnswerChange = (quizId, answer) => {
     setUserAnswers(prev => ({
@@ -328,12 +366,12 @@ const TestPaper = () => {
       <Header>
         <TestTitle>금 융</TestTitle>
         <DateName>
-          <p>ZooZooCity</p>
-          <p>{user.name}</p>
+          <p>ZooZooSchool</p>
+          <p>{characterInfo.animalName}</p>
         </DateName>
       </Header>
       {isSubmitted && score !== null && (
-        <ScoreDisplay>{score.toFixed(0)}</ScoreDisplay>
+        <ScoreDisplay score={parseInt(score)} />
       )}
       <QuestionsContainer>
         <QuestionGroup side="left">

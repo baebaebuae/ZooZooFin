@@ -13,6 +13,7 @@ import {
 import { PropInfo } from './root/headerCharInfo';
 
 import CharacterInfo from './character/CharacterInfo';
+import Wallet from './Wallet';
 
 const HeaderBlock = styled.div`
     width: 94%;
@@ -32,12 +33,14 @@ const HeaderButtonBlock = styled.div`
 const HeaderUserBlock = styled.div`
     display: flex;
     flex-direction: column;
-    align-items: end;
+    align-items: flex-end;
     max-width: 640px;
+    width: 100%; /* 너비를 100%로 설정 */
 `;
 
 const Header = () => {
     const [isCharOpen, setIsCharOpen] = useState(false);
+    const [isWalletOpen, setIsWalletOpen] = useState(false);
     const { animalAssets, memberGoldBar, turn, fetchUserProfile } = useUserStore();
 
     useEffect(() => {
@@ -48,6 +51,14 @@ const Header = () => {
         console.log('캐릭터 클릭됨');
         setIsCharOpen(!isCharOpen);
     };
+
+    const openWalletModal = () => {
+    setIsWalletOpen(true); 
+};
+
+const closeWalletModal = () => {
+    setIsWalletOpen(false);
+};
 
     // 1,000 형식으로
     const formatNumber = (num) => {
@@ -62,9 +73,7 @@ const Header = () => {
                     <Link to="/map">
                         <HeaderMapButton />
                     </Link>
-                    <Link to="/wallet">
-                        <HeaderWalletButton />
-                    </Link>
+                    <HeaderWalletButton onClick={openWalletModal} />
                     <HeaderTurnButton currentTurn={turn} />
                 </HeaderButtonBlock>
                 <HeaderUserBlock>
@@ -76,6 +85,7 @@ const Header = () => {
                     />
                 </HeaderUserBlock>
             </HeaderBlock>
+            {isWalletOpen && <Wallet onClose={closeWalletModal} />}
         </nav>
     );
 };

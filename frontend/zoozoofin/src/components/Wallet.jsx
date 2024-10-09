@@ -160,6 +160,7 @@ const CardContent = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   overflow-y: auto;
+  padding-bottom:20px;
 `;
 
 const TransactionItem = styled.div`
