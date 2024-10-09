@@ -1,6 +1,5 @@
 package com.zzf.backend.domain.stock.entity;
 
-import com.zzf.backend.global.base.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -37,8 +36,8 @@ public class FinancialStatements {
     private Long marketCap;
 
     @NotNull
-    @Column(name = "divided_yield")
-    private Double dividedYield;
+    @Column(name = "dividend_yield")
+    private Double dividendYield;
 
     @NotNull
     @Column(name = "pbr")
@@ -57,12 +56,12 @@ public class FinancialStatements {
     private Double PSR;
 
     @Builder
-    public FinancialStatements(Stock stock, Long period, Long revenue, Long marketCap, Double dividedYield, Double PBR, Double PER, Double ROE, Double PSR) {
+    public FinancialStatements(Stock stock, Long period, Long revenue, Long marketCap, Double dividendYield, Double PBR, Double PER, Double ROE, Double PSR) {
         this.stock = stock;
         this.period = period;
         this.revenue = revenue;
         this.marketCap = marketCap;
-        this.dividedYield = dividedYield;
+        this.dividendYield = dividendYield;
         this.PBR = PBR;
         this.PER = PER;
         this.ROE = ROE;

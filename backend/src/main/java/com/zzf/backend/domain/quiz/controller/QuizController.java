@@ -66,6 +66,7 @@ public class QuizController {
             @AnimalId Long animalId,
             @RequestBody @Valid QuizRequest quizRequest) {
         QuizResponse quizResponse = quizServiceImpl.gradeQuizzes(memberId, animalId, quizRequest);
+
         return ResponseDto.success(SuccessCode.QUIZ_GRADING_SUCCESS, quizResponse);
     }
 

@@ -99,9 +99,10 @@ public class QuizServiceImpl implements QuizService {
             quizGrading.setIsCorrect(isCorrect);
             quizGradingList.add(quizGrading);
             
-            // goldBar 추가
-            member.addGoldBar(score);
         }
+        // goldBar 추가
+        member.addGoldBar(score);
+
         quizResponse.setQuizResults(quizGradingList);
         quizResponse.setScore(score);
 

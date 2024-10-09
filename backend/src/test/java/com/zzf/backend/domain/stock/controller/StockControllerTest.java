@@ -302,7 +302,7 @@ class StockControllerTest {
                                         fieldWithPath("body.period").type(JsonFieldType.NUMBER).description("분기"),
                                         fieldWithPath("body.revenue").type(JsonFieldType.NUMBER).description("매출액"),
                                         fieldWithPath("body.marketCap").type(JsonFieldType.NUMBER).description("시가총액"),
-                                        fieldWithPath("body.dividedYield").type(JsonFieldType.NUMBER).description("배당수익률"),
+                                        fieldWithPath("body.dividendYield").type(JsonFieldType.NUMBER).description("배당수익률"),
                                         fieldWithPath("body.PBR").type(JsonFieldType.NUMBER).description("PBR"),
                                         fieldWithPath("body.PER").type(JsonFieldType.NUMBER).description("PER"),
                                         fieldWithPath("body.ROE").type(JsonFieldType.NUMBER).description("ROE"),
