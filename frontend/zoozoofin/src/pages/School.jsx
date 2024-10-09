@@ -74,8 +74,7 @@ const School = () => {
         } else if (nextScript === 'EXIT') {
             navigate(-1);
         } else if (nextScript === 'END') {
-            // 시험 종료
-            navigate('/');
+            navigate(-3);
         }
     };
 

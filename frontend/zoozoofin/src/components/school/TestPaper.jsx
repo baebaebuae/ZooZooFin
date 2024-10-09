@@ -1,20 +1,16 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import CorrectSVG from '@assets/images/school/correct.svg?react';
 import IncorrectSVG from '@assets/images/school/incorrect.svg?react';
 import { Button } from '@components/root/buttons';
-
-// 환경 변수 import
-const VITE_URL = import.meta.env.VITE_URL;
-const VITE_ACCESS_TOKEN = import.meta.env.VITE_ACCESS_TOKEN;
+import { getApiClient } from '@/stores/apiClient';
 
 // 시험지 전체 컨테이너
 const Paper = styled.div`
   background-color: #f9f9f9;
-  min-height: 500px;
+  height: 580px;
   width: 80%;
   margin: 2px auto;
   border: 1px solid #ccc;
@@ -23,6 +19,7 @@ const Paper = styled.div`
   display: flex; 
   flex-direction: column;
   position: relative;
+  overflow-y: auto;
 `;
 
 // 시험지 헤더 스타일링
@@ -57,6 +54,7 @@ const QuestionsContainer = styled.div`
   display: flex;
   width: 100%;
   flex-grow: 1;
+  overflow-y: auto;
 `;
 
 // 문제 그룹(좌측/우측) 스타일링 수정
@@ -92,20 +90,21 @@ const MagnifyIcon = styled.span`
   }
 `;
 
-// 모달 배경 스타일링
+// 모달 배경 스타일링 수정
 const ModalBackground = styled.div`
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 `;
 
-// 모달 컨텐츠 스타일링
+// 모달 컨텐츠 스타일링 수정
 const ModalContent = styled.div`
   background-color: white;
   padding: 20px;
@@ -113,6 +112,7 @@ const ModalContent = styled.div`
   max-width: 80%;
   max-height: 80%;
   overflow-y: auto;
+  z-index: 1001;
 `;
 
 const AnswerInput = styled.input`
@@ -158,8 +158,8 @@ const SubmitButton = styled.button`
 
 const ScoreDisplay = styled.div`
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 30px;
+  right: 40px;
   font-size: 36px;
   font-weight: bold;
   color: red;
@@ -168,7 +168,7 @@ const ScoreDisplay = styled.div`
 const GradeMarker = styled.div`
   position: absolute;
   top: -10px;
-  left: -15px;
+  left: -10px;
 `;
 
 const QuestionSection = ({ question, index, onAnswerChange, userAnswer, isSubmitted, isCorrect }) => {
@@ -252,10 +252,17 @@ QuestionSection.propTypes = {
   isCorrect: PropTypes.bool,
 };
 
+const fallbackData = [
+  { quizId: 1, quizQuestion: '환율이 상승(원화 약세)하면 수출 기업의 이익이 증가할 가능성이 크다.', quizAnswer: 'O', quizType: 'ox' },
+  { quizId: 2, quizQuestion: '골든 크로스는 단기 이동평균선이 장기 이동평균선을 아래에서 위로 돌파할 때 발생하는 신호이다.', quizAnswer: 'O', quizType: 'ox' },
+  { quizId: 3, quizQuestion: 'PBR이 높으면 주가가 회사 자산 대비 고평가되었을 가능성이 있다.', quizAnswer: 'O', quizType: 'ox' },
+  { quizId: 4, quizQuestion: '주가가 하락하다가 반등하는 지점을 나타내는 용어는?', quizAnswer: '지지선', quizType: 'short' },
+  { quizId: 5, quizQuestion: '단기 이동평균선이 장기 이동평균선을 돌파할 때 발생하는 신호는?', quizAnswer: '골든크로스', quizType: 'short' },
+];
+
 const TestPaper = () => {
   const [quizData, setQuizData] = useState([]);
-  const [user] = useState({ name: '토 토', date: 'ZooZooCity' });
-  const [error, setError] = useState(null);
+  const [user] = useState({ name: '토 토' });
   const [isLoading, setIsLoading] = useState(false);
   const [userAnswers, setUserAnswers] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -265,24 +272,18 @@ const TestPaper = () => {
 
   const fetchQuizData = useCallback(async () => {
     setIsLoading(true);
-    setError(null);
     try {
-      console.log('Fetching quiz data...');
-      const response = await axios.get(`${VITE_URL}/quiz`, {
-        headers: {
-          'Authorization': `Bearer ${VITE_ACCESS_TOKEN}`,
-        },
-      });
+      const apiClient = getApiClient();
+      const response = await apiClient.get('/quiz');
       
-      console.log('Response received:', response);
-      if (response.data && response.data.body && response.data.body.quizzes) {
+      if (response.data && response.data.body && response.data.body.quizzes.length > 0) {
         setQuizData(response.data.body.quizzes);
       } else {
-        throw new Error('Unexpected data structure in response');
+        setQuizData(fallbackData);
       }
     } catch (error) {
-      setError(`데이터를 가져오는 중 오류 발생: ${error.message}`);
-      console.error('Fetch error:', error);
+      console.error('API 호출 실패:', error);
+      setQuizData(fallbackData);
     } finally {
       setIsLoading(false);
     }
@@ -318,7 +319,6 @@ const TestPaper = () => {
   };
 
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
 
   const leftQuestions = quizData.slice(0, Math.ceil(quizData.length / 2));
   const rightQuestions = quizData.slice(Math.ceil(quizData.length / 2));
@@ -328,7 +328,7 @@ const TestPaper = () => {
       <Header>
         <TestTitle>금 융</TestTitle>
         <DateName>
-          <p>{user.date}</p>
+          <p>ZooZooCity</p>
           <p>{user.name}</p>
         </DateName>
       </Header>
