@@ -139,6 +139,7 @@ public class StockServiceImpl implements StockService {
         return StockInfoResponse.builder()
                 .stockId(stock.getStockId())
                 .stockName(stock.getStockName())
+                .stockIntro(stock.getStockInfo())
                 .chart(chartList.stream()
                         .map(StockInfoResponse::getChartInfo)
                         .collect(Collectors.toList()))
