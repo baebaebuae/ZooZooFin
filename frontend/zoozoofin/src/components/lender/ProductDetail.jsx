@@ -98,8 +98,8 @@ export const ProductDetail = ({ currentTurn }) => {
         }
     }, [loanPeriod, currentTurn, setExpectedFinalTurn]);
 
-    // 구현 테스트를 위한 maxAmount 설정
-    const maxAmount = 5000000;
+    // 캐피탈 최대 대출 금액 1억
+    const maxAmount = 100000000;
 
     return (
         <>
