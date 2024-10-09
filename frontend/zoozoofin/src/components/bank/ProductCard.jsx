@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { NormalIcon } from '@components/root/icon';
 import IconChicken from '@assets/images/icons/icon_chicken.png';
+import IconZoozoo from '@assets/images/icons/icon_chick.png';
+import IconSloth from '@assets/images/icons/icon_sloth.png';
 import { ProductDetailInfo } from '@components/root/productDetailInfo';
 import { Card } from '@components/root/card';
 
@@ -16,10 +18,29 @@ const CardBlock = styled(Card)`
     margin: 8px 0;
 `;
 
+
+const getProductIcon = (productName) => {
+    switch (productName) {
+        case '주주예금':
+            return IconZoozoo;
+        case '꼬꼬예금':
+            return IconChicken;
+        case '야옹예금':
+            return IconSloth;
+        case '주주적금':
+            return IconZoozoo;
+        case '너굴적금':
+            return IconChicken;
+        case '곰곰적금':
+            return IconSloth;
+    }
+  };
+
 export const ProductCard = ({ productName, productPeriod, productRate, handleClick }) => {
+    const productIcon = getProductIcon(productName);
     return (
         <CardBlock onClick={handleClick}>
-            <NormalIcon icon={IconChicken}></NormalIcon>
+            <NormalIcon icon={productIcon}></NormalIcon>
             <ProductName>{productName}</ProductName>
             <ProductDetailInfo
                 infoTitle1={'기간'}

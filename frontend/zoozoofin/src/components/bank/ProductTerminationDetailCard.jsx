@@ -49,6 +49,7 @@ const terminateProduct = async (animalId, productType, productId) => {
     }
 };
 
+
 export const ProductTerminationDetailCard = ({
     productType,
     productId,

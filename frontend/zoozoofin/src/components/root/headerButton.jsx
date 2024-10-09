@@ -23,7 +23,7 @@ import NextTurn from '../NextTurn';
 import { getApiClient } from '@/stores/apiClient';
 import { useNavigate } from 'react-router-dom';
 import { useMusicStore } from '@stores/useMusicStore.js';
-4
+// import { useBillStore, useBankruptStore } from '@stores/useBillStore';
 import useUserStore from '@/stores/useUserStore';
 
 const HeaderButton = styled.div`
@@ -84,7 +84,9 @@ export const HeaderHamburgerButton = () => {
     const isMusicOn = useMusicStore((state) => state.isMusicOn);
     const toggleMusic = useMusicStore((state) => state.toggleMusic);
     const fetchUserProfile = useUserStore((state) => state.fetchUserProfile);
-    
+    // const { updateBillState } = useBillStore();
+    // const { updateBankruptState } = useBankruptStore();
+
     const open = Boolean(anchorEl);
 
     const navigate = useNavigate();
@@ -116,6 +118,13 @@ export const HeaderHamburgerButton = () => {
             const apiClient = getApiClient();
             await apiClient.patch('/home/next');
             await fetchUserProfile();  // 사용자 정보 새로고침
+
+            // 고지서와 파산 안내 상태 초기화
+            // updateBankruptState('isShown', false);
+            // updateBankruptState('isDetected', false);
+            // updateBillState('isShown', false);
+            // updateBillState('isDetected', false);
+
             setIsSleepModalOpen(false);
             navigate('/myroom');
         } catch (error) {
@@ -190,15 +199,16 @@ export const HeaderMapButton = () => {
     );
 };
 
-export const HeaderWalletButton = () => {
+export const HeaderWalletButton = ({ onClick }) => {
     return (
         <>
-            <HeaderButton2>
+            <HeaderButton2 onClick={onClick}> {/* onClick 이벤트 추가 */}
                 <HeaderWallet width={30} height={30} />
             </HeaderButton2>
         </>
     );
 };
+
 
 export const HeaderTurnButton = ({ currentTurn }) => {
     return (

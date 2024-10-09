@@ -5,35 +5,47 @@ import { NormalIcon } from '@components/root/icon';
 import useUserStore from '@/stores/useUserStore';
 import { useLocation } from 'react-router-dom';
 
-const PropInfoBox = styled.div``;
+const PropInfoBox = styled.div`
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-end; 
+    width:100%;
+`;
 
 const PropValue = styled.div`
     font-family: 'OneMobilePop';
     font-size: 16px;
     text-align: right;
     font-weight: bold;
+    width: 100%;
 `;
 
 const PropMoney = styled(PropValue)`
-    background: linear-gradient(180deg, #d1d9d1, #08c600);
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
+    color: #08c600; 
+    position: relative;
+    display: inline-block;
+    text-shadow: 1px 1px 0 white, 
+                 -1px 1px 0 white,
+                 1px -1px 0 white,
+                 -1px -1px 0 white;
+    width: 100%; 
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
 `;
 
+
 const PropGold = styled(PropValue)`
-    background: linear-gradient(270deg, #ffd84e, #ffefb8);
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
+    color: #ffd84e;
+    position: relative;
+    display: inline-block;
+    text-shadow: 1px 1px 0 #ffffff, 
+                 -1px 1px 0 #ffffff,
+                 1px -1px 0 #ffffff,
+                 -1px -1px 0 #ffffff;
 `;
 
 const CarrotIcon = styled.span`
     display: inline-block;
-    color: #ff9933; /* 당근 색상 */
-    -webkit-text-fill-color: initial; /* 초기화 */
+    color: #ff9933; /* 당근 색상 *
 `;
 
 export const PropInfo = () => {
