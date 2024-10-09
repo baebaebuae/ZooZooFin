@@ -9,6 +9,7 @@ import java.util.List;
 @Builder
 public record StockInfoResponse(Long stockId,
                                 String stockName,
+                                String stockIntro,
                                 List<ChartInfo> chart,
                                 List<NewsInfo> news) {
 
