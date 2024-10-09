@@ -173,7 +173,7 @@ public class StockServiceImpl implements StockService {
                 .period(period)
                 .revenue(fs.getRevenue())
                 .marketCap(fs.getMarketCap())
-                .dividedYield(fs.getDividedYield())
+                .dividendYield(fs.getDividendYield())
                 .PBR(fs.getPBR())
                 .PER(fs.getPER())
                 .ROE(fs.getROE())

@@ -127,7 +127,7 @@ values (10000, 10000, 10001, 100, 75000, false, now(), now()),
 ;
 
 -- Financial Statements
-insert into financial_statements(stock_id, period, revenue, market_cap, divided_yield, pbr, per, roe, psr)
+insert into financial_statements(stock_id, period, revenue, market_cap, dividend_yield, pbr, per, roe, psr)
 values (10000, 1, 429978, 954551, 1.18, 1.45, 9.93, 16.84, 2.22),
        (10000, 2, 446216, 544383, 1.60, 0.82, 24.49, 3.55, 1.22)
 ;
