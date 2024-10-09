@@ -27,6 +27,8 @@ import com.zzf.backend.domain.quest.repository.QuestHistoryRepository;
 import com.zzf.backend.domain.quest.repository.QuestRepository;
 import com.zzf.backend.domain.savings.entity.Savings;
 import com.zzf.backend.domain.savings.repository.SavingsRepository;
+import com.zzf.backend.domain.stock.entity.StockHoldings;
+import com.zzf.backend.domain.stock.repository.StockHoldingsRepository;
 import com.zzf.backend.global.auth.entity.Member;
 import com.zzf.backend.global.auth.repository.MemberRepository;
 import com.zzf.backend.global.exception.CustomException;
@@ -34,7 +36,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -50,6 +51,7 @@ public class AnimalServiceImpl implements AnimalService {
     private final PortfolioRepository portfolioRepository;
     private final DepositRepository depositRepository;
     private final SavingsRepository savingsRepository;
+    private final StockHoldingsRepository stockHoldingsRepository;
     private final LoanRepository loanRepository;
     private final CapitalRepository capitalRepository;
     private final TurnRecordRepository turnRecordRepository;
@@ -183,6 +185,11 @@ public class AnimalServiceImpl implements AnimalService {
                 .map(Savings::getSavingsAmount)
                 .reduce(0L, Long::sum);
 
+        List<StockHoldings> stockHoldings = stockHoldingsRepository.findAllByAnimalAndStockIsSoldFalse(animal);
+        Double stockTotal = stockHoldings.stream()
+                .map(sh -> sh.getStockAveragePrice() * sh.getStockCount())
+                .reduce(0.0, Double::sum);
+
         List<Loan> loan = loanRepository.findAllByAnimalAndLoanIsEndFalse(animal);
         Long loanTotal = loan.stream()
                 .map(Loan::getLoanAmount)
@@ -211,7 +218,7 @@ public class AnimalServiceImpl implements AnimalService {
                 .totalAssets(animal.getAssets())
                 .totalDeposit(depositTotal)
                 .totalSavings(savingsTotal)
-                .totalStock(savingsTotal)
+                .totalStock(stockTotal)
                 .totalLoan(loanTotal)
                 .totalCapital(capitalTotal)
                 .build();
