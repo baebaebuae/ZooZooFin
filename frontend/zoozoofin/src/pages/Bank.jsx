@@ -184,9 +184,14 @@ const Bank = () => {
             case '파산 처리':
                 return (
                     <Bankrupt
-                        action={() => {}}
-                        // action = 파산 처리하는 함수
-                        // Bankrupt Component 자체에서 처리할 수 있을지 확인
+                        action={() => {
+                            navigate('/ending', {
+                                state: {
+                                    endingType: 'A002',
+                                },
+                            });
+                        }}
+                        // action = 파산 처리하는 함수 = Ending에 'A002'(파산 엔딩) 보내기
                         goToScript={() =>
                             handleResponseClick(currentScript.responses[0].nextScript)
                         }

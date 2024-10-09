@@ -8,6 +8,15 @@ const useUserStore = create((set, get) => ({
     turn: 1,
     isLoading: false,
     error: null,
+    isTurnChecked: false,
+    isBankruptChecked: false,
+
+    updateTurnChecked: () => {
+        set((state) => ({ isTurnChecked: !state.isTurnChecked }));
+    },
+    updateBankruptChecked: () => {
+        set((state) => ({ isBankruptChecked: !state.isBankruptChecked }));
+    },
 
     fetchUserProfile: async () => {
         set({ isLoading: true, error: null });
