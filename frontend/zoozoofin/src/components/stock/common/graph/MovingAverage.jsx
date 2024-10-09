@@ -1,21 +1,35 @@
 import styled from 'styled-components';
 import ReactApexChart from 'react-apexcharts';
-import StockData from '@components/stock/TestStock';
+import useStockStore from '@components/stock/common/store/StockStore';
+import { useEffect, useState } from 'react';
+const GraphWrapper = styled.div`
+    padding-top: 10px;
+`;
 
-export const MovingAverage = ({ turn }) => {
-    const getNowStockData = (turn) => {
-        const now = turn + 25;
-        const entries = Object.entries(StockData.data).slice(0, now);
-        const NowData = Object.fromEntries(entries);
-        return NowData;
-    };
-    const data = getNowStockData(turn);
-    const dataPrices = Object.values(data).map((price) => [
-        price.open,
-        price.high,
-        price.low,
-        price.close,
-    ]);
+export const MovingAverage = () => {
+    const { clickedStockCharts } = useStockStore();
+    const [stockData, setStockData] = useState(0);
+    const [turns, setTurns] = useState([]);
+    const [dataPrices, setdataPrices] = useState([]);
+    // 클릭된 주식 차트를 상태에 저장
+    useEffect(() => {
+        if (clickedStockCharts) {
+            setStockData(clickedStockCharts);
+        }
+    }, [clickedStockCharts]);
+
+    // 주식 데이터에서 endPrice만 추출
+    useEffect(() => {
+        if (stockData) {
+            const prices = Object.values(stockData).map((price) => [
+                price['startPrice'],
+                price['highPrice'],
+                price['lowPrice'],
+                price['endPrice'],
+            ]);
+            setdataPrices(prices);
+        }
+    }, [stockData]);
 
     const calculateMovingAverage = (data, windowSize) => {
         return data.map((_, idx, arr) => {
@@ -31,7 +45,6 @@ export const MovingAverage = ({ turn }) => {
     const shortTermMA = calculateMovingAverage(dataPrices, 5);
     // 장기 이동 평균선 (10턴 : 7*10 = 70일)
     const longTermMA = calculateMovingAverage(dataPrices, 10);
-    console.log(shortTermMA);
 
     const options = {
         chart: {
@@ -106,5 +119,7 @@ export const MovingAverage = ({ turn }) => {
         },
     ];
 
-    return <ReactApexChart type="candlestick" options={options} series={series} />;
+    return (
+        <>{dataPrices && <ReactApexChart type="candlestick" options={options} series={series} />}</>
+    );
 };

@@ -8,29 +8,35 @@ import {
     NewsTitle,
     NewsName,
 } from '@components/stock/common/container/StockDetailContainer';
+import useStockStore from '../common/store/StockStore';
+import { useEffect } from 'react';
 
 export const StockNews = () => {
+    const { clickedStockInfo } = useStockStore();
+    const newsItems = clickedStockInfo.news;
+
     return (
         <StockDetailCard>
             <CardTitle>
                 <LargeIcon icon={IconNews} />
                 뉴스
             </CardTitle>
-            <NewsList>
-                <NewsTitle>뉴스 제목1</NewsTitle>
-                <NewsName>-너굴경제-</NewsName>
-                <Divider />
-            </NewsList>
-            <NewsList>
-                <NewsTitle>뉴스 제목2</NewsTitle>
-                <NewsName>-너굴경제-</NewsName>
-                <Divider />
-            </NewsList>
-            <NewsList>
-                <NewsTitle>뉴스 제목3</NewsTitle>
-                <NewsName>-너굴경제-</NewsName>
-                <Divider />
-            </NewsList>
+            {[0, 1, 2].map((index) => (
+                <NewsList key={index}>
+                    {clickedStockInfo.news && clickedStockInfo.news[index] ? (
+                        <>
+                            <NewsTitle>{clickedStockInfo.news[index].title}</NewsTitle>
+                            <NewsName>-주주경제-</NewsName>
+                        </>
+                    ) : (
+                        <>
+                            <NewsTitle>뉴스 준비중 . . .</NewsTitle>
+                            <NewsName>-주주경제-</NewsName>
+                        </>
+                    )}
+                    <Divider />
+                </NewsList>
+            ))}
         </StockDetailCard>
     );
 };

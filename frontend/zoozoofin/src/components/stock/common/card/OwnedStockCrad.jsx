@@ -117,22 +117,22 @@ export const OwnedStockCrad = ({ channel }) => {
     const [gainLoss, setGainLoss] = useState(null);
 
     const [stockData, setStockData] = useState(null);
-    const { domesticStocks, overseasStocks, ETFStocks } = useUserStockStore();
+    const { myDomesticStocks, myOverseasStocks, myETFStocks } = useUserStockStore();
 
     useEffect(() => {
         let type = '';
 
         if (channel === '국내 주식') {
             type = 'domestic';
-            setStockData(domesticStocks);
+            setStockData(myDomesticStocks);
         } else if (channel === '해외 주식') {
             type = 'overseas';
-            setStockData(overseasStocks);
+            setStockData(myOverseasStocks);
         } else if (channel === 'ETF') {
             type = 'ETF';
-            setStockData(ETFStocks);
+            setStockData(myETFStocks);
         }
-    }, [channel, domesticStocks, overseasStocks, ETFStocks]);
+    }, [channel, myDomesticStocks, myOverseasStocks, myETFStocks]);
 
     useEffect(() => {
         // 보유 주식 확인 후 출력

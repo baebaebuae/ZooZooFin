@@ -7,6 +7,7 @@ import {
     DefaultText,
 } from '@components/stock/common/container/FieldIconContainer';
 import { DefaultFieldIcon, ActiveFieldIcon } from '@components/stock/common/icon/StockIcons';
+import { useUserStockStore } from '../common/store/StockStore';
 
 // 채널 별 주식 분야 리스트
 export const StockFieldList = {
@@ -102,6 +103,7 @@ const TextStyle = styled.div`
 const FieldBox = styled.div`
     display: flex;
     flex-direction: row;
+    justify-content: center;
     align-items: flex-start;
     width: 110%;
     padding: 25px 0;
@@ -122,11 +124,56 @@ const Wrapper = styled.div`
     gap: 20px;
 `;
 
+// 보유 주식 필드 조회
+const getMyStockFields = (nowItems, field) => {
+    const searchFields = StockFieldList[field];
+    const result = [];
+
+    Object.entries(searchFields).forEach(([key, value]) => {
+        if (nowItems.includes(value)) {
+            result[key] = value; // 일치하는 key-value 쌍을 result에 추가
+        }
+    });
+
+    return result;
+};
+
 // 무한 스크롤 원리 적용
-const StockField = ({ type, onFieldSelect }) => {
+const StockField = ({ field, type, onFieldSelect }) => {
     const fieldBoxRef = useRef(null);
-    const [items, setItems] = useState(Object.entries(StockFieldList[type]));
+    const [loading, setLoading] = useState(true); // 로딩 상태
+    const [items, setItems] = useState(null);
     const [activeIndex, setActiveIndex] = useState(null); // 활성화된 필드의 인덱스를 관리
+
+    const { myDomesticStocks, myOverseasStocks, myETFStocks } = useUserStockStore();
+    // 데이터 로드 함수
+    const loadItems = () => {
+        let nowItems = [];
+        let result = {};
+
+        if (type === 'buy') {
+            nowItems = Object.entries(StockFieldList[field]);
+            console.log(nowItems);
+            setItems(nowItems);
+            setLoading(false);
+        } else if (type === 'sell') {
+            if (field === 'domestic') {
+                nowItems = myDomesticStocks.holdingsList.map((item) => item.stockField);
+            } else if (field === 'overseas') {
+                nowItems = myOverseasStocks.holdingsList.map((item) => item.stockField);
+            } else if (field === 'ETF') {
+                nowItems = myETFStocks.holdingsList.map((item) => item.stockField);
+            }
+
+            result = getMyStockFields(nowItems, field);
+            setItems(Object.entries(result)); // 객체를 배열로 변환
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        loadItems(); // 데이터 로드
+    }, [type, field]); // type과 field가 변경될 때마다 호출
 
     // 스크롤이 끝에 도달했는지 확인하는 함수
     const handleScroll = () => {
@@ -140,7 +187,7 @@ const StockField = ({ type, onFieldSelect }) => {
 
     // 리스트에 아이템 추가하는 함수
     const addMoreItems = () => {
-        setItems((prevItems) => [...prevItems, ...Object.entries(StockFieldList[type])]);
+        setItems((prevItems) => [...prevItems, ...Object.entries(StockFieldList[field])]);
     };
 
     useEffect(() => {
@@ -178,21 +225,28 @@ const StockField = ({ type, onFieldSelect }) => {
             </ExchangeRatebox>
             <FieldBox ref={fieldBoxRef}>
                 <Wrapper>
-                    {items.map(([key, value], index) => (
-                        <DefaultField key={index} onClick={() => handleFieldClick(index, key)}>
-                            {/* 클릭된 인덱스와 현재 인덱스가 같으면 ActiveFieldIcon, 아니면 DefaultFieldIcon */}
-                            {activeIndex === index ? (
-                                <ActiveFieldIcon field={key} />
-                            ) : (
-                                <DefaultFieldIcon field={key} />
-                            )}
-                            {activeIndex === index ? (
-                                <AtciveText>{value}</AtciveText>
-                            ) : (
-                                <DefaultText>{value}</DefaultText>
-                            )}
-                        </DefaultField>
-                    ))}
+                    {loading ? (
+                        <div>주식 분야 확인 중 . . .</div>
+                    ) : (
+                        items.map(([key, value], index) => (
+                            <DefaultField
+                                key={index}
+                                onClick={() => handleFieldClick(index, value)}
+                            >
+                                {/* 클릭된 인덱스와 현재 인덱스가 같으면 ActiveFieldIcon, 아니면 DefaultFieldIcon */}
+                                {activeIndex === index ? (
+                                    <ActiveFieldIcon field={key} />
+                                ) : (
+                                    <DefaultFieldIcon field={key} />
+                                )}
+                                {activeIndex === index ? (
+                                    <AtciveText>{value}</AtciveText>
+                                ) : (
+                                    <DefaultText>{value}</DefaultText>
+                                )}
+                            </DefaultField>
+                        ))
+                    )}
                 </Wrapper>
             </FieldBox>
         </FieldContainer>

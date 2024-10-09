@@ -38,6 +38,19 @@ const StockChannel = ({ onChannelSelect }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedChannel, setSelectedChannel] = useState(null);
 
+    // header -> turn undefined 문제 확인 24.10.08
+    // turn 별 주식 채널 주식 리스트 fetch
+    const { turn, fetchUserProfile } = useUserStore();
+    const { fetchMyStocklist } = useUserStockStore();
+    const { fetchStocklist } = useStockStore();
+    useEffect(() => {
+        fetchUserProfile();
+        if (turn) {
+            console.log(`now turn is ${turn}`);
+            fetchStocklist(turn);
+            fetchMyStocklist(turn);
+        }
+    }, [turn]);
     const handleOpenModal = (channel) => {
         // 주식 리스트 및 보유 주식 불러오기
         setIsModalOpen(true);
@@ -54,19 +67,6 @@ const StockChannel = ({ onChannelSelect }) => {
         // 0.5초 후 채널 이동
         setTimeout(() => onChannelSelect(channelName), 500);
     };
-
-    // header -> turn undefined 문제 확인 24.10.08
-    // turn 별 주식 채널 주식 리스트 fetch
-    const { turn, fetchUserProfile } = useUserStore();
-    const { fetchMyStocklist } = useUserStockStore();
-    const { fetchStocklist } = useStockStore();
-    useEffect(() => {
-        fetchUserProfile();
-        if (turn) {
-            fetchStocklist(turn);
-            fetchMyStocklist(turn);
-        }
-    }, [turn, fetchUserProfile, fetchStocklist, fetchMyStocklist]);
 
     return (
         <>

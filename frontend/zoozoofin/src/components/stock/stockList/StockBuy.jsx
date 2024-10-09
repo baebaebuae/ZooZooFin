@@ -14,9 +14,10 @@ export const StockBuy = ({ channel, onOrderCompletion }) => {
 
     const [isStockSelected, setIsStockSelected] = useState(false);
 
-    const handleFieldClick = (field) => {
+    const handleFieldClick = (nowField) => {
         setIsFieldSelected(true);
-        setField(field);
+        setField(nowField);
+        console.log(field);
     };
 
     // 상품 구매하기 이동을 위한 상태 설정
@@ -38,14 +39,14 @@ export const StockBuy = ({ channel, onOrderCompletion }) => {
         setIsDetailClicked(true);
     };
 
-    let type = '';
+    let nowField = '';
 
     if (channel === '국내 주식') {
-        type = 'domestic';
+        nowField = 'domestic';
     } else if (channel === '해외 주식') {
-        type = 'overseas';
+        nowField = 'overseas';
     } else if (channel === 'ETF') {
-        type = 'ETF';
+        nowField = 'ETF';
     }
 
     if (isProductChecked) {
@@ -70,7 +71,7 @@ export const StockBuy = ({ channel, onOrderCompletion }) => {
                     <MessageIcon />
                     주식 분야를 선택해줘 개굴!
                 </ChannelMessage>
-                <StockField type={type} onFieldSelect={handleFieldClick} />
+                <StockField field={nowField} type={'buy'} onFieldSelect={handleFieldClick} />
 
                 {isFieldSelected && (
                     <>
