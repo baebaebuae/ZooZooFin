@@ -27,7 +27,7 @@ const useUserStore = create((set, get) => ({
                 animalImg: response.data.body.animalImg,
                 animalAssets: response.data.body.animalAssets,
                 memberGoldBar: response.data.body.memberGoldBar,
-                // turn: response.data.body.turn,
+                turn: response.data.body.turn,
                 isLoading: false,
             });
         } catch (error) {

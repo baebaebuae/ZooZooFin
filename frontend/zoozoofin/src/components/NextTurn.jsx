@@ -3,6 +3,7 @@ import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 import { theme } from "@/styles/theme";
 import { Button } from '@components/root/buttons';
 import mungmung from '@assets/images/characters/mungmungprofile.png';
+import { useNavigate } from 'react-router-dom';
 
 const GlobalStyle = createGlobalStyle`
   @font-face {
@@ -32,7 +33,7 @@ const ModalBox = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 300px;
+  width: 280px;
   padding: 30px 20px;
   border-radius: 40px;
   border: 10px solid white;
@@ -73,11 +74,14 @@ const ButtonWrapper = styled.div`
   justify-content: space-between;
   width: 100%;
   margin-top: 20px;
+  padding: 0 10px;
 `;
 
 const StyledButton = styled(Button)`
-  width: 60%;  
-  border: 6px solid white;
+  width: 45%;
+  border: 4px solid white;
+  font-size: 15px;
+  padding: 5px 10px;
 `;
 
 const CloseButton = styled.button`
@@ -91,7 +95,20 @@ const CloseButton = styled.button`
   color: ${({ theme }) => theme.colors.gray};
 `;
 
-const NextTurn = ({ isOpen, onClose, onConfirm }) => {
+const WarningMessage = styled.p`
+  color: ${({ theme }) => theme.colors.warm};
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 10px;
+  padding: 5px;
+  border: 2px solid ${({ theme }) => theme.colors.warm};
+  border-radius: 5px;
+`;
+
+const NextTurn = ({ isOpen, onClose, onConfirm, bankruptcyRisk }) => {
+  const navigate = useNavigate();
+
   if (!isOpen) return null;
 
   return (
@@ -107,11 +124,16 @@ const NextTurn = ({ isOpen, onClose, onConfirm }) => {
             <Title> 이제 자러 가는거야?</Title>
           </HeaderWrapper>
           <Subtitle>잠을 자면 이번 턴이 마무리되고, 다음 턴으로 넘어가요.</Subtitle>
+          {bankruptcyRisk && (
+            <WarningMessage>
+              주의! 다음 턴에 파산 위험이 있습니다. 부족액: {bankruptcyRisk.deficit}
+            </WarningMessage>
+          )}
           <ButtonWrapper>
             <StyledButton size="large" color="primary" onClick={onConfirm}>
               응! 잘래
             </StyledButton>
-            <StyledButton size="large" color="warn" onClick={onClose}>
+            <StyledButton size="large" color="tertiary" onClick={onClose}>
               아직이야!
             </StyledButton>
           </ButtonWrapper>
