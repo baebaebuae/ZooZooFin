@@ -56,7 +56,9 @@ const WalletContent = styled.div`
   align-items: center;
   width: 300px;
   height: 85vh;
-  padding: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
   border-radius: 40px;
   background-color: ${({ theme }) => theme.colors.yellow};
   border: 8px solid white;
@@ -65,13 +67,21 @@ const WalletContent = styled.div`
   position: relative;
 `;
 
+const CloseButtonContainer = styled.div`
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background-color: ${({ theme }) => theme.colors.yellow};
+  display: flex;
+  justify-content: flex-end;
+  z-index: 1001;
+`;
+
 const CloseButton = styled.button`
-  position: absolute;
-  top: 10px;
-  right: 10px;
   background: none;
   border: none;
   cursor: pointer;
+
   color: ${({ theme }) => theme.colors.primary};
   font-size: 24px;
 `;
@@ -80,7 +90,6 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  margin-top: 22px;
   margin-bottom: 20px;
 `;
 
@@ -156,6 +165,7 @@ const CardContent = styled.div`
 const TransactionItem = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: flex-end;
   margin-top: 5px;
 `;
 
@@ -167,12 +177,14 @@ const TransactionValue = styled.span`
   font-size: 14px;
   font-weight: bold;
   display: flex;
-  align-items: center;
+  align-items: end;
 `;
 
-const CarrotIcon = styled(NormalIcon)`
-  transform: translateY(-2px);
-`;
+
+const isAllZero = (transactions) => {
+  return transactions.every((transaction) => transaction.value === 0);
+};
+
 
 const Wallet = ({ onClose = () => {} }) => {
   const [walletData, setWalletData] = useState(null);
@@ -272,7 +284,7 @@ const Wallet = ({ onClose = () => {} }) => {
   }, []);
 
   if (isLoading || !imagesLoaded) {
-    return <div>Loading...</div>;
+    return <div></div>;
   }
 
   const todayCards = [
@@ -365,11 +377,13 @@ const Wallet = ({ onClose = () => {} }) => {
       <GlobalStyle />
       <ModalWrapper>
         <WalletContent>
-          <CloseButton onClick={handleClose}>
-            <X size={24} />
-          </CloseButton>
-
+          <CloseButtonContainer>
+            <CloseButton onClick={handleClose}>
+              <X size={24} />
+            </CloseButton>
+          </CloseButtonContainer>
           <ButtonContainer>
+            
             <StyledButton
               size="large"
               color={activeTab === 'today' ? 'primaryDeep' : 'gray'}
@@ -390,63 +404,65 @@ const Wallet = ({ onClose = () => {} }) => {
           
           <CardContainer>
             {activeTab === 'today' ? (
-              todayCards.map((card, index) => (
-                <Card 
-                  key={index} 
-                  backgroundImage={card.backgroundImage} 
-                  height={card.height}
-                >
-                  <CardHeader>
-                    <IconWrapper icon={card.icon} />
-                    <CardTitle>{card.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    {card.transactions.map((transaction, tIndex) => (
-                      <TransactionItem key={tIndex}>
-                        <TransactionLabel>{transaction.label}</TransactionLabel>
-                        <TransactionValue>
-                          {transaction.value === 0 
-                            ? '0'
-                            : transaction.value > 0
-                              ? `+${transaction.value.toLocaleString()}`
-                              : transaction.value.toLocaleString()
-                          }
-                          <CarrotIcon icon={IconCarrot}/>
-                        </TransactionValue>
-                      </TransactionItem>
-                    ))}
-                  </CardContent>
-                </Card>
-              ))
+              todayCards
+                .filter((card) => !isAllZero(card.transactions)) // 모든 값이 0인 카드를 필터링
+                .map((card, index) => (
+                  <Card 
+                    key={index} 
+                    backgroundImage={card.backgroundImage} 
+                    height={card.height}
+                  >
+                    <CardHeader>
+                      <IconWrapper icon={card.icon} />
+                      <CardTitle>{card.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      {card.transactions.map((transaction, tIndex) => (
+                        <TransactionItem key={tIndex}>
+                          <TransactionLabel>{transaction.label}</TransactionLabel>
+                          <TransactionValue>
+                            {transaction.value === 0 
+                              ? '0'
+                              : transaction.value > 0
+                                ? `+${transaction.value.toLocaleString()}`
+                                : transaction.value.toLocaleString()
+                            }
+                            🥕
+                          </TransactionValue>
+                        </TransactionItem>
+                      ))}
+                    </CardContent>
+                  </Card>
+                ))
             ) : (
-              nextDayCards.map((card, index) => (
-                <Card 
-                  key={index} 
-                  backgroundImage={card.backgroundImage} 
-                  height={card.height} 
-                >
-                  <CardHeader>
-                    <IconWrapper icon={card.icon} />
-                    <CardTitle>{card.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    {card.transactions.map((transaction, tIndex) => (
-                      <TransactionItem key={tIndex}>
-                        <TransactionLabel>{transaction.label}</TransactionLabel>
-                        <TransactionValue>
-                          {transaction.value === 0 
-                            ? '0'
-                            : transaction.value < 0 
-                              ? `-${Math.abs(transaction.value).toLocaleString()}`
-                              : Math.abs(transaction.value).toLocaleString()
-                          }
-                          <NormalIcon icon={IconCarrot}/>
-                        </TransactionValue>
-                      </TransactionItem>
-                    ))}
-                  </CardContent>
-                </Card>
-              ))
+              nextDayCards
+                .filter((card) => !isAllZero(card.transactions)) // 모든 값이 0인 카드를 필터링
+                .map((card, index) => (
+                  <Card 
+                    key={index} 
+                    backgroundImage={card.backgroundImage} 
+                    height={card.height} 
+                  >
+                    <CardHeader>
+                      <IconWrapper icon={card.icon} />
+                      <CardTitle>{card.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      {card.transactions.map((transaction, tIndex) => (
+                        <TransactionItem key={tIndex}>
+                          <TransactionLabel>{transaction.label}</TransactionLabel>
+                          <TransactionValue>
+                            {transaction.value === 0 
+                              ? '0'
+                              : `-${Math.abs(transaction.value).toLocaleString()}`
+                            }
+                            🥕
+                          </TransactionValue>
+                        </TransactionItem>
+                      ))}
+                    </CardContent>
+                  </Card>
+                ))
             )}
           </CardContainer>
         </WalletContent>
@@ -454,5 +470,4 @@ const Wallet = ({ onClose = () => {} }) => {
     </ThemeProvider>
   );
 };
-
 export default Wallet;

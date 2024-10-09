@@ -22,6 +22,7 @@ const HeaderBlock = styled.div`
     padding: 0 3%;
     margin: 20px 0;
     z-index: 10;
+    max-width: 360px;
 `;
 
 const HeaderButtonBlock = styled.div`

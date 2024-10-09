@@ -1,7 +1,9 @@
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import IconGold from '@assets/images/icons/icon_gold.png';
-import IconCarrot from '@assets/images/icons/icon_carrot.png';
 import { NormalIcon } from '@components/root/icon';
+import useUserStore from '@/stores/useUserStore';
+import { useLocation } from 'react-router-dom';
 
 const PropInfoBox = styled.div``;
 
@@ -13,13 +15,11 @@ const PropValue = styled.div`
 `;
 
 const PropMoney = styled(PropValue)`
-    //background: linear-gradient(180deg, #FFD1A1, #FF8C00);
     background: linear-gradient(180deg, #d1d9d1, #08c600);
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
-    /* -webkit-text-stroke: 1px brown; */
 `;
 
 const PropGold = styled(PropValue)`
@@ -28,24 +28,36 @@ const PropGold = styled(PropValue)`
     -webkit-background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
-    /* -webkit-text-stroke: 1px brown; */
 `;
-export const PropInfo = ({ propMoney, propGold }) => {
+
+const CarrotIcon = styled.span`
+    display: inline-block;
+    color: #ff9933; /* 당근 색상 */
+    -webkit-text-fill-color: initial; /* 초기화 */
+`;
+
+export const PropInfo = () => {
+    const { animalAssets, memberGoldBar, fetchUserProfile } = useUserStore();
+    const location = useLocation(); // 페이지 변경 감지
+
+    // 페이지가 변경될 때마다 서버에서 프로필 데이터를 가져옴
+    useEffect(() => {
+        fetchUserProfile(); // 페이지가 변경되면 프로필 데이터를 다시 가져옴
+    }, [location.pathname]); // location.pathname이 변경될 때마다 실행됨
+
     return (
-        <>
-            <PropInfoBox>
-                <PropMoney>
-                    {propMoney}
-                    {/* 형식 문제로(10,000,000) 문자열 처리되어있음 */}
-                    <NormalIcon icon={IconCarrot}/>
-                </PropMoney>
-                <PropGold>
-                    {propGold}
-                    <NormalIcon icon={IconGold} />
-                </PropGold>
-            </PropInfoBox>
-        </>
+        <PropInfoBox>
+            <PropMoney>
+                {animalAssets.toLocaleString()}
+                <CarrotIcon>🥕</CarrotIcon>
+            </PropMoney>
+            <PropGold>
+                {memberGoldBar.toLocaleString()}
+                <NormalIcon icon={IconGold} />
+            </PropGold>
+        </PropInfoBox>
     );
 };
+
 
 // CharIcon : Header에서 관리(Char 정보 받아오기)

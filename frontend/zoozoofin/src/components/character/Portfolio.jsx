@@ -352,7 +352,7 @@ const Portfolio = ({ isOpen, onClose, animalId, animalImage, createdDate }) => {
           <Section>
             <AssetRow>
               <AssetLabel>순자산</AssetLabel>
-              <AssetValue bold>{data.totalAmount.toLocaleString()}<NormalIcon icon={IconCarrot}/></AssetValue>
+              <AssetValue bold>{data.totalAmount.toLocaleString()}🥕</AssetValue>
             </AssetRow>
           </Section>
           <Section>
@@ -360,7 +360,9 @@ const Portfolio = ({ isOpen, onClose, animalId, animalImage, createdDate }) => {
               <AssetRow key={index}>
                 <AssetLabel>{label}</AssetLabel>
                 <AssetValue color={label === '대출' ? theme.colors.warn : undefined}>
-                  {label === '대출' ? '-' : ''}{data[['totalAssets', 'totalDeposit', 'totalSavings', 'totalStock', 'totalLoan'][index]].toLocaleString()}<NormalIcon icon={IconCarrot}/>
+                  {label === '대출'
+                    ? (data.totalLoan > 0 ? `-${data.totalLoan.toLocaleString()}` : data.totalLoan.toLocaleString()) + '🥕'
+                    : data[['totalAssets', 'totalDeposit', 'totalSavings', 'totalStock', 'totalLoan'][index]].toLocaleString() + '🥕'}
                 </AssetValue>
               </AssetRow>
             ))}
