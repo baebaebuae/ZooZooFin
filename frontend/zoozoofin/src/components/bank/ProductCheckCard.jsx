@@ -99,12 +99,13 @@ export const ProductCheckCard = ({
                 $isLoan={true}
             />
             {/* 임의로 캐릭터 능력 추가 금액을 가입 금액을 기준으로 계산해놓음. 실제 추가 금액 얼마인지 확인 */}
-            {specialRate > 0 && (
+            {/* {specialRate > 0 && (
                 <ExtraInfo
                     extraRate={specialRate}
                     extraAmount={(specialRate / 100) * savingsAmount}
                 ></ExtraInfo>
-            )}
+            )} */}
+            {/* 주석처리만 해둠. 캐릭터 특별 능력이 생긴다면 './actions/JoinProduct'에서 specialRate값 받아오기 */}
             <StampButton onClick={() => setIsModalOpen(true)} />
 
             {isModalOpen && (

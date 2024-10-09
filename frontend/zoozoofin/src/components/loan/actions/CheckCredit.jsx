@@ -66,9 +66,11 @@ const CheckCredit = ({ goToScript }) => {
                             goToScript={() => goToScript(credit.characterCredit)}
                             // goToScript={() => goToScript(7)} // 낮은 신용등급일 때 테스트
                             isAvailable={credit.isAvailable}
-                            loanLimit={credit.loanLimit.toLocaleString()}
-                            characterCredit={credit.characterCredit}
-                            loanAvailable={credit.loanAvailable.toLocaleString()}
+                            loanLimit={credit.loanLimit ? credit.loanLimit.toLocaleString() : '0'}
+                            characterCredit={credit.characterCredit ? credit.characterCredit : '0'}
+                            loanAvailable={
+                                credit.loanAvailable ? credit.loanAvailable.toLocaleString() : '0'
+                            }
                         />
                     ) : (
                         <div>신용 등급 정보가 없어요.</div>

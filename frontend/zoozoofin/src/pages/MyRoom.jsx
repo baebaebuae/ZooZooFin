@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { Bill } from '@components/Bill';
 import { BankruptNotice } from '@components/myroom/BankruptNotice';
-import { useBillStore } from '@stores/useBillStore';
+import { useBillStore, useBankruptStore } from '@stores/useBillStore';
 
 import { RoomComponent } from '@components/myroom/Room';
 import { Loader } from '@components/Loader';
@@ -37,16 +37,11 @@ const BillContainer = styled.div`
 `;
 
 const MyRoom = () => {
-    const { billTurn, isBillShown, showBill, resetBill } = useBillStore();
-    const {
-        isBankruptChecked,
-        updateBankruptChecked,
-        isTurnChecked,
-        updateTurnChecked,
-        animalAssets,
-        turn,
-        fetchUserProfile,
-    } = useUserStore();
+    const { isTurnChecked, updateTurnChecked, animalAssets, turn, fetchUserProfile } =
+        useUserStore();
+    const { billData, setBillData, billState, updateBillState } = useBillStore();
+    const { bankruptState, updateBankruptState } = useBankruptStore();
+
     const apiClient = getApiClient();
     const navigate = useNavigate();
 
@@ -84,8 +79,8 @@ const MyRoom = () => {
                                 moveToEnding('A002');
                             }
                             // 일반 대출 미상환 -> 은행 파산 가능 안내
-                            else {
-                                // updateBankruptChecked();
+                            else if (!bankruptState.isDetected) {
+                                updateBankruptState('isDetected', true);
                                 console.log('일반 대출 미상환');
                             }
                         }
@@ -100,6 +95,33 @@ const MyRoom = () => {
         checkTurn();
     }, []);
 
+    useEffect(() => {
+        if (!billState.isDetected) {
+            const fetchData = async () => {
+                const apiClient = getApiClient();
+                try {
+                    const response = await apiClient.get('/home/warning-record');
+                    if (response.data && response.data.body) {
+                        console.log('BillData: ', response.data.body);
+                        setBillData(response.data.body);
+                    }
+
+                    // fetch된 billData를 탐색해서
+                    // 연체 내역이 있거나 depositTotal, .. 암튼 객체 내 모든 값 중에 하나라도 보여줄 게 있으면
+                    // bill의 detected를 true로 바꾸기
+                    const hasValue = Object.values(billData).some((value) => value > 0);
+                    if (hasValue) {
+                        updateBillState('isDetected', true);
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+            };
+
+            fetchData();
+        }
+    }, []);
+
     // RoomComponent 출력 후 고지서 출력을 위한 처리
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -110,27 +132,24 @@ const MyRoom = () => {
         return () => clearTimeout(timer);
     }, []);
 
-    const checkBill = () => {
-        console.log(billTurn);
-        showBill();
-        console.log(billTurn);
-    };
-
     return (
         <>
             <RoomBlock>
-                {!isBankruptChecked && (
+                {bankruptState.isDetected && !bankruptState.isShown && (
                     <BankruptNotice
                         checkBill={() => {
-                            updateBankruptChecked();
+                            updateBankruptState('isShown', true);
                         }}
                     />
                 )}
-                {
-                    // 현재 턴과 비교한 조건 추가하기. isBillShown은 중복 조건이라 삭제
-                    // !isBillShown &&
-                    billTurn === turn && <Bill checkBill={checkBill} />
-                }
+                {billState.isDetected && !billState.isShown && (
+                    <Bill
+                        // Bill에서는 store data 가져다가 쓰는거임
+                        checkBill={() => {
+                            updateBillState('isShown', true);
+                        }}
+                    />
+                )}
                 <RoomComponent />
             </RoomBlock>
         </>

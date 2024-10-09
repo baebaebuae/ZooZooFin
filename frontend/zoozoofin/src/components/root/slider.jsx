@@ -36,8 +36,8 @@ export const TurnSliderLoan = ({ title, min, max, onTurnChange }) => {
 
     const marks = [
         {
-            value: 1,
-            label: `1턴`,
+            value: min,
+            label: `${min}턴`,
         },
         {
             value: midAmount,

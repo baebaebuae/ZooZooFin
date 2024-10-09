@@ -47,13 +47,15 @@ const FinalLevelDivider = styled.div`
 `;
 
 const FinalLevelValue = styled(FinalLevel)`
-    font-size: 40px;
+    font-size: 28px;
 `;
 
 const NextGameInfoBox = styled.div`
+    margin: 10px 0;
     background-color: white;
     color: ${({ theme }) => theme.colors.tertiaryDeep};
     font-weight: bold;
+    font-size: 12px;
     text-align: center;
     border-radius: 20px;
 `;
@@ -228,7 +230,7 @@ const Ending = () => {
 
     const receivedEndingType = location.state ? location.state.endingType : 'A001';
 
-    const charFinalLevel = characterData ? characterData.animalAbility : 6;
+    const charFinalLevel = characterData ? characterData.animalHierarchy : '계급 없음';
 
     // happy, bad에 따라, 레벨에 따라 보상 차등 지급
     const benefits = [2, 2, 2, 2, 10, 10, 20, 20, 20, 20];
@@ -241,6 +243,8 @@ const Ending = () => {
         '',
         '그 동안 함께해서 정말 즐거웠어. 또 보자!',
     ];
+
+    console.log(characterData);
 
     return (
         <>
@@ -257,7 +261,7 @@ const Ending = () => {
                 )}
                 {content === 4 && (
                     <>
-                        <FinalLevelTitle>최종 레벨</FinalLevelTitle>
+                        <FinalLevelTitle>최종 계급</FinalLevelTitle>
                         <FinalLevelDividerBlock>
                             <FinalLevelDividerCircle />
                             <FinalLevelDivider />

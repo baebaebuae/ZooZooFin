@@ -157,14 +157,12 @@ const CreateAnimal = () => {
 
                                 <AnimalInfoBox>
                                     <AnimalInfoName>{animal.animalTypeName}</AnimalInfoName>
-                                    <AnimalInfoCondition>예금, 적금 가입 시</AnimalInfoCondition>
+                                    <AnimalInfoCondition>캐릭터 우대사항</AnimalInfoCondition>
                                     <AnimalInfoSpecial>
-                                        <AnimalInfoSpecialContent>
-                                            우대금리
-                                        </AnimalInfoSpecialContent>
-                                        <AnimalInfoSpecialNum>
+                                        <AnimalInfoSpecialContent>없음</AnimalInfoSpecialContent>
+                                        {/* <AnimalInfoSpecialNum>
                                             +{animal.animalAbility}%
-                                        </AnimalInfoSpecialNum>
+                                        </AnimalInfoSpecialNum> */}
                                     </AnimalInfoSpecial>
                                 </AnimalInfoBox>
                             </AnimalCard>

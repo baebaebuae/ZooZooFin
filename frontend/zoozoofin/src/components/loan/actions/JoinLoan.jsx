@@ -11,6 +11,7 @@ import { NormalIcon } from '@components/root/icon';
 import IconChick from '@assets/images/icons/icon_chick.png';
 
 import { useCreditStore } from '@stores/useCreditStore';
+import useUserStore from '@/stores/useUserStore';
 
 const Block = styled.div`
     display: flex;
@@ -46,6 +47,7 @@ const JoinLoan = ({ goToScript }) => {
     const [repayType, setRepayType] = useState(null);
 
     const { credit, fetchCredit } = useCreditStore();
+    const { turn } = useUserStore();
 
     useEffect(() => {
         if (!credit) {
@@ -110,7 +112,7 @@ const JoinLoan = ({ goToScript }) => {
                                 characterCredit={credit.characterCredit}
                             />
                             <LoanJoinCard
-                                currentTurn={10}
+                                currentTurn={turn}
                                 maxAmount={credit.loanAvailable}
                                 saveLoanInfo={saveLoanInfo}
                                 loanRate={credit.loanRate}
@@ -126,7 +128,7 @@ const JoinLoan = ({ goToScript }) => {
                             expectedFinalAmount={expectedFinalAmount}
                             loanPeriod={loanPeriod}
                             expectedFinalTurn={expectedFinalTurn}
-                            loanRate={5}
+                            loanRate={credit.loanRate}
                             repayType={repayType}
                             goToNextCard={goToNextCard}
                         />
