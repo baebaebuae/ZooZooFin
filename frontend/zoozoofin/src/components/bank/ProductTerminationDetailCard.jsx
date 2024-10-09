@@ -3,6 +3,10 @@ import styled from 'styled-components';
 import { Button } from '@components/root/buttons';
 import { NormalIcon } from '@components/root/icon';
 import IconChicken from '@assets/images/icons/icon_chicken.png';
+import IconZoozoo from '@assets/images/icons/icon_chick.png';
+import IconCat from '@assets/images/icons/icon_cat.png';
+import IconBear from '@assets/images/icons/icon_bear.png';
+import IconRaccon from '@assets/images/icons/icon_raccon.png';
 import { ProductDetailInfo, ProductJoinInfo } from '@components/root/productDetailInfo';
 import { StampButton } from '@components/root/buttons';
 import { Divider } from '@components/root/card';
@@ -49,6 +53,22 @@ const terminateProduct = async (animalId, productType, productId) => {
     }
 };
 
+const getProductIcon = (productName) => {
+    switch (productName) {
+        case '주주예금':
+            return IconZoozoo;
+        case '꼬꼬예금':
+            return IconChicken;
+        case '야옹예금':
+            return IconCat;
+        case '주주적금':
+            return IconZoozoo;
+        case '너굴적금':
+            return IconRaccon;
+        case '곰곰적금':
+            return IconBear;
+    }
+};
 
 export const ProductTerminationDetailCard = ({
     productType,
@@ -67,10 +87,10 @@ export const ProductTerminationDetailCard = ({
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const { nowAnimal } = useAnimalStore();
-
+    const productIcon = getProductIcon(productName);
     return (
         <Card>
-            <NormalIcon icon={IconChicken}></NormalIcon>
+            <NormalIcon icon={productIcon}></NormalIcon>
             <ProductName>{productName}</ProductName>
             {warning && (
                 <Button size={'small'} $isBorder={false} color={'warn'}>

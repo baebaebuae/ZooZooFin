@@ -23,7 +23,7 @@ import NextTurn from '../NextTurn';
 import { getApiClient } from '@/stores/apiClient';
 import { useNavigate } from 'react-router-dom';
 import { useMusicStore } from '@stores/useMusicStore.js';
-// import { useBillStore, useBankruptStore } from '@stores/useBillStore';
+import { useBillStore, useBankruptStore } from '@stores/useBillStore';
 import useUserStore from '@/stores/useUserStore';
 
 const HeaderButton = styled.div`
@@ -84,8 +84,8 @@ export const HeaderHamburgerButton = () => {
     const isMusicOn = useMusicStore((state) => state.isMusicOn);
     const toggleMusic = useMusicStore((state) => state.toggleMusic);
     const fetchUserProfile = useUserStore((state) => state.fetchUserProfile);
-    // const { updateBillState } = useBillStore();
-    // const { updateBankruptState } = useBankruptStore();
+    const { updateBillState } = useBillStore();
+    const { updateBankruptState } = useBankruptStore();
 
     const open = Boolean(anchorEl);
 
@@ -120,10 +120,10 @@ export const HeaderHamburgerButton = () => {
             await fetchUserProfile();  // 사용자 정보 새로고침
 
             // 고지서와 파산 안내 상태 초기화
-            // updateBankruptState('isShown', false);
-            // updateBankruptState('isDetected', false);
-            // updateBillState('isShown', false);
-            // updateBillState('isDetected', false);
+            updateBankruptState('isShown', false);
+            updateBankruptState('isDetected', false);
+            updateBillState('isShown', false);
+            updateBillState('isDetected', false);
 
             setIsSleepModalOpen(false);
             navigate('/myroom');
