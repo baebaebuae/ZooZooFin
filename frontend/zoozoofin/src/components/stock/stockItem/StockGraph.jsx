@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StockDetailCard } from '@components/stock/common/card/DetailCard';
 import {
     StockDetailRow,
@@ -8,7 +8,7 @@ import {
     DetailButtonContainer,
 } from '@components/stock/common/container/StockDetailContainer';
 import {
-    CurrentStockState,
+    RateState,
     StockPrice,
     ButtonContainer,
 } from '@components/stock/common/container/StoreContainer';
@@ -19,24 +19,49 @@ import { Collapse } from '@mui/material';
 import LineGraph from '../common/graph/LineGraph';
 
 import useUserStore from '../../../stores/useUserStore';
+import useStockStore from '../common/store/StockStore';
 
-const InfoColumn = ({ product, stockPrice, currentState }) => {
+const formatStockRate = (stockRate) => {
+    if (stockRate < 0) {
+        return `▼ ${Math.abs(stockRate)} %`; // 음수일 경우 부호를 빼고 ▼를 붙임
+    } else if (stockRate > 0) {
+        return `▲ ${Math.abs(stockRate)} %`; // 양수일 경우 + 부호를 붙이고 ▲를 붙임
+    } else {
+        return `0`; // 0일 경우 그대로 출력
+    }
+};
+const InfoColumn = ({ product, stockPrice, stockRate }) => {
     return (
         <StockInfoColumn>
             <StockInfoText type="title">{product}</StockInfoText>
             <StockPriceRow>
-                <StockPrice>{stockPrice} 🥕</StockPrice>
-                <CurrentStockState current={currentState}>{currentState}</CurrentStockState>
+                <StockPrice>{stockPrice ? `${stockPrice.toLocaleString()} 🥕` : 0}</StockPrice>
+                <RateState rate={stockRate}>{formatStockRate(stockRate)}</RateState>
             </StockPriceRow>
         </StockInfoColumn>
     );
 };
 
 export const StockGraph = ({ onClickDetail, onClickHint }) => {
-    const product = '개굴자동차';
-    const currentState = 'up';
-    const stockPrice = '89,000';
     const { turn } = useUserStore();
+    const { clickedStockDetail, clickedStockInfo, setClickedStockCharts } = useStockStore();
+    const [stockInfo, setStockInfo] = useState([]);
+
+    // 현재 turn의 주식 정보 가져오기
+    useEffect(() => {
+        if (turn && clickedStockInfo['chart']) {
+            const nowTurn = turn + 25;
+            // console.log(clickedStockInfo['chart']);
+            setStockInfo(clickedStockInfo['chart'][nowTurn]);
+        }
+    }, [clickedStockInfo['chart'], turn]);
+
+    // 그래프 작성을 위한 주식 차트 저장
+    useEffect(() => {
+        if (clickedStockDetail) {
+            setClickedStockCharts(clickedStockDetail.chartDetail);
+        }
+    }, [clickedStockDetail, setClickedStockCharts]);
 
     // + 버튼 활성화
     const [isExpanded, setIsExpanded] = useState(false);
@@ -49,10 +74,14 @@ export const StockGraph = ({ onClickDetail, onClickHint }) => {
     return (
         <StockDetailCard>
             <StockDetailRow>
-                <InfoColumn product={product} currentState={currentState} stockPrice={stockPrice} />
+                <InfoColumn
+                    product={clickedStockInfo.stockName}
+                    stockRate={stockInfo ? stockInfo['rate'] : 0}
+                    stockPrice={stockInfo['endPrice']}
+                />
                 <PlusButton onClick={handleToggle}> {!isExpanded ? '+' : '-'}</PlusButton>
             </StockDetailRow>
-            <LineGraph turn={turn} />
+            <LineGraph />
             <DetailButtonContainer>
                 <Collapse in={isOpened} timeout="auto" unmountOnExit>
                     <ButtonContainer>

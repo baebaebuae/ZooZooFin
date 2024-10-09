@@ -26,7 +26,7 @@ export const StockOverview = () => {
 
     useEffect(() => {
         setStockDetail(clickedStockDetail);
-    }, clickedStockDetail);
+    }, [clickedStockDetail]);
 
     useEffect(() => {
         if (stockDetail) {
@@ -44,7 +44,7 @@ export const StockOverview = () => {
                 ROE: ROE,
             });
         }
-    });
+    }, [stockDetail]);
 
     const [nowList, setNowList] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -73,7 +73,7 @@ export const StockOverview = () => {
                     <LargeIcon icon={IconGraph} />
                     <GraphTitle onClick={handleModal} />
                 </CardTitle>
-                <MovingAverage turn={15} />
+                <MovingAverage />
             </StockDetailCard>
         </>
     );

@@ -8,40 +8,28 @@ const GraphWrapper = styled.div`
     padding-top: 10px;
 `;
 
-export const LineGraph = ({ turn }) => {
-    const { clickedStockDetail } = useStockStore();
+export const LineGraph = () => {
+    const { clickedStockCharts } = useStockStore();
     // turn 연결 후 그래프 처리하기
 
     const [stockData, setStockData] = useState(0);
-    const [data, setData] = useState(null);
+    const [turns, setTurns] = useState([]);
     const [closePrices, setClosePrices] = useState(null);
 
+    // 클릭된 주식 차트를 상태에 저장
     useEffect(() => {
-        if (clickedStockDetail) {
-            setStockData(clickedStockDetail.chartDetail);
+        if (clickedStockCharts) {
+            setStockData(clickedStockCharts);
         }
-    }, [clickedStockDetail]);
+    }, [clickedStockCharts]);
 
+    // 주식 데이터에서 endPrice만 추출
     useEffect(() => {
         if (stockData) {
-            setData(getNowStockData(turn));
+            const prices = Object.values(stockData).map((item) => item['endPrice']);
+            setClosePrices(prices);
         }
     }, [stockData]);
-
-    useEffect(() => {
-        if (data) {
-            setClosePrices(Object.values(data).map((item) => item.close));
-        }
-    }, [data]);
-
-    // 현재 turn 까지의 데이터 가져오기
-    const getNowStockData = (turn) => {
-        // const now = turn + 25;
-        const now = turn;
-        const entries = Object.entries(stockData).slice(0, now);
-        const NowData = Object.fromEntries(entries);
-        return NowData;
-    };
 
     const options = {
         chart: {
@@ -59,6 +47,7 @@ export const LineGraph = ({ turn }) => {
                 top: 0,
                 left: 0,
                 blur: 3,
+                // 주식 차트 그래프에서만 사용하는 색상 적용
                 color: ['#ff6a00'],
                 opacity: 0.5,
             },
@@ -89,7 +78,7 @@ export const LineGraph = ({ turn }) => {
             labels: {
                 show: false,
             },
-            // categories: dates,
+            // categories: turns,
         },
         yaxis: {
             show: false,
@@ -107,7 +96,7 @@ export const LineGraph = ({ turn }) => {
     return (
         <>
             <GraphWrapper>
-                {data && <ReactApexChart options={options} series={series} />}
+                {closePrices && turns && <ReactApexChart options={options} series={series} />}
             </GraphWrapper>
         </>
     );

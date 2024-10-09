@@ -4,7 +4,6 @@ import {
     BuyingContent,
     CompanyName,
     BuyingMoneyContent,
-    CurrentStockState,
     RateState,
     StockPrice,
     ButtonContainer,
@@ -16,25 +15,26 @@ import { Divider } from '@components/stock/common/card/StoreCards';
 import { useEffect, useState } from 'react';
 
 import { getApiClient } from '../../../../stores/apiClient';
-import useStockStore from '../store/StockStore';
+import useStockStore, { useUserStockStore } from '../store/StockStore';
 
 const formatStockRate = (stockRate) => {
+    const rate = Math.abs(stockRate);
     if (stockRate < 0) {
-        return `▼ ${Math.abs(stockRate)}`; // 음수일 경우 부호를 빼고 ▼를 붙임
+        return `▼ ${parseFloat(rate).toFixed(1)} %`; // 음수일 경우 부호를 빼고 ▼를 붙임
     } else if (stockRate > 0) {
-        return `▲ +${stockRate}`; // 양수일 경우 + 부호를 붙이고 ▲를 붙임
+        return `▲ ${parseFloat(rate).toFixed(1)} %`; // 양수일 경우 + 부호를 붙이고 ▲를 붙임
     } else {
-        return `${stockRate}`; // 0일 경우 그대로 출력
+        return 'new'; // 0일 경우 그대로 출력
     }
 };
 
-export const StockTitle = ({ stockName, stockPrice, stockRate, onToggle }) => {
+export const StockTitle = ({ stockName, stockPrice, stockRate, onToggle, stockTotal }) => {
     return (
         <BuyingContent onClick={onToggle} style={{ cursor: 'pointer' }}>
             <CompanyName>{stockName}</CompanyName>
             <BuyingMoneyContent>
                 <RateState rate={stockRate}>{formatStockRate(stockRate)}</RateState>
-                <StockPrice>{stockPrice ? stockPrice.toLocaleString() : 0} 🥕</StockPrice>
+                <StockPrice>{(stockPrice || stockTotal || 0).toLocaleString()} 🥕</StockPrice>
             </BuyingMoneyContent>
         </BuyingContent>
     );
@@ -52,13 +52,24 @@ export const StockTitleContainer = ({
     type,
     channel,
     onDetailClick,
+    stockTotal,
+    stockCount,
 }) => {
     const [value, setValue] = useState(null);
     const [stockPrice, setStockPrice] = useState(null); // stockPrice 상태 추가
     const [goToOrder, setGoToOrder] = useState(false);
     const [goToDetail, setGoToDetail] = useState(false);
 
-    const { clickedStockId, setClickedStockId, clickedStockInfo, fetchStockInfo } = useStockStore();
+    const {
+        clickedStockId,
+        setClickedStockId,
+        clickedStockInfo,
+        clickedStockDetail,
+        fetchStockInfo,
+        fetchStockDetail,
+    } = useStockStore();
+
+    const { setClickedMyStock } = useUserStockStore();
 
     useEffect(() => {
         if (type === 'buy') {
@@ -70,26 +81,54 @@ export const StockTitleContainer = ({
 
     const handleClickStock = () => {
         // isStockSelected(true);
-        setClickedStockId(stockId); // 클릭 시 clickedStockId 업데이트
-        setGoToOrder(true);
+        // 클릭 시 clickedStockId 업데이트
+
+        if (type === 'buy') {
+            setClickedStockId(stockId);
+            setGoToOrder(true);
+        }
+        if (type === 'sell') {
+            const nowMyStock = {
+                stockName: stockName,
+                stockPrice: stockTotal,
+                stockRate: stockRate,
+                stockTotal: stockTotal,
+                stockCount: stockCount,
+            };
+            setClickedMyStock(nowMyStock);
+            setGoToOrder(true);
+        }
     };
 
     useEffect(() => {
         if (clickedStockId) {
             console.log(`Fetching details for stockId: ${clickedStockId}`);
-            fetchStockInfo(clickedStockId); // clickedStockId가 있을 때만 fetch 실행
+            fetchStockInfo(clickedStockId);
+            fetchStockDetail(clickedStockId);
         }
-    }, [clickedStockId, clickedStockInfo, fetchStockInfo]); // clickedStockId가 업데이트되면 fetch 실행
+    }, [clickedStockId]); // clickedStockId가 업데이트되면 fetch 실행
 
     useEffect(() => {
-        // 주문하기 이동
-        if (goToOrder && clickedStockId && fetchStockInfo) {
-            isStockSelected(true);
-        }
+        if (type === 'buy') {
+            // 주문하기 이동
+            if (goToOrder && clickedStockId && clickedStockInfo && clickedStockDetail) {
+                isStockSelected(true);
+            }
 
-        // 상세 화면 이동
-        if (goToDetail && clickedStockId && fetchStockInfo) {
-            onDetailClick();
+            // 상세 화면 이동
+            if (goToDetail && clickedStockId && clickedStockInfo && clickedStockDetail) {
+                onDetailClick();
+            }
+        } else if (type === 'sell') {
+            // 주문하기 이동
+            if (goToOrder) {
+                isStockSelected(true);
+            }
+
+            // 상세 화면 이동
+            if (goToDetail) {
+                onDetailClick();
+            }
         }
     }, [goToOrder, goToDetail, clickedStockId, fetchStockInfo]); // 의존성 배열에 clickedStockId 추가
 
@@ -126,12 +165,14 @@ export const StockTitleContainer = ({
         <>
             <BuyingContent onClick={onToggle}>
                 <TitleCoulumn>
-                    {channel === 'ETF' && <CompanyName type="title">증권사 이름</CompanyName>}
-                    <CompanyName>{stockName}</CompanyName>
+                    {channel === 'ETF' && (
+                        <CompanyName type="title">{stockName.slice(0, 2)} 증권</CompanyName>
+                    )}
+                    <CompanyName> {channel === 'ETF' ? stockName.slice(2) : stockName}</CompanyName>
                 </TitleCoulumn>
                 <BuyingMoneyContent>
                     <RateState rate={stockRate}>{formatStockRate(stockRate)}</RateState>
-                    <StockPrice>{stockPrice ? stockPrice.toLocaleString() : 0} 🥕</StockPrice>
+                    <StockPrice> {(stockPrice || stockTotal || 0).toLocaleString()} 🥕</StockPrice>
                 </BuyingMoneyContent>
             </BuyingContent>
             <Collapse in={isOpen} timeout="auto" unmountOnExit>

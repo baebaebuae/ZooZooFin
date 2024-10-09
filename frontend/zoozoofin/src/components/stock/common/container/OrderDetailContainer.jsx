@@ -30,7 +30,7 @@ const TextStyle = styled.div`
     padding: 2px 0px;
     height: 25px;
     color: ${({ type, theme }) => (type === 'content' ? theme.colors.primaryDeep : 'black')};
-    font-size: ${({ size }) => (size === 'large' ? '17px' : '14px')};
+    font-size: ${({ size }) => (size === 'large' ? '17px' : '12px')};
     font-weight: ${({ type }) => (type === 'content' ? 'bold' : 'normal')};
 `;
 
@@ -39,7 +39,7 @@ const ColumnInfoBox = ({ title, content, showIcon }) => {
         <ColumnContainerBox>
             <TextStyle type="title">{title}</TextStyle>
             <TextStyle type="content" size="large">
-                {content} {showIcon && '🥕'}
+                {content ? `${content.toLocaleString()}` : 0} {showIcon && '🥕'}
             </TextStyle>
         </ColumnContainerBox>
     );
@@ -77,7 +77,7 @@ export const TotalPrice = ({ title, total }) => {
     );
 };
 
-export const InputOrder = ({ type, stockPrice }) => {
+export const InputOrder = ({ type, stockPrice, max }) => {
     const [title, setTitle] = useState(0);
     const [totalTitle, setTotalTitle] = useState(null);
 
@@ -107,7 +107,7 @@ export const InputOrder = ({ type, stockPrice }) => {
                 amount2={5}
                 amount3={10}
                 amount4={25}
-                maxAmount={50}
+                maxAmount={max}
                 onSavingsAmountChange={() => {}}
                 isSavings={true}
                 handleTotal={handleTotal}

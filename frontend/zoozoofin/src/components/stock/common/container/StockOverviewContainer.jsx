@@ -3,6 +3,7 @@ import { LargeIcon } from '@components/root/icon';
 import IconOverview from '@assets/images/icons/stocks/icon_overview.png';
 import { QuestionButton } from '@components/stock/common/button/Button';
 import { Divider } from '@components/stock/common/card/StoreCards';
+import useStockStore from '../store/StockStore';
 
 const CardRow = styled.div`
     display: flex;
@@ -39,6 +40,8 @@ export const OverviewText = styled.p`
 `;
 
 export const Title = ({ quarter }) => {
+    const { clickedStockInfo } = useStockStore();
+
     return (
         <CardRow>
             <TitleRow>
@@ -48,7 +51,7 @@ export const Title = ({ quarter }) => {
                     <OverviewText type={'title'}>재무제표</OverviewText>
                 </OverviewColumn>
             </TitleRow>
-            <OverviewText>개굴자동차</OverviewText>
+            <OverviewText>{clickedStockInfo.stockName}</OverviewText>
         </CardRow>
     );
 };
@@ -78,7 +81,9 @@ export const OverviewList = ({ list, item, onClick }) => {
                     <OverviewText type={'list'}>{list}</OverviewText>
                     <QuestionButton onClick={() => onClick(list)}>?</QuestionButton>
                 </ListRow>
-                <OverviewText type={'content'}>{item}</OverviewText>
+                <OverviewText type={'content'}>
+                    {item ? `${item.toLocaleString()}` : '-'}
+                </OverviewText>
             </CardRow>
             <Divider />
         </ListColumn>

@@ -21,16 +21,14 @@ const useStockStore = create((set) => ({
 
             // 기본적으로 domestic 주식 목록을 가져옴
             requests.push(apiClient.get('/stock/list/domestic'));
-            // turn이 5 이상이면 해외 주식 목록도 가져옴
-            if (turn >= 5) {
-                requests.push(apiClient.get('/stock/list/oversea'));
-            }
-            // turn이 10 이상이면 ETF 목록도 가져옴
-            if (turn >= 10) {
-                requests.push(apiClient.get('/stock/list/etf'));
-            }
+
+            requests.push(apiClient.get('/stock/list/oversea'));
+
+            requests.push(apiClient.get('/stock/list/etf'));
+
             // Promise.all을 사용해 모든 요청을 병렬로 처리
             const responses = await Promise.all(requests);
+            console.log(responses);
             const [domesticResponse, overseaResponse, etfResponse] = responses;
             set({ domesticStocks: domesticResponse.data.body.stockDetails });
 
@@ -41,6 +39,7 @@ const useStockStore = create((set) => ({
 
             // ETF 주식 업데이트 (turn >= 10일 때만)
             if (etfResponse) {
+                console.log(etfResponse);
                 set({ ETFStocks: etfResponse.data.body.stockDetails });
             }
         } catch (error) {
@@ -53,7 +52,9 @@ const useStockStore = create((set) => ({
     clickedStockId: null,
     clickedStockInfo: {},
     clickedStockDetail: {},
+    clickedStockCharts: [],
     setClickedStockId: (stockid) => set({ clickedStockId: stockid }),
+    setClickedStockCharts: (charts) => set({ clickedStockCharts: charts }),
     // fetchStockInfo
     fetchStockInfo: async (stockId) => {
         try {
@@ -69,6 +70,7 @@ const useStockStore = create((set) => ({
     fetchStockDetail: async (stockId) => {
         try {
             const apiClient = getApiClient();
+            console.log(stockId);
             const response = await apiClient.get(`/stock/statements/${stockId}`);
             // console.log(response);
             set({ clickedStockDetail: response.data.body });
@@ -84,9 +86,12 @@ const useStockStore = create((set) => ({
 // 보유 주식 관련 store 생성
 export const useUserStockStore = create((set) => ({
     // 주식 채널 주식 리스트 확인
-    domesticStocks: [],
-    overseasStocks: [],
-    ETFStocks: [],
+    myDomesticStocks: [],
+    myOverseasStocks: [],
+    myETFStocks: [],
+
+    clickedMyStock: {},
+    setClickedMyStock: (myStock) => set({ clickedMyStock: myStock }),
 
     fetchMyStocklist: async ({ turn }) => {
         try {
@@ -110,17 +115,17 @@ export const useUserStockStore = create((set) => ({
             console.log(responses);
             console.log('myDomesticResponse', domesticResponse);
             if (domesticResponse) {
-                set({ domesticStocks: domesticResponse.data.body });
+                set({ myDomesticStocks: domesticResponse.data.body });
             }
 
             // 해외 주식 업데이트 (turn >= 5일 때만)
             if (overseaResponse) {
-                set({ overseasStocks: overseaResponse.data.body });
+                set({ myOverseasStocks: overseaResponse.data.body });
             }
 
             // ETF 주식 업데이트 (turn >= 10일 때만)
             if (etfResponse) {
-                set({ ETFStocks: etfResponse.data.body });
+                set({ myETFStocks: etfResponse.data.body });
             }
         } catch (error) {
             console.error('Failed to fetch user profile:', error);

@@ -104,11 +104,9 @@ export const RateState = styled.div`
         }
     }};
     font-size: 12px;
-    color: ${({ current, theme }) => {
-        if (current === 'up') {
+    color: ${({ rate, theme }) => {
+        if (rate > 0) {
             return '#FF3E3E';
-        } else if (current === 'down') {
-            return theme.colors.primaryDeep;
         } else {
             return theme.colors.primaryDeep;
         }
