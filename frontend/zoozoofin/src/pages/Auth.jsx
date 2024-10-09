@@ -1,30 +1,45 @@
 import React from 'react';
-import axios from 'axios';
-import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getApiClient } from '@stores/apiClient';
 
 const Auth = () => {
     const navigate = useNavigate();
     const url = new URL(window.location.href);
     const accessToken = url.searchParams.get('accessToken');
     const refreshToken = url.searchParams.get('refreshToken');
-
+    
     useEffect(() => {
-        console.log(accessToken, refreshToken);
+        const apiClient = getApiClient();
+        const fetchUserState = async () => {
+            if (accessToken.length !== 0) {
+                try {
+                    localStorage.setItem('accessToken', accessToken);
+                    localStorage.setItem('refreshToken', refreshToken);
 
-        if (accessToken.length !== 0) {
-            localStorage.setItem('accessToken', accessToken);
-            localStorage.setItem('refreshToken', refreshToken);
+                    const res = await apiClient.get('/member/animal');
+                    if (res.status === 200){
+                        const animalNumber = res.data.body.animalNumber;
+                        if (animalNumber && animalNumber > 0){
+                            navigate('../myroom');
+                        } else {
+                            navigate('../tutorial')
+                        }
+                    } else {
+                        console.error(res.status)
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
 
-            // memberId -> animal 유무 체크
-            navigate('../start');
-        } else {
-            console.error('카카오 인증 코드가 없습니다.');
-        }
-    }, [accessToken]);
+            } else {
+                console.error('인증 실패');
+            }
+        };
+        fetchUserState();
+    }, []);
 
-    return <div>카카오 로그인 처리 중...</div>;
+    return <div>Loading</div>;
 };
 
 export default Auth;
