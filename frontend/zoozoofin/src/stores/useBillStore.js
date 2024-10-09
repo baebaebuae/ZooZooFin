@@ -1,12 +1,30 @@
 import { create } from 'zustand';
 
 export const useBillStore = create((set) => ({
-    isBillShown: false,
+    billData: null,
+    setBillData: (data) => set({ billData: data }),
 
-    billTurn: 1,
+    billState: {
+        isShown: false,
+        isDetected: false,
+    },
 
-    showBill: () =>
-        set((state) => ({ billTurn: state.billTurn + 1, isBillShown: !state.isBillShown })),
+    updateBillState: (key, value) => {
+        set((state) => ({
+            billState: { ...state.billState, [key]: value },
+        }));
+    },
+}));
 
-    resetBill: () => set({ isBillShown: false }),
+export const useBankruptStore = create((set) => ({
+    bankruptState: {
+        isShown: false,
+        isDetected: false,
+    },
+
+    updateBankruptState: (key, value) => {
+        set((state) => ({
+            bankruptState: { ...state.bankruptState, [key]: value },
+        }));
+    },
 }));

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import { getApiClient } from '@/stores/apiClient';
+import { useBillStore } from '@stores/useBillStore';
 
 const BillContainer = styled.div`
     width: 320px;
@@ -129,7 +130,8 @@ const CheckButton = styled.div`
 `;
 
 export const Bill = ({ checkBill }) => {
-    const [billData, setBillData] = useState([]);
+    // const [billData, setBillData] = useState([]);
+    const { billData } = useBillStore();
 
     const warnTexts = [
         '연체시 해당 상품에 대해 경고 1회 부과됩니다. (노트북 확인)',
@@ -137,38 +139,38 @@ export const Bill = ({ checkBill }) => {
         '보유 중인 자산이 압류 처리됩니다. (예금-적금-자산 순)',
     ];
 
-    const tempData = {
-        warningSavingsCount: 0,
-        warningLoanCount: 1,
-        depositTotal: 39036700,
-        depositRepay: 39036700,
-        savingsTotal: 8265700,
-        savingsRepay: 8265700,
-        stockTotal: 127349300,
-        stockRepay: 55237000,
-    };
+    // const tempData = {
+    //     warningSavingsCount: 0,
+    //     warningLoanCount: 1,
+    //     depositTotal: 39036700,
+    //     depositRepay: 39036700,
+    //     savingsTotal: 8265700,
+    //     savingsRepay: 8265700,
+    //     stockTotal: 127349300,
+    //     stockRepay: 55237000,
+    // };
 
-    const fetchData = async () => {
-        const apiClient = getApiClient();
+    // const fetchData = async () => {
+    //     const apiClient = getApiClient();
 
-        try {
-            const response = await apiClient.get('/home/warning-record');
-            if (response.data && response.data.body) {
-                console.log('BillData: ', response.data.body);
-                setBillData(response.data.body);
-            } else {
-                setBillData(tempData);
-            }
-        } catch (error) {
-            console.error(error);
-            setBillData(tempData);
-        }
-    };
+    //     try {
+    //         const response = await apiClient.get('/home/warning-record');
+    //         if (response.data && response.data.body) {
+    //             console.log('BillData: ', response.data.body);
+    //             setBillData(response.data.body);
+    //         } else {
+    //             setBillData(tempData);
+    //         }
+    //     } catch (error) {
+    //         console.error(error);
+    //         setBillData(tempData);
+    //     }
+    // };
 
-    useEffect(() => {
-        fetchData();
-        // console.log('test');
-    }, []);
+    // useEffect(() => {
+    //     fetchData();
+    //     // console.log('test');
+    // }, []);
 
     const dataTypes = ['deposit', 'savings', 'stock'];
 

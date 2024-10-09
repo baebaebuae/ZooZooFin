@@ -11,6 +11,7 @@ import { NormalIcon } from '@components/root/icon';
 import IconChick from '@assets/images/icons/icon_chick.png';
 
 import { getApiClient } from '@stores/apiClient';
+import useUserStore from '@/stores/useUserStore';
 
 const Block = styled.div`
     display: flex;
@@ -41,6 +42,8 @@ const JoinProduct = ({ productType, goToScript }) => {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [savingsAmount, setSavingsAmount] = useState(null);
     const [expectedFinalAmount, setExpectedFinalAmount] = useState(null);
+
+    const { turn } = useUserStore();
 
     // 상품 정보 받아오기
     const fetchProducts = async () => {
@@ -130,7 +133,7 @@ const JoinProduct = ({ productType, goToScript }) => {
                             productPeriod={selectedProduct.period}
                             productRate={selectedProduct.rate}
                             $isLoan={false}
-                            currentTurn={5}
+                            currentTurn={turn}
                             maxAmount={10000000}
                             isSavings={productType === 'savings'} // true=적금, false=예금
                             saveAmount={saveAmount}
@@ -145,7 +148,7 @@ const JoinProduct = ({ productType, goToScript }) => {
                                 productName={selectedProduct.name}
                                 productPeriod={selectedProduct.period}
                                 productRate={selectedProduct.rate}
-                                currentTurn={5}
+                                currentTurn={turn}
                                 savingsAmount={savingsAmount}
                                 expectedFinalAmount={expectedFinalAmount}
                                 specialRate={6} // 캐릭터 특별 능력 없으면 null이거나 0이거나
