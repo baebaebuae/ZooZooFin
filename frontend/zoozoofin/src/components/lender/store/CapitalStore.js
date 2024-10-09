@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 
+import { getApiClient } from '@stores/apiClient';
+
 const useCapitalStore = create((set) => ({
     loanAmount: 0,
     loanPeriod: 0,
@@ -21,7 +23,31 @@ const useCapitalStore = create((set) => ({
     // 상환 방식
     selectedRepayType: '만기일시상환',
 
+    // 대출 가능 여부 확인
+    capitalExist: true,
+    checkCaptial: async () => {
+        try {
+            const apiClient = getApiClient();
+            const res = await apiClient.get('/capital');
+            set({ capitalExist: res.data.body.capitalExist });
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    },
+
     // 대출 결정 완료
+    totalRepay: 0,
+    totalTurn: 0,
+    fetchTotalRepay: async () => {
+        try {
+            const apiClient = getApiClient();
+            const res = await apiClient.get('/home/capital');
+            set({ totalRepay: res.data.body.capitalRestMoney });
+            set({ totalTurn: res.data.body.capitalEndTurn });
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    },
 }));
 
 export default useCapitalStore;
