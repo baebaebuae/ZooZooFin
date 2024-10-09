@@ -63,6 +63,7 @@ public class NextTurnServiceImpl implements NextTurnService {
 
         // 1턴 증가
         animal.increaseAnimalTurn();
+        animal.setIsWorked(false);
 
         // 턴 기록
         TurnRecord turnRecord = TurnRecord.builder()
