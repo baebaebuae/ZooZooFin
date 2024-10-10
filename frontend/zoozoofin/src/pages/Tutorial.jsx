@@ -125,6 +125,7 @@ const Tutorial = () => {
     const [currentId, setCurrentId] = useState(1);
     const [currentScript, setCurrentScript] = useState(null);
     const [animalName, setAnimalName] = useState(null);
+    const [tutorialScript, setTutorialScript] = useState(null);
 
     const { nowAnimal, getAnimalData } = useAnimalStore();
 
@@ -141,11 +142,27 @@ const Tutorial = () => {
         if (!scripts || scripts.length === 0) {
             const loadScripts = async () => {
                 // await fetchTutorialScript('tutorial');
-                fetchTutorialScript('tutorial');
+                // fetchTutorialScript('tutorial');
+
+                try {
+                    const apiClient = getApiClient();
+
+                    const res = await apiClient.get('/scripts/tutorial', {});
+
+                    if (res.status === 200) {
+                        const scripts = res.data.body.scripts;
+                        setTutorialScript(scripts);
+                        return res.data.body.scripts;
+                    }
+                } catch (error) {
+                    console.error('error: ', error);
+                    return error;
+                }
             };
             loadScripts();
         }
-    }, [fetchTutorialScript, scripts]);
+        // }, [fetchTutorialScript, scripts]);
+    }, [scripts]);
 
     // currentScript 설정
     useEffect(() => {
