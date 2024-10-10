@@ -30,7 +30,7 @@ public class QuizController {
     private final QuizServiceImpl quizServiceImpl;
 
     // 퀴즈 일자 별 퀴즈 목록 조회
-    @GetMapping("")
+    @GetMapping
     public ResponseDto<HashMap<String, List<QuizDto>>> getQuizzesByQuizDate() {
         // 로컬 일자
         LocalDate localDate = LocalDate.now();
@@ -49,14 +49,6 @@ public class QuizController {
         map.put("quizzes", quizDtoList);
 
         return ResponseDto.success(SuccessCode.TODAY_QUIZ_SUCCESS, map);
-    }
-
-    // 퀴즈 ID로 퀴즈 조회
-    @GetMapping("/{quizId}")
-    public ResponseDto<QuizDto> getQuizById(@PathVariable(name = "quizId") Long quizId) {
-        Quiz quiz = quizServiceImpl.findQuizByQuizId(quizId);
-        QuizDto quizDto = new QuizDto(quiz);
-        return ResponseDto.success(SuccessCode.QUIZ_SUCCESS, quizDto);
     }
 
     // 퀴즈 채점 결과

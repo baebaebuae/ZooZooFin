@@ -9,7 +9,7 @@ values (10000, 'google', '110717068153166490640', 'b60e8cbc-9c20-4f53-bf68-cfeaf
 
 -- Animal Type
 insert into animal_type(animal_type_name, animal_ability, animal_img_url)
-values ('토끼', 1, 'https://ssafy.com')
+values ('토끼', '기본형', 'https://ssafy.com')
 ;
 
 -- Animal
