@@ -1,7 +1,6 @@
 import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { useState, useEffect, useRef } from 'react';
-import { useMusic } from '@components/useMusic';
 
 import Start from '@pages/Start';
 import LayoutInGame from '@components/LayoutInGame';
@@ -35,6 +34,7 @@ import startMusic from '@assets/music/start.mp3';
 import bankMusic from '@assets/music/bank.mp3';
 import capitalMusic from '@assets/music/lender.mp3';
 
+import { useMusic } from '@components/useMusic';
 import { useMusicStore } from '@stores/useMusicStore.js';
 
 const Block = styled.div`
@@ -71,10 +71,12 @@ const MusicToggleButton = styled.button`
 `;
 
 const AppRouter = () => {
-    const { isMusicOn, toggleMusic, audioRef } = useMusic();
+    // const { isMusicOn, audioRef } = useMusic();
     const [backgroundimage, setBackgroundimage] = useState(null);
     const [currentMusic, setCurrentMusic] = useState(startMusic);
-    // const audioRef = useRef(null);
+    const audioRef = useRef(null);
+
+    const { isMusicOn } = useMusicStore();
 
     // const isMusicOn = useMusicStore((state) => state.isMusicOn);
     // const toggleMusic = useMusicStore((state) => state.toggleMusic);
@@ -107,9 +109,9 @@ const AppRouter = () => {
         setBackgroundimage(image.default);
     };
 
-    useEffect(() => {
-        !isMusicOn && audioRef.current.pause();
-    });
+    // useEffect(() => {
+    //     !isMusicOn && audioRef.current.pause();
+    // });
 
     // 페이지 넘어갔을 때 path에서 바로 pathname 찾기
     useEffect(() => {
@@ -137,7 +139,8 @@ const AppRouter = () => {
             <Background backgroundimage={backgroundimage} />
 
             {/* pathname에 따라 음악 바뀌도록 설정 */}
-            <audio ref={audioRef} loop autoPlay={true}>
+            {/* <audio ref={audioRef} loop autoPlay={true}> */}
+            <audio ref={audioRef} loop autoPlay={isMusicOn}>
                 <source src={currentMusic} type="audio/mp3" />
             </audio>
 

@@ -185,15 +185,6 @@ const Tutorial = () => {
         }
     }, [scripts, currentId]);
 
-    // useEffect(() => {
-    //     if (currentScript?.content?.includes('${name}')) {
-    //         setCurrentScript((prevScript) => ({
-    //             ...prevScript,
-    //             content: prevScript.content.replace('${name}', `**${nowAnimal.animalName}**`),
-    //         }));
-    //     }
-    // }, [currentScript, nowAnimal.animalName]);
-
     const handleResponseClick = (nextScript) => {
         setCurrentId(nextScript);
     };
@@ -221,6 +212,7 @@ const Tutorial = () => {
 
             if (res.status === 200) {
                 console.log(res.data);
+                setAnimalName(animalName);
             } else {
                 console.error('Unexpected status code:', res.status);
             }
@@ -254,7 +246,8 @@ const Tutorial = () => {
     if (currentScript.content.includes('${name}')) {
         currentScript.content = currentScript.content.replace(
             '${name}',
-            `**${nowAnimal.animalName}**`
+            `**${animalName}**`
+            // `**${nowAnimal.animalName}**`
         );
     }
 
