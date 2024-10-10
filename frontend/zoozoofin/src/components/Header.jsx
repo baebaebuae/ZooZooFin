@@ -15,15 +15,18 @@ import { PropInfo } from './root/headerCharInfo';
 import CharacterInfo from './character/CharacterInfo';
 import Wallet from './Wallet';
 
-const HeaderBlock = styled.div`
-    width: 94%;
+const HeaderContainer = styled.nav`
     position: fixed;
+    top: 20px;
+    left: 10px; // 절대적인 픽셀 값
+    width: 340px;
+    z-index: 1000;
+`;
+
+const HeaderBlock = styled.div`
     display: flex;
     justify-content: space-between;
-    padding: 0 3%;
-    margin: 20px 0;
-    z-index: 10;
-    max-width: 360px;
+    width: 100%;
 `;
 
 const HeaderButtonBlock = styled.div`
@@ -34,8 +37,6 @@ const HeaderUserBlock = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    max-width: 640px;
-    width: 100%; /* 너비를 100%로 설정 */
 `;
 
 const Header = () => {
@@ -53,20 +54,19 @@ const Header = () => {
     };
 
     const openWalletModal = () => {
-    setIsWalletOpen(true); 
-};
+        setIsWalletOpen(true); 
+    };
 
-const closeWalletModal = () => {
-    setIsWalletOpen(false);
-};
+    const closeWalletModal = () => {
+        setIsWalletOpen(false);
+    };
 
-    // 1,000 형식으로
     const formatNumber = (num) => {
         return num ? num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
     };
 
     return (
-        <nav>
+        <HeaderContainer>
             <HeaderBlock>
                 <HeaderButtonBlock>
                     <HeaderHamburgerButton />
@@ -78,15 +78,15 @@ const closeWalletModal = () => {
                 </HeaderButtonBlock>
                 <HeaderUserBlock>
                     <ProfileIcon icon={CharRabbit} onClick={openCharInfo} />
-                    {isCharOpen && <CharacterInfo onClose={openCharInfo} />}
                     <PropInfo
                         propMoney={formatNumber(animalAssets)}
                         propGold={formatNumber(memberGoldBar)}
                     />
                 </HeaderUserBlock>
             </HeaderBlock>
+            {isCharOpen && <CharacterInfo onClose={openCharInfo} />}
             {isWalletOpen && <Wallet onClose={closeWalletModal} />}
-        </nav>
+        </HeaderContainer>
     );
 };
 

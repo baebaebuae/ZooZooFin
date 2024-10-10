@@ -49,12 +49,11 @@ const RoomModel = () => {
             const clickedObject = intersects[0].object;
             const name = clickedObject.parent.name;
             // router 연결
-            // 240924 침대 연결 아직 완성되지 않음
-            if (name === 'Door') {
-                navigate('/map');
-            } else if (name === 'Bed') {
-                console.log('로딩화면 및 API 연결 예정');
-            } else if (name === 'Computer') {
+            // if (name === 'Door') {
+            //     navigate('/map');
+            // } else if (name === 'Bed') {
+            //     console.log('로딩화면 및 API 연결 예정');
+            if (name === 'Computer') {
                 navigate('/laptop');
             }
         }
