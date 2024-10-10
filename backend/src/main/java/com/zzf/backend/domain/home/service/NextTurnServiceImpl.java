@@ -691,7 +691,7 @@ public class NextTurnServiceImpl implements NextTurnService {
         for (Capital capital : capitalList) {
             // 마감턴일 경우 money에 추가
             if (capital.getCapitalEndTurn().equals(animal.getTurn() + 1)) {
-                total = capital.getCapitalAmount() + capital.getCapitalAmount() / 10;
+                total = capital.getCapitalRemain() + capital.getCapitalRemain() / 10;
             }
         }
 
