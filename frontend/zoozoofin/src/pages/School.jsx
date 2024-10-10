@@ -81,7 +81,7 @@ const School = () => {
             } else {
                 setDialogue({
                     content: `${location.state.score}점이구나. 다음에는 더 잘할 수 있을 거야!`,
-                    responses: [{ selection: '네, 더 열심히 공부할게요.', nextScript: 'END' }]
+                    responses: [{ selection: '넵... 더 열심히 공부할게요.', nextScript: 'END' }]
                 });
             }
         }
