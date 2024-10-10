@@ -7,14 +7,17 @@ import { BadgeNormal } from './badge';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 
 const BubbleContainer2 = styled.div`
-    position: fixed;
-    bottom: 0;
+    /* position: fixed; */
+    /* bottom: 0; */
 `;
 
 const BubbleContainer = styled.div`
-    position: relative;
+    position: absolute;
     /* width: 320px; */
-    margin: 20px 0px;
+    /* margin: 20px 0px; */
+    /* top: 220px; */
+    bottom: 0;
+    z-index: 100000000;
 `;
 
 const BubbleBlockStyle = styled(BubbleBlock)`
@@ -126,35 +129,32 @@ export const Bubble = ({ npc, type, content, responses, onClick }) => {
     };
 
     return (
-        <BubbleContainer2>
-            <BubbleContainer onClick={() => handleContainerClick(responses)}>
-                <BadgeNormalStyle color={'tertiary'}>{npc}</BadgeNormalStyle>
-                <BubbleBlockStyle />
-                <BubbleBox>
-                    <LineBlock>{parseContent(content)}</LineBlock>
-                    <ResponseBlock>
-                        {responses.map((response, index) => (
-                            <ResponseButton
-                                key={index}
-                                onClick={() => onClick(response.nextScript)}
-                            >
-                                {response.selection && (
-                                    <>
-                                        <ResponseSymbol>▶ </ResponseSymbol>
-                                        {response.selection}
-                                    </>
-                                )}
-                            </ResponseButton>
-                        ))}
-                    </ResponseBlock>
-                </BubbleBox>
-                {responses[0].selection === null && (
-                    <NextButtonBlock>
-                        <KeyboardDoubleArrowRightIcon color="action" sx={{ fontSize: 36 }} />
-                    </NextButtonBlock>
-                )}
-            </BubbleContainer>
-        </BubbleContainer2>
+        // <BubbleContainer2>
+        <BubbleContainer onClick={() => handleContainerClick(responses)}>
+            <BadgeNormalStyle color={'tertiary'}>{npc}</BadgeNormalStyle>
+            <BubbleBlockStyle />
+            <BubbleBox>
+                <LineBlock>{parseContent(content)}</LineBlock>
+                <ResponseBlock>
+                    {responses.map((response, index) => (
+                        <ResponseButton key={index} onClick={() => onClick(response.nextScript)}>
+                            {response.selection && (
+                                <>
+                                    <ResponseSymbol>▶ </ResponseSymbol>
+                                    {response.selection}
+                                </>
+                            )}
+                        </ResponseButton>
+                    ))}
+                </ResponseBlock>
+            </BubbleBox>
+            {responses[0].selection === null && (
+                <NextButtonBlock>
+                    <KeyboardDoubleArrowRightIcon color="action" sx={{ fontSize: 36 }} />
+                </NextButtonBlock>
+            )}
+        </BubbleContainer>
+        // </BubbleContainer2>
     );
 };
 

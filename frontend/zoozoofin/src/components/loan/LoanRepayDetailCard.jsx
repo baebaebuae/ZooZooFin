@@ -120,7 +120,7 @@ export const LoanRepayDetailCard = ({
             <ProductJoinInfo
                 $isLoan={true}
                 infoTitle={'대출 원금'}
-                infoContent={`${loanAmount}🥕`}
+                infoContent={`${loanAmount ? loanAmount.toLocaleString() : 0}🥕`}
             />
             <ProductJoinInfo $isLoan={true} infoTitle={'대출 금리'} infoContent={`${loanRate}%`} />
             <ProductJoinInfo
@@ -140,7 +140,7 @@ export const LoanRepayDetailCard = ({
             <ProductJoinInfo
                 $isLoan={true}
                 infoTitle={'남은 상환 금액'}
-                infoContent={`${loanRemain}🥕`}
+                infoContent={`${loanRemain ? loanRemain.toLocaleString() : 0}🥕`}
             />
             <Button
                 size={'normal'}

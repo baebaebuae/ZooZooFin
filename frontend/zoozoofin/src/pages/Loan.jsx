@@ -15,9 +15,13 @@ import { Loader } from '@components/Loader';
 import Raccoon from '@/assets/images/characters/characters/Raccoon.gif';
 
 const LoanBlock = styled.div`
+    width: 360px;
+    height: 640px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    /* background-color: pink; */
+    position: relative;
 `;
 
 const LoanContainer = styled.div`
@@ -28,23 +32,25 @@ const LoanContainer = styled.div`
 `;
 
 const BubbleBlock = styled(Bubble)`
-    position: fixed;
+    /* position: fixed; */
     /* bottom: 0;
     right: 0; */
-    top: 320px;
-    left: -10px;
+    top: 220px;
+    left: 140px;
+    position: absolute;
 `;
 
 const ImageContainer = styled.div`
-    position: fixed;
+    /* position: fixed; */
     /* bottom: 16%;
     right: -69%; */
     top: 220px;
-    left: 160px;
+    left: 140px;
+    position: absolute;
 `;
 
 const NpcImage = styled.img`
-    width: 200px;
+    width: 250px;
     object-fit: contain;
 `;
 
@@ -87,7 +93,7 @@ const Loan = () => {
             if (script?.content.includes('${name}')) {
                 const updatedScript = {
                     ...script,
-                    content: script.content.replace('${name}', `**${nowAnimal.animalName}**`),
+                    content: script.content.replace('${name}', `** ${nowAnimal.animalName}**`),
                 };
                 setCurrentScript(updatedScript);
             }

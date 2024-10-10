@@ -18,6 +18,8 @@ const Block = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 20px;
+    height: 540px;
+    margin: 120px;
 `;
 
 const FixedMessageBox = styled.div`
@@ -29,7 +31,7 @@ const ProductBlock = styled.div`
     width: 100%;
     overflow-y: auto;
     /* max-height: 100%; */
-    height: 450px;
+    height: 500px;
     padding: 10px;
     box-sizing: border-box;
 `;

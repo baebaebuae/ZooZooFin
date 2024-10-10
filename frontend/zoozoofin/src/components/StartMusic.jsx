@@ -44,7 +44,6 @@ const QuestionBlock = styled.div`
     font-size: 14px;
     margin: 50px 0 10px 0;
     z-index: 10000000;
-
 `;
 
 const TextBlock = styled.div`
@@ -64,16 +63,21 @@ const Enterbutton = styled.div`
 `;
 
 const StartMusic = ({ handleSelectMusicOn }) => {
-    const { toggleMusic, updateMusicChecked } = useMusicStore();
+    const { turnOnMusic, turnOffMusic, updateMusicChecked } = useMusicStore();
 
     const checkMusic = () => {
         updateMusicChecked(true);
         localStorage.setItem('isMusicChecked', JSON.stringify(true));
     };
 
-    const goToEnterPage = () => {
+    const enterAndTurnOff = () => {
         checkMusic();
-        toggleMusic();
+        turnOffMusic();
+    };
+
+    const enterAndTurnOn = () => {
+        checkMusic();
+        turnOnMusic();
     };
 
     return (
@@ -82,8 +86,8 @@ const StartMusic = ({ handleSelectMusicOn }) => {
 
             <QuestionBlock>음악을 들을래?</QuestionBlock>
             <TextBlock>
-                <Enterbutton onClick={goToEnterPage}>응</Enterbutton>
-                <Enterbutton onClick={checkMusic}>아니</Enterbutton>
+                <Enterbutton onClick={enterAndTurnOn}>응</Enterbutton>
+                <Enterbutton onClick={enterAndTurnOff}>아니</Enterbutton>
             </TextBlock>
         </Container>
     );

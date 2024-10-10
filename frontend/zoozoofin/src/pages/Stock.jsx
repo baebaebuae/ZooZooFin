@@ -16,6 +16,8 @@ import StockResult from '@components/stock/stockList/StockResult';
 import Frog from '@/assets/images/characters/characters/Frog.gif';
 
 const StockBlock = styled.div`
+    width: 360px;
+    height: 640px;
     display: flex;
     position: relative;
     flex-direction: column;
@@ -24,30 +26,26 @@ const StockBlock = styled.div`
     gap: 21px;
     margin: 0px auto;
     margin-top: 20px;
-    width: 100%;
+    /* width: 100%; */
     /* overflow-x: hidden; */
     overflow-y: auto;
 `;
 
 const ImageContainer = styled.div`
-    position: fixed;
-    /* bottom: 16%;
-    right: -69%; */
     top: 220px;
-    left: 160px;
+    left: 120px;
+    position: absolute;
 `;
 
 const NpcImage = styled.img`
-    width: 200px;
+    width: 240px;
     object-fit: contain;
 `;
 
 const BubbleBlock = styled(Bubble)`
-    position: fixed;
-    /* bottom: 0;
-    right: 0; */
-    top: 320px;
-    left: -10px;
+    top: 220px;
+    left: 140px;
+    position: absolute;
 `;
 
 const BubbleLine = styled.span`

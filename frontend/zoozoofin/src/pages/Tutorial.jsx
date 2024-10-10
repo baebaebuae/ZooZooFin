@@ -26,12 +26,13 @@ const TutorialContainer = styled.div`
     justify-content: start;
     width: 360px;
     height: 640px;
+    /* position: relative; */
 `;
 
 const BubbleBlock = styled(Bubble)`
-    position: fixed;
-    bottom: 0;
-    right: 0;
+    top: 220px;
+    left: 140px;
+    position: absolute;
 `;
 
 const NameModalBLock = styled.div`
@@ -54,6 +55,7 @@ const NameModal = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    z-index: 100000000;
 `;
 
 const NameModalMessage = styled.div`
@@ -78,6 +80,8 @@ const NameModalInput = styled.input`
 const TutorialRoomBackground = styled.img`
     width: 360px;
     height: 640px;
+    position: absolute;
+    z-index: 100000000;
 `;
 
 const TutorialHeaderBlock = styled.div`
@@ -89,18 +93,26 @@ const ArrowBox = styled.div`
     width: 360px;
     left: ${({ left }) => `${left}vw`};
     top: 100px;
+    z-index: 3000000000;
 `;
 
 const ImageContainer = styled.div`
-    position: fixed;
-    bottom: 26%;
-    right: -13%;
+    top: 220px;
+    left: 140px;
+    position: absolute;
+    z-index: 100000000;
 `;
 
 const NpcImage = styled.img`
     width: 300px;
     height: 250px;
     object-fit: contain;
+`;
+
+const BackgroundImageBlock = styled.div`
+    width: 360px;
+    height: 640px;
+    z-index: 500000000;
 `;
 
 // const NPCModel = () => {
@@ -173,6 +185,15 @@ const Tutorial = () => {
         }
     }, [scripts, currentId]);
 
+    // useEffect(() => {
+    //     if (currentScript?.content?.includes('${name}')) {
+    //         setCurrentScript((prevScript) => ({
+    //             ...prevScript,
+    //             content: prevScript.content.replace('${name}', `**${nowAnimal.animalName}**`),
+    //         }));
+    //     }
+    // }, [currentScript, nowAnimal.animalName]);
+
     const handleResponseClick = (nextScript) => {
         setCurrentId(nextScript);
     };
@@ -217,7 +238,7 @@ const Tutorial = () => {
 
     if (!currentScript) return <Loader loadingText={'주주시티에 입장하는중'} />;
 
-    const receivedAnimalTypeId = location.state.animalTypeId;
+    const receivedAnimalTypeId = location.state?.animalTypeId ?? 1;
     // const receivedAnimalTypeId = 1; //임시로 지정
 
     let backgroundImage;
@@ -267,7 +288,7 @@ const Tutorial = () => {
                 return navigate('/myroom');
             case '듣고싶은 설명을 골라봐.':
                 return (
-                    <>
+                    <TutorialContainer>
                         <TutorialRoomBackground src={backgroundImage} />;
                         <BubbleBlock
                             npc={'뭉뭉'}
@@ -276,12 +297,12 @@ const Tutorial = () => {
                             responses={currentScript.responses}
                             onClick={handleResponseClick}
                         />
-                    </>
+                    </TutorialContainer>
                 );
             case 'NOTEBOOK_DETAIL':
                 return (
-                    <div>
-                        <img
+                    <TutorialContainer>
+                        <TutorialRoomBackground
                             src={backgroundImage}
                             onClick={() =>
                                 handleResponseClick(currentScript.responses[0].nextScript)
@@ -294,7 +315,7 @@ const Tutorial = () => {
                         >
                             next
                         </button>
-                    </div>
+                    </TutorialContainer>
                 );
             case 'NOTEBOOK_FUNCTION':
                 return (
@@ -311,14 +332,14 @@ const Tutorial = () => {
                 );
             case 'MENU_BAR':
                 return (
-                    <div>
-                        <img
+                    <TutorialContainer>
+                        <TutorialRoomBackground
                             src={backgroundImage}
                             onClick={() =>
                                 handleResponseClick(currentScript.responses[0].nextScript)
                             }
                         />
-                    </div>
+                    </TutorialContainer>
                 );
             case 'MENU_FIRST':
                 return (
@@ -326,7 +347,7 @@ const Tutorial = () => {
                         <ArrowBox left={6}>
                             <img src={TutorialArrow} alt="화살표" />
                         </ArrowBox>
-                        <img
+                        <TutorialRoomBackground
                             src={backgroundImage}
                             onClick={() =>
                                 handleResponseClick(currentScript.responses[0].nextScript)
@@ -337,10 +358,10 @@ const Tutorial = () => {
             case 'MENU_SECOND':
                 return (
                     <TutorialHeaderBlock>
-                        <ArrowBox left={21}>
+                        <ArrowBox left={18}>
                             <img src={TutorialArrow} alt="화살표" />
                         </ArrowBox>
-                        <img
+                        <TutorialRoomBackground
                             src={backgroundImage}
                             onClick={() =>
                                 handleResponseClick(currentScript.responses[0].nextScript)
@@ -351,10 +372,10 @@ const Tutorial = () => {
             case 'MENU_THIRD':
                 return (
                     <TutorialHeaderBlock>
-                        <ArrowBox left={37}>
+                        <ArrowBox left={32}>
                             <img src={TutorialArrow} alt="화살표" />
                         </ArrowBox>
-                        <img
+                        <TutorialRoomBackground
                             src={backgroundImage}
                             onClick={() =>
                                 handleResponseClick(currentScript.responses[0].nextScript)
@@ -365,10 +386,10 @@ const Tutorial = () => {
             case 'MENU_LAST':
                 return (
                     <TutorialHeaderBlock>
-                        <ArrowBox left={52}>
+                        <ArrowBox left={46}>
                             <img src={TutorialArrow} alt="화살표" />
                         </ArrowBox>
-                        <img
+                        <TutorialRoomBackground
                             src={backgroundImage}
                             onClick={() =>
                                 handleResponseClick(currentScript.responses[0].nextScript)
@@ -383,7 +404,7 @@ const Tutorial = () => {
 
     if (currentScript.scriptId >= 8 && currentScript.scriptId <= 28) {
         return (
-            <>
+            <BackgroundImageBlock>
                 <TutorialRoomBackground src={backgroundImage} />;
                 <BubbleBlock
                     npc={'뭉뭉'}
@@ -392,7 +413,7 @@ const Tutorial = () => {
                     responses={currentScript.responses}
                     onClick={handleResponseClick}
                 />
-            </>
+            </BackgroundImageBlock>
         );
     }
 
