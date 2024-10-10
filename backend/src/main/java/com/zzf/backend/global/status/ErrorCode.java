@@ -83,12 +83,16 @@ public enum ErrorCode {
     QUIZ_NOT_FOUND_EXCEPTION(404, "존재하지 않는 퀴즈지롱~!"),
     QUIZ_RESULT_NOT_FOUND_EXCEPTION(404, "존재하지 않는 퀴즈 결과지롱~!"),
     DUPLICATE_QUIZ_ID_EXCEPTION(400, "중복된 퀴즈 아이디가 존재합니다."),
+    ALREADY_SOLVED_EXCEPTION(400, "이미 오늘 퀴즈를 풀었습니다."),
 
     CASH_SHORTAGE_EXCEPTION(409, "현금이 부족합니다."),
     SAME_DAY_CANCELLATION_NOT_ALLOWED(400, "당일 취소는 불가능합니다."),
     CREDIT_LOW(400, "신용 등급이 낮습니다."),
     NO_SUCH_CREDIT_EXCEPTION(404, "존재하지 않는 대출 등급입니다."),
     EARLY_REPAYMENT_NOT_ALLOWED_EXCEPTION(400, "중도 상환은 불가능합니다."),
+
+    // Quest
+    QUEST_NOT_FOUND_EXCEPTION(404, "퀘스트를 찾을 수 없습니다."),
 
     // Work
     ALREADY_WORK_TODAY_EXCEPTION(400, "이미 당일 업무를 마쳤습니다."),

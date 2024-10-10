@@ -2,6 +2,10 @@ package com.zzf.backend.domain.quiz.service;
 
 import com.zzf.backend.domain.animal.entity.Animal;
 import com.zzf.backend.domain.animal.repository.AnimalRepository;
+import com.zzf.backend.domain.quest.entity.Quest;
+import com.zzf.backend.domain.quest.entity.QuestHistory;
+import com.zzf.backend.domain.quest.repository.QuestHistoryRepository;
+import com.zzf.backend.domain.quest.repository.QuestRepository;
 import com.zzf.backend.domain.quiz.dto.QuizRequest;
 import com.zzf.backend.domain.quiz.dto.QuizResponse;
 import com.zzf.backend.domain.quiz.entity.Quiz;
@@ -23,39 +27,40 @@ import java.util.List;
 import static com.zzf.backend.global.status.ErrorCode.*;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class QuizServiceImpl implements QuizService {
+
+    private final MemberRepository memberRepository;
     private final AnimalRepository animalRepository;
     private final QuizRepository quizRepository;
     private final QuizResultRepository quizResultRepository;
-    private final MemberRepository memberRepository;
+    private final QuestRepository questRepository;
+    private final QuestHistoryRepository questHistoryRepository;
 
-    // 해당 일자 퀴즈 결과 조회
     @Override
-    public List<Quiz> findQuizByQuizDate(Date quizDate)
-    {
+    public List<Quiz> findQuizByQuizDate(Date quizDate) {
         return quizRepository.findByQuizDate(quizDate);
     }
 
-    // 퀴즈 ID로 퀴즈 조회
     @Override
-    public Quiz findQuizByQuizId(Long quizId)
-    {
-        return quizRepository.findByQuizId(quizId).orElseThrow(()-> new CustomException(QUIZ_NOT_FOUND_EXCEPTION));
+    public Quiz findQuizByQuizId(Long quizId) {
+        return quizRepository.findByQuizId(quizId)
+                .orElseThrow(() -> new CustomException(QUIZ_NOT_FOUND_EXCEPTION));
     }
 
-    // 퀴즈 채점
     @Override
-    @Transactional
-    public QuizResponse gradeQuizzes(String memberId, Long animalId, QuizRequest quizRequest)
-    {
+    public QuizResponse gradeQuizzes(String memberId, Long animalId, QuizRequest quizRequest) {
         Member member = memberRepository.findByUsername(memberId)
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND_EXCEPTION));
+
+        if (member.getIsSolvedQuiz()) {
+            throw new CustomException(ALREADY_SOLVED_EXCEPTION);
+        }
 
         Animal animal = animalRepository.findById(animalId)
                 .orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
-        // quiz validator
         Set<Long> setQuizIds = new HashSet<>();
         for (QuizRequest.AnswerDto answerDto : quizRequest.getAnswerList()) {
             Long quizId = answerDto.getQuizId();
@@ -71,7 +76,8 @@ public class QuizServiceImpl implements QuizService {
         long score = 0;
 
         for (QuizRequest.AnswerDto answerDto : quizRequest.getAnswerList()) {
-            Quiz quiz = quizRepository.findByQuizId(answerDto.getQuizId()).orElseThrow(() -> new CustomException(QUIZ_NOT_FOUND_EXCEPTION));
+            Quiz quiz = quizRepository.findByQuizId(answerDto.getQuizId()).
+                    orElseThrow(() -> new CustomException(QUIZ_NOT_FOUND_EXCEPTION));
 
             String animalAnswer = answerDto.getAnimalAnswer();
             boolean isCorrect = quiz.getQuizAnswer()
@@ -86,23 +92,28 @@ public class QuizServiceImpl implements QuizService {
 
             quizResultRepository.save(quizResult);
 
-            // 점수 계산
             if (isCorrect) {
                 score += 20;
             }
 
-            // 정리
             QuizResponse.QuizGrading quizGrading = new QuizResponse.QuizGrading();
             quizGrading.setQuizId(quiz.getQuizId());
             quizGrading.setQuizAnswer(quiz.getQuizAnswer());
             quizGrading.setAnimalAnswer(animalAnswer);
             quizGrading.setIsCorrect(isCorrect);
             quizGradingList.add(quizGrading);
-            
+
         }
-        // goldBar 추가
+
+        Quest quest = questRepository.findByPage("school")
+                .orElseThrow(() -> new CustomException(QUEST_NOT_FOUND_EXCEPTION));
+        questHistoryRepository.save(QuestHistory.builder()
+                .animal(animal)
+                .quest(quest)
+                .build());
+
+        member.setIsSolvedQuiz(true);
         member.setGoldBar(member.getGoldBar() + score);
-        memberRepository.save(member);
 
         quizResponse.setQuizResults(quizGradingList);
         quizResponse.setScore(score);
