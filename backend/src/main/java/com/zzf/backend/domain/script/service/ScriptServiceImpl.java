@@ -3,7 +3,9 @@ package com.zzf.backend.domain.script.service;
 import com.zzf.backend.domain.animal.entity.Animal;
 import com.zzf.backend.domain.animal.repository.AnimalRepository;
 import com.zzf.backend.domain.capital.repository.CapitalRepository;
+import com.zzf.backend.domain.deposit.repository.DepositRepository;
 import com.zzf.backend.domain.loan.repository.LoanRepository;
+import com.zzf.backend.domain.savings.repository.SavingsRepository;
 import com.zzf.backend.domain.script.document.Script;
 import com.zzf.backend.domain.script.repository.ScriptRepository;
 import com.zzf.backend.domain.stock.repository.StockHoldingsRepository;
@@ -23,6 +25,10 @@ public class ScriptServiceImpl implements ScriptService {
 
     private final AnimalRepository animalRepository;
 
+    private final DepositRepository depositRepository;
+
+    private final SavingsRepository savingsRepository;
+
     private final StockHoldingsRepository stockHoldingsRepository;
 
     private final LoanRepository loanRepository;
@@ -39,19 +45,34 @@ public class ScriptServiceImpl implements ScriptService {
 
         Animal animal = animalRepository.findById(animalId).orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
-        // 주식 상품 없을 경우
-        if (category.equals("stock") && !stockHoldingsRepository.existsByAnimalAndStockIsSoldFalse(animal)) {
-            category = "no_stock";
-        }
+        switch (category) {
+            case "bank" -> {
+                boolean isDeposit = depositRepository.existsByAnimalAndDepositIsEndIsFalse(animal);
+                boolean isSavings = savingsRepository.existsByAnimalAndSavingsIsEndIsFalse(animal);
 
-        // loan 없을 경우
-        if (category.equals("loan") && !loanRepository.existsByAnimalAndLoanIsEndFalse(animal)) {
-            category = "no_loan";
-        }
-
-        // capital 없을 경우
-        if (category.equals("capital") && !capitalRepository.existsByAnimalAndCapitalIsEndFalse(animal)) {
-            category = "no_capital";
+                if (!isDeposit && !isSavings) {
+                    category = "nobank";
+                } else if (!isDeposit) {
+                    category = "nodeposit";
+                } else if (!isSavings) {
+                    category = "nosavings";
+                }
+            }
+            case "stock" -> {
+                if (!stockHoldingsRepository.existsByAnimalAndStockIsSoldFalse(animal)) {
+                    category = "no_stock";
+                }
+            }
+            case "loan" -> {
+                if (!loanRepository.existsByAnimalAndLoanIsEndFalse(animal)) {
+                    category = "no_loan";
+                }
+            }
+            case "capital" -> {
+                if (!capitalRepository.existsByAnimalAndCapitalIsEndFalse(animal)) {
+                    category = "no_capital";
+                }
+            }
         }
 
         return scriptRepository.findByCategory(category);
