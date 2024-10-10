@@ -97,6 +97,9 @@ export const HeaderHamburgerButton = () => {
 
     const handleClose = () => {
         setAnchorEl(null);
+        localStorage.removeItem("accessToken")
+        localStorage.removeItem('refreshToken')
+        navigate('/start')
     };
     const handleMissionClick = () => {
         setIsMissionOpen(true);
