@@ -83,7 +83,7 @@ export const LoanRepayCard = ({
             </InfoTitleBlock>
             <LoanContentBox>
                 <InfoTitle>금리 {loanRate}%</InfoTitle>
-                <LoanContent>{loanRemain}🥕</LoanContent>
+                <LoanContent>{loanRemain ? loanRemain.toLocaleString() : 0}🥕</LoanContent>
             </LoanContentBox>
         </CardBlock>
     );

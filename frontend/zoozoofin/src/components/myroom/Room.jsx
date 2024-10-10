@@ -16,12 +16,12 @@ const ModelWrapper = styled.div`
     height: 640px;
     /* z-index: -1; */
     z-index: 4000;
-    position: fixed;
+    position: absolute;
     top: 0;
 `;
 
 export const RoomLoader = () => {
-    return <Loader loadingText={'나의 방으로 입장하는 중...'} />;
+    return <Loader loadingText={'내 방으로 입장하는 중...'} />;
 };
 
 export const RoomComponent = () => {

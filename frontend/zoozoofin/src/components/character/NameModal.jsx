@@ -11,6 +11,7 @@ const NameModalBLock = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 10000000;
 `;
 
 const NameModal = styled.div`
@@ -46,36 +47,38 @@ const NameModalInput = styled.input`
     outline: none;
 `;
 
-// 캐릭터 정보 넘기기
-const createAnimal = async (animalTypeId, animalName) => {
-    const apiClient = getApiClient();
-
-    console.log('animalTypeId:', animalTypeId);
-    console.log('animalName:', animalName);
-
-    const productData = {
-        animalTypeId: animalTypeId,
-        animalName: animalName,
-    };
-
-    try {
-        console.log('Request Data:', productData);
-
-        const res = await apiClient.post(`/animal`, productData, {});
-
-        if (res.status === 200) {
-            console.log(res.data);
-        } else {
-            console.error('Unexpected status code:', res.status);
-        }
-    } catch (error) {
-        console.error('error: ', error);
-        return error;
-    }
-};
-
 const CreateNameModal = ({ animalTypeId }) => {
     const [animalName, setAnimalName] = useState(null);
+    const navigate = useNavigate();
+
+    // 캐릭터 정보 넘기기
+    const createAnimal = async (animalTypeId, animalName) => {
+        const apiClient = getApiClient();
+
+        console.log('animalTypeId:', animalTypeId);
+        console.log('animalName:', animalName);
+
+        const productData = {
+            animalTypeId: animalTypeId,
+            animalName: animalName,
+        };
+
+        try {
+            console.log('Request Data:', productData);
+
+            const res = await apiClient.post(`/animal`, productData, {});
+
+            if (res.status === 200) {
+                console.log(res.data);
+                navigate('/myroom');
+            } else {
+                console.error('Unexpected status code:', res.status);
+            }
+        } catch (error) {
+            console.error('error: ', error);
+            return error;
+        }
+    };
 
     const onChange = (e) => {
         setAnimalName(e.target.value);

@@ -13,6 +13,7 @@ const FinalLevelBlock = styled.div`
     justify-content: center;
     align-items: center;
     gap: 20px;
+    z-index: 1000000;
 `;
 
 const FinalLevel = styled.div`
@@ -23,15 +24,18 @@ const FinalLevel = styled.div`
         2px 0px white,
         0px -2px white;
     color: ${({ theme }) => theme.colors.tertiaryDeep};
+    z-index: 1000000;
 `;
 
 const FinalLevelTitle = styled(FinalLevel)`
     font-size: 20px;
+    z-index: 1000000;
 `;
 
 const FinalLevelDividerBlock = styled.div`
     display: flex;
     align-items: center;
+    z-index: 1000000;
 `;
 const FinalLevelDividerCircle = styled.div`
     width: 14px;
@@ -58,6 +62,7 @@ const NextGameInfoBox = styled.div`
     font-size: 12px;
     text-align: center;
     border-radius: 20px;
+    z-index: 1000000;
 `;
 
 const NextGameInfoBoxTitle = styled.div`
@@ -95,6 +100,7 @@ const FinalButtonBlock = styled.div`
     justify-content: center;
     align-items: center;
     gap: 10px;
+    z-index: 1000000;
 `;
 
 const FinalButton = styled.div`
@@ -114,6 +120,10 @@ const FinalCheckButton = styled(FinalButton)`
     background-color: ${({ theme }) => theme.colors.tertiaryDeep};
     border: 3px solid white;
     color: white;
+`;
+
+const CharImage = styled.img`
+    z-index: 1000000;
 `;
 
 const fadeInBlur = keyframes`
@@ -140,7 +150,8 @@ const fadeOutBlur = keyframes`
 `;
 
 const FinalMessageBlock = styled.div`
-    color: ${({ theme }) => theme.colors.tertiary};
+    color: ${({ theme }) => theme.colors.tertiaryDeep};
+    font-weight: bold;
     text-shadow:
         -1px 0px white,
         0px 1px white,
@@ -149,6 +160,7 @@ const FinalMessageBlock = styled.div`
     font-size: 18px;
     animation: ${({ $isFadingOut }) => ($isFadingOut ? fadeOutBlur : fadeInBlur)} 1s ease-in-out
         forwards;
+    z-index: 1000000;
 `;
 
 const endGame = async (animalId, endingType) => {
@@ -156,7 +168,6 @@ const endGame = async (animalId, endingType) => {
     console.log('Starting endGame function');
     console.log('animalId:', animalId);
     console.log('endingType:', endingType);
-
 
     const productData = {
         endingType: endingType,
@@ -209,7 +220,7 @@ const Ending = () => {
                 setIsFadingOut(true);
 
                 const fadeOutTimer = setTimeout(() => {
-                    navigate('/start');
+                    navigate('/createanimal');
                 }, 2000);
 
                 return () => clearTimeout(fadeOutTimer);
@@ -224,7 +235,7 @@ const Ending = () => {
             try {
                 const apiClient = getApiClient();
                 const response = await apiClient.get('/animal/info');
-                console.log(response)
+                console.log(response);
                 if (response.data && response.data.body) {
                     setCharacterData(response.data.body);
                 } else {
@@ -322,7 +333,7 @@ const Ending = () => {
                                 )}
                             </NextGameInfoBoxInside>
                         </NextGameInfoBox>
-                        <img src={CharRabbit} width={120} />
+                        <CharImage src={CharRabbit} width={120} />
 
                         <FinalButtonBlock>
                             {/* <FinalPortfolioButton>최종 포트폴리오</FinalPortfolioButton> */}
