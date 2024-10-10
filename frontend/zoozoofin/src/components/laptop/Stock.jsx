@@ -113,7 +113,11 @@ export const Stock = () => {
                         <LaptopInfoBox
                             color={'primaryDeep'}
                             infoTitle={'님의 주식 총 자산'}
-                            infoContent={data ? `${data.totalAmount.toLocaleString()}🥕` : 0}
+                            infoContent={
+                                data && data.totalAmount
+                                    ? `${data.totalAmount.toLocaleString()}🥕`
+                                    : 0
+                            }
                         ></LaptopInfoBox>
                         <AppContent>보유 주식</AppContent>
                         {data && data.domesticList && data.domesticList.length > 0 && (
