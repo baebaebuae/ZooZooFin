@@ -288,6 +288,7 @@ const Portfolio = ({ isOpen, onClose, animalId, animalImage, createdDate }) => {
       try {
         const apiClient = getApiClient();
         const response = await apiClient.get(`/animal/${animalId}`);
+        console.log(response)
         if (response.data && response.data.body) {
           setPortfolioData(response.data.body);
         } else {

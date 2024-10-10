@@ -203,8 +203,9 @@ const CharacterHistory = () => {
       try {
         const apiClient = getApiClient();
         const response = await apiClient.get('/member/animal');
-        if (response.data && response.data.animals && response.data.animals.length > 0) {
-          setAnimalData(response.data);
+        console.log(response)
+        if (response.data.body && response.data.body.animals && response.data.body.animals.length > 0) {
+          setAnimalData(response.data.body);
         } else {
           console.log('No data received from API or no animals available');
           setAnimalData({ animals: [] });

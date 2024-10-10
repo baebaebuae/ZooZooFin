@@ -5,6 +5,7 @@ import { Button } from '@components/root/buttons';
 import mungmung from '@assets/images/characters/mungmungprofile.png';
 import { useNavigate } from 'react-router-dom';
 import useUserStore from '@stores/useUserStore';
+import useAnimalInfoStore from '@/stores/useAnimalInfoStore';
 
 const GlobalStyle = createGlobalStyle`
   @font-face {
@@ -97,25 +98,37 @@ const CloseButton = styled.button`
 `;
 
 const WarningMessage = styled.p`
-  color: ${({ theme }) => theme.colors.warm};
+  color: ${({ theme }) => theme.colors.warn};
   font-size: 14px;
   font-weight: bold;
   text-align: center;
   margin-top: 10px;
   padding: 5px;
-  border: 2px solid ${({ theme }) => theme.colors.warm};
+  border: 2px solid ${({ theme }) => theme.colors.warn};
   border-radius: 5px;
 `;
+
+const EndGameMessage = styled.p`
+  color: ${({ theme }) => theme.colors.primaryDeep};
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 10px;
+  padding: 5px;
+  border: 2px solid ${({ theme }) => theme.colors.primaryDeep};
+  border-radius: 5px;
+`;
+
 
 const NextTurn = ({ isOpen, onClose, onConfirm, bankruptcyRisk }) => {
   const navigate = useNavigate();
   const { turn, animalAssets } = useUserStore();
+  const { animalName } = useAnimalInfoStore(); 
 
   if (!isOpen) return null;
 
   const handleConfirm = () => {
     if (turn === 50) {
-      // Move to Ending
       const endingType = animalAssets >= 0 ? 'A001' : 'A002';
       navigate('/ending', {
         state: {
@@ -123,7 +136,6 @@ const NextTurn = ({ isOpen, onClose, onConfirm, bankruptcyRisk }) => {
         },
       });
     } else {
-      // Proceed with the original onConfirm logic
       onConfirm();
     }
   };
@@ -141,14 +153,19 @@ const NextTurn = ({ isOpen, onClose, onConfirm, bankruptcyRisk }) => {
             <Title>이제 자러 가는거야?</Title>
           </HeaderWrapper>
           <Subtitle>잠을 자면 이번 턴이 마무리되고, 다음 턴으로 넘어가요.</Subtitle>
+          {turn === 50 && (
+            <EndGameMessage>
+              ⚠️ 주의! 이번 턴이 마지막 턴이에요. ⚠️<br />{animalName} 캐릭터가 종료됩니다!
+            </EndGameMessage>
+          )}
           {bankruptcyRisk && (
             <WarningMessage>
-              ⚠️주의! 다음 턴에 파산이야!⚠️ (부족액: {bankruptcyRisk.deficit})
+              ⚠️주의! 다음 턴에 파산이야!⚠️<br />(부족액: {bankruptcyRisk.deficit})
             </WarningMessage>
           )}
           <ButtonWrapper>
             <StyledButton size="large" color="primary" onClick={handleConfirm}>
-              응! 잘래
+              {turn === 50 ? '게임 끝내기' : '응! 잘래'}
             </StyledButton>
             <StyledButton size="large" color="tertiary" onClick={onClose}>
               아직이야!

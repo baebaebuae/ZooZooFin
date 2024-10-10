@@ -7,9 +7,7 @@ import CreditBox from '@components/root/creditBox';
 import { Button } from '@components/root/buttons';
 import { useNavigate } from 'react-router-dom';
 import { theme } from "@/styles/theme"; //테마 파일(색상코드)
-import IconCarrot from '@assets/images/icons/icon_carrot.png';
-import IconSheep from '@assets/images/icons/icon_sheep.png'
-import { NormalIcon } from '@components/root/icon';
+import useAnimalInfoStore from '@/stores/useAnimalInfoStore';
 
 const GlobalStyle = createGlobalStyle`
   @font-face {
@@ -210,142 +208,129 @@ const CloseButton = styled.button`
 
 
 const CharacterInfo = ({ onClose }) => {
-    const [characterData, setCharacterData] = useState(null);
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const {
+      animalName,
+      animalAbility,
+      animalHierarchy,
+      animalCredit,
+      isWorkToday,
+      isSolvedQuizToday,
+      totalAmount,
+      totalAssets,
+      totalDeposit,
+      totalSavings,
+      totalStock,
+      totalLoan,
+      fetchAnimalInfo,
+      isLoading,
+      error
+  } = useAnimalInfoStore();
 
-    // 임시데이터
-    const fallbackData = {
-      animalHierarchy: "당근 알바생",
-      animalName: "토토",
-      animalAbility: "예금우대",
-      animalCredit: 5,
-      isSolveQuizToday: false,
-      isWorkToday: true,
-      totalAmount: 1000000,
-      totalAssets: 500000,
-      totalDeposit: 200000,
-      totalSavings: 200000,
-      totalStock: 100000,
-      totalLoan: 0,
-    };
+  useEffect(() => {
+      fetchAnimalInfo();
+  }, [fetchAnimalInfo]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const apiClient = getApiClient();
-                const response = await apiClient.get('/animal/info');
-                if (response.data && response.data.body) {
-                    setCharacterData(response.data.body);
-                } else {
-                    console.log('No data received from API, using fallback data');
-                    setCharacterData(fallbackData);
-                }
-            } catch (error) {
-                console.error('Error fetching character data:', error);
-                console.log('Using fallback data due to error');
-                setCharacterData(fallbackData);
-            }
-        };
+  const handleBadgeClick = (type) => {
+      if (type === 'quiz' && !isSolvedQuizToday) {
+          navigate('/school');
+          onClose();
+      } else if (type === 'work' && !isWorkToday) {
+          navigate('/work');
+          onClose();
+      } else {
+          console.log('이미 완료된 작업입니다.');
+      }
+  };
 
-        fetchData();
-    }, []);
+  if (isLoading) {
+      return <div>Loading...</div>;
+  }
 
-    const handleBadgeClick = (type) => {
-        if (type === 'quiz' && !characterData.isSolveQuizToday) {
-            navigate('/school');
-            onClose();
-        } else if (type === 'work' && !characterData.isWorkToday) {
-            navigate('/work');
-            onClose();
-        } else {
-            console.log('이미 완료된 작업입니다.');
-        }
-    };
+  if (error) {
+      return <div>Error: {error}</div>;
+  }
 
-    if (!characterData) {
-        return <div></div>;
-    }
-
-    const allTasksCompleted = characterData.isSolveQuizToday && characterData.isWorkToday;
+  const allTasksCompleted = isSolvedQuizToday && isWorkToday;
 
   return (
-    <>
-      <GlobalStyle />
-      <ModalBackdrop onClick={onClose}>
-        <StyledModal onClose={onClose} onClick={(e) => e.stopPropagation()}>
-          <ModalContent>
-          <CloseButton onClick={onClose}>&times;</CloseButton>
-            <Header>
-              <Subtitle>{characterData.animalHierarchy}</Subtitle>
-              <TopSection>
-                <Title title={characterData.animalName}>{characterData.animalName}</Title>
-                <StyledButton size="small" color="primary" title={characterData.animalAbility}>{characterData.animalAbility}</StyledButton>
-              </TopSection>
-            </Header>
-            <CreditSection>
-              <FullWidthCreditBox grade={characterData.animalCredit} />
-            </CreditSection>
-            <BadgeContainer>
-              <BadgeItem 
-                completed={characterData.isSolveQuizToday}
-                activeColor={theme.colors.primary}
-                onClick={() => !characterData.isSolveQuizToday && handleBadgeClick('quiz')}
-              >
-                <BadgeIcon>
-                  {'✏️'}
-                </BadgeIcon>
-                <BadgeText completed={characterData.isSolveQuizToday} activeColor={theme.colors.primary}>
-                  {characterData.isSolveQuizToday ? '완료' : 'GO'}
-                </BadgeText>
-              </BadgeItem>
-              <BadgeItem 
-                completed={characterData.isWorkToday}
-                activeColor={theme.colors.orange}
-                onClick={() => !characterData.isWorkToday && handleBadgeClick('work')}
-              >
-                <BadgeIcon>
-                  🥕
-                </BadgeIcon>
-                <BadgeText completed={characterData.isWorkToday} activeColor={theme.colors.orange}>
-                  {characterData.isWorkToday ? '완료' : 'GO'}
-                </BadgeText>
-              </BadgeItem>
-            </BadgeContainer>
-            <AssetSection>
-              <AssetRow>
-                <AssetLabel>순자산</AssetLabel>
-                <AssetValue bold>{characterData.totalAmount.toLocaleString()}🥕</AssetValue>
-              </AssetRow>
-            </AssetSection>
-            <Spacer />
-            <AssetSection>
-              <AssetRow>
-                <AssetLabel>현금</AssetLabel>
-                <AssetValue>{characterData.totalAssets.toLocaleString()}🥕</AssetValue>
-              </AssetRow>
-              <AssetRow>
-                <AssetLabel>예금</AssetLabel>
-                <AssetValue>{characterData.totalDeposit.toLocaleString()}🥕</AssetValue>
-              </AssetRow>
-              <AssetRow>
-                <AssetLabel>적금</AssetLabel>
-                <AssetValue>{characterData.totalSavings.toLocaleString()}🥕</AssetValue>
-              </AssetRow>
-              <AssetRow>
-                <AssetLabel>주식</AssetLabel>
-                <AssetValue>{characterData.totalStock.toLocaleString()}🥕</AssetValue>
-              </AssetRow>
-              <AssetRow>
-                <AssetLabel>대출</AssetLabel>
-                <AssetValue color={theme.colors.warn}>
-                  {characterData.totalLoan > 0 ? `-${characterData.totalLoan.toLocaleString()}` : characterData.totalLoan.toLocaleString()}🥕
-                </AssetValue>
-              </AssetRow>
-            </AssetSection>
-          </ModalContent>
-        </StyledModal>
-      </ModalBackdrop>
-    </>
+      <>
+          <GlobalStyle />
+          <ModalBackdrop onClick={onClose}>
+              <StyledModal onClose={onClose} onClick={(e) => e.stopPropagation()}>
+                  <ModalContent>
+                      <CloseButton onClick={onClose}>&times;</CloseButton>
+                      <Header>
+                          <Subtitle>{animalHierarchy}</Subtitle>
+                          <TopSection>
+                              <Title title={animalName}>{animalName}</Title>
+                              <StyledButton size="small" color="primary" title={animalAbility}>{animalAbility}</StyledButton>
+                          </TopSection>
+                      </Header>
+                      <CreditSection>
+                          <FullWidthCreditBox grade={animalCredit} />
+                      </CreditSection>
+                      <BadgeContainer>
+                          <BadgeItem 
+                              completed={isSolvedQuizToday}
+                              activeColor={theme.colors.primary}
+                              onClick={() => !isSolvedQuizToday && handleBadgeClick('quiz')}
+                          >
+                              <BadgeIcon>
+                                  {'✏️'}
+                              </BadgeIcon>
+                              <BadgeText completed={isSolvedQuizToday} activeColor={theme.colors.primary}>
+                                  {isSolvedQuizToday ? '완료' : 'GO'}
+                              </BadgeText>
+                          </BadgeItem>
+                          <BadgeItem 
+                              completed={isWorkToday}
+                              activeColor={theme.colors.orange}
+                              onClick={() => !isWorkToday && handleBadgeClick('work')}
+                          >
+                              <BadgeIcon>
+                                  🥕
+                              </BadgeIcon>
+                              <BadgeText completed={isWorkToday} activeColor={theme.colors.orange}>
+                                  {isWorkToday ? '완료' : 'GO'}
+                              </BadgeText>
+                          </BadgeItem>
+                      </BadgeContainer>
+                      <AssetSection>
+                          <AssetRow>
+                              <AssetLabel>순자산</AssetLabel>
+                              <AssetValue bold>{totalAmount.toLocaleString()}🥕</AssetValue>
+                          </AssetRow>
+                      </AssetSection>
+                      <Spacer />
+                      <AssetSection>
+                          <AssetRow>
+                              <AssetLabel>현금</AssetLabel>
+                              <AssetValue>{totalAssets.toLocaleString()}🥕</AssetValue>
+                          </AssetRow>
+                          <AssetRow>
+                              <AssetLabel>예금</AssetLabel>
+                              <AssetValue>{totalDeposit.toLocaleString()}🥕</AssetValue>
+                          </AssetRow>
+                          <AssetRow>
+                              <AssetLabel>적금</AssetLabel>
+                              <AssetValue>{totalSavings.toLocaleString()}🥕</AssetValue>
+                          </AssetRow>
+                          <AssetRow>
+                              <AssetLabel>주식</AssetLabel>
+                              <AssetValue>{totalStock.toLocaleString()}🥕</AssetValue>
+                          </AssetRow>
+                          <AssetRow>
+                              <AssetLabel>대출</AssetLabel>
+                              <AssetValue color={theme.colors.warn}>
+                                  {totalLoan > 0 ? `-${totalLoan.toLocaleString()}` : totalLoan.toLocaleString()}🥕
+                              </AssetValue>
+                          </AssetRow>
+                      </AssetSection>
+                  </ModalContent>
+              </StyledModal>
+          </ModalBackdrop>
+      </>
   );
 };
 

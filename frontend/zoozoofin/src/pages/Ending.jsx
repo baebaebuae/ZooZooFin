@@ -211,6 +211,7 @@ const Ending = () => {
             try {
                 const apiClient = getApiClient();
                 const response = await apiClient.get('/animal/info');
+                console.log(response)
                 if (response.data && response.data.body) {
                     setCharacterData(response.data.body);
                 } else {
