@@ -9,6 +9,18 @@ import CreateNameModal from '@components/character/NameModal';
 
 import { getApiClient } from '@stores/apiClient';
 
+// 캐릭터 이미지 import
+import AnimalType1Image from '@/assets/images/history/1.png';
+import AnimalType2Image from '@/assets/images/history/2.png';
+import AnimalType3Image from '@/assets/images/history/3.png';
+
+// 이미지 생성
+const animalImages = {
+    1: AnimalType1Image,
+    2: AnimalType2Image,
+    3: AnimalType3Image,
+};
+
 const Block = styled.div`
     width: 100%;
     display: flex;
@@ -29,7 +41,13 @@ const TitleMessage = styled.div`
         0px -1px white;
 `;
 
+const CharacterImage = styled.img`
+    width: 150px;
+    height: 150px;
+`;
+
 const AnimalBlock = styled.div`
+    display: flex;
     overflow-x: auto;
     // 여러 캐릭터 들어온 후 가로 스크롤 설정 확인(width 값 조심 !!)
     margin: 20px 0;
@@ -85,6 +103,17 @@ const AnimalInfoSpecial = styled.div`
 
 const AnimalInfoSpecialContent = styled(AnimalInfoCondition)`
     font-size: 16px;
+`;
+
+const InactiveOverlay = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 28px;
+    z-index: 10;
 `;
 
 const AnimalInfoSpecialNum = styled(AnimalInfoSpecialContent)`
@@ -160,7 +189,6 @@ const CreateAnimal = () => {
                         {/* 받아온 animals 없을 때 에러 처리 */}
                         {animals &&
                             animals.map((animal, index) => {
-                                4;
                                 return (
                                     <AnimalCard
                                         key={index}
@@ -170,9 +198,14 @@ const CreateAnimal = () => {
                                         }
                                         onClick={() => handleClick(animal)}
                                     >
+                                        {animal.animalTypeId === 2 && (
+                                            <InactiveOverlay>Inactive</InactiveOverlay>
+                                        )}
                                         <AnimalPhoto>
-                                            {/* <Rabbit width={150} height={150} /> */}
-                                            <img src={Rabbit} />
+                                            <CharacterImage
+                                                src={animalImages[animal.animalTypeId]}
+                                                alt={animal.animalName}
+                                            />
                                         </AnimalPhoto>
 
                                         <AnimalInfoBox>
@@ -182,7 +215,7 @@ const CreateAnimal = () => {
                                             </AnimalInfoCondition>
                                             <AnimalInfoSpecial>
                                                 <AnimalInfoSpecialContent>
-                                                    없음
+                                                    {animal.animalAbility}
                                                 </AnimalInfoSpecialContent>
                                                 {/* <AnimalInfoSpecialNum>
                                             +{animal.animalAbility}%
