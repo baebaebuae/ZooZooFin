@@ -2,10 +2,6 @@ import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { useState, useEffect, useRef } from 'react';
 
-import Juju from '@pages/test/Juju';
-import Sinijini from '@pages/test/Sinijini';
-import Jignonne from '@pages/test/Jignonne';
-
 import Start from '@pages/Start';
 import LayoutInGame from '@components/LayoutInGame';
 
@@ -37,8 +33,6 @@ import defaultMusic from '@assets/music/default.mp3';
 import startMusic from '@assets/music/start.mp3';
 import bankMusic from '@assets/music/bank.mp3';
 import capitalMusic from '@assets/music/lender.mp3';
-import VolumeOffRoundedIcon from '@mui/icons-material/VolumeOffRounded';
-import VolumeUpRoundedIcon from '@mui/icons-material/VolumeUpRounded';
 
 import { useMusicStore } from '@stores/useMusicStore.js';
 
@@ -166,9 +160,6 @@ const AppRouter = () => {
 
                 <Route path="/character-history" element={<CharacterHistory />} />
 
-                <Route path="/juju" element={<Juju />} />
-                <Route path="/sinijini" element={<Sinijini />} />
-                <Route path="/jignonne" element={<Jignonne />} />
                 {/* social login */}
                 <Route path="/callback" element={<Auth />} />
             </Routes>
