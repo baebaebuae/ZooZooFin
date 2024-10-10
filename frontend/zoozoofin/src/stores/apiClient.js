@@ -64,7 +64,7 @@ export const getApiClient = () => {
                 } 
             } 
             else {
-                console.log(error.response.status, error.response.data.httpStatus)
+                console.log(`error status: ${error.response.status}, httpStatus: ${error.response.data.httpStatus}`)
                 if (error.response.data.httpStatus == 401){
                     clearAccessToken();
                     clearRefreshToken();
@@ -75,7 +75,7 @@ export const getApiClient = () => {
                         window.location.href = `https://zoozoofin.site/start`
                     }
                     }
-                return Promise.reject(new Error('No refresh token'));
+                return Promise.reject(new Error('잘못된 axios 요청'));
             }
             if (error.response?.status == 400) {
                 console.error('Bad Request (400):', error.response.data);
