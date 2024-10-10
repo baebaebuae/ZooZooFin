@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useMusic } from '@/components/useMusic';
 
 import { useMusicStore } from '@stores/useMusicStore.js';
 
@@ -62,22 +63,30 @@ const Enterbutton = styled.div`
     font-size: 14px;
 `;
 
-const StartMusic = ({ handleSelectMusicOn }) => {
+const StartMusic = () => {
     const { turnOnMusic, turnOffMusic, updateMusicChecked } = useMusicStore();
+    const { toggleMusic } = useMusic();
 
     const checkMusic = () => {
         updateMusicChecked(true);
         localStorage.setItem('isMusicChecked', JSON.stringify(true));
     };
 
+    // const enterAndTurnOn = () => {
+    //     checkMusic();
+    //     turnOnMusic();
+    // };
+    const enterAndTurnOn = () => {
+        // localStorage.setItem('isMusicChecked', JSON.stringify(true));
+        checkMusic();
+        turnOnMusic();
+        // toggleMusic(true);
+    };
+
     const enterAndTurnOff = () => {
         checkMusic();
         turnOffMusic();
-    };
-
-    const enterAndTurnOn = () => {
-        checkMusic();
-        turnOnMusic();
+        // toggleMusic(false);
     };
 
     return (
