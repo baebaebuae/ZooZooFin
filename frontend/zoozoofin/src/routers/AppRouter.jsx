@@ -1,7 +1,7 @@
 import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { useState, useEffect, useRef } from 'react';
-import { useMusic } from './useMusic';
+import { useMusic } from '@components/useMusic';
 
 import Start from '@pages/Start';
 import LayoutInGame from '@components/LayoutInGame';
