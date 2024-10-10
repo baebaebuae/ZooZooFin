@@ -219,7 +219,6 @@ const Wallet = ({ onClose = () => {} }) => {
 
   const handleClose = () => {
     onClose();
-    navigate(-1); 
   };
 
   useEffect(() => {

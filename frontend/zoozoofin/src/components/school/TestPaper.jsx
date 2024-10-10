@@ -238,7 +238,7 @@ const QuestionSection = ({ question, index, onAnswerChange, userAnswer, isSubmit
     <QuestionSectionStyled>
       <QuestionNumber>
         {index}.
-        {isSubmitted && (
+        {isSubmitted && isCorrect !== null && (
           <GradeMarker>
             {isCorrect ? <CorrectSVG width="50" height="50" /> : <IncorrectSVG width="40" height="40" />}
           </GradeMarker>
@@ -275,7 +275,6 @@ QuestionSection.propTypes = {
   isCorrect: PropTypes.bool,
 };
 
-
 const TestPaper = () => {
   const [quizData, setQuizData] = useState([]);
   const [characterInfo, setCharacterInfo] = useState({ animalName: '' });
@@ -283,7 +282,7 @@ const TestPaper = () => {
   const [userAnswers, setUserAnswers] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [score, setScore] = useState(null);
-  const [correctAnswers, setCorrectAnswers] = useState({});
+  const [quizResults, setQuizResults] = useState([]);
   const navigate = useNavigate();
 
   const fetchCharacterInfo = useCallback(async () => {
@@ -335,7 +334,7 @@ const TestPaper = () => {
       const answerList = quizData.map((quiz) => ({
         quizId: quiz.quizId,
         animalAnswer: userAnswers[quiz.quizId] !== undefined 
-          ? userAnswers[quiz.quizId].trim() || null // 앞뒤 공백만 제거하고, 빈 값은 null 처리
+          ? userAnswers[quiz.quizId].trim() || null
           : null
       }));
   
@@ -343,21 +342,20 @@ const TestPaper = () => {
         answerList: answerList
       };
 
-      
       console.log(requestData);
-      const response = await apiClient.post('/quiz/submit', requestData );
+      const response = await apiClient.post('/quiz/submit', requestData);
       console.log("퀴즈 서브밋!");
       console.log(response);
       if (response.data && response.data.body) {
         setScore(response.data.body.score);
-        setCorrectAnswers(response.data.body.correctAnswers);
+        setQuizResults(response.data.body.quizResults);
         setIsSubmitted(true);
       } else {
         throw new Error('Invalid response from server');
       }
     } catch (error) {
       console.error('Failed to submit quiz:', error);
-     } finally {
+    } finally {
       setIsLoading(false);
     }
   };
@@ -366,10 +364,27 @@ const TestPaper = () => {
     navigate('/school', { state: { score: score.toFixed(0) } });
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div></div>;
 
   const leftQuestions = quizData.slice(0, Math.ceil(quizData.length / 2));
   const rightQuestions = quizData.slice(Math.ceil(quizData.length / 2));
+
+  const renderQuestionGroup = (questions) => {
+    return questions.map((question, index) => {
+      const result = quizResults.find(r => r.quizId === question.quizId);
+      return (
+        <QuestionSection 
+          key={question.quizId || index}
+          question={question || {}}
+          index={index + 1}
+          onAnswerChange={handleAnswerChange}
+          userAnswer={userAnswers[question.quizId] || ''}
+          isSubmitted={isSubmitted}
+          isCorrect={result ? result.isCorrect : null}
+        />
+      );
+    });
+  };
 
   return (
     <Paper>
@@ -385,28 +400,10 @@ const TestPaper = () => {
       )}
       <QuestionsContainer>
         <QuestionGroup side="left">
-          {leftQuestions.map((question, index) => (
-            <QuestionSection 
-            key={question?.quizId || index} 
-            question={question || {}}       
-            index={index + 1}
-            onAnswerChange={handleAnswerChange}
-            userAnswer={userAnswers[question?.quizId] || ''} 
-            isSubmitted={isSubmitted}
-          />
-          ))}
+          {renderQuestionGroup(leftQuestions)}
         </QuestionGroup>
         <QuestionGroup side="right">
-          {rightQuestions.map((question, index) => (
-            <QuestionSection 
-            key={question?.quizId || index}  
-            question={question || {}}       
-            index={index + 1}
-            onAnswerChange={handleAnswerChange}
-            userAnswer={userAnswers[question?.quizId] || ''} 
-            isSubmitted={isSubmitted}
-          />
-          ))}
+          {renderQuestionGroup(rightQuestions)}
         </QuestionGroup>
       </QuestionsContainer>
       {!isSubmitted && <SubmitButton onClick={handleSubmit} disabled={isLoading}>
