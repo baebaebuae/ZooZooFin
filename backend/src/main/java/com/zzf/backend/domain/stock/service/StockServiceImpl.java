@@ -10,7 +10,11 @@ import com.zzf.backend.domain.stock.repository.*;
 import com.zzf.backend.global.exception.CustomException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +37,12 @@ public class StockServiceImpl implements StockService {
     private final NewsRepository newsRepository;
     private final StockHistoryRepository stockHistoryRepository;
     private final TurnRecordRepository turnRecordRepository;
+
+    @Value("${ai-server.uri}")
+    private String aiServerUri;
+
+    @Value("${ai-server.path}")
+    private String aiServerPath;
 
     @Override
     public GetHoldingsResponse getHoldings(Long animalId, String stockType) {
@@ -297,7 +307,71 @@ public class StockServiceImpl implements StockService {
 
     @Override
     public StockHintResponse getStockHint(Long animalId, Long stockId) {
-        return null;
+        Animal animal = animalRepository.findById(animalId)
+                .orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
+
+        Stock stock = stockRepository.findById(stockId)
+                .orElseThrow(() -> new CustomException(STOCK_NOT_FOUND_EXCEPTION));
+
+        List<Chart> chartList = chartRepository.findTop5ByStockAndTurnLessThanEqualOrderByTurnDesc(stock, animal.getTurn());
+        if (chartList.size() != 5) {
+            throw new CustomException(CHART_NOT_FOUND_EXCEPTION);
+        }
+
+        List<News> newsList = newsRepository.findAllByStockAndTurn(stock, animal.getTurn());
+        if (newsList.isEmpty()) {
+            throw new CustomException(NEWS_NOT_FOUND);
+        }
+
+        News news = newsList.getFirst();
+
+        AiInputDto inputDto = AiInputDto.builder()
+                .industryField(stock.getStockField())
+                .stockField(stock.getStockType())
+                .stockCode(stock.getStockCode())
+                .inputDate(news.getDate())
+                .newsData(news.getContent())
+                .build();
+
+        AiOutputDto aiOutput = WebClient.create(aiServerUri)
+                .post()
+                .uri(uriBuilder -> uriBuilder
+                        .scheme("http")
+                        .path(aiServerPath)
+                        .build(true)
+                )
+                .bodyValue(inputDto)
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError,
+                        clientResponse -> Mono.error(new CustomException(AI_SERVER_ERROR)))
+                .onStatus(HttpStatusCode::is5xxServerError,
+                        clientResponse -> Mono.error(new CustomException(AI_SERVER_ERROR)))
+                .bodyToMono(AiOutputDto.class)
+                .block();
+
+        return StockHintResponse.builder()
+                .newsTitle(news.getTitle())
+                .negativeRatio(aiOutput.getNegativeRatio())
+                .neutralRatio(aiOutput.getNeutralRatio())
+                .positiveRatio(aiOutput.getPositiveRatio())
+                .negativeSentences(aiOutput.getNegativeSentences().stream()
+                        .map(ns -> StockHintResponse.Sentence.builder()
+                                .score(ns.getScore())
+                                .sentence(ns.getSentence())
+                                .build()
+                        ).collect(Collectors.toList()))
+                .positiveSentences(aiOutput.getPositiveSentences().stream()
+                        .map(ps -> StockHintResponse.Sentence.builder()
+                                .score(ps.getScore())
+                                .sentence(ps.getSentence())
+                                .build())
+                        .collect(Collectors.toList()))
+                .predictedPrice(aiOutput.getPredictedPrice())
+                .summary(aiOutput.getSummary())
+                .price(chartList.stream()
+                        .map(Chart::getPrice)
+                        .collect(Collectors.toList()))
+                .build();
     }
 
     @Override

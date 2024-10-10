@@ -78,6 +78,10 @@ public enum ErrorCode {
     LACK_STOCK_EXCEPTION(400, "보유중인 주식이 부족합니다."),
     FINANCIAL_STATEMENTS_NOT_FOUND(404, "재무제표를 찾을 수 없습니다."),
     STOCK_HISTORY_NOT_FOUND(404, "주식 매매 기록이 존재하지 않습니다."),
+    AI_SERVER_ERROR(500, "AI 서버 에러 발생"),
+
+    // News
+    NEWS_NOT_FOUND(404, "뉴스가 존재하지 않습니다."),
 
     // Quiz
     QUIZ_NOT_FOUND_EXCEPTION(404, "존재하지 않는 퀴즈지롱~!"),

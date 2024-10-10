@@ -71,6 +71,10 @@ jwt:
   refresh-expiration: ${REFRESH_EXPIRATION}
   secret-key: ${SECRET_KEY}
 
+ai-server:
+  uri: ${AI_SERVER_URI}
+  path: ${AI_SERVER_PATH}
+
 logging:
   level:
     root: warn

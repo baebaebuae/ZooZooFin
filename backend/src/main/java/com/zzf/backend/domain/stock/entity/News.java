@@ -38,6 +38,10 @@ public class News {
     private String provider;
 
     @NotNull
+    @Column(name = "description")
+    private String description;
+
+    @NotNull
     @Column(name = "content")
     private String content;
 
@@ -46,11 +50,12 @@ public class News {
     private Date date;
 
     @Builder
-    public News(Stock stock, Long turn, String title, String provider, String content, Date date) {
+    public News(Stock stock, Long turn, String title, String provider, String description, String content, Date date) {
         this.stock = stock;
         this.turn = turn;
         this.title = title;
         this.provider = provider;
+        this.description = description;
         this.content = content;
         this.date = date;
     }

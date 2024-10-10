@@ -11,5 +11,8 @@ import java.util.Optional;
 @Repository
 public interface ChartRepository extends JpaRepository<Chart, Long> {
     Optional<Chart> findByStockAndTurn(Stock stock, Long turn);
+
     List<Chart> findAllByStockAndTurnLessThanEqual(Stock stock, Long turn);
+
+    List<Chart> findTop5ByStockAndTurnLessThanEqualOrderByTurnDesc(Stock stock, Long turn);
 }
