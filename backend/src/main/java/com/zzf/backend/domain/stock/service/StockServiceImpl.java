@@ -26,6 +26,7 @@ public class StockServiceImpl implements StockService {
 
     private final AnimalRepository animalRepository;
     private final ChartRepository chartRepository;
+    private final ExchangeRepository exchangeRepository;
     private final StockRepository stockRepository;
     private final StockHoldingsRepository stockHoldingsRepository;
     private final FinancialStatementsRepository financialRepository;
@@ -66,31 +67,63 @@ public class StockServiceImpl implements StockService {
 
         Double totalProfit = totalInvestment - totalAmount;
 
-        return GetHoldingsResponse.builder()
-                .totalAmount(totalAmount)
-                .totalInvestment(totalInvestment)
-                .totalProfit(totalProfit)
-                .holdingsList(stockHoldings.stream()
-                        .map(holdings -> {
-                            Chart chart = chartRepository.findByStockAndTurn(holdings.getStock(), animal.getTurn())
-                                    .orElseThrow(() -> new CustomException(CHART_NOT_FOUND_EXCEPTION));
+        if (stockType.equals("oversea")) {
+            Exchange exchange = exchangeRepository.findByTurn(animal.getTurn())
+                    .orElseThrow(() -> new CustomException(EXCHANGE_NOT_FOUND_EXCEPTION));
+            return GetHoldingsResponse.builder()
+                    .totalAmount(totalAmount)
+                    .totalInvestment(totalInvestment)
+                    .totalProfit(totalProfit)
+                    .exchange(exchange.getExchange())
+                    .exchangeRate(exchange.getExchangeRate())
+                    .holdingsList(stockHoldings.stream()
+                            .map(holdings -> {
+                                Chart chart = chartRepository.findByStockAndTurn(holdings.getStock(), animal.getTurn())
+                                        .orElseThrow(() -> new CustomException(CHART_NOT_FOUND_EXCEPTION));
 
-                            double stockRate = getStockRate(holdings.getStockAveragePrice(), chart.getPrice());
-                            Long stockPrice = chart.getPrice();
-                            Long stockTotal = stockPrice * holdings.getStockCount();
+                                double stockRate = getStockRate(holdings.getStockAveragePrice(), chart.getPrice());
+                                Long stockPrice = chart.getPrice() * exchange.getExchange();
+                                Long stockTotal = stockPrice * holdings.getStockCount();
 
-                            return GetHoldingsResponse.Holdings.builder()
-                                    .stockId(holdings.getStock().getStockId())
-                                    .stockField(holdings.getStock().getStockField())
-                                    .stockName(holdings.getStock().getStockName())
-                                    .stockRate(stockRate)
-                                    .stockTotal(stockTotal)
-                                    .stockPrice(stockPrice)
-                                    .stockCount(holdings.getStockCount())
-                                    .build();
-                        })
-                        .collect(Collectors.toList()))
-                .build();
+                                return GetHoldingsResponse.Holdings.builder()
+                                        .stockId(holdings.getStock().getStockId())
+                                        .stockField(holdings.getStock().getStockField())
+                                        .stockName(holdings.getStock().getStockName())
+                                        .stockRate(stockRate)
+                                        .stockTotal(stockTotal)
+                                        .stockPrice(stockPrice)
+                                        .stockCount(holdings.getStockCount())
+                                        .build();
+                            })
+                            .collect(Collectors.toList()))
+                    .build();
+        } else {
+            return GetHoldingsResponse.builder()
+                    .totalAmount(totalAmount)
+                    .totalInvestment(totalInvestment)
+                    .totalProfit(totalProfit)
+                    .holdingsList(stockHoldings.stream()
+                            .map(holdings -> {
+                                Chart chart = chartRepository.findByStockAndTurn(holdings.getStock(), animal.getTurn())
+                                        .orElseThrow(() -> new CustomException(CHART_NOT_FOUND_EXCEPTION));
+
+                                double stockRate = getStockRate(holdings.getStockAveragePrice(), chart.getPrice());
+                                Long stockPrice = chart.getPrice();
+                                Long stockTotal = stockPrice * holdings.getStockCount();
+
+                                return GetHoldingsResponse.Holdings.builder()
+                                        .stockId(holdings.getStock().getStockId())
+                                        .stockField(holdings.getStock().getStockField())
+                                        .stockName(holdings.getStock().getStockName())
+                                        .stockRate(stockRate)
+                                        .stockTotal(stockTotal)
+                                        .stockPrice(stockPrice)
+                                        .stockCount(holdings.getStockCount())
+                                        .build();
+                            })
+                            .collect(Collectors.toList()))
+                    .build();
+        }
     }
 
     @Override
@@ -105,20 +138,49 @@ public class StockServiceImpl implements StockService {
             default -> throw new CustomException(STOCK_TYPE_NOT_FOUND_EXCEPTION);
         };
 
-        return StockListResponse.builder()
-                .stockDetails(stockList.stream()
-                        .map(stock -> StockListResponse.StockDetails.builder()
-                                .stockId(stock.getStockId())
-                                .stockName(stock.getStockName())
-                                .stockField(stock.getStockField())
-                                .stockIntro(stock.getStockInfo())
-                                .stockImage(stock.getStockImg())
-                                .rate(chartRepository.findByStockAndTurn(stock, animal.getTurn())
-                                        .orElseThrow(() -> new CustomException(CHART_NOT_FOUND_EXCEPTION))
-                                        .getRate())
-                                .build())
-                        .collect(Collectors.toList()))
-                .build();
+        if (stockType.equals("oversea")) {
+            Exchange exchange = exchangeRepository.findByTurn(animal.getTurn())
+                    .orElseThrow(() -> new CustomException(EXCHANGE_NOT_FOUND_EXCEPTION));
+            return StockListResponse.builder()
+                    .exchange(exchange.getExchange())
+                    .exchangeRate(exchange.getExchangeRate())
+                    .stockDetails(stockList.stream()
+                            .map(stock -> {
+                                Chart chart = chartRepository.findByStockAndTurn(stock, animal.getTurn())
+                                        .orElseThrow(() -> new CustomException(CHART_NOT_FOUND_EXCEPTION));
+                                return StockListResponse.StockDetails.builder()
+                                        .stockId(stock.getStockId())
+                                        .stockName(stock.getStockName())
+                                        .stockField(stock.getStockField())
+                                        .stockIntro(stock.getStockInfo())
+                                        .stockImage(stock.getStockImg())
+                                        .rate(chart.getRate())
+                                        .price(chart.getPrice() * exchange.getExchange())
+                                        .build();
+                            })
+                            .collect(Collectors.toList()))
+                    .build();
+
+        } else {
+            return StockListResponse.builder()
+                    .stockDetails(stockList.stream()
+                            .map(stock -> {
+                                Chart chart = chartRepository.findByStockAndTurn(stock, animal.getTurn())
+                                        .orElseThrow(() -> new CustomException(CHART_NOT_FOUND_EXCEPTION));
+                                return StockListResponse.StockDetails.builder()
+                                        .stockId(stock.getStockId())
+                                        .stockName(stock.getStockName())
+                                        .stockField(stock.getStockField())
+                                        .stockIntro(stock.getStockInfo())
+                                        .stockImage(stock.getStockImg())
+                                        .rate(chart.getRate())
+                                        .price(chart.getPrice())
+                                        .build();
+                            })
+                            .collect(Collectors.toList()))
+                    .build();
+
+        }
     }
 
     @Override
@@ -232,6 +294,9 @@ public class StockServiceImpl implements StockService {
         Animal animal = animalRepository.findById(animalId)
                 .orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
 
+        Exchange exchange = exchangeRepository.findByTurn(animal.getTurn())
+                .orElseThrow(() -> new CustomException(EXCHANGE_NOT_FOUND_EXCEPTION));
+
         List<StockHoldings> stockHoldings = stockHoldingsRepository.findAllByAnimalAndStockIsSoldFalse(animal);
 
 
@@ -255,7 +320,7 @@ public class StockServiceImpl implements StockService {
                 case "해외" -> overseaList.add(NotebookStockListResponse.NotebookStock.builder()
                         .stockId(stockHolding.getStock().getStockId())
                         .stockName(stockHolding.getStock().getStockName())
-                        .stockTotal(stockHolding.getStockCount() * chart.getPrice())
+                        .stockTotal(stockHolding.getStockCount() * chart.getPrice() * exchange.getExchange())
                         .stockRate(chart.getRate())
                         .build());
                 case "ETF" -> etfList.add(NotebookStockListResponse.NotebookStock.builder()
@@ -328,6 +393,11 @@ public class StockServiceImpl implements StockService {
                 .orElseThrow(() -> new CustomException(CHART_NOT_FOUND_EXCEPTION));
 
         Long cost = chart.getPrice() * buyStockRequest.getCount();
+        if (stock.getStockType().equals("해외")) {
+            Exchange exchange = exchangeRepository.findByTurn(animal.getTurn())
+                    .orElseThrow(() -> new CustomException(EXCHANGE_NOT_FOUND_EXCEPTION));
+            cost *= exchange.getExchange();
+        }
 
         if (animal.getAssets() < cost) {
             throw new CustomException(LACK_ASSETS_EXCEPTION);
@@ -343,11 +413,11 @@ public class StockServiceImpl implements StockService {
             stockHoldings = stockHoldingsRepository.findByStockAndAnimalAndStockIsSoldFalse(stock, animal)
                     .orElseThrow(() -> new CustomException(HOLDINGS_NOT_FOUND_EXCEPTION));
 
-            stockHoldings.setStockCount(stockHoldings.getStockCount() + buyStockRequest.getCount());
             stockHoldings.setStockAveragePrice(
-                    (stockHoldings.getStockAveragePrice() * stockHoldings.getStockCount()
-                     + chart.getPrice() * buyStockRequest.getCount())
-                    / (stockHoldings.getStockCount() + buyStockRequest.getCount()));
+                    ((stockHoldings.getStockAveragePrice() * stockHoldings.getStockCount())
+                            + (chart.getPrice() * buyStockRequest.getCount()))
+                            / (stockHoldings.getStockCount() + buyStockRequest.getCount()));
+            stockHoldings.setStockCount(stockHoldings.getStockCount() + buyStockRequest.getCount());
 
         } else {
             stockHoldings = StockHoldings.builder()
@@ -365,7 +435,7 @@ public class StockServiceImpl implements StockService {
                 .stock(stock)
                 .animal(animal)
                 .tradeCount(buyStockRequest.getCount())
-                .tradeAmount(-buyStockRequest.getCount() * chart.getPrice())
+                .tradeAmount(-cost)
                 .isBuy(true)
                 .turn(animal.getTurn())
                 .build());
@@ -393,6 +463,11 @@ public class StockServiceImpl implements StockService {
         }
 
         Long cost = chart.getPrice() * sellStockRequest.getCount();
+        if (stock.getStockType().equals("해외")) {
+            Exchange exchange = exchangeRepository.findByTurn(animal.getTurn())
+                    .orElseThrow(() -> new CustomException(EXCHANGE_NOT_FOUND_EXCEPTION));
+            cost *= exchange.getExchange();
+        }
 
         animal.setAssets(animal.getAssets() + cost);
 
@@ -408,7 +483,7 @@ public class StockServiceImpl implements StockService {
                 .stock(stock)
                 .animal(animal)
                 .tradeCount(sellStockRequest.getCount())
-                .tradeAmount(sellStockRequest.getCount() * chart.getPrice())
+                .tradeAmount(cost)
                 .isBuy(false)
                 .turn(animal.getTurn())
                 .build());

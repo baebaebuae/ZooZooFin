@@ -13,7 +13,7 @@ public record AnimalInfoResponse(String animalName,
                                  Long totalAssets,
                                  Long totalDeposit,
                                  Long totalSavings,
-                                 Double totalStock,
+                                 Long totalStock,
                                  Long totalLoan,
                                  Long totalCapital) {
 }

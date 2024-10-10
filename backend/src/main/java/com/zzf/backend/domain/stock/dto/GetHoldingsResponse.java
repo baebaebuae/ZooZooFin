@@ -8,6 +8,8 @@ import java.util.List;
 public record GetHoldingsResponse(Long totalAmount,
                                   Double totalInvestment,
                                   Double totalProfit,
+                                  Long exchange,
+                                  Double exchangeRate,
                                   List<Holdings> holdingsList) {
 
     @Builder

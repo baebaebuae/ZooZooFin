@@ -78,7 +78,7 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findByUsername(memberId)
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND_EXCEPTION));
 
-        List<Animal> animalList = animalRepository.findAllByMember(member);
+        List<Animal> animalList = animalRepository.findAllByMemberAndIsEndTrue(member);
 
         return new MyAnimalResponse(animalList);
     }

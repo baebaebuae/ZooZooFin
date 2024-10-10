@@ -43,56 +43,126 @@ class StockControllerTest {
     private final String token = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6ImI2MGU4Y2JjLTljMjAtNGY1My1iZjY4LWNmZWFmMjg1ZDNkNSIsImV4cCI6MTgxNDY0MDgzNX0.-m9wnI1dqig8v2ibj1-975jX7mhK8t0goa_PNrkjK8U";
 
     @Test
-    @DisplayName("보유 주식 조회 - 성공")
-    public void stock_holdings_success() throws Exception {
+    @DisplayName("보유 국내 주식 조회 - 성공")
+    public void stock_holdings_domestic_success() throws Exception {
         // given
 
         // when
         ResultActions actions = mockMvc.perform(
-                get("/api/v1/stock/{stockType}", "domestic")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                        .contentType(MediaType.APPLICATION_JSON)
-        );
-
-        ResultActions actions1 = mockMvc.perform(
-                get("/api/v1/stock/{stockType}", "oversea")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                        .contentType(MediaType.APPLICATION_JSON)
-        );
-
-        ResultActions actions2 = mockMvc.perform(
-                get("/api/v1/stock/{stockType}", "etf")
+                get("/api/v1/stock/domestic")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
         );
 
         // then
-        actions1
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.httpStatus").value(GET_HOLDINGS_SUCCESS.getHttpStatus()))
-                .andExpect(jsonPath("$.message").value(GET_HOLDINGS_SUCCESS.getMessage()));
-
-        actions2
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.httpStatus").value(GET_HOLDINGS_SUCCESS.getHttpStatus()))
-                .andExpect(jsonPath("$.message").value(GET_HOLDINGS_SUCCESS.getMessage()));
-
         actions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.httpStatus").value(GET_HOLDINGS_SUCCESS.getHttpStatus()))
                 .andExpect(jsonPath("$.message").value(GET_HOLDINGS_SUCCESS.getMessage()))
                 .andDo(
-                        document("보유 주식 조회",
+                        document("보유 국내 주식 조회",
                                 ResourceSnippetParameters.builder()
                                         .tag("주식")
-                                        .summary("보유 주식 조회 API")
-                                        .description("보유한 주식을 종류별로 조회할때 사용하는 API<br>국내: domestic<br>해외: oversea<br>ETF: etf"),
+                                        .summary("보유 국내 주식 조회 API")
+                                        .description("보유한 국내 주식을 조회할때 사용하는 API"),
                                 responseFields(
                                         fieldWithPath("httpStatus").type(JsonFieldType.NUMBER).description("응답 상태코드"),
                                         fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
                                         fieldWithPath("body.totalAmount").type(JsonFieldType.NUMBER).description("총액"),
                                         fieldWithPath("body.totalInvestment").type(JsonFieldType.NUMBER).description("총 투자액"),
                                         fieldWithPath("body.totalProfit").type(JsonFieldType.NUMBER).description("이율"),
+                                        fieldWithPath("body.exchange").type(JsonFieldType.NULL).description("환율"),
+                                        fieldWithPath("body.exchangeRate").type(JsonFieldType.NULL).description("환율 변동률"),
+                                        fieldWithPath("body.holdingsList[]").type(JsonFieldType.ARRAY).description("보유 주식 리스트"),
+                                        fieldWithPath("body.holdingsList[].stockId").type(JsonFieldType.NUMBER).description("주식 ID"),
+                                        fieldWithPath("body.holdingsList[].stockField").type(JsonFieldType.STRING).description("분야"),
+                                        fieldWithPath("body.holdingsList[].stockName").type(JsonFieldType.STRING).description("이름"),
+                                        fieldWithPath("body.holdingsList[].stockRate").type(JsonFieldType.NUMBER).description("상승률"),
+                                        fieldWithPath("body.holdingsList[].stockTotal").type(JsonFieldType.NUMBER).description("총액"),
+                                        fieldWithPath("body.holdingsList[].stockPrice").type(JsonFieldType.NUMBER).description("개당 가격"),
+                                        fieldWithPath("body.holdingsList[].stockCount").type(JsonFieldType.NUMBER).description("개수")
+                                )
+                        )
+                );
+
+    }
+
+    @Test
+    @DisplayName("보유 해외 주식 조회 - 성공")
+    public void stock_holdings_oversea_success() throws Exception {
+        // given
+
+        // when
+        ResultActions actions = mockMvc.perform(
+                get("/api/v1/stock/oversea")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.httpStatus").value(GET_HOLDINGS_SUCCESS.getHttpStatus()))
+                .andExpect(jsonPath("$.message").value(GET_HOLDINGS_SUCCESS.getMessage()))
+                .andDo(
+                        document("보유 해외 주식 조회",
+                                ResourceSnippetParameters.builder()
+                                        .tag("주식")
+                                        .summary("보유 해외 주식 조회 API")
+                                        .description("보유한 해외 주식을 조회할때 사용하는 API"),
+                                responseFields(
+                                        fieldWithPath("httpStatus").type(JsonFieldType.NUMBER).description("응답 상태코드"),
+                                        fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
+                                        fieldWithPath("body.totalAmount").type(JsonFieldType.NUMBER).description("총액"),
+                                        fieldWithPath("body.totalInvestment").type(JsonFieldType.NUMBER).description("총 투자액"),
+                                        fieldWithPath("body.totalProfit").type(JsonFieldType.NUMBER).description("이율"),
+                                        fieldWithPath("body.exchange").type(JsonFieldType.NUMBER).description("환율"),
+                                        fieldWithPath("body.exchangeRate").type(JsonFieldType.NUMBER).description("환율 변동률"),
+                                        fieldWithPath("body.holdingsList[]").type(JsonFieldType.ARRAY).description("보유 주식 리스트"),
+                                        fieldWithPath("body.holdingsList[].stockId").type(JsonFieldType.NUMBER).description("주식 ID"),
+                                        fieldWithPath("body.holdingsList[].stockField").type(JsonFieldType.STRING).description("분야"),
+                                        fieldWithPath("body.holdingsList[].stockName").type(JsonFieldType.STRING).description("이름"),
+                                        fieldWithPath("body.holdingsList[].stockRate").type(JsonFieldType.NUMBER).description("상승률"),
+                                        fieldWithPath("body.holdingsList[].stockTotal").type(JsonFieldType.NUMBER).description("총액"),
+                                        fieldWithPath("body.holdingsList[].stockPrice").type(JsonFieldType.NUMBER).description("개당 가격"),
+                                        fieldWithPath("body.holdingsList[].stockCount").type(JsonFieldType.NUMBER).description("개수")
+                                )
+                        )
+                );
+
+    }
+
+    @Test
+    @DisplayName("보유 ETF 조회 - 성공")
+    public void stock_holdings_etf_success() throws Exception {
+        // given
+
+        // when
+        ResultActions actions = mockMvc.perform(
+                get("/api/v1/stock/etf")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.httpStatus").value(GET_HOLDINGS_SUCCESS.getHttpStatus()))
+                .andExpect(jsonPath("$.message").value(GET_HOLDINGS_SUCCESS.getMessage()))
+                .andDo(
+                        document("보유 ETF 조회",
+                                ResourceSnippetParameters.builder()
+                                        .tag("주식")
+                                        .summary("보유 ETF 조회 API")
+                                        .description("보유한 ETF를 조회할때 사용하는 API"),
+                                responseFields(
+                                        fieldWithPath("httpStatus").type(JsonFieldType.NUMBER).description("응답 상태코드"),
+                                        fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
+                                        fieldWithPath("body.totalAmount").type(JsonFieldType.NUMBER).description("총액"),
+                                        fieldWithPath("body.totalInvestment").type(JsonFieldType.NUMBER).description("총 투자액"),
+                                        fieldWithPath("body.totalProfit").type(JsonFieldType.NUMBER).description("이율"),
+                                        fieldWithPath("body.exchange").type(JsonFieldType.NULL).description("환율"),
+                                        fieldWithPath("body.exchangeRate").type(JsonFieldType.NULL).description("환율 변동률"),
                                         fieldWithPath("body.holdingsList[]").type(JsonFieldType.ARRAY).description("보유 주식 리스트"),
                                         fieldWithPath("body.holdingsList[].stockId").type(JsonFieldType.NUMBER).description("주식 ID"),
                                         fieldWithPath("body.holdingsList[].stockField").type(JsonFieldType.STRING).description("분야"),
@@ -127,60 +197,41 @@ class StockControllerTest {
     }
 
     @Test
-    @DisplayName("전체 주식 리스트 조회 - 성공")
-    public void stock_list_success() throws Exception {
+    @DisplayName("국내 주식 리스트 조회 - 성공")
+    public void stock_list_domestic_success() throws Exception {
         // given
 
         // when
         ResultActions actions = mockMvc.perform(
-                get("/api/v1/stock/list/{stockType}", "domestic")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                        .contentType(MediaType.APPLICATION_JSON)
-        );
-
-        ResultActions actions1 = mockMvc.perform(
-                get("/api/v1/stock/list/{stockType}", "oversea")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                        .contentType(MediaType.APPLICATION_JSON)
-        );
-
-        ResultActions actions2 = mockMvc.perform(
-                get("/api/v1/stock/list/{stockType}", "etf")
+                get("/api/v1/stock/list/domestic")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
         );
 
         // then
-        actions1
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.httpStatus").value(GET_STOCK_LIST_SUCCESS.getHttpStatus()))
-                .andExpect(jsonPath("$.message").value(GET_STOCK_LIST_SUCCESS.getMessage()));
-
-        actions2
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.httpStatus").value(GET_STOCK_LIST_SUCCESS.getHttpStatus()))
-                .andExpect(jsonPath("$.message").value(GET_STOCK_LIST_SUCCESS.getMessage()));
-
         actions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.httpStatus").value(GET_STOCK_LIST_SUCCESS.getHttpStatus()))
                 .andExpect(jsonPath("$.message").value(GET_STOCK_LIST_SUCCESS.getMessage()))
                 .andDo(
-                        document("전체 주식 리스트 조회",
+                        document("국내 주식 리스트 조회",
                                 ResourceSnippetParameters.builder()
                                         .tag("주식")
-                                        .summary("전체 주식 리스트 조회 API")
-                                        .description("전체 주식 리스트를 조회할때 사용하는 API<br>국내: domestic<br>해외: oversea<br>ETF: etf"),
+                                        .summary("국내 주식 리스트 조회 API")
+                                        .description("국내 주식 리스트를 조회할때 사용하는 API"),
                                 responseFields(
                                         fieldWithPath("httpStatus").type(JsonFieldType.NUMBER).description("응답 상태코드"),
                                         fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
+                                        fieldWithPath("body.exchange").type(JsonFieldType.NULL).description("환율"),
+                                        fieldWithPath("body.exchangeRate").type(JsonFieldType.NULL).description("환율 변동률"),
                                         fieldWithPath("body.stockDetails[]").type(JsonFieldType.ARRAY).description("주식 리스트"),
                                         fieldWithPath("body.stockDetails[].stockId").type(JsonFieldType.NUMBER).description("주식 ID"),
                                         fieldWithPath("body.stockDetails[].stockName").type(JsonFieldType.STRING).description("이름"),
                                         fieldWithPath("body.stockDetails[].stockField").type(JsonFieldType.STRING).description("분류"),
                                         fieldWithPath("body.stockDetails[].stockIntro").type(JsonFieldType.STRING).description("간단 소개"),
                                         fieldWithPath("body.stockDetails[].stockImage").type(JsonFieldType.STRING).description("이미지"),
-                                        fieldWithPath("body.stockDetails[].rate").type(JsonFieldType.NUMBER).description("상승률")
+                                        fieldWithPath("body.stockDetails[].rate").type(JsonFieldType.NUMBER).description("상승률"),
+                                        fieldWithPath("body.stockDetails[].price").type(JsonFieldType.NUMBER).description("가격")
                                 )
                         )
                 );
@@ -188,7 +239,91 @@ class StockControllerTest {
     }
 
     @Test
-    @DisplayName("전체 주식 리스트 조회 - 존재하지 않는 타입")
+    @DisplayName("해외 주식 리스트 조회 - 성공")
+    public void stock_list_oversea_success() throws Exception {
+        // given
+
+        // when
+        ResultActions actions = mockMvc.perform(
+                get("/api/v1/stock/list/oversea")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.httpStatus").value(GET_STOCK_LIST_SUCCESS.getHttpStatus()))
+                .andExpect(jsonPath("$.message").value(GET_STOCK_LIST_SUCCESS.getMessage()))
+                .andDo(
+                        document("해외 주식 리스트 조회",
+                                ResourceSnippetParameters.builder()
+                                        .tag("주식")
+                                        .summary("해외 주식 리스트 조회 API")
+                                        .description("해외 주식 리스트를 조회할때 사용하는 API"),
+                                responseFields(
+                                        fieldWithPath("httpStatus").type(JsonFieldType.NUMBER).description("응답 상태코드"),
+                                        fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
+                                        fieldWithPath("body.exchange").type(JsonFieldType.NUMBER).description("환율"),
+                                        fieldWithPath("body.exchangeRate").type(JsonFieldType.NUMBER).description("환율 변동률"),
+                                        fieldWithPath("body.stockDetails[]").type(JsonFieldType.ARRAY).description("주식 리스트"),
+                                        fieldWithPath("body.stockDetails[].stockId").type(JsonFieldType.NUMBER).description("주식 ID"),
+                                        fieldWithPath("body.stockDetails[].stockName").type(JsonFieldType.STRING).description("이름"),
+                                        fieldWithPath("body.stockDetails[].stockField").type(JsonFieldType.STRING).description("분류"),
+                                        fieldWithPath("body.stockDetails[].stockIntro").type(JsonFieldType.STRING).description("간단 소개"),
+                                        fieldWithPath("body.stockDetails[].stockImage").type(JsonFieldType.STRING).description("이미지"),
+                                        fieldWithPath("body.stockDetails[].rate").type(JsonFieldType.NUMBER).description("상승률"),
+                                        fieldWithPath("body.stockDetails[].price").type(JsonFieldType.NUMBER).description("가격")
+                                )
+                        )
+                );
+
+    }
+
+    @Test
+    @DisplayName("ETF 리스트 조회 - 성공")
+    public void stock_list_etf_success() throws Exception {
+        // given
+
+        // when
+        ResultActions actions = mockMvc.perform(
+                get("/api/v1/stock/list/etf")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.httpStatus").value(GET_STOCK_LIST_SUCCESS.getHttpStatus()))
+                .andExpect(jsonPath("$.message").value(GET_STOCK_LIST_SUCCESS.getMessage()))
+                .andDo(
+                        document("etf 리스트 조회",
+                                ResourceSnippetParameters.builder()
+                                        .tag("주식")
+                                        .summary("etf 리스트 조회 API")
+                                        .description("etf 리스트를 조회할때 사용하는 API"),
+                                responseFields(
+                                        fieldWithPath("httpStatus").type(JsonFieldType.NUMBER).description("응답 상태코드"),
+                                        fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
+                                        fieldWithPath("body.exchange").type(JsonFieldType.NULL).description("환율"),
+                                        fieldWithPath("body.exchangeRate").type(JsonFieldType.NULL).description("환율 변동률"),
+                                        fieldWithPath("body.stockDetails[]").type(JsonFieldType.ARRAY).description("주식 리스트"),
+                                        fieldWithPath("body.stockDetails[].stockId").type(JsonFieldType.NUMBER).description("주식 ID"),
+                                        fieldWithPath("body.stockDetails[].stockName").type(JsonFieldType.STRING).description("이름"),
+                                        fieldWithPath("body.stockDetails[].stockField").type(JsonFieldType.STRING).description("분류"),
+                                        fieldWithPath("body.stockDetails[].stockIntro").type(JsonFieldType.STRING).description("간단 소개"),
+                                        fieldWithPath("body.stockDetails[].stockImage").type(JsonFieldType.STRING).description("이미지"),
+                                        fieldWithPath("body.stockDetails[].rate").type(JsonFieldType.NUMBER).description("상승률"),
+                                        fieldWithPath("body.stockDetails[].price").type(JsonFieldType.NUMBER).description("가격")
+                                )
+                        )
+                );
+
+    }
+
+    @Test
+    @DisplayName("주식 리스트 조회 - 존재하지 않는 타입")
     public void stock_list_type_not_found() throws Exception {
         // given
 

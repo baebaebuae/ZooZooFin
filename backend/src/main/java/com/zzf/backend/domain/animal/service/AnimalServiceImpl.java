@@ -27,7 +27,9 @@ import com.zzf.backend.domain.quest.repository.QuestHistoryRepository;
 import com.zzf.backend.domain.quest.repository.QuestRepository;
 import com.zzf.backend.domain.savings.entity.Savings;
 import com.zzf.backend.domain.savings.repository.SavingsRepository;
+import com.zzf.backend.domain.stock.entity.Chart;
 import com.zzf.backend.domain.stock.entity.StockHoldings;
+import com.zzf.backend.domain.stock.repository.ChartRepository;
 import com.zzf.backend.domain.stock.repository.StockHoldingsRepository;
 import com.zzf.backend.global.auth.entity.Member;
 import com.zzf.backend.global.auth.repository.MemberRepository;
@@ -51,6 +53,7 @@ public class AnimalServiceImpl implements AnimalService {
     private final PortfolioRepository portfolioRepository;
     private final DepositRepository depositRepository;
     private final SavingsRepository savingsRepository;
+    private final ChartRepository chartRepository;
     private final StockHoldingsRepository stockHoldingsRepository;
     private final LoanRepository loanRepository;
     private final CapitalRepository capitalRepository;
@@ -186,9 +189,13 @@ public class AnimalServiceImpl implements AnimalService {
                 .reduce(0L, Long::sum);
 
         List<StockHoldings> stockHoldings = stockHoldingsRepository.findAllByAnimalAndStockIsSoldFalse(animal);
-        Double stockTotal = stockHoldings.stream()
-                .map(sh -> sh.getStockAveragePrice() * sh.getStockCount())
-                .reduce(0.0, Double::sum);
+        Long stockTotal = stockHoldings.stream()
+                .map(sh -> {
+                    Chart chart = chartRepository.findByStockAndTurn(sh.getStock(), animal.getTurn())
+                            .orElseThrow(() -> new CustomException(CHART_NOT_FOUND_EXCEPTION));
+                    return chart.getPrice() * sh.getStockCount();
+                })
+                .reduce(0L, Long::sum);
 
         List<Loan> loan = loanRepository.findAllByAnimalAndLoanIsEndFalse(animal);
         Long loanTotal = loan.stream()
@@ -204,6 +211,7 @@ public class AnimalServiceImpl implements AnimalService {
         allTotal += animal.getAssets();
         allTotal += depositTotal;
         allTotal += savingsTotal;
+        allTotal += stockTotal;
         allTotal += loanTotal;
         allTotal += capitalTotal;
 
