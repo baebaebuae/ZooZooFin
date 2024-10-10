@@ -140,27 +140,29 @@ const FinalMessageBlock = styled.div`
 
 const endGame = async (animalId, endingType) => {
     const apiClient = getApiClient();
-
-    console.log('endGame - endingType:', endingType);
+    console.log('Starting endGame function');
+    console.log('animalId:', animalId);
+    console.log('endingType:', endingType);
 
     const productData = {
         endingType: endingType,
     };
 
     try {
-        console.log('Request Data:', productData);
-
+        console.log('Sending POST request to /ending');
         const res = await apiClient.post('ending', productData, {
             headers: { animalId: animalId },
         });
 
+        console.log('Response received:', res);
         if (res.status === 200) {
+            console.log('Ending successfully processed');
             console.log(res.data);
         } else {
             console.error('Unexpected status code:', res.status);
         }
     } catch (error) {
-        console.error('error: ', error);
+        console.error('Error in endGame:', error);
         return error;
     }
 };
