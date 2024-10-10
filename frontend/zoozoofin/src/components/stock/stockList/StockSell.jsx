@@ -62,14 +62,14 @@ export const StockSell = ({ channel, onOrderCompletion }) => {
         return (
             <StoreWrapper>
                 {/* StockOrder 컴포넌트 */}
-                <StockOrder type={'sell'} orderIsDone={handleOrderCompletion} />
+                <StockOrder channel={channel} type={'sell'} orderIsDone={handleOrderCompletion} />
             </StoreWrapper>
         );
     } else if (isDetailClicked) {
         return (
             <StoreWrapper>
                 {/* StockDetail 컴포넌트 */}
-                <StockDetail />
+                <StockDetail channel={channel} />
             </StoreWrapper>
         );
     } else {

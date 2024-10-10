@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import LineGraph from './stock/LineGraph';
 
 const DetailContainer = styled.div`
     width: 100%;
@@ -111,12 +112,13 @@ const LoanListContent = styled.div`
 export const StockDetail = ({
     name,
     stockRate,
-    stockTotal,
+    stockPrice,
     handleSelected,
     stockCount,
     purchaseDate,
     evaluationProfitLoss,
     tradeHistory,
+    stockCharts,
 }) => {
     return (
         <DetailContainer>
@@ -125,8 +127,8 @@ export const StockDetail = ({
                 <DetailTitle>{name}</DetailTitle>
             </DetailTitleBlock>
             <DetailContentBlock>
-                <div>그래프 soon</div>
-                <StockTotal>{stockTotal.toLocaleString()}🥕</StockTotal>
+                <LineGraph stockData={stockCharts} />
+                <StockTotal>{stockPrice ? stockPrice.toLocaleString() : 0}🥕</StockTotal>
                 <StockRate $stockRate={stockRate}>{stockRate}%</StockRate>
             </DetailContentBlock>
             <DividerLarge />
@@ -141,7 +143,9 @@ export const StockDetail = ({
                 <TableTitle>손익률</TableTitle>
                 <TableValue>{stockRate}%</TableValue>
                 <TableTitle>평가손익</TableTitle>
-                <TableValue>{evaluationProfitLoss.toLocaleString()}</TableValue>
+                <TableValue>
+                    {evaluationProfitLoss ? evaluationProfitLoss.toLocaleString() : 0}
+                </TableValue>
             </TableRow>
             <DividerLarge />
 
@@ -153,18 +157,17 @@ export const StockDetail = ({
                 <LoanListTitle>거래 수량</LoanListTitle>
                 <LoanListTitle>거래가</LoanListTitle>
             </LoanListTitleBox>
-            {tradeHistory.map((trade, index) => {
-                return (
-                    <LoanListBox key={index}>
-                        <LoanListContent>{trade.turnNumber}</LoanListContent>
-                        <LoanListContent $tradeType={trade.tradeType}>
-                            {trade.tradeType}
-                        </LoanListContent>
-                        <LoanListContent>{trade.tradeQuantity}</LoanListContent>
-                        <LoanListContent>{trade.tradePrice}</LoanListContent>
-                    </LoanListBox>
-                );
-            })}
+            {tradeHistory &&
+                tradeHistory.map((trade, index) => {
+                    return (
+                        <LoanListBox key={index}>
+                            <LoanListContent>{trade.turn}</LoanListContent>
+                            <LoanListContent $tradeType={trade.type}>{trade.type}</LoanListContent>
+                            <LoanListContent>{trade.count}</LoanListContent>
+                            <LoanListContent>{trade.price}</LoanListContent>
+                        </LoanListBox>
+                    );
+                })}
         </DetailContainer>
     );
 };

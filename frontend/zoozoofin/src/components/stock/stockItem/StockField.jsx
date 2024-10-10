@@ -37,7 +37,7 @@ export const StockFieldList = {
         IT: 'IT',
         House: '리츠',
         Bio: '바이오',
-        China: '중국',
+        China: '판다시티',
         Construction: '기계/건설',
         Bank: '금융',
     },
@@ -146,6 +146,9 @@ const StockField = ({ field, type, onFieldSelect }) => {
     const [activeIndex, setActiveIndex] = useState(null); // 활성화된 필드의 인덱스를 관리
     const [fieldCount, setFieldCount] = useState(8);
 
+    // 해외 환율 반영 예정
+    const ExchangeRate = 1350;
+
     const { myDomesticStocks, myOverseasStocks, myETFStocks } = useUserStockStore();
     // 데이터 로드 함수
     const loadItems = () => {
@@ -161,7 +164,12 @@ const StockField = ({ field, type, onFieldSelect }) => {
             if (field === 'domestic') {
                 nowItems = myDomesticStocks.holdingsList.map((item) => item.stockField);
             } else if (field === 'overseas') {
-                nowItems = myOverseasStocks.holdingsList.map((item) => item.stockField);
+                if (myOverseasStocks.length > 0) {
+                    // console.log(myOverseasStocks);
+                    nowItems = myOverseasStocks.holdingsList.map((item) => item.stockField);
+                } else {
+                    nowItems = [];
+                }
             } else if (field === 'ETF') {
                 nowItems = myETFStocks.holdingsList.map((item) => item.stockField);
             }
@@ -211,14 +219,14 @@ const StockField = ({ field, type, onFieldSelect }) => {
 
     return (
         <FieldContainer>
-            <ExchangeRatebox field={type}>
+            <ExchangeRatebox field={field}>
                 <TextContainer>
                     <TextStyle type="list">오늘의 환율</TextStyle>
                 </TextContainer>
                 {/* 환율 금액 업데이트 예정 */}
                 <PriceContainer>
                     <TextStyle type="content" size="large">
-                        1342.25
+                        {ExchangeRate}
                     </TextStyle>
                     <TextStyle size="small" now="up">
                         00.0%

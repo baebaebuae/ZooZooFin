@@ -13,7 +13,7 @@ import { ExplainModal } from '@components/stock/stockItem/StockModal';
 
 import useStockStore from '@components/stock/common/store/StockStore';
 
-export const StockOverview = () => {
+export const StockOverview = ({ channel }) => {
     const [stockDetail, setStockDetail] = useState({});
     const { clickedStockDetail } = useStockStore();
     const [stockInfo, setStockInfo] = useState({
@@ -58,25 +58,43 @@ export const StockOverview = () => {
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
-    return (
-        <>
-            {isModalOpen && <ExplainModal list={nowList} onClose={handleCloseModal} />}
 
-            <StockDetailCard>
-                <Title quarter={stockDetail.period ? stockDetail.period : 0} />
-                {Object.entries(stockInfo).map(([list, item]) => (
-                    <OverviewList key={list} list={list} item={item} onClick={handleModal} />
-                ))}
-            </StockDetailCard>
-            <StockDetailCard>
-                <CardTitle>
-                    <LargeIcon icon={IconGraph} />
-                    <GraphTitle onClick={handleModal} />
-                </CardTitle>
-                <MovingAverage />
-            </StockDetailCard>
-        </>
-    );
+    if (channel === 'ETF') {
+        return (
+            <>
+                {isModalOpen && <ExplainModal list={nowList} onClose={handleCloseModal} />}
+
+                <StockDetailCard>ETF 주식 차트 생성중 . . .</StockDetailCard>
+                <StockDetailCard>
+                    <CardTitle>
+                        <LargeIcon icon={IconGraph} />
+                        <GraphTitle onClick={handleModal} />
+                    </CardTitle>
+                    <MovingAverage />
+                </StockDetailCard>
+            </>
+        );
+    } else {
+        return (
+            <>
+                {isModalOpen && <ExplainModal list={nowList} onClose={handleCloseModal} />}
+
+                <StockDetailCard>
+                    <Title quarter={stockDetail.period ? stockDetail.period : 0} />
+                    {Object.entries(stockInfo).map(([list, item]) => (
+                        <OverviewList key={list} list={list} item={item} onClick={handleModal} />
+                    ))}
+                </StockDetailCard>
+                <StockDetailCard>
+                    <CardTitle>
+                        <LargeIcon icon={IconGraph} />
+                        <GraphTitle onClick={handleModal} />
+                    </CardTitle>
+                    <MovingAverage />
+                </StockDetailCard>
+            </>
+        );
+    }
 };
 
 export default StockOverview;

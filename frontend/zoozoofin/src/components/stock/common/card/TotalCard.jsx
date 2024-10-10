@@ -60,7 +60,7 @@ export const TotalCard = ({ type }) => {
         if (clickedStockId) {
             // 현재 턴을 기준으로 가져올 예정
             const pricecharts = clickedStockInfo.chart;
-            const stockPrice = pricecharts ? pricecharts[pricecharts.length - 1]['endPrice'] : 0;
+            const stockPrice = pricecharts ? pricecharts[pricecharts.length - 1]['price'] : 0;
             setNowPrice(stockPrice);
             const stockRate = pricecharts ? pricecharts[pricecharts.length - 1]['rate'] : 0;
             setNowRate(stockRate);
@@ -78,7 +78,7 @@ export const TotalCard = ({ type }) => {
             <RowContainerBox>
                 <TextStyle>{value}할 주</TextStyle>
                 <TextStyle type="content" size="large">
-                    {totalStock} 주
+                    {totalStock ? totalStock.toLocaleString() : 0} 주
                 </TextStyle>
             </RowContainerBox>
             <RowContainerBox>

@@ -50,7 +50,8 @@ export const StockGraph = ({ onClickDetail, onClickHint }) => {
     // 현재 turn의 주식 정보 가져오기
     useEffect(() => {
         if (turn && clickedStockInfo['chart']) {
-            const nowTurn = turn + 25;
+            // 주식 차트 인덱스 설정
+            const nowTurn = turn + 24;
             // console.log(clickedStockInfo['chart']);
             setStockInfo(clickedStockInfo['chart'][nowTurn]);
         }
@@ -77,7 +78,7 @@ export const StockGraph = ({ onClickDetail, onClickHint }) => {
                 <InfoColumn
                     product={clickedStockInfo.stockName}
                     stockRate={stockInfo ? stockInfo['rate'] : 0}
-                    stockPrice={stockInfo['endPrice']}
+                    stockPrice={stockInfo ? stockInfo['price'] : 0}
                 />
                 <PlusButton onClick={handleToggle}> {!isExpanded ? '+' : '-'}</PlusButton>
             </StockDetailRow>

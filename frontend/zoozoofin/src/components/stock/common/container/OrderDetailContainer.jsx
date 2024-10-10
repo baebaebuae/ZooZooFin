@@ -25,7 +25,7 @@ const TextStyle = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-    align-items: center;
+    align-items: ${({ type }) => (type === 'content' ? 'flex-end' : 'center')};
     gap: 3px;
     padding: 2px 0px;
     height: 25px;

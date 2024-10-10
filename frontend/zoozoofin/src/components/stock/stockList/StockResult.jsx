@@ -37,31 +37,28 @@ const postStock = async (type, stockId, stockCount, onComplete) => {
 };
 
 export const StockResult = ({ onComplete, type }) => {
-    const [value, setValue] = useState(null);
+    const [value, setValue] = useState('');
     const { totalStock, clickedStockId } = useStockStore();
-
-    useEffect(
-        (type) => {
-            if (type === 'buy') {
-                setValue('구매');
-            } else if (type === 'sell') {
-                setValue('판매');
-            }
-        },
-        [type]
-    );
+    useEffect(() => {
+        if (type === 'buy') {
+            setValue('구매');
+        } else if (type === 'sell') {
+            setValue('판매');
+        }
+    }, [type]);
 
     const handleOnClick = () => {
         if (clickedStockId && totalStock) {
             postStock(type, clickedStockId, totalStock, onComplete);
         }
     };
+    console.log(value);
 
     return (
         <StoreWrapper>
             <ChannelMessage>
                 <MessageIcon />
-                {value} 완료했어 개굴!
+                {value ? value : ''} 완료했어 개굴!
             </ChannelMessage>
             <TotalCard type={type} />
             <ActiveButton size={'large'} onClick={handleOnClick}>

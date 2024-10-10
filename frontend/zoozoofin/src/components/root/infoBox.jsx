@@ -1,5 +1,6 @@
 // 주의사항 확인, 대출 가능/불가능 등 정보 알려주는 박스
 import styled from 'styled-components';
+import { useAnimalStore } from '../../store';
 
 const InfoBoxBlock = styled.div`
     display: flex;
@@ -39,7 +40,8 @@ export const InfoBox = ({ color, infoContent }) => {
 };
 
 export const LaptopInfoBox = ({ color, infoTitle, infoContent }) => {
-    const userName = '토토';
+    const { nowAnimal } = useAnimalStore();
+    const userName = nowAnimal.animalName;
 
     return (
         <>
