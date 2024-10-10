@@ -41,7 +41,14 @@ const TextStyle = styled.div`
 `;
 
 export const TotalCard = ({ type }) => {
-    const { totalStock, totalPrice, clickedStockId, clickedStockInfo } = useStockStore();
+    const {
+        totalStock,
+        totalPrice,
+        clickedStockId,
+        clickedStockInfo,
+        clickedNowPrice,
+        clickedStockRate,
+    } = useStockStore();
     const [nowStock, setNowStock] = useState(null);
     const [nowPrice, setNowPrice] = useState(null);
     const [nowRate, setNowRate] = useState(null);
@@ -59,10 +66,9 @@ export const TotalCard = ({ type }) => {
     useEffect(() => {
         if (clickedStockId) {
             // 현재 턴을 기준으로 가져올 예정
-            const pricecharts = clickedStockInfo.chart;
-            const stockPrice = pricecharts ? pricecharts[pricecharts.length - 1]['price'] : 0;
+            const stockPrice = clickedNowPrice ? clickedNowPrice : 0;
             setNowPrice(stockPrice);
-            const stockRate = pricecharts ? pricecharts[pricecharts.length - 1]['rate'] : 0;
+            const stockRate = clickedStockRate ? clickedStockRate : 0;
             setNowRate(stockRate);
         }
     });

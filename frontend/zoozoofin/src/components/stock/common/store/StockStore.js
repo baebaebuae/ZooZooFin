@@ -13,6 +13,8 @@ const useStockStore = create((set) => ({
     domesticStocks: [],
     overseasStocks: [],
     ETFStocks: [],
+    nowExchange: 0,
+    nowExchangeRate: 0,
 
     fetchStocklist: async ({ turn }) => {
         try {
@@ -35,6 +37,9 @@ const useStockStore = create((set) => ({
             // 해외 주식 업데이트 (turn >= 5일 때만)
             if (overseaResponse) {
                 set({ overseasStocks: overseaResponse.data.body.stockDetails });
+                console.log(overseaResponse.data.body);
+                set({ nowExchange: overseaResponse.data.body.exchange });
+                set({ nowExchangeRate: overseaResponse.data.body.exchangeRate });
             }
 
             // ETF 주식 업데이트 (turn >= 10일 때만)
@@ -50,11 +55,18 @@ const useStockStore = create((set) => ({
 
     // 상세 정보 조회를 위한 선택된 stockId, stockRate 저장
     clickedStockId: null,
+    clickedNowPrice: 0,
+    clickedStockRate: 0,
+
     clickedStockInfo: {},
     clickedStockDetail: {},
     clickedStockCharts: [],
+
     setClickedStockId: (stockid) => set({ clickedStockId: stockid }),
+    setClickedNowPrice: (stockPrice) => set({ clickedNowPrice: stockPrice }),
     setClickedStockCharts: (charts) => set({ clickedStockCharts: charts }),
+    setClickedStockRate: (rate) => set({ clickedStockRate: rate }),
+
     // fetchStockInfo
     fetchStockInfo: async (stockId) => {
         try {
@@ -67,15 +79,26 @@ const useStockStore = create((set) => ({
         }
     },
 
-    fetchStockDetail: async (stockId) => {
-        try {
-            const apiClient = getApiClient();
-            console.log(stockId);
-            const response = await apiClient.get(`/stock/statements/${stockId}`);
-            // console.log(response);
-            set({ clickedStockDetail: response.data.body });
-        } catch (error) {
-            console.error(`Failed to fetch stock detail for stockId: ${stockId}`, error);
+    fetchStockDetail: async (channel, stockId) => {
+        if (channel === 'ETF') {
+            try {
+                const apiClient = getApiClient();
+                const response = await apiClient.get(`/stock/creation/${stockId}`);
+                console.log(response);
+                set({ clickedStockDetail: response.data.body });
+            } catch (error) {
+                console.error(`Failed to fetch stock detail for stockId: ${stockId}`, error);
+            }
+        } else {
+            try {
+                const apiClient = getApiClient();
+                console.log(stockId);
+                const response = await apiClient.get(`/stock/statements/${stockId}`);
+                // console.log(response);
+                set({ clickedStockDetail: response.data.body });
+            } catch (error) {
+                console.error(`Failed to fetch stock detail for stockId: ${stockId}`, error);
+            }
         }
     },
 

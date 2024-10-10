@@ -37,13 +37,12 @@ export const useAnimalStore = create((set) => ({
     getAnimalData: async () => {
         try {
             const apiClient = getApiClient();
-            const res = await apiClient.get('/member/animal');
+            const res = await apiClient.get('/animal/info');
             if (res.status === 200) {
-                const animals = res.data.body.animals;
+                const animals = res.data.body;
                 console.log(animals);
                 set({
-                    animals: animals,
-                    nowAnimal: animals[animals.length - 1],
+                    nowAnimal: animals,
                 });
                 return animals;
             }

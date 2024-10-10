@@ -7,6 +7,7 @@ import useStockStore, { useUserStockStore } from '../common/store/StockStore';
 
 export const StockProducts = ({ field, onStockSelected, type, channel, handleDetailClick }) => {
     const [open, setOpen] = useState([false, false, false]);
+
     const handleToggle = (index) => {
         const newOpen = [...open];
         newOpen[index] = !newOpen[index];
@@ -27,7 +28,6 @@ export const StockProducts = ({ field, onStockSelected, type, channel, handleDet
             console.log('check channel!!');
             setStockItems(domesticStocks);
             setMyStockItems(myDomesticStocks.holdingsList);
-            console.log(myDomesticStocks);
         } else if (channel === '해외 주식') {
             setStockItems(overseasStocks);
             setMyStockItems(myOverseasStocks.holdingsList);
@@ -55,6 +55,7 @@ export const StockProducts = ({ field, onStockSelected, type, channel, handleDet
                             stockId={item.stockId}
                             stockName={item.stockName}
                             stockRate={item.rate}
+                            stockPrice={item.price}
                             stockIntro={item.stockIntro}
                             isOpen={open[index]}
                             onToggle={() => handleToggle(index)}
@@ -78,6 +79,7 @@ export const StockProducts = ({ field, onStockSelected, type, channel, handleDet
                             key={index}
                             stockId={item.stockId}
                             stockName={item.stockName}
+                            stockPrice={item.stockPrice}
                             stockRate={item.stockRate}
                             stockIntro={item.stockIntro}
                             isOpen={open[index]}

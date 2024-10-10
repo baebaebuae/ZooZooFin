@@ -7,7 +7,7 @@ const GraphWrapper = styled.div`
 `;
 
 export const MovingAverage = () => {
-    const { clickedStockCharts } = useStockStore();
+    const { clickedStockCharts, clickedStockInfo } = useStockStore();
     const [stockData, setStockData] = useState(0);
     const [turns, setTurns] = useState([]);
     const [dataPrices, setdataPrices] = useState([]);
@@ -16,8 +16,11 @@ export const MovingAverage = () => {
     useEffect(() => {
         if (clickedStockCharts) {
             setStockData(clickedStockCharts);
+        } else {
+            console.log(clickedStockInfo);
+            setStockData(clickedStockInfo.chart);
         }
-    }, [clickedStockCharts]);
+    }, [clickedStockCharts, clickedStockInfo]);
 
     // 주식 데이터에서 endPrice만 추출
     useEffect(() => {

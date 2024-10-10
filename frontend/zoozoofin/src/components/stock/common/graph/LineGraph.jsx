@@ -9,7 +9,7 @@ const GraphWrapper = styled.div`
 `;
 
 export const LineGraph = () => {
-    const { clickedStockCharts } = useStockStore();
+    const { clickedStockCharts, clickedStockInfo } = useStockStore();
     // turn 연결 후 그래프 처리하기
 
     const [stockData, setStockData] = useState(0);
@@ -20,8 +20,11 @@ export const LineGraph = () => {
     useEffect(() => {
         if (clickedStockCharts) {
             setStockData(clickedStockCharts);
+        } else {
+            console.log(clickedStockInfo);
+            setStockData(clickedStockInfo.chart);
         }
-    }, [clickedStockCharts]);
+    }, [clickedStockCharts, clickedStockInfo]);
 
     // 주식 데이터에서 endPrice만 추출
     useEffect(() => {
