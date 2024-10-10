@@ -271,6 +271,7 @@ const Portfolio = ({ isOpen, onClose, animalId, animalImage, createdDate }) => {
     totalSavings: 200000,
     totalStock: 100000,
     totalLoan: 0,
+    totalCapital: 0,
     portfolio: {
       depositPercent: 20,
       savingsPercent: 30,
@@ -352,7 +353,7 @@ const Portfolio = ({ isOpen, onClose, animalId, animalImage, createdDate }) => {
           </CreditSection>
           <Section>
             <AssetRow>
-              <AssetLabel>순자산</AssetLabel>
+              <AssetLabel>총자산</AssetLabel>
               <AssetValue bold>{data.totalAmount.toLocaleString()}🥕</AssetValue>
             </AssetRow>
           </Section>

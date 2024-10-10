@@ -275,13 +275,6 @@ QuestionSection.propTypes = {
   isCorrect: PropTypes.bool,
 };
 
-const fallbackData = [
-  { quizId: 1, quizQuestion: '환율이 상승(원화 약세)하면 수출 기업의 이익이 증가할 가능성이 크다.', quizAnswer: 'O', quizType: 'ox' },
-  { quizId: 2, quizQuestion: '골든 크로스는 단기 이동평균선이 장기 이동평균선을 아래에서 위로 돌파할 때 발생하는 신호이다.', quizAnswer: 'O', quizType: 'ox' },
-  { quizId: 3, quizQuestion: 'PBR이 높으면 주가가 회사 자산 대비 고평가되었을 가능성이 있다.', quizAnswer: 'O', quizType: 'ox' },
-  { quizId: 4, quizQuestion: '주가가 하락하다가 반등하는 지점을 나타내는 용어는?', quizAnswer: '지지선', quizType: 'short' },
-  { quizId: 5, quizQuestion: '단기 이동평균선이 장기 이동평균선을 돌파할 때 발생하는 신호는?', quizAnswer: '골든크로스', quizType: 'short' },
-];
 
 const TestPaper = () => {
   const [quizData, setQuizData] = useState([]);
@@ -310,15 +303,13 @@ const TestPaper = () => {
     try {
       const apiClient = getApiClient();
       const response = await apiClient.get('/quiz');
-      
+      console.log("퀴즈");
+      console.log(response.data.body);
       if (response.data && response.data.body && response.data.body.quizzes.length > 0) {
         setQuizData(response.data.body.quizzes);
-      } else {
-        setQuizData(fallbackData);
-      }
+      } 
     } catch (error) {
       console.error('API 호출 실패:', error);
-      setQuizData(fallbackData);
     } finally {
       setIsLoading(false);
     }
@@ -344,9 +335,16 @@ const TestPaper = () => {
         quizId: parseInt(quizId),
         animalAnswer
       }));
+  
+      const requestData = {
+        answerList: answerList
+      };
 
-      const response = await apiClient.post('/quiz/submit', { answerList });
       
+      console.log(requestData);
+      const response = await apiClient.post('/quiz/submit', requestData );
+      console.log("퀴즈 서브밋!");
+      console.log(response);
       if (response.data && response.data.body) {
         setScore(response.data.body.score);
         setCorrectAnswers(response.data.body.correctAnswers);
@@ -356,8 +354,7 @@ const TestPaper = () => {
       }
     } catch (error) {
       console.error('Failed to submit quiz:', error);
-      // You might want to show an error message to the user here
-    } finally {
+     } finally {
       setIsLoading(false);
     }
   };
@@ -387,27 +384,25 @@ const TestPaper = () => {
         <QuestionGroup side="left">
           {leftQuestions.map((question, index) => (
             <QuestionSection 
-              key={question.quizId} 
-              question={question} 
-              index={index + 1}
-              onAnswerChange={handleAnswerChange}
-              userAnswer={userAnswers[question.quizId]}
-              isSubmitted={isSubmitted}
-              isCorrect={correctAnswers[question.quizId]}
-            />
+            key={question?.quizId || index} 
+            question={question || {}}       
+            index={index + 1}
+            onAnswerChange={handleAnswerChange}
+            userAnswer={userAnswers[question?.quizId] || ''} 
+            isSubmitted={isSubmitted}
+          />
           ))}
         </QuestionGroup>
         <QuestionGroup side="right">
           {rightQuestions.map((question, index) => (
             <QuestionSection 
-              key={question.quizId} 
-              question={question}
-              index={index + leftQuestions.length + 1}
-              onAnswerChange={handleAnswerChange}
-              userAnswer={userAnswers[question.quizId]}
-              isSubmitted={isSubmitted}
-              isCorrect={correctAnswers[question.quizId]}
-            />
+            key={question?.quizId || index}  
+            question={question || {}}       
+            index={index + 1}
+            onAnswerChange={handleAnswerChange}
+            userAnswer={userAnswers[question?.quizId] || ''} 
+            isSubmitted={isSubmitted}
+          />
           ))}
         </QuestionGroup>
       </QuestionsContainer>
