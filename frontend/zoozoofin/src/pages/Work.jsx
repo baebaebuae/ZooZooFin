@@ -1,14 +1,15 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import GameButton from '@components/work/GameButton.jsx';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import GameDescription from '@components/work/GameDescription';
+import { getApiClient } from '@/stores/apiClient';
 
 const ButtonContainer = styled.div`
     display: flex;
-    height: 550px;
     width: 100%;
-    /* border: 1px solid black; */
+    height: 640px;
+    border: 1px solid black;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -16,21 +17,50 @@ const ButtonContainer = styled.div`
 `;
 const Work = () => {
     const [openModal, setOpenModal] = useState(false)
+    const [isWorkToday, setIsWorkToday] = useState()
+    const [status, setStatus] = useState()
     const navigate = useNavigate();
+
     const handleGameStart = () => {
-        console.log('test')
-        navigate('./inGame')
+        // 게임을 완료한 경우
+        if (isWorkToday){
+            setStatus("warning")
+            setOpenModal(true)
+        } else {
+            navigate('./inGame')
+        }
     };
     const handleGameDescription = () => {
-        console.log('modal')
         setOpenModal(true)
     }
     const handleGameExit = () => {
     navigate('/map')
     }
+
+    useEffect(() => {
+        console.log('useEffect 실행', isWorkToday)
+        const fetchGameState = async() => {
+            const apiClient = getApiClient();
+            try {
+                const res = await apiClient.get('/animal/info')
+                if (res && res.status === 200) {
+                    setIsWorkToday(res.data.body.isWorkToday);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        if (!isWorkToday || isWorkToday.length == 0){
+            fetchGameState();
+        }
+    }, [isWorkToday])
+
     return (
         <>
-        {openModal && <GameDescription setOpenModal={setOpenModal}/>}
+        {openModal && <GameDescription 
+            setOpenModal={setOpenModal}
+            status={status}
+        />}
             <ButtonContainer>
                 <GameButton
                     emoji="🥕"

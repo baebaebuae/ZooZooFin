@@ -36,8 +36,6 @@ const GameOverModal = ({ score }) => {
                 paidAmount: score,
             });
             if (res && res.status === 200) {
-                console.log('PATCH 요청 성공:', res.data);
-                // 지도로 이동하기
                 navigate('/map');
             }
         } catch (error) {
