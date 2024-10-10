@@ -132,6 +132,22 @@ const MyRoom = () => {
         return () => clearTimeout(timer);
     }, []);
 
+    const [isLoading, setIsLoading] = useState(true);
+
+    // 입장 시 로딩 페이지
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 1000);
+
+        return () => clearTimeout(timer);
+    }, []);
+
+    // 로딩 중일 때 Loader 컴포넌트 렌더링
+    if (isLoading) {
+        return <Loader loadingText={'내 방으로 입장하는 중...'} />;
+    }
+
     return (
         <>
             <RoomBlock>

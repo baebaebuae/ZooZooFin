@@ -7,6 +7,8 @@ import * as THREE from 'three';
 
 import { Bill } from '@components/Bill';
 
+import { Loader } from '@components/Loader';
+
 const BillContainer = styled.div`
     display: flex;
     justify-content: center;
@@ -151,8 +153,24 @@ const CanvasBoard = styled.div`
 //     '/environmentMaps/0/nz.png',
 // ]);
 
-const Sinijini = () => {
+const Map = () => {
     const [isPostboxClicked, setIsPostboxClicked] = useState(false);
+
+    const [isLoading, setIsLoading] = useState(true);
+
+    // 입장 시 로딩 페이지
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 1000);
+
+        return () => clearTimeout(timer);
+    }, []);
+
+    // 로딩 중일 때 Loader 컴포넌트 렌더링
+    if (isLoading) {
+        return <Loader loadingText={'지도로 입장하는 중...'} />;
+    }
 
     return (
         <>
@@ -190,4 +208,4 @@ const Sinijini = () => {
     );
 };
 
-export default Sinijini;
+export default Map;
