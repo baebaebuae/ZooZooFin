@@ -250,15 +250,15 @@ const Ending = () => {
 
     // happy, bad에 따라, 레벨에 따라 보상 차등 지급
 
-    // 기본 100만원 x ?%
+    // 기본 100만원 + ?%
     const benefits = {
-        당근: 0, // 1000000 당근
-        '당근 알바생': 1, // 1010000 당근
-        '당근 매니저': 5, // 1050000 당근
-        '당근 부장': 200, // 2000000 당근
-        '당근 전무': 600, // 6000000 당근
-        '당근 사장': 800, // 8000000 당근
-        '당근 투자왕': 1000, // 10000000 당근
+        '가난한 당근': 1, // 1000000 당근
+        '당근 알바생': 1.01, // 1010000 당근
+        '당근 매니저': 1.05, // 1050000 당근
+        '당근 부장': 2, // 2000000 당근
+        '당근 전무': 6, // 6000000 당근
+        '당근 사장': 8, // 8000000 당근
+        '당근 투자왕': 10, // 11000000 당근
         '계급 없음': 0,
     };
 
@@ -300,16 +300,26 @@ const Ending = () => {
                                 {receivedEndingType === 'A001' ? ' 보상' : ' 패널티'}
                             </NextGameInfoBoxTitle>
                             <NextGameInfoBoxInside>
-                                <NextGameInfoBoxInsideTitle>초기 자본</NextGameInfoBoxInsideTitle>
-                                <NextGameInfoBoxInsideValue>
-                                    {receivedEndingType === 'A001' ? ' x ' : ' x -'}
-                                    {receivedEndingType === 'A001'
-                                        ? benefits[charFinalLevel]
-                                            ? `${benefits[charFinalLevel]}`
-                                            : 0
-                                        : `${penalties[0]}`}
-                                    %
-                                </NextGameInfoBoxInsideValue>
+                                {charFinalLevel === '가난한 당근' ||
+                                charFinalLevel === '계급 없음' ? (
+                                    <NextGameInfoBoxInsideTitle>
+                                        보상 없음
+                                    </NextGameInfoBoxInsideTitle>
+                                ) : (
+                                    <>
+                                        <NextGameInfoBoxInsideTitle>
+                                            초기 자본
+                                        </NextGameInfoBoxInsideTitle>
+                                        <NextGameInfoBoxInsideValue>
+                                            {receivedEndingType === 'A001' ? ' x ' : ' x -'}
+                                            {receivedEndingType === 'A001'
+                                                ? benefits[charFinalLevel]
+                                                    ? benefits[charFinalLevel]
+                                                    : 0
+                                                : penalties[0]}
+                                        </NextGameInfoBoxInsideValue>
+                                    </>
+                                )}
                             </NextGameInfoBoxInside>
                         </NextGameInfoBox>
                         <img src={CharRabbit} width={120} />
