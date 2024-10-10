@@ -157,15 +157,15 @@ const endGame = async (animalId, endingType) => {
     console.log('animalId:', animalId);
     console.log('endingType:', endingType);
 
+
     const productData = {
         endingType: endingType,
     };
 
     try {
         console.log('Sending POST request to /ending');
-        const res = await apiClient.post('ending', productData, {
-            headers: { animalId: animalId },
-        });
+        console.log(productData);
+        const res = await apiClient.post('ending', productData);
 
         console.log('Response received:', res);
         if (res.status === 200) {
