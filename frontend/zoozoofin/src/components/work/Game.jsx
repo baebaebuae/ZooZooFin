@@ -7,6 +7,7 @@ const Container = styled.div`
     display: flex;
     position: absolute;
     top: 30px;
+    z-index: 1000000;
 `;
 const Device = styled.img`
     width: 350px;

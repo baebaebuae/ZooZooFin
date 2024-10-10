@@ -4,15 +4,23 @@ import Loading from '@assets/images/background/loading.png';
 
 import LoadingPuppy from '@assets/images/characters/loadingPuppy.png';
 
+const Block = styled.div`
+    /* position: relative; */
+`;
+
 const Background = styled.div`
-    width: 360px;
+    /* width: 360px; */
+    /* height: 640px; */
+    width: 100%;
+    /* height: 100%; */
     height: 640px;
     background-image: url(${(props) => props.backgroundimage});
     background-size: cover;
     z-index: -1;
-    position: fixed;
-    top: 0;
-    left: 0;
+    /* position: fixed; */
+    /* top: 0; */
+    /* left: 0; */
+    position: absolute;
 `;
 
 const LoadingContainer = styled.div`
@@ -41,7 +49,7 @@ const LoadingText = styled.div`
 
 export const Loader = ({ loadingText }) => {
     return (
-        <>
+        <Block>
             <Background backgroundimage={Loading} />
             {/* <Background backgroundimage={Loadingtest2} /> */}
 
@@ -49,6 +57,6 @@ export const Loader = ({ loadingText }) => {
                 <img src={LoadingPuppy} alt="Loading Puppy" />
                 <LoadingText>{loadingText}</LoadingText>
             </LoadingContainer>
-        </>
+        </Block>
     );
 };

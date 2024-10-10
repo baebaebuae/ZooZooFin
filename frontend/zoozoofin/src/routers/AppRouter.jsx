@@ -37,13 +37,21 @@ import capitalMusic from '@assets/music/lender.mp3';
 
 import { useMusicStore } from '@stores/useMusicStore.js';
 
+const Block = styled.div`
+    width: 100%;
+    height: 100%;
+    position: relative;
+    /* background-color: red; */
+`;
+
 const Background = styled.div`
     width: 360px;
     height: 640px;
+
     background-image: url(${(props) => props.backgroundimage});
     background-size: cover;
-    z-index: -1;
-    position: fixed;
+    z-index: 2;
+    position: absolute;
     top: 0;
     left: 0;
 `;
@@ -125,7 +133,7 @@ const AppRouter = () => {
     }, [location.pathname, isMusicOn, currentMusic]);
 
     return (
-        <>
+        <Block>
             <Background backgroundimage={backgroundimage} />
 
             {/* pathname에 따라 음악 바뀌도록 설정 */}
@@ -166,7 +174,7 @@ const AppRouter = () => {
                 {/* social login */}
                 <Route path="/callback" element={<Auth />} />
             </Routes>
-        </>
+        </Block>
     );
 };
 export default AppRouter;

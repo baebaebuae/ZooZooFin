@@ -154,6 +154,9 @@ export const HeaderHamburgerButton = () => {
                 MenuListProps={{
                     'aria-labelledby': 'basic-button',
                 }}
+                sx={{
+                    zIndex: 300000,
+                }}
             >
                 {/* UI 구현 예정 */}
                 <MenuItem onClick={handleCharacterHistoryClick}>

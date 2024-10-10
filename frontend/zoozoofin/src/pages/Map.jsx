@@ -9,17 +9,24 @@ import { Bill } from '@components/Bill';
 
 import { Loader } from '@components/Loader';
 
-const BillContainer = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
+const Container = styled.div`
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
+    position: absolute;
+    /* z-index: -1; */
+    z-index: 3000;
+    /* pointer-events: auto; */
 `;
 
+const CanvasBoard = styled.div`
+    width: 360px;
+    height: 640px;
+    /* position: fixed;
+    top: 0;
+    left: 0; */
+    /* position: absolute; */
+    z-index: 4000;
+`;
 // Environment 설정
 // https://drei.docs.pmnd.rs/staging/environment
 
@@ -135,14 +142,6 @@ const MapSample = ({ setIsPostboxClicked }) => {
     // mousedown은 element만
 };
 
-const CanvasBoard = styled.div`
-    width: 360px;
-    height: 640px;
-    position: fixed;
-    top: 0;
-    left: 0;
-`;
-
 // const cubeTextureLoader = new THREE.CubeTextureLoader();
 // const environmentMap = cubeTextureLoader.load([
 //     '/environmentMaps/0/px.png',
@@ -178,7 +177,7 @@ const Map = () => {
             <CanvasBoard>
                 <Canvas
                     shadows
-                    camera={{ fov: 40, position: [4, 5.3, 4.9] }}
+                    camera={{ fov: 45, position: [5, 4.3, 4.9] }}
                     style={{ background: 'none' }}
                 >
                     <ambientLight color={'#EBF4F0'} intensity={3} />

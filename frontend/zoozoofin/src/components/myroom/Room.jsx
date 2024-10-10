@@ -15,7 +15,7 @@ const ModelWrapper = styled.div`
     width: 360px;
     height: 640px;
     /* z-index: -1; */
-    z-index: 1;
+    z-index: 4000;
     position: fixed;
     top: 0;
 `;

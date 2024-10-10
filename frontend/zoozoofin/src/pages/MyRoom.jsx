@@ -149,26 +149,24 @@ const MyRoom = () => {
     }
 
     return (
-        <>
-            <RoomBlock>
-                {bankruptState.isDetected && !bankruptState.isShown && (
-                    <BankruptNotice
-                        checkBill={() => {
-                            updateBankruptState('isShown', true);
-                        }}
-                    />
-                )}
-                {billState.isDetected && !billState.isShown && (
-                    <Bill
-                        // Bill에서는 store data 가져다가 쓰는거임
-                        checkBill={() => {
-                            updateBillState('isShown', true);
-                        }}
-                    />
-                )}
-                <RoomComponent />
-            </RoomBlock>
-        </>
+        <RoomBlock>
+            {bankruptState.isDetected && !bankruptState.isShown && (
+                <BankruptNotice
+                    checkBill={() => {
+                        updateBankruptState('isShown', true);
+                    }}
+                />
+            )}
+            {billState.isDetected && !billState.isShown && (
+                <Bill
+                    // Bill에서는 store data 가져다가 쓰는거임
+                    checkBill={() => {
+                        updateBillState('isShown', true);
+                    }}
+                />
+            )}
+            <RoomComponent />
+        </RoomBlock>
     );
 };
 
