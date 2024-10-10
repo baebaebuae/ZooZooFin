@@ -93,5 +93,7 @@ public class EndingServiceImpl implements EndingService {
                 .portfolioInvestStyle(investStyle.getInvestStyle())
                 .portfolioScore(score)
                 .build());
+
+        animal.setIsEnd(true);
     }
 }

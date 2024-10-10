@@ -5,7 +5,9 @@ import lombok.Builder;
 import java.util.List;
 
 @Builder
-public record StockListResponse(List<StockDetails> stockDetails) {
+public record StockListResponse(Long exchange,
+                                Double exchangeRate,
+                                List<StockDetails> stockDetails) {
 
     @Builder
     public record StockDetails(Long stockId,
@@ -13,6 +15,7 @@ public record StockListResponse(List<StockDetails> stockDetails) {
                                String stockField,
                                String stockIntro,
                                String stockImage,
-                               Double rate) {
+                               Double rate,
+                               Long price) {
     }
 }
