@@ -5,6 +5,7 @@ import com.zzf.backend.domain.animal.repository.AnimalRepository;
 import com.zzf.backend.domain.animal.status.HierarchyStatus;
 import com.zzf.backend.domain.member.dto.MyAnimalResponse;
 import com.zzf.backend.domain.member.dto.ProfileResponse;
+import com.zzf.backend.domain.member.dto.StartInfoResponse;
 import com.zzf.backend.global.auth.entity.Member;
 import com.zzf.backend.global.auth.repository.MemberRepository;
 import com.zzf.backend.global.auth.security.CustomOAuth2User;
@@ -53,6 +54,17 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findByProviderNameAndProviderId(provider, providerId)
                 .map(Member::getUsername)
                 .orElseGet(UUID.randomUUID()::toString);
+    }
+
+    @Override
+    public StartInfoResponse getStartInfo(String memberId) {
+        Member member = memberRepository.findByUsername(memberId)
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND_EXCEPTION));
+
+        return StartInfoResponse.builder()
+                .isStarted(animalRepository.existsByMember(member))
+                .isActivated(animalRepository.existsByMemberAndIsEndFalse(member))
+                .build();
     }
 
     @Override

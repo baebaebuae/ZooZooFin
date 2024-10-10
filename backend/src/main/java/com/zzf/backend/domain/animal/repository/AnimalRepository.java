@@ -10,6 +10,8 @@ import java.util.Optional;
 
 @Repository
 public interface AnimalRepository extends JpaRepository<Animal, Long> {
+    boolean existsByMember(Member member);
+
     boolean existsByMemberAndIsEndFalse(Member member);
 
     List<Animal> findAllByMemberAndIsEndTrue(Member member);

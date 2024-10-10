@@ -2,6 +2,7 @@ package com.zzf.backend.global.auth.service;
 
 import com.zzf.backend.domain.member.dto.MyAnimalResponse;
 import com.zzf.backend.domain.member.dto.ProfileResponse;
+import com.zzf.backend.domain.member.dto.StartInfoResponse;
 import com.zzf.backend.global.auth.entity.Member;
 import com.zzf.backend.global.auth.security.CustomOAuth2User;
 import com.zzf.backend.global.auth.security.OAuth2Provider;
@@ -14,6 +15,8 @@ public interface MemberService {
     Optional<Member> getIdByUsername(String username);
 
     String getUsernameOrUUID(OAuth2Provider provider, String providerId);
+
+    StartInfoResponse getStartInfo(String memberId);
 
     ProfileResponse getProfile(String memberId);
 
