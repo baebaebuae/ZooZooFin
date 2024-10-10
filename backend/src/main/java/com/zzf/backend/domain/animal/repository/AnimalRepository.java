@@ -14,7 +14,7 @@ public interface AnimalRepository extends JpaRepository<Animal, Long> {
 
     boolean existsByMemberAndIsEndFalse(Member member);
 
-    List<Animal> findAllByMemberAndIsEndTrue(Member member);
+    List<Animal> findAllByMemberAndIsEndTrueOrderByAnimalIdDesc(Member member);
 
     Optional<Animal> findByMemberAndIsEndFalse(Member member);
 }

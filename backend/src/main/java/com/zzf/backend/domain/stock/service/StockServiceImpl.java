@@ -271,6 +271,18 @@ public class StockServiceImpl implements StockService {
             throw new CustomException(CREATION_UNIT_NOT_FOUND_EXCEPTION);
         }
 
+        if (creationUnitList.size() > 10) {
+            double sum = 0;
+            for (int i = 0; i < 10; i++) {
+                sum += creationUnitList.get(i).getElemPercentage();
+            }
+            creationUnitList = creationUnitList.subList(0, 10);
+            creationUnitList.add(CreationUnit.builder()
+                    .elemName("기타")
+                    .elemPercentage(sum)
+                    .build());
+        }
+
         return CreationUnitResponse.builder()
                 .elements(creationUnitList.stream()
                         .map(cu -> CreationUnitResponse.Element.builder()
@@ -279,7 +291,7 @@ public class StockServiceImpl implements StockService {
                                 .build())
                         .collect(Collectors.toList()))
                 .chartDetail(chartList.stream()
-                        .map(StockDetailResponse::getChartDetail)
+                        .map(CreationUnitResponse::getChartDetail)
                         .collect(Collectors.toList()))
                 .build();
     }

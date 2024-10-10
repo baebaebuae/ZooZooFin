@@ -87,12 +87,29 @@ public class AnimalServiceImpl implements AnimalService {
             throw new CustomException(ANIMAL_ALREADY_EXIST);
         }
 
+        List<Animal> animalHistory = animalRepository.findAllByMemberAndIsEndTrueOrderByAnimalIdDesc(member);
+
+        long totalAssets;
+        if (animalHistory.isEmpty()) {
+            totalAssets = 1000000;
+        } else {
+            totalAssets = switch (animalHistory.getFirst().getHierarchy()) {
+                case "당근 투자왕" -> 11000000;
+                case "당근 사장" -> 8000000;
+                case "당근 전무" -> 6000000;
+                case "당근 부장" -> 2000000;
+                case "당근 매니저" -> 1050000;
+                case "당근 알바생" -> 1010000;
+                default -> 1000000;
+            };
+        }
+
         Animal animal = animalRepository.save(Animal.builder()
                 .member(member)
                 .animalType(animalType)
                 .name(animalCreateRequest.getAnimalName())
                 .turn(1L)
-                .assets(1000000L)
+                .assets(totalAssets)
                 .credit(5L)
                 .hierarchy(HierarchyStatus.PART_TIME.getHierarchyName())
                 .isWorked(false)

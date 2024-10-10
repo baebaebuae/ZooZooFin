@@ -5,7 +5,7 @@ import com.zzf.backend.domain.script.document.Script;
 import java.util.List;
 
 public interface ScriptService {
-    List<Script> findAllScripts();
+    List<Script> findTutorialScript();
 
     List<Script> findScriptByCategory(Long animalId, String category);
 }
