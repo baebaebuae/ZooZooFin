@@ -7,6 +7,18 @@ import { Button } from '@components/root/buttons';
 
 import { getApiClient } from '@stores/apiClient';
 
+// 캐릭터 이미지 import
+import AnimalType1Image from '@/assets/images/history/1.png';
+import AnimalType2Image from '@/assets/images/history/2.png';
+import AnimalType3Image from '@/assets/images/history/3.png';
+
+// 이미지 생성
+const animalImages = {
+    1: AnimalType1Image,
+    2: AnimalType2Image,
+    3: AnimalType3Image,
+};
+
 const Block = styled.div`
     width: 100%;
     display: flex;
@@ -28,9 +40,15 @@ const TitleMessage = styled.div`
 `;
 
 const AnimalBlock = styled.div`
+    display: flex;
     overflow-x: auto;
     // 여러 캐릭터 들어온 후 가로 스크롤 설정 확인(width 값 조심 !!)
     margin: 20px 0;
+`;
+
+const CharacterImage = styled.img`
+    width: 150px;
+    height: 150px;
 `;
 
 const AnimalCard = styled.div`
@@ -79,6 +97,17 @@ const AnimalInfoSpecial = styled.div`
     display: flex;
     align-items: center;
     gap: 8px;
+`;
+
+const InactiveOverlay = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 28px;
+    z-index: 10;
 `;
 
 const AnimalInfoSpecialContent = styled(AnimalInfoCondition)`
@@ -142,7 +171,6 @@ const CreateAnimal = () => {
                 {/* 받아온 animals 없을 때 에러 처리 */}
                 {animals &&
                     animals.map((animal, index) => {
-                        4;
                         return (
                             <AnimalCard
                                 key={index}
@@ -150,16 +178,25 @@ const CreateAnimal = () => {
                                 $isSelected={animal.animalTypeId === selectedAnimal?.animalTypeId}
                                 onClick={() => handleClick(animal)}
                             >
+                                {animal.animalTypeId === 2 && (
+                                    <InactiveOverlay>Inactive</InactiveOverlay>
+                                )}
                                 <AnimalPhoto>
                                     {/* <Rabbit width={150} height={150} /> */}
-                                    <img src={Rabbit} />
+                                    {/* <img src={Rabbit} /> */}
+                                    <CharacterImage
+                                        src={animalImages[animal.animalTypeId]}
+                                        alt={animal.animalName}
+                                    />
                                 </AnimalPhoto>
 
                                 <AnimalInfoBox>
                                     <AnimalInfoName>{animal.animalTypeName}</AnimalInfoName>
                                     <AnimalInfoCondition>캐릭터 우대사항</AnimalInfoCondition>
                                     <AnimalInfoSpecial>
-                                        <AnimalInfoSpecialContent>없음</AnimalInfoSpecialContent>
+                                        <AnimalInfoSpecialContent>
+                                            {animal.animalAbility}
+                                        </AnimalInfoSpecialContent>
                                         {/* <AnimalInfoSpecialNum>
                                             +{animal.animalAbility}%
                                         </AnimalInfoSpecialNum> */}

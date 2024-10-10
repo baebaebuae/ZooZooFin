@@ -39,7 +39,7 @@ const getProductIcon = (productName) => {
         case '곰곰적금':
             return IconBear;
     }
-  };
+};
 
 export const ProductJoinCard = ({
     productType,
@@ -64,7 +64,7 @@ export const ProductJoinCard = ({
 
         const expectedSavingsReturn = newAmount * productPeriod + newAmount * a * rate;
         // 예금일 때는 단순 계산(원금+(원금*이율*턴수))
-        const expectedDepositReturn = newAmount + newAmount * (productRate / 100) * productPeriod;
+        const expectedDepositReturn = newAmount + newAmount * (productRate / 100);
 
         setExpectedFinalAmount(isSavings ? expectedSavingsReturn : expectedDepositReturn);
     }
