@@ -7,8 +7,8 @@ const Container = styled.div`
     z-index: 1;
     border: 1px solid black;
     width: 300px;
-    height: 500px;
-    transform: translate(30px, 70px);
+    max-height: 500px;
+    padding: 10px 0;
 
     background: ${({ theme }) => theme.colors.lightGreen};
 
@@ -23,10 +23,13 @@ const Container = styled.div`
     border-radius: 24px;
     border: 4px solid;
     border-color: ${({ theme }) => theme.colors.tertiary};
-    display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+
+    top: 50%;     
+    left: 50%; 
+    transform: translate(-50%, -50%);  
 `;
 const Content = styled.div`
     display: flex;
@@ -76,7 +79,46 @@ const Btn = styled.button`
     align-items: center;
     justify-content: center;
 `;
-const GameDescription = ({ setOpenModal }) => {
+
+const RenderDescription = () => {
+    return (
+        <>
+            <Title>당근 받기 게임에 온 걸 환영해!</Title>
+            <Text>
+                <GreenText>당근 받기 게임</GreenText>은 당근을 바구니에 받아서 투자에 필요한
+                재화를 얻는 <br /> 우리 도시의 대표 미니게임이야.
+            </Text>
+            <Text>
+                <GreenText>10초 동안</GreenText> 하늘에서 떨어지는 당근을 <br /> 받으면 돼.
+            </Text>
+            <Text>
+                그냥 당근은 <RedText>10만 당근</RedText>, 황금 당근은 무려{' '}
+                <RedText>100만 당근</RedText>으로 바꿔줄거야! <br />
+                어마어마하지?
+            </Text>
+            <Text>
+                아참! 썩은 당근을 주워오면 <br /> 농작물에 피해가 막심하니 <br />{' '}
+                <RedText>100당근을 차감</RedText>한다는 걸 잊지마~!
+            </Text>
+            <Text>
+                당근 받기 게임은 <br />
+                <GreenText>1턴당 1번만</GreenText> 할 수 있으니까 <br /> 열심히 당근을
+                받아보라구!!
+            </Text>
+        </>
+    )
+}
+const RenderWarning = () => {
+    return (
+        <>
+            <Title>게임 불가🚫</Title>
+            <Text>
+                당근 받기 게임은 <GreenText>1턴당 1번만</GreenText> 할 수 있다구!!
+            </Text>
+        </>
+    )
+}
+const GameDescription = ({ setOpenModal, status }) => {
     const handleClick = () => {
         setOpenModal(false);
     };
@@ -84,28 +126,11 @@ const GameDescription = ({ setOpenModal }) => {
     return (
         <Container>
             <Content>
-                <Title>당근 받기 게임에 온 걸 환영해!</Title>
-                <Text>
-                    <GreenText>당근 받기 게임</GreenText>은 당근을 바구니에 받아서 투자에 필요한
-                    재화를 얻는 <br /> 우리 도시의 대표 미니게임이야.
-                </Text>
-                <Text>
-                    <GreenText>10초 동안</GreenText> 하늘에서 떨어지는 당근을 <br /> 받으면 돼.
-                </Text>
-                <Text>
-                    그냥 당근은 <RedText>10만 당근</RedText>, 황금 당근은 무려{' '}
-                    <RedText>100만 당근</RedText>으로 바꿔줄거야! <br />
-                    어마어마하지?
-                </Text>
-                <Text>
-                    아참! 썩은 당근을 주워오면 <br /> 농작물에 피해가 막심하니 <br />{' '}
-                    <RedText>100당근을 차감</RedText>한다는 걸 잊지마~!
-                </Text>
-                <Text>
-                    당근 받기 게임은 <br />
-                    <GreenText>1턴당 1번만</GreenText> 할 수 있으니까 <br /> 열심히 당근을
-                    받아보라구!!
-                </Text>
+                <>
+                {status === "warning" 
+                    ? RenderWarning() : RenderDescription()
+                }
+                </>
             </Content>
             <Btn onClick={handleClick}>닫 기</Btn>
         </Container>

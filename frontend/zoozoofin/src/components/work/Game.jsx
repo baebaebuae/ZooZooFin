@@ -24,7 +24,7 @@ const Countdown = styled.div`
     text-align: center;
 `;
 const Game = () => {
-    const [time, setTime] = useState(30);
+    const [time, setTime] = useState(10);
     const [gameOver, setGameOver] = useState(false);
     const [isGameActive, setIsGameActive] = useState(false);
     const [countdown, setCountdown] = useState(3);
