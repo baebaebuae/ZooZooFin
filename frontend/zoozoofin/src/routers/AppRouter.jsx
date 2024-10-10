@@ -1,6 +1,7 @@
 import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { useState, useEffect, useRef } from 'react';
+import { useMusic } from './useMusic';
 
 import Start from '@pages/Start';
 import LayoutInGame from '@components/LayoutInGame';
@@ -62,12 +63,14 @@ const MusicToggleButton = styled.button`
 `;
 
 const AppRouter = () => {
+    const { isMusicOn, toggleMusic, audioRef } = useMusic();
     const [backgroundimage, setBackgroundimage] = useState(null);
     const [currentMusic, setCurrentMusic] = useState(startMusic);
-    const audioRef = useRef(null);
+    // const audioRef = useRef(null);
 
-    const isMusicOn = useMusicStore((state) => state.isMusicOn);
-    const toggleMusic = useMusicStore((state) => state.toggleMusic);
+    // const isMusicOn = useMusicStore((state) => state.isMusicOn);
+    // const toggleMusic = useMusicStore((state) => state.toggleMusic);
+    // const isMusicOn = JSON.parse(localStorage.getItem('isMusicOn')) || false;
 
     // musicList 지정
     const musicList = {

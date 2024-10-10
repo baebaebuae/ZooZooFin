@@ -27,19 +27,26 @@ const BankContainer = styled.div`
 
 const BubbleBlock = styled(Bubble)`
     position: fixed;
-    bottom: 0;
-    right: 0;
+    /* bottom: 0;
+    right: 0; */
+    top: 320px;
+    left: -10px;
 `;
 
 const ImageContainer = styled.div`
     position: fixed;
-    bottom: 16%;
-    right: -69%;
+    /* bottom: 16%;
+    right: -69%; */
+    top: 220px;
+    left: 160px;
 `;
 
 const NpcImage = styled.img`
-    width: 700px;
-    height: 325px;
+    /* width: 700px; */
+    /* width: 360px; */
+    /* height: 325px; */
+    /* height: 200px; */
+    width: 200px;
     object-fit: contain;
 `;
 
