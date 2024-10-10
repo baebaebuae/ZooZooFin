@@ -5,6 +5,8 @@ import HeaderMenu from '@assets/images/components/header/header_menu.svg?react';
 import HeaderMap from '@assets/images/components/header/header_map.svg?react';
 // 일단 급하게 사이즈 줄여놨는데, svg파일 용량 줄이는 법 더 찾기
 
+import { useMusic } from './useMusic';
+
 import { useState } from 'react';
 
 import Menu from '@mui/material/Menu';
@@ -16,7 +18,7 @@ import VolumeUpRoundedIcon from '@mui/icons-material/VolumeUpRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded';
 import FlagRoundedIcon from '@mui/icons-material/FlagRounded';
-import BedIcon from '@mui/icons-material/Bed';  // 잠자기 아이콘 추가
+import BedIcon from '@mui/icons-material/Bed'; // 잠자기 아이콘 추가
 import MissionDashboard from '../../components/Mission';
 import NextTurn from '../NextTurn';
 
@@ -81,11 +83,13 @@ export const HeaderHamburgerButton = () => {
     const [isMissionOpen, setIsMissionOpen] = useState(false);
     const [isCharacterHistoryOpen, setIsCharacterHistoryOpen] = useState(false);
     const [isSleepModalOpen, setIsSleepModalOpen] = useState(false);
-    const isMusicOn = useMusicStore((state) => state.isMusicOn);
-    const toggleMusic = useMusicStore((state) => state.toggleMusic);
+    // const isMusicOn = useMusicStore((state) => state.isMusicOn);
+    // const toggleMusic = useMusicStore((state) => state.toggleMusic);
     const fetchUserProfile = useUserStore((state) => state.fetchUserProfile);
     const { updateBillState } = useBillStore();
     const { updateBankruptState } = useBankruptStore();
+
+    const { isMusicOn, toggleMusic } = useMusic();
 
     const open = Boolean(anchorEl);
 
@@ -113,16 +117,16 @@ export const HeaderHamburgerButton = () => {
         handleClose();
     };
     const handleLogoutClick = () => {
-        localStorage.removeItem("accessToken")
-        localStorage.removeItem('refreshToken')
-        navigate('/start')
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        navigate('/start');
         handleClose();
-    }
+    };
     const handleConfirmSleep = async () => {
         try {
             const apiClient = getApiClient();
             await apiClient.patch('/home/next');
-            await fetchUserProfile();  // 사용자 정보 새로고침
+            await fetchUserProfile(); // 사용자 정보 새로고침
 
             // 고지서와 파산 안내 상태 초기화
             updateBankruptState('isShown', false);
@@ -136,7 +140,6 @@ export const HeaderHamburgerButton = () => {
             console.error('Failed to progress to next turn:', error);
         }
     };
-    
 
     return (
         <>
@@ -185,7 +188,7 @@ export const HeaderHamburgerButton = () => {
                 </MenuItem>
             </Menu>
             <MissionDashboard isOpen={isMissionOpen} onClose={() => setIsMissionOpen(false)} />
-            <NextTurn 
+            <NextTurn
                 isOpen={isSleepModalOpen}
                 onClose={() => setIsSleepModalOpen(false)}
                 onConfirm={handleConfirmSleep}
@@ -207,13 +210,14 @@ export const HeaderMapButton = () => {
 export const HeaderWalletButton = ({ onClick }) => {
     return (
         <>
-            <HeaderButton2 onClick={onClick}> {/* onClick 이벤트 추가 */}
+            <HeaderButton2 onClick={onClick}>
+                {' '}
+                {/* onClick 이벤트 추가 */}
                 <HeaderWallet width={30} height={30} />
             </HeaderButton2>
         </>
     );
 };
-
 
 export const HeaderTurnButton = ({ currentTurn }) => {
     return (
