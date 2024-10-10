@@ -71,10 +71,24 @@ const NextGameInfoBoxInside = styled.div`
     border-radius: 20px;
     padding: 20px 50px;
     margin: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
+    font-size: 16px;
     background-color: ${({ theme }) => theme.colors.bubble};
-    color: ${({ theme }) => theme.colors.orange};
+
+    /* background-color: green; */
+`;
+
+const NextGameInfoBoxInsideTitle = styled.div`
     font-family: 'OneMobilePop';
+    color: ${({ theme }) => theme.colors.tertiaryDeep};
+`;
+
+const NextGameInfoBoxInsideValue = styled(NextGameInfoBoxInsideTitle)`
+    color: ${({ theme }) => theme.colors.orange};
+    margin-left: 10px;
 `;
 
 const FinalButtonBlock = styled.div`
@@ -91,15 +105,16 @@ const FinalButton = styled.div`
     border-radius: 50px;
     width: 160px;
     padding: 10px;
-    border: 3px solid ${({ theme }) => theme.colors.tertiaryDeep};
 `;
 
 const FinalPortfolioButton = styled(FinalButton)`
     background-color: ${({ theme }) => theme.colors.bubble};
     color: ${({ theme }) => theme.colors.tertiaryDeep};
+    border: 3px solid ${({ theme }) => theme.colors.tertiaryDeep};
 `;
 const FinalCheckButton = styled(FinalButton)`
     background-color: ${({ theme }) => theme.colors.tertiaryDeep};
+    border: 3px solid white;
     color: white;
 `;
 
@@ -235,7 +250,19 @@ const Ending = () => {
     const charFinalLevel = characterData ? characterData.animalHierarchy : '계급 없음';
 
     // happy, bad에 따라, 레벨에 따라 보상 차등 지급
-    const benefits = [2, 2, 2, 2, 10, 10, 20, 20, 20, 20];
+
+    // 기본 100만원 x ?%
+    const benefits = {
+        당근: 0, // 1000000 당근
+        '당근 알바생': 1, // 1010000 당근
+        '당근 매니저': 5, // 1050000 당근
+        '당근 부장': 200, // 2000000 당근
+        '당근 전무': 600, // 6000000 당근
+        '당근 사장': 800, // 8000000 당근
+        '당근 투자왕': 1000, // 10000000 당근
+        '계급 없음': 0,
+    };
+
     const penalties = [5, 10];
 
     const finalMessages = [
@@ -245,8 +272,6 @@ const Ending = () => {
         '',
         '그 동안 함께해서 정말 즐거웠어. 또 보자!',
     ];
-
-    console.log(characterData);
 
     return (
         <>
@@ -276,18 +301,22 @@ const Ending = () => {
                                 {receivedEndingType === 'A001' ? ' 보상' : ' 패널티'}
                             </NextGameInfoBoxTitle>
                             <NextGameInfoBoxInside>
-                                수익
-                                {receivedEndingType === 'A001' ? ' +' : ' -'}
-                                {receivedEndingType === 'A001'
-                                    ? `${benefits[charFinalLevel - 1]}`
-                                    : `${penalties[0]}`}
-                                %
+                                <NextGameInfoBoxInsideTitle>초기 자본</NextGameInfoBoxInsideTitle>
+                                <NextGameInfoBoxInsideValue>
+                                    {receivedEndingType === 'A001' ? ' x ' : ' x -'}
+                                    {receivedEndingType === 'A001'
+                                        ? benefits[charFinalLevel]
+                                            ? `${benefits[charFinalLevel]}`
+                                            : 0
+                                        : `${penalties[0]}`}
+                                    %
+                                </NextGameInfoBoxInsideValue>
                             </NextGameInfoBoxInside>
                         </NextGameInfoBox>
                         <img src={CharRabbit} width={120} />
 
                         <FinalButtonBlock>
-                            <FinalPortfolioButton>최종 포트폴리오</FinalPortfolioButton>
+                            {/* <FinalPortfolioButton>최종 포트폴리오</FinalPortfolioButton> */}
                             {/* 최종 endingType 보내는 post 함수 */}
                             <FinalCheckButton
                                 onClick={() => postEnding(nowAnimal.animalId, receivedEndingType)}
