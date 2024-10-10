@@ -30,8 +30,8 @@ public class ScriptServiceImpl implements ScriptService {
     private final CapitalRepository capitalRepository;
 
     @Override
-    public List<Script> findAllScripts() {
-        return scriptRepository.findAll();
+    public List<Script> findTutorialScript() {
+        return scriptRepository.findByCategory("tutorial");
     }
 
     @Override

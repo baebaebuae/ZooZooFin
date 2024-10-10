@@ -7,7 +7,7 @@ import java.util.List;
 
 @Builder
 public record CreationUnitResponse(List<Element> elements,
-                                   List<StockDetailResponse.ChartDetail> chartDetail) {
+                                   List<ChartDetail> chartDetail) {
 
     @Builder
     public record Element(String name,
@@ -22,8 +22,8 @@ public record CreationUnitResponse(List<Element> elements,
                               Long endPrice) {
     }
 
-    public static StockDetailResponse.ChartDetail getChartDetail(Chart chart) {
-        return StockDetailResponse.ChartDetail.builder()
+    public static ChartDetail getChartDetail(Chart chart) {
+        return ChartDetail.builder()
                 .price(chart.getPrice())
                 .highPrice(chart.getHighPrice())
                 .lowPrice(chart.getLowPrice())
