@@ -4,6 +4,7 @@ import { theme } from "@/styles/theme";
 import { Button } from '@components/root/buttons';
 import mungmung from '@assets/images/characters/mungmungprofile.png';
 import { useNavigate } from 'react-router-dom';
+import useUserStore from '@stores/useUserStore';
 
 const GlobalStyle = createGlobalStyle`
   @font-face {
@@ -53,7 +54,7 @@ const Title = styled.h2`
   font-size: 20px;
   margin-left: 10px; 
   text-align: left; 
-  font-weight:bold;
+  font-weight: bold;
 `;
 
 const Subtitle = styled.p`
@@ -108,8 +109,24 @@ const WarningMessage = styled.p`
 
 const NextTurn = ({ isOpen, onClose, onConfirm, bankruptcyRisk }) => {
   const navigate = useNavigate();
+  const { turn, animalAssets } = useUserStore();
 
   if (!isOpen) return null;
+
+  const handleConfirm = () => {
+    if (turn === 50) {
+      // Move to Ending
+      const endingType = animalAssets >= 0 ? 'A001' : 'A002';
+      navigate('/ending', {
+        state: {
+          endingType: endingType,
+        },
+      });
+    } else {
+      // Proceed with the original onConfirm logic
+      onConfirm();
+    }
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -121,7 +138,7 @@ const NextTurn = ({ isOpen, onClose, onConfirm, bankruptcyRisk }) => {
             <IconWrapper>
               <img src={mungmung} alt="Mungmung Character" width="60" height="60" />
             </IconWrapper>
-            <Title> 이제 자러 가는거야?</Title>
+            <Title>이제 자러 가는거야?</Title>
           </HeaderWrapper>
           <Subtitle>잠을 자면 이번 턴이 마무리되고, 다음 턴으로 넘어가요.</Subtitle>
           {bankruptcyRisk && (
@@ -130,7 +147,7 @@ const NextTurn = ({ isOpen, onClose, onConfirm, bankruptcyRisk }) => {
             </WarningMessage>
           )}
           <ButtonWrapper>
-            <StyledButton size="large" color="primary" onClick={onConfirm}>
+            <StyledButton size="large" color="primary" onClick={handleConfirm}>
               응! 잘래
             </StyledButton>
             <StyledButton size="large" color="tertiary" onClick={onClose}>

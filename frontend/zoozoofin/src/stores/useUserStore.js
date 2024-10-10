@@ -19,6 +19,7 @@ const useUserStore = create((set, get) => ({
         try {
             const apiClient = getApiClient();
             const response = await apiClient.get('/member/profile');
+            console.log(response)
             set({
                 animalImg: response.data.body.animalImg,
                 animalAssets: response.data.body.animalAssets,
