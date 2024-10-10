@@ -25,6 +25,8 @@ import { getApiClient } from '@stores/apiClient';
 import useUserStore from '../stores/useUserStore.js';
 
 const CapitalBlock = styled.div`
+    width: 360px;
+    height: 640px;
     display: flex;
     position: relative;
     flex-direction: column;
@@ -39,24 +41,20 @@ const CapitalBlock = styled.div`
 `;
 
 const ImageContainer = styled.div`
-    position: fixed;
-    /* bottom: 16%;
-    right: -69%; */
-    top: 220px;
-    left: 160px;
+    top: 200px;
+    left: 140px;
+    position: absolute;
 `;
 
 const NpcImage = styled.img`
-    width: 200px;
+    width: 230px;
     object-fit: contain;
 `;
 
 const BubbleBlock = styled(Bubble)`
-    position: fixed;
-    /* bottom: 0;
-    right: 0; */
-    top: 320px;
-    left: -10px;
+    top: 220px;
+    left: 140px;
+    position: absolute;
 `;
 
 const CapitalWrapper = styled.div`

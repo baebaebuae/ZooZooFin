@@ -10,6 +10,8 @@ import { Loader } from '@components/Loader';
 import Pig from '@/assets/images/characters/characters/Pig.gif';
 
 const BankBlock = styled.div`
+    width: 360px;
+    height: 640px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -23,15 +25,15 @@ const BankContainer = styled.div`
 `;
 
 const BubbleBlock = styled(Bubble)`
-    position: fixed;
-    top: 320px;
-    left: -10px;
+    top: 220px;
+    left: 140px;
+    position: absolute;
 `;
 
 const ImageContainer = styled.div`
-    position: fixed;
-    top: 220px;
-    left: 160px;
+    top: 200px;
+    left: 180px;
+    position: absolute;
 `;
 
 const NpcImage = styled.img`

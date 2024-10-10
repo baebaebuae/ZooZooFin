@@ -72,6 +72,11 @@ const BlankBlock = styled.div`
     justify-content: center;
     align-items: center;
 `;
+
+const LaptopBlock = styled.div`
+    width: 100%;
+`;
+
 export const Capital = () => {
     const [isCautionOpened, setIsCautionOpened] = useState(false);
     const [capitalData, setCapitalData] = useState([]);
@@ -121,19 +126,14 @@ export const Capital = () => {
 
                 {isCautionOpened && (
                     <CautionBox>
-                        <CautionTextBox>
-                            {/* <CautionText>✔</CautionText> */}
-                            <CautionText>
-                                <CheckIcon sx={{ fontSize: 16 }} />
-                            </CautionText>
-                            <CautionText>{CautionTexts[0]}</CautionText>
-                        </CautionTextBox>
-                        <CautionTextBox>
-                            <CautionText>
-                                <CheckIcon sx={{ fontSize: 16 }} />
-                            </CautionText>
-                            <CautionText>{CautionTexts[1]}</CautionText>
-                        </CautionTextBox>
+                        {CautionTexts.map((text, index) => (
+                            <CautionTextBox key={index}>
+                                <CautionText>
+                                    <CheckIcon sx={{ fontSize: 16 }} />
+                                </CautionText>
+                                <CautionText>{text}</CautionText>
+                            </CautionTextBox>
+                        ))}
                     </CautionBox>
                 )}
             </CautionBlock>
@@ -148,7 +148,7 @@ export const Capital = () => {
                 capitalData.capitalOrigin > 0 &&
                 capitalData.capitalEndTurn > 0 &&
                 capitalData.capitalRestMoney > 0 && (
-                    <div>
+                    <LaptopBlock>
                         <LaptopInfo
                             infoTitle={'대출 원금'}
                             infoContent={`${capitalData.capitalOrigin.toLocaleString()}🥕`}
@@ -162,7 +162,7 @@ export const Capital = () => {
                             infoContent={`${capitalData.capitalRestMoney.toLocaleString()}🥕`}
                             color={'warn'}
                         />
-                    </div>
+                    </LaptopBlock>
                 )}
 
             <DividerLarge />

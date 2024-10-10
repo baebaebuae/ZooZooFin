@@ -191,11 +191,11 @@ export const BankLoan = () => {
             )}
 
             {loanData &&
-                loanData.length > 0 &&
+                loanData.myLoanList &&
                 loanData.myLoanList.length > 0 &&
                 loanData.myLoanList.map((loan, index) => {
                     return (
-                        <>
+                        <div key={index}>
                             <AppContent>대출 리스트</AppContent>
                             <LoanListTitleBox>
                                 <LoanListTitle>대출번호</LoanListTitle>
@@ -231,17 +231,17 @@ export const BankLoan = () => {
                                                 {loanType[loan.loanType]}
                                             </Loa0nListDetailType>
                                         </LoanListDetailBoxContent>
-                                        <LoanListDetailBoxContent>
+                                        {/* <LoanListDetailBoxContent>
                                             <LoanListDetailNotice>이번 턴에서</LoanListDetailNotice>
                                             <LoanListDetailNoticeAmount>
                                                 ????????🥕
                                             </LoanListDetailNoticeAmount>
                                             <LoanListDetailNotice>상환 예정</LoanListDetailNotice>
-                                        </LoanListDetailBoxContent>
+                                        </LoanListDetailBoxContent> */}
                                     </LoanListDetailBox>
                                 </AccordionDetails>
                             </Accordion>
-                        </>
+                        </div>
                     );
                 })}
         </Container>

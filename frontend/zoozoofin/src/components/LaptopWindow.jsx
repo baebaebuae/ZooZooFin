@@ -10,11 +10,12 @@ import AppStock from '@assets/images/icons/laptop/appStock.png';
 import ClearIcon from '@mui/icons-material/Clear';
 
 const LaptopContainer = styled.div`
-    height: 600px;
+    height: 640px;
     padding: 10px;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: end;
+    overflow-y: auto;
 `;
 
 const LaptopWindowContainer = styled.div`

@@ -21,8 +21,11 @@ const RoomBlock = styled.div`
     padding: 10px 0px;
     gap: 21px;
     margin: 0px auto;
-    width: 100%;
-    height: 100%;
+    /* width: 100%;
+    height: 100%; */
+    width: 360px;
+    height: 640px;
+    position: relative;
 `;
 
 const BillContainer = styled.div`
@@ -143,10 +146,10 @@ const MyRoom = () => {
         return () => clearTimeout(timer);
     }, []);
 
-    // 로딩 중일 때 Loader 컴포넌트 렌더링
-    if (isLoading) {
-        return <Loader loadingText={'내 방으로 입장하는 중...'} />;
-    }
+    // // 로딩 중일 때 Loader 컴포넌트 렌더링
+    // if (isLoading) {
+    //     return <Loader loadingText={'내 방으로 입장하는 중...'} />;
+    // }
 
     return (
         <RoomBlock>

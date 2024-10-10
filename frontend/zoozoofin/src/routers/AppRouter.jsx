@@ -120,7 +120,7 @@ const AppRouter = () => {
             setMusic(pathname);
 
             // defaultMusic으로 계속 연결되는 경우에는 useEffect 안에서 바꾸지 않음
-            if (isMusicOn && audioRef.current && currentMusic != defaultMusic) {
+            if (audioRef.current && currentMusic != defaultMusic) {
                 audioRef.current.load();
 
                 if (isMusicOn) {

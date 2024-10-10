@@ -9,6 +9,8 @@ import CreateNameModal from '@components/character/NameModal';
 
 import { getApiClient } from '@stores/apiClient';
 
+import IconLock from '@assets/images/icons/stocks/icon_lock.png';
+
 // 캐릭터 이미지 import
 import AnimalType1Image from '@/assets/images/history/1.png';
 import AnimalType2Image from '@/assets/images/history/2.png';
@@ -27,6 +29,7 @@ const Block = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    z-index: 10000000;
 `;
 
 const TitleMessage = styled.div`
@@ -39,13 +42,17 @@ const TitleMessage = styled.div`
         0px 1px white,
         1px 0px white,
         0px -1px white;
+    z-index: 10000000;
 `;
 
 const AnimalBlock = styled.div`
     display: flex;
+    gap: 20px;
+    width: 360px;
     overflow-x: auto;
     // 여러 캐릭터 들어온 후 가로 스크롤 설정 확인(width 값 조심 !!)
     margin: 20px 0;
+    z-index: 10000000;
 `;
 
 const CharacterImage = styled.img`
@@ -59,6 +66,7 @@ const AnimalCard = styled.div`
     padding: 5px;
     background: ${({ $isSelected }) =>
         $isSelected ? 'linear-gradient(90deg, red, yellow, green)' : 'none'};
+    position: relative;
 `;
 
 const AnimalPhoto = styled.div`
@@ -105,11 +113,19 @@ const InactiveOverlay = styled.div`
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
+    width: 200px;
+    padding: 10px;
+    /* height: 100%; */
+    height: 370px;
+    background-color: rgba(0, 0, 0, 0.7);
     border-radius: 28px;
-    z-index: 10;
+`;
+
+const LockIconBox = styled.img`
+    position: absolute;
+    top: 170px;
+    left: 90px;
+    width: 50px;
 `;
 
 const AnimalInfoSpecialContent = styled(AnimalInfoCondition)`
@@ -127,6 +143,10 @@ const AnimalInfoSpecialNum = styled(AnimalInfoSpecialContent)`
         0px -1px white;
 `;
 
+const ButtonBlock = styled.div`
+    z-index: 10000000;
+`;
+
 const CreateAnimal = () => {
     const [animals, setAnimals] = useState([]);
     const [selectedAnimal, setSelectedAnimal] = useState(null);
@@ -136,7 +156,9 @@ const CreateAnimal = () => {
     const location = useLocation();
 
     // isStarted 받아서
-    const isStarted = location.state.isStarted;
+    // const isStarted = true;
+    const isStarted = location.state?.isStarted ?? true;
+
     console.log('isStarted: ', isStarted);
 
     const moveToNextStep = () => {
@@ -196,11 +218,19 @@ const CreateAnimal = () => {
                                         $isSelected={
                                             animal.animalTypeId === selectedAnimal?.animalTypeId
                                         }
-                                        onClick={() => handleClick(animal)}
+                                        onClick={
+                                            animal.animalTypeId === 1
+                                                ? () => handleClick(animal)
+                                                : null
+                                        }
                                     >
                                         {animal.animalTypeId === 2 && (
-                                            <InactiveOverlay>Inactive</InactiveOverlay>
+                                            <InactiveOverlay></InactiveOverlay>
                                         )}
+                                        {animal.animalTypeId === 2 && (
+                                            <LockIconBox src={IconLock} />
+                                        )}
+
                                         <AnimalPhoto>
                                             <CharacterImage
                                                 src={animalImages[animal.animalTypeId]}
@@ -227,9 +257,15 @@ const CreateAnimal = () => {
                             })}
                     </AnimalBlock>
                     {selectedAnimal && (
-                        <Button $isBorder={true} color={'primaryShadow'} onClick={moveToNextStep}>
-                            선택 완료
-                        </Button>
+                        <ButtonBlock>
+                            <Button
+                                $isBorder={true}
+                                color={'primaryShadow'}
+                                onClick={moveToNextStep}
+                            >
+                                선택 완료
+                            </Button>
+                        </ButtonBlock>
                     )}
                 </Block>
             ) : (
