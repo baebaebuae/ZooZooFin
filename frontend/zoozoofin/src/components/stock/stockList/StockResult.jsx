@@ -14,6 +14,7 @@ const StoreWrapper = styled.div`
     align-items: center;
     gap: 21px;
     margin: 0px auto;
+    margin-top: 120px;
 `;
 
 const postStock = async (type, stockId, stockCount, onComplete) => {

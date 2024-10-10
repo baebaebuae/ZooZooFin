@@ -27,6 +27,7 @@ const Paper = styled.div`
   flex-direction: column;
   position: relative;
   overflow-y: auto;
+  margin-top: 125px;
 `;
 
 // 시험지 헤더 스타일링
@@ -369,14 +370,15 @@ const TestPaper = () => {
   const leftQuestions = quizData.slice(0, Math.ceil(quizData.length / 2));
   const rightQuestions = quizData.slice(Math.ceil(quizData.length / 2));
 
-  const renderQuestionGroup = (questions) => {
+  const renderQuestionGroup = (questions, startIndex) => {
     return questions.map((question, index) => {
+      const questionNumber = startIndex + index + 1;
       const result = quizResults.find(r => r.quizId === question.quizId);
       return (
         <QuestionSection 
           key={question.quizId || index}
           question={question || {}}
-          index={index + 1}
+          index={questionNumber}
           onAnswerChange={handleAnswerChange}
           userAnswer={userAnswers[question.quizId] || ''}
           isSubmitted={isSubmitted}
@@ -400,12 +402,13 @@ const TestPaper = () => {
       )}
       <QuestionsContainer>
         <QuestionGroup side="left">
-          {renderQuestionGroup(leftQuestions)}
+          {renderQuestionGroup(leftQuestions, 0)}
         </QuestionGroup>
         <QuestionGroup side="right">
-          {renderQuestionGroup(rightQuestions)}
+          {renderQuestionGroup(rightQuestions, leftQuestions.length)}
         </QuestionGroup>
       </QuestionsContainer>
+
       {!isSubmitted && <SubmitButton onClick={handleSubmit} disabled={isLoading}>
         {isLoading ? '제출 중...' : '제출하기'}
       </SubmitButton>}

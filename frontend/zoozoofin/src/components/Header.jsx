@@ -20,7 +20,6 @@ const HeaderContainer = styled.nav`
     /* top: 20px; */
     /* left: 10px; // 절대적인 픽셀 값 */
     width: 340px;
-    z-index: 1000;
     margin: 0 10px;
     z-index: 5000;
 `;
