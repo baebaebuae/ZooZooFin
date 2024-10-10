@@ -671,9 +671,9 @@ public class NextTurnServiceImpl implements NextTurnService {
 
                 // 사용자 현금 차감, 대출금 0, 대출 종료
                 animal.decreaseAnimalAssets(capital.getCapitalRemain());
+                capitalFinish += capital.getCapitalRemain();
                 capital.changeCapitalRemain(0L);
                 capital.changeCapitalIsEnd(true);
-                capitalFinish += capital.getCapitalRemain();
             }
 
         }
