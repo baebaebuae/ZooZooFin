@@ -70,12 +70,11 @@ export const getApiClient = () => {
             else {
                 clearAccessToken();
                 clearRefreshToken();
-                console.log(window.location.href)
                 const currentURL = window.location.href;
                 if (currentURL.includes("localhost")){
                     window.location.href = 'http://localhost:5173/start'
                 } else {
-                    window.location.href = `${API_URL}/start`
+                    window.location.href = `https://zoozoofin.site/start`
                 }
                 return Promise.reject(new Error('No refresh token'));
             }

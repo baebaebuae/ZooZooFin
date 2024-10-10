@@ -2,6 +2,7 @@ import React from 'react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getApiClient } from '@stores/apiClient';
+import { Loader } from '@components/Loader';
 
 const Auth = () => {
     const navigate = useNavigate();
@@ -14,11 +15,10 @@ const Auth = () => {
         const fetchUserState = async () => {
             if (accessToken && accessToken.length > 0) {
                 try {
-                    // console.log(accessToken, refreshToken);
                     localStorage.setItem('accessToken', accessToken);
                     localStorage.setItem('refreshToken', refreshToken);
                     const apiClient = getApiClient();
-                    const res = await apiClient.get('/member/animal');
+                    const res = await apiClient.get('/member/start');
                     if (res.status === 200){
                         const isStarted = res.data.body.isStarted;
                         const isActivated = res.data.body.isActivated;
@@ -30,7 +30,7 @@ const Auth = () => {
                             // re-play 여부
                             navigate('../createanimal', {
                                 state: {
-                                    isActivated: isStarted
+                                    isStarted: isStarted
                                 }
                             });
                         }
@@ -48,7 +48,7 @@ const Auth = () => {
         fetchUserState();
     }, [accessToken, refreshToken]);
 
-    return <div>Loading</div>;
+    return <Loader loadingText={'로딩 중...'} />;
 };
 
 export default Auth;
