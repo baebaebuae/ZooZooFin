@@ -29,7 +29,7 @@ export const LineGraph = () => {
     // 주식 데이터에서 endPrice만 추출
     useEffect(() => {
         if (stockData) {
-            const prices = Object.values(stockData).map((item) => (item ? item['price'] : 0));
+            const prices = Object.values(stockData).map((item) => (item ? item['endPrice'] : 0));
             setClosePrices(prices);
         }
     }, [stockData]);

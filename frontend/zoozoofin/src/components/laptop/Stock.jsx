@@ -54,7 +54,7 @@ const BlankBlock = styled.div`
 
 export const Stock = () => {
     const [isSelected, setIsSelected] = useState(false);
-    const [data, setData] = useState(null);
+    const [data, setData] = useState([]);
     const [selectedData, setSelectedData] = useState(null);
 
     const { getAnimalData } = useAnimalStore();
@@ -68,7 +68,7 @@ export const Stock = () => {
         try {
             const apiClient = getApiClient();
             const res = await apiClient.get('/stock/notebook');
-            console.log(res.data.body);
+            // console.log(res);
             setData(res.data.body);
         } catch (error) {
             console.error('Failed to fetch user notebook Stock:', error);
@@ -91,94 +91,96 @@ export const Stock = () => {
         fetchStockData();
     }, []);
 
-    // console.log(data);
-    return (
-        <Container>
-            {isSelected && selectedData ? (
-                <StockDetail
-                    name={selectedData.stockName}
-                    stockRate={selectedData.stockRate} // 손익률
-                    rate={selectedData.rate}
-                    stockPrice={selectedData.stockPrice}
-                    stockCount={selectedData.stockCount} // 보유 주식 수
-                    purchaseDate={selectedData.buyTurn} // 매수일자
-                    evaluationProfitLoss={selectedData.profit} // 평가손익
-                    tradeHistory={selectedData.stockHistory} // 매매 내역
-                    handleSelected={() => setIsSelected(false)}
-                    stockCharts={selectedData.chart}
-                />
-            ) : (
-                <>
-                    <LaptopInfoBox
-                        color={'primaryDeep'}
-                        infoTitle={'님의 주식 총 자산'}
-                        infoContent={data ? `${data.totalAmount.toLocaleString()}🥕` : 0}
-                    ></LaptopInfoBox>
-                    <AppContent>보유 주식</AppContent>
-                    {data && data.domesticList.length > 0 && (
-                        <>
-                            <AppContentH2>국내</AppContentH2>
-                            <ProductBlock>
-                                {data.domesticList.map((stock, index) => {
-                                    return (
-                                        <StockTitle
-                                            key={index}
-                                            stockName={stock.stockName}
-                                            stockPrice={stock.stockTotal}
-                                            stockRate={stock.stockRate}
-                                            onToggle={() => handleSelect(stock.stockId)}
-                                        />
-                                    );
-                                })}
-                            </ProductBlock>
-                        </>
-                    )}
+    useEffect;
 
-                    {data && data.overseaList.length > 0 && (
-                        <>
-                            <AppContentH2>해외</AppContentH2>
-                            <ProductBlock>
-                                {data.overseaList.map((stock, index) => {
-                                    return (
-                                        <StockTitle
-                                            key={index}
-                                            companyName={stock.stockName}
-                                            stockPrice={stock.stockTotal}
-                                            currentState={stock.stockRate > 0 ? 'up' : 'down'}
-                                            onToggle={() => handleSelect(stock)}
-                                        />
-                                    );
-                                })}
-                            </ProductBlock>
-                        </>
-                    )}
-
-                    {data && data.etfList.length > 0 && (
-                        <>
-                            <AppContentH2>ETF</AppContentH2>
-                            <ProductBlock>
-                                {data.etfList.map((stock, index) => {
-                                    return (
-                                        <StockTitle
-                                            key={index}
-                                            companyName={stock.stockName}
-                                            stockPrice={stock.stockTotal}
-                                            currentState={stock.stockRate > 0 ? 'up' : 'down'}
-                                            onToggle={() => handleSelect(stock)}
-                                        />
-                                    );
-                                })}
-                            </ProductBlock>
-                        </>
-                    )}
-
-                    {data.domesticList.length === 0 &&
-                        data.overseaList.length === 0 &&
-                        data.etfList.length === 0 && (
-                            <BlankBlock>아직 구입한 주식이 없어요.</BlankBlock>
+    if (data) {
+        return (
+            <Container>
+                {isSelected && selectedData ? (
+                    <StockDetail
+                        name={selectedData.stockName}
+                        stockRate={selectedData.stockRate} // 손익률
+                        stockPrice={selectedData.stockPrice}
+                        stockCount={selectedData.stockCount} // 보유 주식 수
+                        purchaseDate={selectedData.buyTurn} // 매수일자
+                        evaluationProfitLoss={selectedData.profit} // 평가손익
+                        tradeHistory={selectedData.stockHistory} // 매매 내역
+                        handleSelected={() => setIsSelected(false)}
+                        stockCharts={selectedData.chart}
+                    />
+                ) : (
+                    <>
+                        <LaptopInfoBox
+                            color={'primaryDeep'}
+                            infoTitle={'님의 주식 총 자산'}
+                            infoContent={data ? `${data.totalAmount.toLocaleString()}🥕` : 0}
+                        ></LaptopInfoBox>
+                        <AppContent>보유 주식</AppContent>
+                        {data && data.domesticList && data.domesticList.length > 0 && (
+                            <>
+                                <AppContentH2>국내</AppContentH2>
+                                <ProductBlock>
+                                    {data.domesticList.map((stock, index) => {
+                                        return (
+                                            <StockTitle
+                                                key={index}
+                                                stockName={stock.stockName}
+                                                stockPrice={stock.stockTotal}
+                                                stockRate={stock.stockRate}
+                                                onToggle={() => handleSelect(stock.stockId)}
+                                            />
+                                        );
+                                    })}
+                                </ProductBlock>
+                            </>
                         )}
-                </>
-            )}
-        </Container>
-    );
+
+                        {data && data.overseaList && data.overseaList.length > 0 && (
+                            <>
+                                <AppContentH2>해외</AppContentH2>
+                                <ProductBlock>
+                                    {data.overseaList.map((stock, index) => {
+                                        return (
+                                            <StockTitle
+                                                key={index}
+                                                companyName={stock.stockName}
+                                                stockPrice={stock.stockTotal}
+                                                currentState={stock.stockRate > 0 ? 'up' : 'down'}
+                                                onToggle={() => handleSelect(stock)}
+                                            />
+                                        );
+                                    })}
+                                </ProductBlock>
+                            </>
+                        )}
+
+                        {data && data.etfList && data.etfList.length > 0 && (
+                            <>
+                                <AppContentH2>ETF</AppContentH2>
+                                <ProductBlock>
+                                    {data.etfList.map((stock, index) => {
+                                        return (
+                                            <StockTitle
+                                                key={index}
+                                                companyName={stock.stockName}
+                                                stockPrice={stock.stockTotal}
+                                                currentState={stock.stockRate > 0 ? 'up' : 'down'}
+                                                onToggle={() => handleSelect(stock)}
+                                            />
+                                        );
+                                    })}
+                                </ProductBlock>
+                            </>
+                        )}
+
+                        {(!data.domesticList || data.domesticList.length === 0) &&
+                            (!data.overseaList || data.overseaList.length === 0) &&
+                            (!data.etfList || data.etfList.length === 0) && (
+                                <BlankBlock>아직 구입한 주식이 없어요.</BlankBlock>
+                            )}
+                    </>
+                )}
+            </Container>
+        );
+    }
 };

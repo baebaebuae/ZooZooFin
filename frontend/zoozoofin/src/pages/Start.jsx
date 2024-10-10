@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import LogoMain from '@assets/images/icons/logo_main.svg';
 import Google from '@assets/images/icons/start/google.png';
@@ -58,26 +58,15 @@ const StartTextAnimated = styled(StartTextBox)`
 const API_URI = import.meta.env.VITE_URL;
 
 const Start = () => {
-    const [isEntered, setIsEntered] = useState(false);
+    const [isEntered, setIsEntered] = useState(false); // API
+    const [isMusicSelected, setIsMusicSelected] = useState(false);
 
-    const { isMusicChecked, updateMusicChecked } = useMusicStore();
+    const isMusicOn = useMusicStore((state) => state.isMusicOn);
+    const toggleMusic = useMusicStore((state) => state.toggleMusic);
 
-    useEffect(() => {
-        const sessionExists = sessionStorage.getItem('sessionExists');
-
-        if (!sessionExists) {
-            // 앱 Off -> On (sessionStorage 없을 때)
-            localStorage.removeItem('isMusicChecked');
-            sessionStorage.setItem('sessionExists', 'true'); // 입력해줌
-            updateMusicChecked(false);
-        } else {
-            // 새로고침시 (같은 세션에서 실행)
-            const musicPreferenceChecked = localStorage.getItem('isMusicChecked');
-            if (musicPreferenceChecked !== null) {
-                updateMusicChecked(true);
-            }
-        }
-    }, [updateMusicChecked]);
+    const handleSelectMusicOn = () => {
+        setIsMusicSelected(true);
+    };
 
     const handleEnter = () => {
         setIsEntered(true);
@@ -89,7 +78,7 @@ const Start = () => {
 
     return (
         <>
-            {isMusicChecked ? (
+            {isMusicSelected ? (
                 isEntered ? (
                     <>
                         <StartBlock>
@@ -117,7 +106,7 @@ const Start = () => {
                     </StartBlock>
                 )
             ) : (
-                <StartMusic />
+                <StartMusic handleSelectMusicOn={handleSelectMusicOn} />
             )}
         </>
     );

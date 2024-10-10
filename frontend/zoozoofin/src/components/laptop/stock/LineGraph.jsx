@@ -16,14 +16,14 @@ export const LineGraph = ({ stockData }) => {
     const [closePrices, setClosePrices] = useState(null);
 
     useEffect(() => {
-        const nowTurn = stockData.slice(0, turn + 25);
+        const nowTurn = stockData.slice(0, turn + 24);
         setData(nowTurn);
     }, [turn]);
 
-    // 주식 데이터에서 price만 추출
+    // 주식 데이터에서 endPrice만 추출
     useEffect(() => {
         if (data) {
-            const prices = Object.values(data).map((item) => (item ? item['price'] : 0));
+            const prices = Object.values(data).map((item) => (item ? item['endPrice'] : 0));
             console.log(prices);
             setClosePrices(prices);
         }
