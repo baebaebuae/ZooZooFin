@@ -331,9 +331,12 @@ const TestPaper = () => {
     setIsLoading(true);
     try {
       const apiClient = getApiClient();
-      const answerList = Object.entries(userAnswers).map(([quizId, animalAnswer]) => ({
-        quizId: parseInt(quizId),
-        animalAnswer
+
+      const answerList = quizData.map((quiz) => ({
+        quizId: quiz.quizId,
+        animalAnswer: userAnswers[quiz.quizId] !== undefined 
+          ? userAnswers[quiz.quizId].trim() || null // 앞뒤 공백만 제거하고, 빈 값은 null 처리
+          : null
       }));
   
       const requestData = {
