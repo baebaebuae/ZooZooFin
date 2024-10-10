@@ -218,7 +218,6 @@ const Tutorial = () => {
     if (!currentScript) return <Loader loadingText={'주주시티에 입장하는중'} />;
 
     const receivedAnimalTypeId = location.state.animalTypeId;
-    // const receivedAnimalTypeId = 1; //임시로 지정
 
     let backgroundImage;
 
@@ -230,7 +229,8 @@ const Tutorial = () => {
         backgroundImage = MyRoomBackground;
     }
 
-    if (currentScript.content.includes('${name}')) {
+    // scriptId === 5 이면 다시 바꿔!!
+    if (currentScript.scriptId === 5 && currentScript.content.includes('${name}')) {
         currentScript.content = currentScript.content.replace(
             '${name}',
             `**${nowAnimal.animalName}**`
