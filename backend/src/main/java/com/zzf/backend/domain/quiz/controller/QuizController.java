@@ -4,7 +4,7 @@ import com.zzf.backend.domain.quiz.dto.QuizDto;
 import com.zzf.backend.domain.quiz.dto.QuizRequest;
 import com.zzf.backend.domain.quiz.dto.QuizResponse;
 import com.zzf.backend.domain.quiz.entity.Quiz;
-import com.zzf.backend.domain.quiz.service.QuizServiceImpl;
+import com.zzf.backend.domain.quiz.service.QuizService;
 import com.zzf.backend.global.auth.annotation.AnimalId;
 import com.zzf.backend.global.auth.annotation.MemberId;
 import com.zzf.backend.global.dto.ResponseDto;
@@ -27,40 +27,32 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/quiz")
 public class QuizController {
 
-    private final QuizServiceImpl quizServiceImpl;
+    private final QuizService quizService;
 
-    // 퀴즈 일자 별 퀴즈 목록 조회
     @GetMapping
     public ResponseDto<HashMap<String, List<QuizDto>>> getQuizzesByQuizDate() {
-        // 로컬 일자
         LocalDate localDate = LocalDate.now();
         Date currentDate = Date.from(localDate
                 .atStartOfDay(ZoneId.systemDefault())
                 .toInstant());
 
-        // 해당 일자의 퀴즈 목록 조회
-        List<Quiz> quizzes = quizServiceImpl.findQuizByQuizDate(currentDate);
+        List<Quiz> quizzes = quizService.findQuizByQuizDate(currentDate);
         List<QuizDto> quizDtoList = quizzes.stream()
                 .map(QuizDto::new)
                 .collect(Collectors.toList());
 
-        // quizzes
         HashMap<String, List<QuizDto>> map = new HashMap<>();
         map.put("quizzes", quizDtoList);
 
         return ResponseDto.success(SuccessCode.TODAY_QUIZ_SUCCESS, map);
     }
 
-    // 퀴즈 채점 결과
     @PostMapping("/submit")
-    public ResponseDto<QuizResponse> submitQuiz(
-            @MemberId String memberId,
-            @AnimalId Long animalId,
-            @RequestBody @Valid QuizRequest quizRequest) {
-        QuizResponse quizResponse = quizServiceImpl.gradeQuizzes(memberId, animalId, quizRequest);
+    public ResponseDto<QuizResponse> submitQuiz(@MemberId String memberId,
+                                                @AnimalId Long animalId,
+                                                @RequestBody @Valid QuizRequest quizRequest) {
+        QuizResponse quizResponse = quizService.gradeQuizzes(memberId, animalId, quizRequest);
 
         return ResponseDto.success(SuccessCode.QUIZ_GRADING_SUCCESS, quizResponse);
     }
-
-
 }

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.zzf.backend.global.status.ErrorCode.*;
@@ -373,21 +372,41 @@ public class StockServiceImpl implements StockService {
             throw new CustomException(STOCK_HISTORY_NOT_FOUND);
         }
 
-        return NotebookStockInfoResponse.builder()
-                .stockName(stock.getStockName())
-                .stockPrice(chart.getPrice())
-                .stockRate(chart.getRate())
-                .chart(chartList.stream()
-                        .map(NotebookStockInfoResponse::getChartInfo)
-                        .collect(Collectors.toList()))
-                .stockCount(stockHolding.getStockCount())
-                .buyTurn(stockHistoryList.getFirst().getTurn())
-                .rate(getStockRate(stockHolding.getStockAveragePrice(), chart.getPrice()))
-                .profit((long) (chart.getPrice() - stockHolding.getStockAveragePrice()) * stockHolding.getStockCount())
-                .stockHistory(stockHistoryList.stream()
-                        .map(NotebookStockInfoResponse::getStockHistoryInfo)
-                        .collect(Collectors.toList()))
-                .build();
+        if (stock.getStockType().equals("해외")) {
+            Exchange exchange = exchangeRepository.findByTurn(animal.getTurn())
+                    .orElseThrow(() -> new CustomException(EXCHANGE_NOT_FOUND_EXCEPTION));
+            return NotebookStockInfoResponse.builder()
+                    .stockName(stock.getStockName())
+                    .stockPrice(chart.getPrice() * exchange.getExchange())
+                    .stockRate(chart.getRate())
+                    .chart(chartList.stream()
+                            .map(NotebookStockInfoResponse::getChartInfo)
+                            .collect(Collectors.toList()))
+                    .stockCount(stockHolding.getStockCount())
+                    .buyTurn(stockHistoryList.getFirst().getTurn())
+                    .rate(getStockRate(stockHolding.getStockAveragePrice(), chart.getPrice()))
+                    .profit((long) (chart.getPrice() - stockHolding.getStockAveragePrice()) * stockHolding.getStockCount() * exchange.getExchange())
+                    .stockHistory(stockHistoryList.stream()
+                            .map(NotebookStockInfoResponse::getStockHistoryInfo)
+                            .collect(Collectors.toList()))
+                    .build();
+        } else {
+            return NotebookStockInfoResponse.builder()
+                    .stockName(stock.getStockName())
+                    .stockPrice(chart.getPrice())
+                    .stockRate(chart.getRate())
+                    .chart(chartList.stream()
+                            .map(NotebookStockInfoResponse::getChartInfo)
+                            .collect(Collectors.toList()))
+                    .stockCount(stockHolding.getStockCount())
+                    .buyTurn(stockHistoryList.getFirst().getTurn())
+                    .rate(getStockRate(stockHolding.getStockAveragePrice(), chart.getPrice()))
+                    .profit((long) (chart.getPrice() - stockHolding.getStockAveragePrice()) * stockHolding.getStockCount())
+                    .stockHistory(stockHistoryList.stream()
+                            .map(NotebookStockInfoResponse::getStockHistoryInfo)
+                            .collect(Collectors.toList()))
+                    .build();
+        }
     }
 
     @Override

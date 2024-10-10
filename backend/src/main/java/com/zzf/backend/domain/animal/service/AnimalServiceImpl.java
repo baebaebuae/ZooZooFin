@@ -278,8 +278,8 @@ public class AnimalServiceImpl implements AnimalService {
         allTotal += depositTotal;
         allTotal += savingsTotal;
         allTotal += stockTotal;
-        allTotal += loanTotal;
-        allTotal += capitalTotal;
+        allTotal -= loanTotal;
+        allTotal -= capitalTotal;
 
         return AnimalInfoResponse.builder()
                 .animalName(animal.getName())
@@ -293,8 +293,8 @@ public class AnimalServiceImpl implements AnimalService {
                 .totalDeposit(depositTotal)
                 .totalSavings(savingsTotal)
                 .totalStock(stockTotal)
-                .totalLoan(loanTotal)
-                .totalCapital(capitalTotal)
+                .totalLoan(-loanTotal)
+                .totalCapital(-capitalTotal)
                 .build();
     }
 
