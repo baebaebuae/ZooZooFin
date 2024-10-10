@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import GameButton from '@components/work/GameButton.jsx';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
@@ -22,51 +22,48 @@ const ButtonContainer = styled.div`
     /* z-index: 1000; */
 `;
 const Work = () => {
-    const [openModal, setOpenModal] = useState(false)
-    const [isWorkToday, setIsWorkToday] = useState()
-    const [status, setStatus] = useState()
+    const [openModal, setOpenModal] = useState(false);
+    const [isWorkToday, setIsWorkToday] = useState();
+    const [status, setStatus] = useState();
     const navigate = useNavigate();
 
     const handleGameStart = () => {
         // 게임을 완료한 경우
-        if (isWorkToday){
-            setStatus("warning")
-            setOpenModal(true)
+        if (isWorkToday) {
+            setStatus('warning');
+            setOpenModal(true);
         } else if (isWorkToday === false) {
-            navigate('./inGame')
+            navigate('./inGame');
         }
     };
     const handleGameDescription = () => {
-        setOpenModal(true)
-    }
+        setOpenModal(true);
+    };
     const handleGameExit = () => {
-    navigate('/map')
-    }
+        navigate('/map');
+    };
 
     useEffect(() => {
-        console.log('useEffect 실행', isWorkToday)
-        const fetchGameState = async() => {
+        console.log('useEffect 실행', isWorkToday);
+        const fetchGameState = async () => {
             const apiClient = getApiClient();
             try {
-                const res = await apiClient.get('/animal/info')
+                const res = await apiClient.get('/animal/info');
                 if (res && res.status === 200) {
                     setIsWorkToday(res.data.body.isWorkToday);
                 }
             } catch (error) {
                 console.log(error);
             }
-        }
-        if (!isWorkToday || isWorkToday.length == 0){
+        };
+        if (!isWorkToday || isWorkToday.length == 0) {
             fetchGameState();
         }
-    }, [isWorkToday])
+    }, [isWorkToday]);
 
     return (
-        <>
-        {openModal && <GameDescription 
-            setOpenModal={setOpenModal}
-            status={status}
-        />}
+        <Block>
+            {openModal && <GameDescription setOpenModal={setOpenModal} status={status} />}
             <ButtonContainer>
                 <GameButton
                     emoji="🥕"
