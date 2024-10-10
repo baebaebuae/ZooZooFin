@@ -222,6 +222,7 @@ const CharacterInfo = ({ onClose }) => {
       totalSavings,
       totalStock,
       totalLoan,
+      totalCapital,
       fetchAnimalInfo,
       isLoading,
       error
@@ -244,7 +245,7 @@ const CharacterInfo = ({ onClose }) => {
   };
 
   if (isLoading) {
-      return <div>Loading...</div>;
+      return <div></div>;
   }
 
   if (error) {
@@ -298,7 +299,7 @@ const CharacterInfo = ({ onClose }) => {
                       </BadgeContainer>
                       <AssetSection>
                           <AssetRow>
-                              <AssetLabel>순자산</AssetLabel>
+                              <AssetLabel>총자산</AssetLabel>
                               <AssetValue bold>{totalAmount.toLocaleString()}🥕</AssetValue>
                           </AssetRow>
                       </AssetSection>
@@ -324,6 +325,12 @@ const CharacterInfo = ({ onClose }) => {
                               <AssetLabel>대출</AssetLabel>
                               <AssetValue color={theme.colors.warn}>
                                   {totalLoan > 0 ? `-${totalLoan.toLocaleString()}` : totalLoan.toLocaleString()}🥕
+                              </AssetValue>
+                          </AssetRow>
+                          <AssetRow>
+                              <AssetLabel>캐피탈</AssetLabel>
+                              <AssetValue color={theme.colors.warn}>
+                                  {totalCapital > 0 ? `-${totalCapital.toLocaleString()}` : totalCapital.toLocaleString()}🥕
                               </AssetValue>
                           </AssetRow>
                       </AssetSection>
