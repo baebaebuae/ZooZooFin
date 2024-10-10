@@ -260,8 +260,8 @@ public class NextTurnServiceImpl implements NextTurnService {
         for (Savings savings : savingsList) {
             // 이자 추가
             SavingsType savingsType = savings.getSavingsType();
-            double rate = Math.ceil(((double) savingsType.getSavingsRate() / savingsType.getSavingsPeriod()) / 100.0);
-            savings.increaseSavingsInterest((long) Math.ceil((savings.getSavingsAmount() * rate)));
+            double rate = (double) savingsType.getSavingsRate() / (savingsType.getSavingsPeriod() * 100);
+            savings.increaseSavingsInterest((long) Math.ceil((savings.getSavingsPayment() * rate)));
 
             // 적금이 만료된 경우 돈 반환
             if (savings.getSavingsEndTurn().equals(animal.getTurn())) {
