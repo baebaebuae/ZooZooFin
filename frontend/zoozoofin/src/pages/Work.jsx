@@ -5,6 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import GameDescription from '@components/work/GameDescription';
 import { getApiClient } from '@/stores/apiClient';
 
+const Block = styled.div`
+    position: relative;
+    z-index: 100000;
+`;
+
 const ButtonContainer = styled.div`
     display: flex;
     width: 100%;
@@ -14,6 +19,7 @@ const ButtonContainer = styled.div`
     justify-content: center;
     align-items: center;
     gap: 7px;
+    /* z-index: 1000; */
 `;
 const Work = () => {
     const [openModal, setOpenModal] = useState(false)
@@ -78,7 +84,7 @@ const Work = () => {
                 ></GameButton>
                 <GameButton text="게임 나가기" onClick={handleGameExit}></GameButton>
             </ButtonContainer>
-        </>
+        </Block>
     );
 };
 

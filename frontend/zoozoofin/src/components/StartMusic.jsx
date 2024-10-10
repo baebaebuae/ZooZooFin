@@ -4,8 +4,7 @@ import { useMusicStore } from '@stores/useMusicStore.js';
 
 const Container = styled.div`
     height: 640px;
-    /* background-color: ${({ theme }) => theme.colors.primaryDeep}; */
-    background-color: black;
+    /* background-color: black; */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -37,17 +36,21 @@ const TextBox = styled.div`
             border-color: transparent;
         }
     }
+    z-index: 10000000;
 `;
 
 const QuestionBlock = styled.div`
     color: white;
     font-size: 14px;
     margin: 50px 0 10px 0;
+    z-index: 10000000;
+
 `;
 
 const TextBlock = styled.div`
     display: flex;
     gap: 20px;
+    z-index: 232350250;
 `;
 
 const Enterbutton = styled.div`

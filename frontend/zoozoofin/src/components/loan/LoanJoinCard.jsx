@@ -202,7 +202,7 @@ export const LoanJoinCard = ({ currentTurn, maxAmount, saveLoanInfo, loanRate })
                 <TurnSliderLoan
                     title={'대출 기간'}
                     min={10}
-                    max={40 - currentTurn}
+                    max={50 - currentTurn}
                     onTurnChange={handleTurnChange}
                 />
                 <ProductDetailInfo

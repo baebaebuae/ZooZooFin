@@ -16,11 +16,13 @@ import CharacterInfo from './character/CharacterInfo';
 import Wallet from './Wallet';
 
 const HeaderContainer = styled.nav`
-    position: fixed;
-    top: 20px;
-    left: 10px; // 절대적인 픽셀 값
+    /* position: fixed; */
+    /* top: 20px; */
+    /* left: 10px; // 절대적인 픽셀 값 */
     width: 340px;
     z-index: 1000;
+    margin: 0 10px;
+    z-index: 5000;
 `;
 
 const HeaderBlock = styled.div`
@@ -54,7 +56,7 @@ const Header = () => {
     };
 
     const openWalletModal = () => {
-        setIsWalletOpen(true); 
+        setIsWalletOpen(true);
     };
 
     const closeWalletModal = () => {

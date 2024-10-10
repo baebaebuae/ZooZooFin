@@ -26,6 +26,7 @@ const LoginButtonBlock = styled.div`
 
 const LoginButton = styled.img`
     width: 50px;
+    z-index: 10000000;
     height: 50px;
 `;
 
@@ -49,6 +50,11 @@ const StartTextBox = styled.div`
         1px -1px 0 white,
         -1px 1px 0 white,
         1px 1px 0 white;
+    z-index: 10000000;
+`;
+
+const ImageBox = styled.img`
+    z-index: 10000000;
 `;
 
 const StartTextAnimated = styled(StartTextBox)`
@@ -112,7 +118,7 @@ const Start = () => {
                     </>
                 ) : (
                     <StartBlock onClick={handleEnter}>
-                        <img src={LogoMain} width={250} />
+                        <ImageBox src={LogoMain} width={250} />
                         <StartTextAnimated>- 터치로 주주시티 입장 -</StartTextAnimated>
                     </StartBlock>
                 )
