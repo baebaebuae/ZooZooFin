@@ -41,6 +41,39 @@ class MemberControllerTest {
     private final String token = "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6ImI2MGU4Y2JjLTljMjAtNGY1My1iZjY4LWNmZWFmMjg1ZDNkNSIsImV4cCI6MTgxNDY0MDgzNX0.-m9wnI1dqig8v2ibj1-975jX7mhK8t0goa_PNrkjK8U";
 
     @Test
+    @DisplayName("시작 정보 조회 - 성공")
+    public void start_info_success() throws Exception {
+        // given
+
+        // when
+        ResultActions actions = mockMvc.perform(
+                get("/api/v1/member/start")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.httpStatus").value(START_INFO_SUCCESS.getHttpStatus()))
+                .andExpect(jsonPath("$.message").value(START_INFO_SUCCESS.getMessage()))
+                .andDo(
+                        document("시작 정보 조회",
+                                ResourceSnippetParameters.builder()
+                                        .tag("사용자")
+                                        .summary("시작 정보 조회 API")
+                                        .description("튜토리얼 여부와 진행중인 동물 여부를 불러오는 API"),
+                                responseFields(
+                                        fieldWithPath("httpStatus").type(JsonFieldType.NUMBER).description("응답 상태코드"),
+                                        fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
+                                        fieldWithPath("body.isStarted").type(JsonFieldType.BOOLEAN).description("튜토리열 여부"),
+                                        fieldWithPath("body.isActivated").type(JsonFieldType.BOOLEAN).description("진행 동물 여부")
+                                )
+                        )
+                );
+    }
+
+    @Test
     @DisplayName("프로필 조회 - 성공")
     public void member_profile_success() throws Exception {
         // given
@@ -97,7 +130,7 @@ class MemberControllerTest {
                                 ResourceSnippetParameters.builder()
                                         .tag("사용자")
                                         .summary("나의 동물 조회 API")
-                                        .description("사용자의 동물 리스트를 불러오는 API"),
+                                        .description("사용자의 끝난 동물 리스트를 불러오는 API"),
                                 responseFields(
                                         fieldWithPath("httpStatus").type(JsonFieldType.NUMBER).description("응답 상태코드"),
                                         fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),

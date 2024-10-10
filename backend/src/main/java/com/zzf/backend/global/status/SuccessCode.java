@@ -13,6 +13,7 @@ public enum SuccessCode {
     LOGOUT_SUCCESS(204, "로그아웃 성공"),
     REISSUE_SUCCESS(201, "토큰 재발급 성공"),
 
+    START_INFO_SUCCESS(200, "시작 정보 조회 성공"),
     PROFILE_SUCCESS(200, "프로필 조회 성공"),
 
     MY_ANIMAL_SUCCESS(200, "나의 동물 리스트 조회 성공"),
