@@ -26,7 +26,7 @@ const Work = () => {
         if (isWorkToday){
             setStatus("warning")
             setOpenModal(true)
-        } else {
+        } else if (isWorkToday === false) {
             navigate('./inGame')
         }
     };
