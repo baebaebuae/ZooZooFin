@@ -157,7 +157,7 @@ const Stock = () => {
         if (currentScript.content.includes('${name}')) {
             currentScript.content = currentScript.content.replace(
                 '${name}',
-                `**${nowAnimal.animalName}**야!`
+                `${nowAnimal ? `**${nowAnimal.animalName}**야!` : ''}`
             );
         }
 

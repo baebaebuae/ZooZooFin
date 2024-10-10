@@ -5,6 +5,14 @@ import { QuestionButton } from '@components/stock/common/button/Button';
 import { Divider } from '@components/stock/common/card/StoreCards';
 import useStockStore from '../store/StockStore';
 
+const CardColumn = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0px;
+    width: 100%;
+`;
 const CardRow = styled.div`
     display: flex;
     flex-direction: row;
@@ -39,21 +47,37 @@ export const OverviewText = styled.p`
         type === 'title' || type === 'list' || type === 'content' ? 'black' : theme.colors.gray};
 `;
 
-export const Title = ({ quarter }) => {
+export const Title = ({ quarter, channel }) => {
     const { clickedStockInfo } = useStockStore();
 
-    return (
-        <CardRow>
-            <TitleRow>
-                <LargeIcon icon={IconOverview} />
-                <OverviewColumn>
-                    <OverviewText>{quarter}분기</OverviewText>
-                    <OverviewText type={'title'}>재무제표</OverviewText>
-                </OverviewColumn>
-            </TitleRow>
-            <OverviewText>{clickedStockInfo.stockName}</OverviewText>
-        </CardRow>
-    );
+    if (channel) {
+        if (channel === 'ETF') {
+            return (
+                <CardColumn>
+                    <TitleRow>
+                        <LargeIcon icon={IconOverview} />
+                        <OverviewColumn>
+                            <OverviewText type={'title'}>구성 종목</OverviewText>
+                        </OverviewColumn>
+                    </TitleRow>
+                    <OverviewText>{clickedStockInfo.stockName}</OverviewText>
+                </CardColumn>
+            );
+        } else {
+            return (
+                <CardRow>
+                    <TitleRow>
+                        <LargeIcon icon={IconOverview} />
+                        <OverviewColumn>
+                            <OverviewText>{quarter ? `${quarter}분기` : ''}</OverviewText>
+                            <OverviewText type={'title'}>재무제표</OverviewText>
+                        </OverviewColumn>
+                    </TitleRow>
+                    <OverviewText>{clickedStockInfo.stockName}</OverviewText>
+                </CardRow>
+            );
+        }
+    }
 };
 
 const ListColumn = styled.div`

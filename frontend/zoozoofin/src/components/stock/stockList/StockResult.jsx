@@ -39,6 +39,7 @@ const postStock = async (type, stockId, stockCount, onComplete) => {
 export const StockResult = ({ onComplete, type }) => {
     const [value, setValue] = useState('');
     const { totalStock, clickedStockId } = useStockStore();
+
     useEffect(() => {
         if (type === 'buy') {
             setValue('구매');

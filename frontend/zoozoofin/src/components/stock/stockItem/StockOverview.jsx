@@ -8,6 +8,7 @@ import { CardTitle } from '@components/stock/common/container/StockDetailContain
 import IconGraph from '@assets/images/icons/stocks/icon_graph.png';
 import { LargeIcon } from '@components/root/icon';
 import { MovingAverage } from '@components/stock/common/graph/MovingAverage';
+import ETFGraph from '@components/stock/common/graph/ETFGraph';
 import { useEffect, useState } from 'react';
 import { ExplainModal } from '@components/stock/stockItem/StockModal';
 
@@ -64,7 +65,15 @@ export const StockOverview = ({ channel }) => {
             <>
                 {isModalOpen && <ExplainModal list={nowList} onClose={handleCloseModal} />}
 
-                <StockDetailCard>ETF 주식 차트 생성중 . . .</StockDetailCard>
+                <StockDetailCard>
+                    <Title
+                        quarter={stockDetail.period ? stockDetail.period : 0}
+                        channel={channel}
+                    />
+                    <>
+                        <ETFGraph />
+                    </>
+                </StockDetailCard>
                 <StockDetailCard>
                     <CardTitle>
                         <LargeIcon icon={IconGraph} />
@@ -80,7 +89,10 @@ export const StockOverview = ({ channel }) => {
                 {isModalOpen && <ExplainModal list={nowList} onClose={handleCloseModal} />}
 
                 <StockDetailCard>
-                    <Title quarter={stockDetail.period ? stockDetail.period : 0} />
+                    <Title
+                        quarter={stockDetail.period ? stockDetail.period : 0}
+                        channel={channel}
+                    />
                     {Object.entries(stockInfo).map(([list, item]) => (
                         <OverviewList key={list} list={list} item={item} onClick={handleModal} />
                     ))}

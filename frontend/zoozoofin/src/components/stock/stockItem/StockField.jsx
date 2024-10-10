@@ -7,7 +7,7 @@ import {
     DefaultText,
 } from '@components/stock/common/container/FieldIconContainer';
 import { DefaultFieldIcon, ActiveFieldIcon } from '@components/stock/common/icon/StockIcons';
-import { useUserStockStore } from '../common/store/StockStore';
+import useStockStore, { useUserStockStore } from '../common/store/StockStore';
 
 // 채널 별 주식 분야 리스트
 export const StockFieldList = {
@@ -123,7 +123,16 @@ const Wrapper = styled.div`
     width: max-content;
     gap: 20px;
 `;
-
+const formatStockRate = (stockRate) => {
+    const rate = Math.abs(stockRate);
+    if (stockRate < 0) {
+        return `▼ ${parseFloat(rate).toFixed(1)} %`; // 음수일 경우 부호를 빼고 ▼를 붙임
+    } else if (stockRate > 0) {
+        return `▲ ${parseFloat(rate).toFixed(1)} %`; // 양수일 경우 + 부호를 붙이고 ▲를 붙임
+    } else {
+        return '-'; // 0일 경우 그대로 출력
+    }
+};
 // 보유 주식 필드 조회
 const getMyStockFields = (nowItems, field) => {
     const searchFields = StockFieldList[field];
@@ -145,9 +154,7 @@ const StockField = ({ field, type, onFieldSelect }) => {
     const [items, setItems] = useState(null);
     const [activeIndex, setActiveIndex] = useState(null); // 활성화된 필드의 인덱스를 관리
     const [fieldCount, setFieldCount] = useState(8);
-
-    // 해외 환율 반영 예정
-    const ExchangeRate = 1350;
+    const { nowExchange, nowExchangeRate } = useStockStore();
 
     const { myDomesticStocks, myOverseasStocks, myETFStocks } = useUserStockStore();
     // 데이터 로드 함수
@@ -226,10 +233,10 @@ const StockField = ({ field, type, onFieldSelect }) => {
                 {/* 환율 금액 업데이트 예정 */}
                 <PriceContainer>
                     <TextStyle type="content" size="large">
-                        {ExchangeRate}
+                        {nowExchange}
                     </TextStyle>
-                    <TextStyle size="small" now="up">
-                        00.0%
+                    <TextStyle size="small" now={nowExchangeRate > 0 ? 'up' : 'down'}>
+                        {nowExchangeRate !== 0 ? formatStockRate(nowExchangeRate) : '-'}
                     </TextStyle>
                 </PriceContainer>
             </ExchangeRatebox>
