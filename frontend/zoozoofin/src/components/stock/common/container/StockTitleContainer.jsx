@@ -8,6 +8,7 @@ import {
     StockPrice,
     ButtonContainer,
     TitleCoulumn,
+    MyStockContent,
 } from '@components/stock/common/container/StoreContainer';
 import { CarrotIcon } from '@components/stock/common/icon/StockIcons';
 import { ActiveButton, DetailButton } from '@components/stock/common/button/Button';
@@ -16,6 +17,7 @@ import { useEffect, useState } from 'react';
 
 import { getApiClient } from '../../../../stores/apiClient';
 import useStockStore, { useUserStockStore } from '../store/StockStore';
+import styled from 'styled-components';
 
 const formatStockRate = (stockRate) => {
     const rate = Math.abs(stockRate);
@@ -39,6 +41,18 @@ export const StockTitle = ({ stockName, stockPrice, stockRate, onToggle, stockTo
         </BuyingContent>
     );
 };
+
+const MyStockContaier = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-bottom: 20px;
+    gap: 20px;
+`;
+
+const MyStockCollapse = styled(Collapse)`
+    width: 100%;
+`;
 
 export const StockTitleContainer = ({
     stockName,
@@ -155,13 +169,23 @@ export const StockTitleContainer = ({
                     <StockPrice> {(stockTotal || stockPrice || 0).toLocaleString()} 🥕</StockPrice>
                 </BuyingMoneyContent>
             </BuyingContent>
-            <Collapse in={isOpen} timeout="auto" unmountOnExit>
-                <p>{stockIntro ? stockIntro : clickedStockInfo.stockIntro}</p>
-                <ButtonContainer>
-                    <ActiveButton onClick={() => handleClickStock()}>{value}</ActiveButton>
-                    <DetailButton onClick={() => handleDetailClick()}>상세 정보</DetailButton>
-                </ButtonContainer>
-            </Collapse>
+            <MyStockCollapse in={isOpen} timeout="auto" unmountOnExit>
+                {stockIntro ? (
+                    <p>{stockIntro}</p>
+                ) : (
+                    <MyStockContaier>
+                        <MyStockContent>
+                            <CompanyName>현재 주가</CompanyName>
+                            <CompanyName>{stockPrice}🥕</CompanyName>
+                        </MyStockContent>
+                        <MyStockContent>
+                            <CompanyName>보유 주식 수</CompanyName>
+                            <CompanyName>{stockCount}주</CompanyName>
+                        </MyStockContent>
+                    </MyStockContaier>
+                )}{' '}
+            </MyStockCollapse>
+
             <Divider />
         </>
     );

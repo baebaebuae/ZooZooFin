@@ -36,7 +36,7 @@ export const StockFieldList = {
         Micro: '반도체',
         IT: 'IT',
         House: '리츠',
-        Bio: '바이오',
+        Bio: '바이오/헬스',
         China: '판다시티',
         Construction: '기계/건설',
         Bank: '금융',
@@ -135,16 +135,21 @@ const formatStockRate = (stockRate) => {
 };
 // 보유 주식 필드 조회
 const getMyStockFields = (nowItems, field) => {
-    const searchFields = StockFieldList[field];
-    const result = [];
-
-    Object.entries(searchFields).forEach(([key, value]) => {
-        if (nowItems.includes(value)) {
-            result[key] = value; // 일치하는 key-value 쌍을 result에 추가
+    console.log(field);
+    if (field) {
+        const searchFields = StockFieldList[field];
+        console.log(searchFields);
+        const result = {};
+        if (searchFields) {
+            Object.entries(searchFields).forEach(([key, value]) => {
+                if (nowItems.includes(value)) {
+                    result[key] = value; // 일치하는 key-value 쌍을 result에 추가
+                }
+            });
+            console.log(result);
+            return result;
         }
-    });
-
-    return result;
+    }
 };
 
 // 무한 스크롤 원리 적용
@@ -168,23 +173,35 @@ const StockField = ({ field, type, onFieldSelect }) => {
             setItems(nowItems);
             setLoading(false);
         } else if (type === 'sell') {
-            if (field === 'domestic') {
-                nowItems = myDomesticStocks.holdingsList.map((item) => item.stockField);
-            } else if (field === 'overseas') {
-                if (myOverseasStocks.length > 0) {
-                    // console.log(myOverseasStocks);
-                    nowItems = myOverseasStocks.holdingsList.map((item) => item.stockField);
-                } else {
-                    nowItems = [];
+            console.log(field);
+            console.log(typeof field);
+            if (field) {
+                if (field === 'domestic') {
+                    nowItems = myDomesticStocks.holdingsList.map((item) => item.stockField);
+                } else if (field === 'overseas') {
+                    if (myOverseasStocks) {
+                        // console.log(myOverseasStocks);
+                        nowItems = myOverseasStocks.holdingsList.map((item) => item.stockField);
+                    } else {
+                        nowItems = [];
+                    }
+                } else if (field === 'ETF') {
+                    if (myETFStocks) {
+                        nowItems = myETFStocks.holdingsList.map((item) => item.stockField);
+                        console.log(nowItems);
+                    }
                 }
-            } else if (field === 'ETF') {
-                nowItems = myETFStocks.holdingsList.map((item) => item.stockField);
             }
+            if (nowItems && field) {
+                const result = getMyStockFields(nowItems, field);
 
-            result = getMyStockFields(nowItems, field);
-            setItems(Object.entries(result)); // 객체를 배열로 변환
-            setFieldCount(Object.entries(result).length); // 배열의 길이로 분야 개수 count
-            setLoading(false);
+                if (result) {
+                    console.log(result);
+                    setItems(Object.entries(result)); // 객체를 배열로 변환
+                    setFieldCount(Object.entries(result).length); // 배열의 길이로 분야 개수 count
+                    setLoading(false);
+                }
+            }
         }
     };
 

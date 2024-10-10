@@ -61,10 +61,15 @@ const Enterbutton = styled.div`
 `;
 
 const StartMusic = ({ handleSelectMusicOn }) => {
-    const toggleMusic = useMusicStore((state) => state.toggleMusic);
+    const { toggleMusic, updateMusicChecked } = useMusicStore();
+
+    const checkMusic = () => {
+        updateMusicChecked(true);
+        localStorage.setItem('isMusicChecked', JSON.stringify(true));
+    };
 
     const goToEnterPage = () => {
-        handleSelectMusicOn();
+        checkMusic();
         toggleMusic();
     };
 
@@ -75,7 +80,7 @@ const StartMusic = ({ handleSelectMusicOn }) => {
             <QuestionBlock>음악을 들을래?</QuestionBlock>
             <TextBlock>
                 <Enterbutton onClick={goToEnterPage}>응</Enterbutton>
-                <Enterbutton onClick={handleSelectMusicOn}>아니</Enterbutton>
+                <Enterbutton onClick={checkMusic}>아니</Enterbutton>
             </TextBlock>
         </Container>
     );

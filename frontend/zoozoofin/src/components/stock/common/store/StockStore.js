@@ -124,19 +124,20 @@ export const useUserStockStore = create((set) => ({
             // 기본적으로 domestic 주식 목록을 가져옴
             requests.push(apiClient.get('/stock/domestic'));
             // turn이 5 이상이면 해외 주식 목록도 가져옴
-            if (turn >= 5) {
-                requests.push(apiClient.get('/stock/oversea'));
-            }
+            requests.push(apiClient.get('/stock/oversea'));
             // turn이 10 이상이면 ETF 목록도 가져옴
-            if (turn >= 10) {
-                requests.push(apiClient.get('/stock/etf'));
-            }
+
+            requests.push(apiClient.get('/stock/etf'));
+
             // Promise.all을 사용해 모든 요청을 병렬로 처리
             const responses = await Promise.all(requests);
             const [domesticResponse, overseaResponse, etfResponse] = responses;
 
             console.log(responses);
             console.log('myDomesticResponse', domesticResponse);
+            console.log('myOverseaResponse', overseaResponse);
+            console.log('myETFResponse', etfResponse);
+
             if (domesticResponse) {
                 set({ myDomesticStocks: domesticResponse.data.body });
             }
