@@ -9,7 +9,7 @@ import StockOverview from '@components/stock/stockItem/StockOverview';
 import StockHint from '@components/stock/stockItem/StockHint';
 import useStockStore from '../common/store/StockStore';
 
-export const StockDetail = () => {
+export const StockDetail = ({ channel }) => {
     const [goToOverview, setGoToOverview] = useState(false);
     const [isHintOpen, setIsHintOpen] = useState(false);
     const { clickedStockId } = useStockStore();
@@ -30,19 +30,34 @@ export const StockDetail = () => {
     };
 
     if (goToOverview) {
-        return <StockOverview />;
+        return <StockOverview channel={channel} />;
     } else {
-        return (
-            <>
-                <ChannelMessage>
-                    <MessageIcon />
-                    주식 상세 정보를 알아보자!
-                </ChannelMessage>
-                <StockGraph onClickDetail={onClickDetail} onClickHint={onClickHint} />
-                <StockNews />
-                <StockHint isOpen={isHintOpen} onClose={closeHint} stockId={clickedStockId} />
-            </>
-        );
+        if (channel === 'ETF') {
+            return (
+                <>
+                    <ChannelMessage>
+                        <MessageIcon />
+                        주식 상세 정보를 알아보자!
+                    </ChannelMessage>
+                    {/* ETF 주식 그래프  */}
+                    <StockGraph onClickDetail={onClickDetail} onClickHint={onClickHint} />
+                    <StockNews />
+                    <StockHint isOpen={isHintOpen} onClose={closeHint} stockId={clickedStockId} />
+                </>
+            );
+        } else {
+            return (
+                <>
+                    <ChannelMessage>
+                        <MessageIcon />
+                        주식 상세 정보를 알아보자!
+                    </ChannelMessage>
+                    <StockGraph onClickDetail={onClickDetail} onClickHint={onClickHint} />
+                    <StockNews />
+                    <StockHint isOpen={isHintOpen} onClose={closeHint} stockId={clickedStockId} />
+                </>
+            );
+        }
     }
 };
 

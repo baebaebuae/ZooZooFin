@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import useStockStore from '../common/store/StockStore';
 import styled from 'styled-components';
 
-export const StockOrder = ({ type, orderIsDone }) => {
+export const StockOrder = ({ channel, type, orderIsDone }) => {
     const [value, setValue] = useState(null);
     const [button, setButton] = useState(null);
 
@@ -33,7 +33,7 @@ export const StockOrder = ({ type, orderIsDone }) => {
             <ChannelMessage>
                 <MessageIcon />몇 주 {value}할거야 개굴?
             </ChannelMessage>
-            <OrderCard type={type} />
+            <OrderCard channel={channel} type={type} />
             {totalStock > 0 && (
                 <ActiveButton size={'large'} onClick={handleOnClick}>
                     {button}

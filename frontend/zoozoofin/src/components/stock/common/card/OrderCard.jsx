@@ -18,7 +18,7 @@ export const OrderCardBox = styled(Card)`
     gap: 20px;
 `;
 
-export const OrderCard = ({ type }) => {
+export const OrderCard = ({ channel, type }) => {
     // 해당 주식 상세 정보 각각 인자로 작성될 예정
     const { animalAssets } = useUserStore();
     const { clickedMyStock } = useUserStockStore();
@@ -29,12 +29,21 @@ export const OrderCard = ({ type }) => {
     const [maxStock, setMaxStock] = useState(0);
     const [maxMoney, setMaxMoney] = useState(0);
 
+    // 해외 환율 반영 예정
+
     useEffect(() => {
+        const ExchangeRate = 1350;
         if (clickedStockId > 0) {
             // 현재 턴을 기준으로 가져올 예정
             const pricecharts = clickedStockInfo.chart;
-            const stockPrice = pricecharts ? pricecharts[pricecharts.length - 1]['endPrice'] : 0;
-            setNowPrice(stockPrice);
+            console.log(channel);
+            if (channel === '해외 주식') {
+                const stockPrice = pricecharts ? pricecharts[pricecharts.length - 1]['price'] : 0;
+                setNowPrice(stockPrice * ExchangeRate);
+            } else {
+                const stockPrice = pricecharts ? pricecharts[pricecharts.length - 1]['price'] : 0;
+                setNowPrice(stockPrice);
+            }
             const stockRate = pricecharts ? pricecharts[pricecharts.length - 1]['rate'] : 0;
             setNowRate(stockRate);
         }
@@ -61,14 +70,14 @@ export const OrderCard = ({ type }) => {
             <OrderCardBox>
                 <StockTitle
                     stockName={clickedStockInfo ? clickedStockInfo.stockName : 'stockName'}
-                    stockPrice={nowPrice}
-                    stockRate={nowRate}
+                    stockPrice={nowPrice ? nowPrice : 0}
+                    stockRate={nowRate ? nowRate : 0}
                     type={type}
                 />
                 <OrderSubtitle
                     type={type}
-                    maxStock={maxStock}
-                    maxMoney={maxMoney.toLocaleString()}
+                    maxStock={maxStock ? maxStock.toLocaleString() : 0}
+                    maxMoney={maxMoney ? maxMoney.toLocaleString() : 0}
                 />
                 <InputOrder type={type} stockPrice={nowPrice} max={maxStock} />
             </OrderCardBox>
@@ -79,14 +88,14 @@ export const OrderCard = ({ type }) => {
             <OrderCardBox>
                 <StockTitle
                     stockName={clickedMyStock ? clickedMyStock.stockName : 'stockName'}
-                    stockPrice={clickedMyStock.stockTotal}
-                    stockRate={nowRate}
+                    stockPrice={clickedMyStock ? clickedMyStock.stockPrice : 0}
+                    stockRate={nowRate ? nowRate : 0}
                     type={type}
                 />
                 <OrderSubtitle
                     type={type}
-                    maxStock={maxStock}
-                    maxMoney={maxMoney.toLocaleString()}
+                    maxStock={maxStock ? maxStock.toLocaleString() : 0}
+                    maxMoney={maxMoney ? maxMoney.toLocaleString() : 0}
                 />
                 <InputOrder type={type} stockPrice={nowPrice} max={maxStock} />
             </OrderCardBox>

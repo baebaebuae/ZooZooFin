@@ -11,6 +11,7 @@ export const MovingAverage = () => {
     const [stockData, setStockData] = useState(0);
     const [turns, setTurns] = useState([]);
     const [dataPrices, setdataPrices] = useState([]);
+
     // 클릭된 주식 차트를 상태에 저장
     useEffect(() => {
         if (clickedStockCharts) {
@@ -22,10 +23,10 @@ export const MovingAverage = () => {
     useEffect(() => {
         if (stockData) {
             const prices = Object.values(stockData).map((price) => [
-                price['startPrice'],
-                price['highPrice'],
-                price['lowPrice'],
-                price['endPrice'],
+                price['startPrice'] ? price['startPrice'] : 0,
+                price['highPrice'] ? price['highPrice'] : 0,
+                price['lowPrice'] ? price['lowPrice'] : 0,
+                price['endPrice'] ? price['endPrice'] : 0,
             ]);
             setdataPrices(prices);
         }
@@ -33,7 +34,7 @@ export const MovingAverage = () => {
 
     const calculateMovingAverage = (data, windowSize) => {
         return data.map((_, idx, arr) => {
-            if (idx < windowSize - 1) return null;
+            if (idx < windowSize - 1) return;
             const window = arr.slice(idx - windowSize + 1, idx + 1);
             const sum = window.reduce((acc, val) => acc + val[3], 0);
 
@@ -114,7 +115,7 @@ export const MovingAverage = () => {
             type: 'candlestick',
             data: dataPrices.map((price, index) => ({
                 x: index,
-                y: price,
+                y: price ? price : 0,
             })),
         },
     ];

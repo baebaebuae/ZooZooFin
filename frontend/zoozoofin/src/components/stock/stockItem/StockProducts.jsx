@@ -40,8 +40,11 @@ export const StockProducts = ({ field, onStockSelected, type, channel, handleDet
         // console.log(stockItems);
     }, [channel]);
 
+    useEffect(() => {
+        setOpen([false, false, false]); // 초기화할 때 open 상태도 초기화
+    }, [field]);
+
     if (type === 'buy' && stockItems) {
-        console.log(stockItems);
         return (
             <StockBuyingCard>
                 {stockItems

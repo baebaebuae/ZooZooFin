@@ -3,33 +3,31 @@ import styled from 'styled-components';
 import ReactApexChart from 'react-apexcharts';
 import useStockStore from '@components/stock/common/store/StockStore';
 import { useEffect, useState } from 'react';
+import useUserStore from '../../../stores/useUserStore';
 
 const GraphWrapper = styled.div`
     padding-top: 10px;
 `;
 
-export const LineGraph = () => {
-    const { clickedStockCharts } = useStockStore();
+export const LineGraph = ({ stockData }) => {
     // turn 연결 후 그래프 처리하기
-
-    const [stockData, setStockData] = useState(0);
-    const [turns, setTurns] = useState([]);
+    const [data, setData] = useState(null);
+    const { turn } = useUserStore();
     const [closePrices, setClosePrices] = useState(null);
 
-    // 클릭된 주식 차트를 상태에 저장
     useEffect(() => {
-        if (clickedStockCharts) {
-            setStockData(clickedStockCharts);
-        }
-    }, [clickedStockCharts]);
+        const nowTurn = stockData.slice(0, turn + 24);
+        setData(nowTurn);
+    }, [turn]);
 
     // 주식 데이터에서 endPrice만 추출
     useEffect(() => {
-        if (stockData) {
-            const prices = Object.values(stockData).map((item) => (item ? item['endPrice'] : 0));
+        if (data) {
+            const prices = Object.values(data).map((item) => (item ? item['endPrice'] : 0));
+            console.log(prices);
             setClosePrices(prices);
         }
-    }, [stockData]);
+    }, [data, turn]);
 
     const options = {
         chart: {
@@ -96,7 +94,7 @@ export const LineGraph = () => {
     return (
         <>
             <GraphWrapper>
-                {closePrices && turns && <ReactApexChart options={options} series={series} />}
+                {closePrices && <ReactApexChart options={options} series={series} />}
             </GraphWrapper>
         </>
     );
