@@ -384,9 +384,6 @@ const Portfolio = ({ isOpen, onClose, animalId, animalImage, createdDate }) => {
           </ChartContainer>
           <SectionTitle>전체 사용자 대비 내 순위</SectionTitle>
           <PercentageBox>
-            <p>수익률 상위 <PercentValue>{data.portfolio.ReturnRate}%</PercentValue></p>
-          </PercentageBox>
-          <PercentageBox>
             <p>총 자금 상위 <PercentValue>{data.portfolio.totalFundsPercent}%</PercentValue></p>
           </PercentageBox>
         </ScrollableContent>

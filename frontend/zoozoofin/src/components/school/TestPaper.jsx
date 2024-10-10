@@ -163,7 +163,6 @@ const SubmitButton = styled.button`
   }
 `;
 
-
 const GradeMarker = styled.div`
   position: absolute;
   top: -10px;
@@ -194,7 +193,6 @@ const ScoreDisplay = ({ score }) => {
 ScoreDisplay.propTypes = {
   score: PropTypes.number.isRequired,
 };
-
 
 const QuestionSection = ({ question, index, onAnswerChange, userAnswer, isSubmitted, isCorrect }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -338,18 +336,30 @@ const TestPaper = () => {
     }));
   };
 
-  const handleSubmit = () => {
-    let correct = 0;
-    const newCorrectAnswers = {};
-    quizData.forEach(question => {
-      const isCorrect = userAnswers[question.quizId] === question.quizAnswer;
-      newCorrectAnswers[question.quizId] = isCorrect;
-      if (isCorrect) correct++;
-    });
-    const calculatedScore = (correct / quizData.length) * 100;
-    setScore(calculatedScore);
-    setCorrectAnswers(newCorrectAnswers);
-    setIsSubmitted(true);
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    try {
+      const apiClient = getApiClient();
+      const answerList = Object.entries(userAnswers).map(([quizId, animalAnswer]) => ({
+        quizId: parseInt(quizId),
+        animalAnswer
+      }));
+
+      const response = await apiClient.post('/quiz/submit', { answerList });
+      
+      if (response.data && response.data.body) {
+        setScore(response.data.body.score);
+        setCorrectAnswers(response.data.body.correctAnswers);
+        setIsSubmitted(true);
+      } else {
+        throw new Error('Invalid response from server');
+      }
+    } catch (error) {
+      console.error('Failed to submit quiz:', error);
+      // You might want to show an error message to the user here
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleFinish = () => {
@@ -391,7 +401,7 @@ const TestPaper = () => {
           {rightQuestions.map((question, index) => (
             <QuestionSection 
               key={question.quizId} 
-              question={question} 
+              question={question}
               index={index + leftQuestions.length + 1}
               onAnswerChange={handleAnswerChange}
               userAnswer={userAnswers[question.quizId]}
@@ -401,7 +411,9 @@ const TestPaper = () => {
           ))}
         </QuestionGroup>
       </QuestionsContainer>
-      {!isSubmitted && <SubmitButton onClick={handleSubmit}>제출하기</SubmitButton>}
+      {!isSubmitted && <SubmitButton onClick={handleSubmit} disabled={isLoading}>
+        {isLoading ? '제출 중...' : '제출하기'}
+      </SubmitButton>}
       {isSubmitted && <SubmitButton onClick={handleFinish}>시험 종료</SubmitButton>}
     </Paper>
   );
