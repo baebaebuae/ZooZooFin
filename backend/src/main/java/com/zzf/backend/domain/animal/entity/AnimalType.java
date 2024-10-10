@@ -20,14 +20,14 @@ public class AnimalType {
 
     @Column(name = "animal_ability")
     @NotNull
-    private Long animalAbility;
+    private String animalAbility;
 
     @Column(name = "animal_img_url")
     @NotNull
     private String animalImgUrl;
 
     @Builder
-    public AnimalType(String animalTypeName, Long animalAbility, String animalImgUrl) {
+    public AnimalType(String animalTypeName, String animalAbility, String animalImgUrl) {
         this.animalTypeName = animalTypeName;
         this.animalAbility = animalAbility;
         this.animalImgUrl = animalImgUrl;

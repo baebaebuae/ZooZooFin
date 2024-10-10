@@ -74,7 +74,7 @@ class AnimalControllerTest {
                                         fieldWithPath("body[]").type(JsonFieldType.ARRAY).description("동물 타입 배열"),
                                         fieldWithPath("body[].animalTypeId").type(JsonFieldType.NUMBER).description("ID"),
                                         fieldWithPath("body[].animalTypeName").type(JsonFieldType.STRING).description("타입 이름"),
-                                        fieldWithPath("body[].animalAbility").type(JsonFieldType.NUMBER).description("동물 능력")
+                                        fieldWithPath("body[].animalAbility").type(JsonFieldType.STRING).description("동물 능력")
                                 )
                         )
                 );
@@ -178,13 +178,21 @@ class AnimalControllerTest {
                                         fieldWithPath("httpStatus").type(JsonFieldType.NUMBER).description("응답 상태코드"),
                                         fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
                                         fieldWithPath("body.animalName").type(JsonFieldType.STRING).description("이름"),
-                                        fieldWithPath("body.animalAsset").type(JsonFieldType.NUMBER).description("가용 자산"),
+                                        fieldWithPath("body.animalHierarchy").type(JsonFieldType.STRING).description("이름"),
+                                        fieldWithPath("body.animalAbility").type(JsonFieldType.STRING).description("이름"),
                                         fieldWithPath("body.animalCredit").type(JsonFieldType.NUMBER).description("신용도"),
+                                        fieldWithPath("body.totalAmount").type(JsonFieldType.NUMBER).description("신용도"),
+                                        fieldWithPath("body.totalAssets").type(JsonFieldType.NUMBER).description("신용도"),
+                                        fieldWithPath("body.totalDeposit").type(JsonFieldType.NUMBER).description("신용도"),
+                                        fieldWithPath("body.totalSavings").type(JsonFieldType.NUMBER).description("신용도"),
+                                        fieldWithPath("body.totalStock").type(JsonFieldType.NUMBER).description("신용도"),
+                                        fieldWithPath("body.totalLoan").type(JsonFieldType.NUMBER).description("신용도"),
                                         fieldWithPath("body.portfolio.depositPercent").type(JsonFieldType.NUMBER).description("예금 비율"),
                                         fieldWithPath("body.portfolio.savingsPercent").type(JsonFieldType.NUMBER).description("적금 비율"),
                                         fieldWithPath("body.portfolio.stockPercent").type(JsonFieldType.NUMBER).description("주식 비율"),
                                         fieldWithPath("body.portfolio.investmentStyle").type(JsonFieldType.STRING).description("투자 방식"),
-                                        fieldWithPath("body.portfolio.ending").type(JsonFieldType.STRING).description("엔딩 타입")
+                                        fieldWithPath("body.portfolio.ending").type(JsonFieldType.STRING).description("엔딩 타입"),
+                                        fieldWithPath("body.portfolio.totalFundsPercent").type(JsonFieldType.NUMBER).description("엔딩 타입")
                                 )
                         )
                 );
@@ -234,7 +242,7 @@ class AnimalControllerTest {
                                         fieldWithPath("httpStatus").type(JsonFieldType.NUMBER).description("응답 상태코드"),
                                         fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
                                         fieldWithPath("body.animalName").type(JsonFieldType.STRING).description("이름"),
-                                        fieldWithPath("body.animalAbility").type(JsonFieldType.NUMBER).description("능력"),
+                                        fieldWithPath("body.animalAbility").type(JsonFieldType.STRING).description("능력"),
                                         fieldWithPath("body.animalHierarchy").type(JsonFieldType.STRING).description("계급"),
                                         fieldWithPath("body.animalCredit").type(JsonFieldType.NUMBER).description("신용도"),
                                         fieldWithPath("body.isSolvedQuizToday").type(JsonFieldType.BOOLEAN).description("퀴즈 여부"),

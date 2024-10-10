@@ -4,8 +4,15 @@ import lombok.Builder;
 
 @Builder
 public record AnimalPortfolioResponse(String animalName,
-                                      Long animalAsset,
+                                      String animalHierarchy,
+                                      String animalAbility,
                                       Long animalCredit,
+                                      Long totalAmount,
+                                      Long totalAssets,
+                                      Long totalDeposit,
+                                      Long totalSavings,
+                                      Long totalStock,
+                                      Long totalLoan,
                                       Portfolio portfolio) {
 
     @Builder
@@ -13,6 +20,7 @@ public record AnimalPortfolioResponse(String animalName,
                             Double savingsPercent,
                             Double stockPercent,
                             String investmentStyle,
-                            String ending) {
+                            String ending,
+                            Long totalFundsPercent) {
     }
 }
