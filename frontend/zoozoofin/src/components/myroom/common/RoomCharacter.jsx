@@ -7,8 +7,8 @@ const CharacterImage = () => {
     const texture = useLoader(TextureLoader, CharRabbit);
     return (
         <mesh
-            position={[1.2, -0.1, 1.2]} // 위치 설정
-            scale={[1.2, 1.2, 1.2]} // 크기 설정
+            position={[-0.9, -0.7, -1.0]} // 위치 설정
+            scale={[1.4, 1.4, 1.4]} // 크기 설정
             rotation={[0, Math.PI / 4.5, 0]} // Y축으로 180도 회전 (정면을 바라보게)
         >
             <planeGeometry args={[1, 1]} /> {/* 평면 지오메트리 생성 */}
