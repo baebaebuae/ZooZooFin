@@ -8,8 +8,6 @@ import CheckIcon from '@mui/icons-material/Check';
 
 import { getApiClient } from '@stores/apiClient';
 
-import useUserStore from '@stores/useUserStore';
-
 const Container = styled.div`
     width: 100%;
     display: flex;
@@ -75,7 +73,6 @@ const BlankBlock = styled.div`
 export const Capital = () => {
     const [isCautionOpened, setIsCautionOpened] = useState(false);
     const [capitalData, setCapitalData] = useState([]);
-    const { turn } = useUserStore();
 
     const tempData = {
         capitalOrigin: 300000000,
@@ -102,10 +99,8 @@ export const Capital = () => {
     }, []);
 
     const CautionTexts = [
-        '제 3금융 대출 금리는 복리 10%로 고정됩니다.',
-        '중도 상환은 불가능합니다.',
-        '정해진 상환일에 대출금을 갚지 못할 경우 자산이 압류됩니다.',
-        '보유한 자산을 모두 압류한 후에도 대출금이 남아있으면 자동으로 파산 처리됩니다.',
+        '정해진 상환일에 대출금을 갚지 못할 경우, 캐피탈 경고 1회 후 자산이 압류됩니다.',
+        '개인이 신청할 경우 파산처리됩니다.',
     ];
 
     return (
@@ -166,15 +161,15 @@ export const Capital = () => {
 
             <DividerLarge />
 
-            {/* {capitalData && capitalData.capitalRestMoney > 0 && capitalData.capitalOrigin > 0 && (
+            {capitalData && capitalData.capitalRestMoney > 0 && capitalData.capitalOrigin > 0 && (
                 <div>
                     <RateBlock>기준 금리 {10}%</RateBlock>
                     <ProgressBox
-                        rate={((capitalData.capitalOrigin - capitalData.capitalRestMoney) / capitalData.capitalOrigin) * 100}
+                        rate={(capitalData.capitalRestMoney / capitalData.capitalOrigin) * 100}
                         restTurn={capitalData.capitalRestTurn}
                     />
                 </div>
-            )} */}
+            )}
         </Container>
     );
 };

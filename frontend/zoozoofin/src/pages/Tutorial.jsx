@@ -121,12 +121,10 @@ const NpcImage = styled.img`
 // };
 
 const Tutorial = () => {
-    // const { setScripts, scripts, fetchTutorialScript } = useStore();
-
+    const { setScripts, scripts, fetchTutorialScript } = useStore();
     const [currentId, setCurrentId] = useState(1);
     const [currentScript, setCurrentScript] = useState(null);
     const [animalName, setAnimalName] = useState(null);
-    const [scripts, setScripts] = useState([]);
 
     const { nowAnimal, getAnimalData } = useAnimalStore();
 
@@ -135,34 +133,19 @@ const Tutorial = () => {
 
     useEffect(() => {
         setScripts([]); // 스크립트 상태 초기화
-    }, [location.pathname, setScripts]);
+        getAnimalData();
+    }, [location.pathname, setScripts, getAnimalData]);
 
     // scripts 가져오기(비동기)
     useEffect(() => {
         if (!scripts || scripts.length === 0) {
             const loadScripts = async () => {
                 // await fetchTutorialScript('tutorial');
-                // fetchTutorialScript('tutorial');
-
-                try {
-                    const apiClient = getApiClient();
-
-                    const res = await apiClient.get('/scripts/tutorial');
-
-                    if (res.status === 200) {
-                        const scripts = res.data.body.scripts;
-                        setScripts(scripts);
-                        return res.data.body.scripts;
-                    }
-                } catch (error) {
-                    console.error('error: ', error);
-                    return error;
-                }
+                fetchTutorialScript('tutorial');
             };
             loadScripts();
         }
-        // }, [fetchTutorialScript, scripts]);
-    }, [scripts]);
+    }, [fetchTutorialScript, scripts]);
 
     // currentScript 설정
     useEffect(() => {
@@ -218,6 +201,7 @@ const Tutorial = () => {
     if (!currentScript) return <Loader loadingText={'주주시티에 입장하는중'} />;
 
     const receivedAnimalTypeId = location.state.animalTypeId;
+    // const receivedAnimalTypeId = 1; //임시로 지정
 
     let backgroundImage;
 
@@ -229,8 +213,7 @@ const Tutorial = () => {
         backgroundImage = MyRoomBackground;
     }
 
-    // scriptId === 5 이면 다시 바꿔!!
-    if (currentScript.scriptId === 5 && currentScript.content.includes('${name}')) {
+    if (currentScript.content.includes('${name}')) {
         currentScript.content = currentScript.content.replace(
             '${name}',
             `**${nowAnimal.animalName}**`

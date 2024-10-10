@@ -1,25 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 import Rabbit from '@assets/images/characters/rabbit.png';
 import { Button } from '@components/root/buttons';
 
-import CreateNameModal from '@components/character/NameModal';
-
 import { getApiClient } from '@stores/apiClient';
-
-// 캐릭터 이미지 import
-import AnimalType1Image from '@/assets/images/history/1.png';
-import AnimalType2Image from '@/assets/images/history/2.png';
-import AnimalType3Image from '@/assets/images/history/3.png';
-
-// 이미지 생성
-const animalImages = {
-    1: AnimalType1Image,
-    2: AnimalType2Image,
-    3: AnimalType3Image,
-};
 
 const Block = styled.div`
     width: 100%;
@@ -41,13 +27,7 @@ const TitleMessage = styled.div`
         0px -1px white;
 `;
 
-const CharacterImage = styled.img`
-    width: 150px;
-    height: 150px;
-`;
-
 const AnimalBlock = styled.div`
-    display: flex;
     overflow-x: auto;
     // 여러 캐릭터 들어온 후 가로 스크롤 설정 확인(width 값 조심 !!)
     margin: 20px 0;
@@ -105,17 +85,6 @@ const AnimalInfoSpecialContent = styled(AnimalInfoCondition)`
     font-size: 16px;
 `;
 
-const InactiveOverlay = styled.div`
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    border-radius: 28px;
-    z-index: 10;
-`;
-
 const AnimalInfoSpecialNum = styled(AnimalInfoSpecialContent)`
     font-family: 'OneMobilePop';
     font-size: 20px;
@@ -130,29 +99,15 @@ const AnimalInfoSpecialNum = styled(AnimalInfoSpecialContent)`
 const CreateAnimal = () => {
     const [animals, setAnimals] = useState([]);
     const [selectedAnimal, setSelectedAnimal] = useState(null);
-    const [isNameModalShown, setIsNameModalShown] = useState(false);
-
     const navigate = useNavigate();
-    const location = useLocation();
 
-    // isStarted 받아서
-    const isStarted = location.state.isStarted;
-    console.log('isStarted: ', isStarted);
-
-    const moveToNextStep = () => {
-        console.log('동물 select 됐나요', selectedAnimal);
-        if (!isStarted) {
-            // 튜토리얼 본 적 없으면 (!isStarted)
-            // tutorial로 이동
-            navigate('/tutorial', {
-                state: {
-                    animalTypeId: selectedAnimal.animalTypeId,
-                },
-            });
-        } else {
-            // 튜토리얼 본 적 있으면 (isStarted) 이 페이지에서 바로 이름 생성 블락 띄우기
-            setIsNameModalShown(true);
-        }
+    const moveToTutorial = () => {
+        console.log('tutorial 가기 전에 동물 select 됐나요', selectedAnimal);
+        navigate('/tutorial', {
+            state: {
+                animalTypeId: selectedAnimal.animalTypeId,
+            },
+        });
     };
 
     const handleClick = (animal) => {
@@ -180,65 +135,52 @@ const CreateAnimal = () => {
     useEffect(() => {}, [animals]);
 
     return (
-        <>
-            {!isNameModalShown ? (
-                <Block>
-                    <TitleMessage>생성할 캐릭터를 선택해줘.</TitleMessage>
+        <Block>
+            <TitleMessage>생성할 캐릭터를 선택해줘.</TitleMessage>
 
-                    <AnimalBlock>
-                        {/* 받아온 animals 없을 때 에러 처리 */}
-                        {animals &&
-                            animals.map((animal, index) => {
-                                return (
-                                    <AnimalCard
-                                        key={index}
-                                        // isSelected={animal === selectedAnimal}
-                                        $isSelected={
-                                            animal.animalTypeId === selectedAnimal?.animalTypeId
-                                        }
-                                        onClick={() => handleClick(animal)}
-                                    >
-                                        {animal.animalTypeId === 2 && (
-                                            <InactiveOverlay>Inactive</InactiveOverlay>
-                                        )}
-                                        <AnimalPhoto>
-                                            <CharacterImage
-                                                src={animalImages[animal.animalTypeId]}
-                                                alt={animal.animalName}
-                                            />
-                                        </AnimalPhoto>
+            <AnimalBlock>
+                {/* 받아온 animals 없을 때 에러 처리 */}
+                {animals &&
+                    animals.map((animal, index) => {
+                        4;
+                        return (
+                            <AnimalCard
+                                key={index}
+                                // isSelected={animal === selectedAnimal}
+                                $isSelected={animal.animalTypeId === selectedAnimal?.animalTypeId}
+                                onClick={() => handleClick(animal)}
+                            >
+                                <AnimalPhoto>
+                                    {/* <Rabbit width={150} height={150} /> */}
+                                    <img src={Rabbit} />
+                                </AnimalPhoto>
 
-                                        <AnimalInfoBox>
-                                            <AnimalInfoName>{animal.animalTypeName}</AnimalInfoName>
-                                            <AnimalInfoCondition>
-                                                캐릭터 우대사항
-                                            </AnimalInfoCondition>
-                                            <AnimalInfoSpecial>
-                                                <AnimalInfoSpecialContent>
-                                                    {animal.animalAbility}
-                                                </AnimalInfoSpecialContent>
-                                                {/* <AnimalInfoSpecialNum>
+                                <AnimalInfoBox>
+                                    <AnimalInfoName>{animal.animalTypeName}</AnimalInfoName>
+                                    <AnimalInfoCondition>캐릭터 우대사항</AnimalInfoCondition>
+                                    <AnimalInfoSpecial>
+                                        <AnimalInfoSpecialContent>없음</AnimalInfoSpecialContent>
+                                        {/* <AnimalInfoSpecialNum>
                                             +{animal.animalAbility}%
-                                            </AnimalInfoSpecialNum> */}
-                                            </AnimalInfoSpecial>
-                                        </AnimalInfoBox>
-                                    </AnimalCard>
-                                );
-                            })}
-                    </AnimalBlock>
-                    {selectedAnimal && (
-                        <Button $isBorder={true} color={'primaryShadow'} onClick={moveToNextStep}>
-                            선택 완료
-                        </Button>
-                    )}
-                </Block>
-            ) : (
-                <Block>
-                    이름 생성 모달
-                    <CreateNameModal animalTypeId={selectedAnimal.animalTypeId} />
-                </Block>
+                                        </AnimalInfoSpecialNum> */}
+                                    </AnimalInfoSpecial>
+                                </AnimalInfoBox>
+                            </AnimalCard>
+                        );
+                    })}
+            </AnimalBlock>
+            {selectedAnimal && (
+                <Button
+                    $isBorder={true}
+                    color={'primaryShadow'}
+                    // onClick={() => {}} // Tutorial로 넘어가는 함수
+                    // 이 때 selectedAnimal.animalTypeId만 같이 보내기(path로)
+                    onClick={moveToTutorial}
+                >
+                    선택 완료
+                </Button>
             )}
-        </>
+        </Block>
     );
 };
 

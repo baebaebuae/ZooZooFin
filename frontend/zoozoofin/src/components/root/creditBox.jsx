@@ -14,10 +14,8 @@ const CreditTitle = styled.div`
 const CreditRateBox = styled.div`
     position: relative;
     width: 40px;
-    left: ${(props) => (props.$grade ? `${(10 - props.$grade) * (190 / 9)}px` : '0px')};
-    // 등급이 1일 때 190px, 10일 때 0px으로 계산
+    left: ${(props) => (props.$grade ? `${200 - (props.$grade - 1) * 20}px` : '0px')};
 `;
-
 
 // width는 임의로 20 * 10값으로 지정(10등급)
 const CreditBar = styled.div`

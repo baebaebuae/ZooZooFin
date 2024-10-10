@@ -70,10 +70,10 @@ export const BankSavingsDetail = ({
                     infoContent={`${finalReturn.toLocaleString()}🥕`}
                     color={'primaryDeep'}
                 />
-                {/* <ExtraInfo
+                <ExtraInfo
                     extraRate={specialRate}
                     extraAmount={(specialRate / 100) * amount}
-                ></ExtraInfo> */}
+                ></ExtraInfo>
                 <DividerLarge />
                 <ProgressBox rate={((period - restTurn) / period) * 100} restTurn={restTurn} />
             </DetailContentBlock>

@@ -163,6 +163,7 @@ const SubmitButton = styled.button`
   }
 `;
 
+
 const GradeMarker = styled.div`
   position: absolute;
   top: -10px;
@@ -193,6 +194,7 @@ const ScoreDisplay = ({ score }) => {
 ScoreDisplay.propTypes = {
   score: PropTypes.number.isRequired,
 };
+
 
 const QuestionSection = ({ question, index, onAnswerChange, userAnswer, isSubmitted, isCorrect }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -275,6 +277,13 @@ QuestionSection.propTypes = {
   isCorrect: PropTypes.bool,
 };
 
+const fallbackData = [
+  { quizId: 1, quizQuestion: '환율이 상승(원화 약세)하면 수출 기업의 이익이 증가할 가능성이 크다.', quizAnswer: 'O', quizType: 'ox' },
+  { quizId: 2, quizQuestion: '골든 크로스는 단기 이동평균선이 장기 이동평균선을 아래에서 위로 돌파할 때 발생하는 신호이다.', quizAnswer: 'O', quizType: 'ox' },
+  { quizId: 3, quizQuestion: 'PBR이 높으면 주가가 회사 자산 대비 고평가되었을 가능성이 있다.', quizAnswer: 'O', quizType: 'ox' },
+  { quizId: 4, quizQuestion: '주가가 하락하다가 반등하는 지점을 나타내는 용어는?', quizAnswer: '지지선', quizType: 'short' },
+  { quizId: 5, quizQuestion: '단기 이동평균선이 장기 이동평균선을 돌파할 때 발생하는 신호는?', quizAnswer: '골든크로스', quizType: 'short' },
+];
 
 const TestPaper = () => {
   const [quizData, setQuizData] = useState([]);
@@ -303,13 +312,15 @@ const TestPaper = () => {
     try {
       const apiClient = getApiClient();
       const response = await apiClient.get('/quiz');
-      console.log("퀴즈");
-      console.log(response.data.body);
+      
       if (response.data && response.data.body && response.data.body.quizzes.length > 0) {
         setQuizData(response.data.body.quizzes);
-      } 
+      } else {
+        setQuizData(fallbackData);
+      }
     } catch (error) {
       console.error('API 호출 실패:', error);
+      setQuizData(fallbackData);
     } finally {
       setIsLoading(false);
     }
@@ -327,39 +338,18 @@ const TestPaper = () => {
     }));
   };
 
-  const handleSubmit = async () => {
-    setIsLoading(true);
-    try {
-      const apiClient = getApiClient();
-
-      const answerList = quizData.map((quiz) => ({
-        quizId: quiz.quizId,
-        animalAnswer: userAnswers[quiz.quizId] !== undefined 
-          ? userAnswers[quiz.quizId].trim() || null // 앞뒤 공백만 제거하고, 빈 값은 null 처리
-          : null
-      }));
-  
-      const requestData = {
-        answerList: answerList
-      };
-
-      
-      console.log(requestData);
-      const response = await apiClient.post('/quiz/submit', requestData );
-      console.log("퀴즈 서브밋!");
-      console.log(response);
-      if (response.data && response.data.body) {
-        setScore(response.data.body.score);
-        setCorrectAnswers(response.data.body.correctAnswers);
-        setIsSubmitted(true);
-      } else {
-        throw new Error('Invalid response from server');
-      }
-    } catch (error) {
-      console.error('Failed to submit quiz:', error);
-     } finally {
-      setIsLoading(false);
-    }
+  const handleSubmit = () => {
+    let correct = 0;
+    const newCorrectAnswers = {};
+    quizData.forEach(question => {
+      const isCorrect = userAnswers[question.quizId] === question.quizAnswer;
+      newCorrectAnswers[question.quizId] = isCorrect;
+      if (isCorrect) correct++;
+    });
+    const calculatedScore = (correct / quizData.length) * 100;
+    setScore(calculatedScore);
+    setCorrectAnswers(newCorrectAnswers);
+    setIsSubmitted(true);
   };
 
   const handleFinish = () => {
@@ -387,31 +377,31 @@ const TestPaper = () => {
         <QuestionGroup side="left">
           {leftQuestions.map((question, index) => (
             <QuestionSection 
-            key={question?.quizId || index} 
-            question={question || {}}       
-            index={index + 1}
-            onAnswerChange={handleAnswerChange}
-            userAnswer={userAnswers[question?.quizId] || ''} 
-            isSubmitted={isSubmitted}
-          />
+              key={question.quizId} 
+              question={question} 
+              index={index + 1}
+              onAnswerChange={handleAnswerChange}
+              userAnswer={userAnswers[question.quizId]}
+              isSubmitted={isSubmitted}
+              isCorrect={correctAnswers[question.quizId]}
+            />
           ))}
         </QuestionGroup>
         <QuestionGroup side="right">
           {rightQuestions.map((question, index) => (
             <QuestionSection 
-            key={question?.quizId || index}  
-            question={question || {}}       
-            index={index + 1}
-            onAnswerChange={handleAnswerChange}
-            userAnswer={userAnswers[question?.quizId] || ''} 
-            isSubmitted={isSubmitted}
-          />
+              key={question.quizId} 
+              question={question} 
+              index={index + leftQuestions.length + 1}
+              onAnswerChange={handleAnswerChange}
+              userAnswer={userAnswers[question.quizId]}
+              isSubmitted={isSubmitted}
+              isCorrect={correctAnswers[question.quizId]}
+            />
           ))}
         </QuestionGroup>
       </QuestionsContainer>
-      {!isSubmitted && <SubmitButton onClick={handleSubmit} disabled={isLoading}>
-        {isLoading ? '제출 중...' : '제출하기'}
-      </SubmitButton>}
+      {!isSubmitted && <SubmitButton onClick={handleSubmit}>제출하기</SubmitButton>}
       {isSubmitted && <SubmitButton onClick={handleFinish}>시험 종료</SubmitButton>}
     </Paper>
   );

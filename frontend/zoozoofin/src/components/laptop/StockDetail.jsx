@@ -112,7 +112,6 @@ const LoanListContent = styled.div`
 export const StockDetail = ({
     name,
     stockRate,
-    rate,
     stockPrice,
     handleSelected,
     stockCount,
@@ -142,7 +141,7 @@ export const StockDetail = ({
             </TableRow>
             <TableRow>
                 <TableTitle>손익률</TableTitle>
-                <TableValue>{rate ? rate.toFixed(2) : 0}%</TableValue>
+                <TableValue>{stockRate}%</TableValue>
                 <TableTitle>평가손익</TableTitle>
                 <TableValue>
                     {evaluationProfitLoss ? evaluationProfitLoss.toLocaleString() : 0}

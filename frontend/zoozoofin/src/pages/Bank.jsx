@@ -33,18 +33,13 @@ const BubbleBlock = styled(Bubble)`
 
 const ImageContainer = styled.div`
     position: fixed;
-    /* bottom: 16%;
-    right: -69%; */
-    top: 200px;
-    left: 170px;
+    bottom: 16%;
+    right: -69%;
 `;
 
 const NpcImage = styled.img`
-    /* width: 700px; */
-    /* width: 360px; */
-    /* height: 325px; */
-    width: 200px;
-    /* height: 200px; */
+    width: 700px;
+    height: 325px;
     object-fit: contain;
 `;
 

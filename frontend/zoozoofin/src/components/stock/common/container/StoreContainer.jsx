@@ -9,15 +9,6 @@ export const BuyingContent = styled.div`
     gap: 5px;
     width: 100%;
 `;
-export const MyStockContent = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0px;
-    gap: 5px;
-    width: 100%;
-`;
 
 export const BuyingMoneyContent = styled.div`
     display: flex;

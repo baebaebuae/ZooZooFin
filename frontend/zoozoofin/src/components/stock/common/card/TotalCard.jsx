@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Card } from '@components/root/card';
 import { StockTitle } from '@components/stock/common/container/StockTitleContainer';
 import { CarrotIcon } from '@components/stock/common/icon/StockIcons';
-import useStockStore, { useUserStockStore } from '@components/stock/common/store/StockStore';
+import useStockStore from '@components/stock/common/store/StockStore';
 
 const TotalCardBox = styled(Card)`
     display: flex;
@@ -49,8 +49,6 @@ export const TotalCard = ({ type }) => {
         clickedNowPrice,
         clickedStockRate,
     } = useStockStore();
-    const { clickedMyStock } = useUserStockStore();
-
     const [nowStock, setNowStock] = useState(null);
     const [nowPrice, setNowPrice] = useState(null);
     const [nowRate, setNowRate] = useState(null);
@@ -75,55 +73,29 @@ export const TotalCard = ({ type }) => {
         }
     });
 
-    if (type === 'buy') {
-        return (
-            <TotalCardBox>
-                <StockTitle
-                    stockName={clickedStockInfo ? clickedStockInfo.stockName : 'stockName'}
-                    stockPrice={nowPrice}
-                    stockRate={nowRate}
-                    type={type}
-                />
-                <RowContainerBox>
-                    <TextStyle>{value}할 주</TextStyle>
-                    <TextStyle type="content" size="large">
-                        {totalStock ? totalStock.toLocaleString() : 0} 주
-                    </TextStyle>
-                </RowContainerBox>
-                <RowContainerBox>
-                    <TextStyle>총 {value} 금액</TextStyle>
-                    <TextStyle type="content" size="large">
-                        {totalPrice !== 0 ? totalPrice.toLocaleString() : 0}
-                        🥕
-                    </TextStyle>
-                </RowContainerBox>
-            </TotalCardBox>
-        );
-    } else if (type === 'sell') {
-        return (
-            <TotalCardBox>
-                <StockTitle
-                    stockName={clickedMyStock ? clickedMyStock.stockName : 'stockName'}
-                    stockPrice={clickedMyStock ? clickedMyStock.stockPrice : 0}
-                    stockRate={clickedStockRate ? clickedStockRate : 0}
-                    type={type}
-                />
-                <RowContainerBox>
-                    <TextStyle>{value}할 주</TextStyle>
-                    <TextStyle type="content" size="large">
-                        {totalStock ? totalStock.toLocaleString() : 0} 주
-                    </TextStyle>
-                </RowContainerBox>
-                <RowContainerBox>
-                    <TextStyle>총 {value} 금액</TextStyle>
-                    <TextStyle type="content" size="large">
-                        {totalPrice !== 0 ? totalPrice.toLocaleString() : 0}
-                        🥕
-                    </TextStyle>
-                </RowContainerBox>
-            </TotalCardBox>
-        );
-    }
+    return (
+        <TotalCardBox>
+            <StockTitle
+                stockName={clickedStockInfo ? clickedStockInfo.stockName : 'stockName'}
+                stockPrice={nowPrice}
+                stockRate={nowRate}
+                type={type}
+            />
+            <RowContainerBox>
+                <TextStyle>{value}할 주</TextStyle>
+                <TextStyle type="content" size="large">
+                    {totalStock ? totalStock.toLocaleString() : 0} 주
+                </TextStyle>
+            </RowContainerBox>
+            <RowContainerBox>
+                <TextStyle>총 {value} 금액</TextStyle>
+                <TextStyle type="content" size="large">
+                    {totalPrice !== 0 ? totalPrice.toLocaleString() : 0}
+                    🥕
+                </TextStyle>
+            </RowContainerBox>
+        </TotalCardBox>
+    );
 };
 
 export default TotalCard;
