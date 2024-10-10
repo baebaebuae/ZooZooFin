@@ -183,7 +183,11 @@ export const StockTitleContainer = ({
                             <CompanyName>{stockCount}주</CompanyName>
                         </MyStockContent>
                     </MyStockContaier>
-                )}{' '}
+                )}
+                <ButtonContainer>
+                    <ActiveButton onClick={() => handleClickStock()}>{value}</ActiveButton>
+                    <DetailButton onClick={() => handleDetailClick()}>상세 정보</DetailButton>
+                </ButtonContainer>
             </MyStockCollapse>
 
             <Divider />
