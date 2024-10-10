@@ -97,9 +97,6 @@ export const HeaderHamburgerButton = () => {
 
     const handleClose = () => {
         setAnchorEl(null);
-        localStorage.removeItem("accessToken")
-        localStorage.removeItem('refreshToken')
-        navigate('/start')
     };
     const handleMissionClick = () => {
         setIsMissionOpen(true);
@@ -115,7 +112,12 @@ export const HeaderHamburgerButton = () => {
         setIsSleepModalOpen(true);
         handleClose();
     };
-
+    const handleLogoutClick = () => {
+        localStorage.removeItem("accessToken")
+        localStorage.removeItem('refreshToken')
+        navigate('/start')
+        handleClose();
+    }
     const handleConfirmSleep = async () => {
         try {
             const apiClient = getApiClient();
@@ -175,7 +177,7 @@ export const HeaderHamburgerButton = () => {
                     </ListItemIcon>
                     {isMusicOn ? 'BGM 켜기' : 'BGM 끄기'}
                 </MenuItem>
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={handleLogoutClick}>
                     <ListItemIcon>
                         <LogoutRoundedIcon />
                     </ListItemIcon>
