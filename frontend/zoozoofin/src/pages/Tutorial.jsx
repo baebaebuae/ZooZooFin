@@ -122,11 +122,11 @@ const NpcImage = styled.img`
 
 const Tutorial = () => {
     // const { setScripts, scripts, fetchTutorialScript } = useStore();
-    // const { setScripts, fetchTutorialScript } = useStore();
+
     const [currentId, setCurrentId] = useState(1);
     const [currentScript, setCurrentScript] = useState(null);
     const [animalName, setAnimalName] = useState(null);
-    const [scripts, setScripts] = useState(null);
+    const [scripts, setScripts] = useState([]);
 
     const { nowAnimal, getAnimalData } = useAnimalStore();
 
@@ -134,7 +134,6 @@ const Tutorial = () => {
     const location = useLocation();
 
     useEffect(() => {
-        // setScripts([]); // 스크립트 상태 초기화
         setScripts([]); // 스크립트 상태 초기화
     }, [location.pathname, setScripts]);
 
@@ -148,7 +147,7 @@ const Tutorial = () => {
                 try {
                     const apiClient = getApiClient();
 
-                    const res = await apiClient.get('/scripts/tutorial', {});
+                    const res = await apiClient.get('/scripts/tutorial');
 
                     if (res.status === 200) {
                         const scripts = res.data.body.scripts;
