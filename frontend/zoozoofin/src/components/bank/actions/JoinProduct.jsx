@@ -19,6 +19,7 @@ const Block = styled.div`
     align-items: center;
     gap: 20px;
     height: 100vh;
+    padding-top: 120px;
 `;
 
 const FixedMessageBox = styled.div`

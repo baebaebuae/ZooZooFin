@@ -196,26 +196,6 @@ const Wallet = ({ onClose = () => {} }) => {
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const navigate = useNavigate();
 
-  const fallbackData = {
-    dailyCharge: 50000,
-    loanMake: 1000000,
-    loanRepay: 50000,
-    stockBuy: 500000,
-    stockSell: 600000,
-    depositMake: 200000,
-    depositFinish: 1000000,
-    savingsMake: 100000,
-    savingsPay: 10000,
-    savingsFinish: 500000,
-    capitalMake: 2000000,
-    capitalRepay: 100000
-  };
-
-  const nextDayFallbackData = {
-    nextLoanRepayment: 50000,
-    nextSavingsRepayment: 200000,
-    nextCapitalRepayment: 100000,
-  };
 
   const handleClose = () => {
     onClose();
@@ -233,20 +213,18 @@ const Wallet = ({ onClose = () => {} }) => {
           setWalletData(todayResponse.data.body);
         } else {
           console.log('No today data received from API, using fallback data');
-          setWalletData(fallbackData);
+
         }
 
         if (nextDayResponse.data && nextDayResponse.data.body) {
           setNextDayData(nextDayResponse.data.body);
         } else {
           console.log('No next day data received from API, using fallback data');
-          setNextDayData(nextDayFallbackData);
+
         }
       } catch (error) {
         console.error('Error fetching data:', error);
         setError(error.message);
-        setWalletData(fallbackData);
-        setNextDayData(nextDayFallbackData);
       } finally {
         setIsLoading(false);
       }

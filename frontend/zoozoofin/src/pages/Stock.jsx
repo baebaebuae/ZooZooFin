@@ -31,23 +31,20 @@ const StockBlock = styled.div`
 
 const ImageContainer = styled.div`
     position: fixed;
-    /* bottom: 16%;
-    right: -69%; */
-    top: 220px;
-    left: 160px;
+    bottom: 28%;
+    right: -5%;
 `;
 
 const NpcImage = styled.img`
-    width: 200px;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
 `;
 
 const BubbleBlock = styled(Bubble)`
     position: fixed;
-    /* bottom: 0;
-    right: 0; */
-    top: 320px;
-    left: -10px;
+    bottom: 0;
+    right: 0;
 `;
 
 const BubbleLine = styled.span`
