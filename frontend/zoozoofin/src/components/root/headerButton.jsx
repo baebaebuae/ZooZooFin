@@ -5,7 +5,7 @@ import HeaderMenu from '@assets/images/components/header/header_menu.svg?react';
 import HeaderMap from '@assets/images/components/header/header_map.svg?react';
 // 일단 급하게 사이즈 줄여놨는데, svg파일 용량 줄이는 법 더 찾기
 
-import { useMusic } from './useMusic';
+import { useMusic } from '@components/useMusic';
 
 import { useState } from 'react';
 
