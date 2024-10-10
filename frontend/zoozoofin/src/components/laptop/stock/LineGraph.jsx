@@ -15,15 +15,19 @@ export const LineGraph = ({ stockData }) => {
     const { turn } = useUserStore();
     const [closePrices, setClosePrices] = useState(null);
 
+    // const categories = Array.from({ length: turn + 2 }, (_, index) => index - 1);
+
     useEffect(() => {
-        const nowTurn = stockData.slice(0, turn + 24);
+        const nowTurn = stockData.slice(0, turn + 25);
         setData(nowTurn);
     }, [turn]);
 
+    // -25부터 turn까지의 카테고리 생성
+    const categories = Array.from({ length: turn + 26 }, (_, index) => index - 24);
     // 주식 데이터에서 endPrice만 추출
     useEffect(() => {
         if (data) {
-            const prices = Object.values(data).map((item) => (item ? item['endPrice'] : 0));
+            const prices = Object.values(data).map((item) => (item ? item['price'] : 0));
             console.log(prices);
             setClosePrices(prices);
         }
@@ -76,7 +80,7 @@ export const LineGraph = ({ stockData }) => {
             labels: {
                 show: false,
             },
-            // categories: turns,
+            categories: categories,
         },
         yaxis: {
             show: false,

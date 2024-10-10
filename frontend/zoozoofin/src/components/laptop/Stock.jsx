@@ -68,8 +68,8 @@ export const Stock = () => {
         try {
             const apiClient = getApiClient();
             const res = await apiClient.get('/stock/notebook');
-            // console.log(res);
             setData(res.data.body);
+            console.log(res.data.body.etfList);
         } catch (error) {
             console.error('Failed to fetch user notebook Stock:', error);
         }
@@ -91,8 +91,6 @@ export const Stock = () => {
         fetchStockData();
     }, []);
 
-    useEffect;
-
     if (data) {
         return (
             <Container>
@@ -100,6 +98,7 @@ export const Stock = () => {
                     <StockDetail
                         name={selectedData.stockName}
                         stockRate={selectedData.stockRate} // 손익률
+                        rate={selectedData.rate}
                         stockPrice={selectedData.stockPrice}
                         stockCount={selectedData.stockCount} // 보유 주식 수
                         purchaseDate={selectedData.buyTurn} // 매수일자
@@ -147,10 +146,10 @@ export const Stock = () => {
                                         return (
                                             <StockTitle
                                                 key={index}
-                                                companyName={stock.stockName}
+                                                stockName={stock.stockName}
                                                 stockPrice={stock.stockTotal}
-                                                currentState={stock.stockRate > 0 ? 'up' : 'down'}
-                                                onToggle={() => handleSelect(stock)}
+                                                stockRate={stock.stockRate}
+                                                onToggle={() => handleSelect(stock.stockId)}
                                             />
                                         );
                                     })}
@@ -163,13 +162,15 @@ export const Stock = () => {
                                 <AppContentH2>ETF</AppContentH2>
                                 <ProductBlock>
                                     {data.etfList.map((stock, index) => {
+                                        console.log(stock.stockName);
                                         return (
                                             <StockTitle
                                                 key={index}
-                                                companyName={stock.stockName}
+                                                channel={'ETF'}
+                                                stockName={stock.stockName}
                                                 stockPrice={stock.stockTotal}
-                                                currentState={stock.stockRate > 0 ? 'up' : 'down'}
-                                                onToggle={() => handleSelect(stock)}
+                                                stockRate={stock.stockRate}
+                                                onToggle={() => handleSelect(stock.stockId)}
                                             />
                                         );
                                     })}

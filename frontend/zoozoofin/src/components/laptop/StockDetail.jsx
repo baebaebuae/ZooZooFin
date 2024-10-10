@@ -112,6 +112,7 @@ const LoanListContent = styled.div`
 export const StockDetail = ({
     name,
     stockRate,
+    rate,
     stockPrice,
     handleSelected,
     stockCount,
@@ -141,7 +142,7 @@ export const StockDetail = ({
             </TableRow>
             <TableRow>
                 <TableTitle>손익률</TableTitle>
-                <TableValue>{stockRate}%</TableValue>
+                <TableValue>{rate ? rate.toFixed(2) : 0}%</TableValue>
                 <TableTitle>평가손익</TableTitle>
                 <TableValue>
                     {evaluationProfitLoss ? evaluationProfitLoss.toLocaleString() : 0}
@@ -164,7 +165,9 @@ export const StockDetail = ({
                             <LoanListContent>{trade.turn}</LoanListContent>
                             <LoanListContent $tradeType={trade.type}>{trade.type}</LoanListContent>
                             <LoanListContent>{trade.count}</LoanListContent>
-                            <LoanListContent>{trade.price}</LoanListContent>
+                            <LoanListContent>
+                                {trade && trade.price ? `${trade.price.toLocaleString()}` : 0}
+                            </LoanListContent>
                         </LoanListBox>
                     );
                 })}
