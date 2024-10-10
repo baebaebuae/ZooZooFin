@@ -20,11 +20,19 @@ const Auth = () => {
                     const apiClient = getApiClient();
                     const res = await apiClient.get('/member/animal');
                     if (res.status === 200){
-                        const animalNumber = res.data.body.animalNumber;
-                        if (animalNumber && animalNumber > 0){
+                        const isStarted = res.data.body.isStarted;
+                        const isActivated = res.data.body.isActivated;
+                        
+                        if (isStarted && isActivated){
+                            // play 여부
                             navigate('../myroom');
                         } else {
-                            navigate('../tutorial')
+                            // re-play 여부
+                            navigate('../createanimal', {
+                                state: {
+                                    isActivated: isStarted
+                                }
+                            });
                         }
                     } else {
                         console.error(res.status)
