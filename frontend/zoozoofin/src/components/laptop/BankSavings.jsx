@@ -4,7 +4,11 @@ import styled from 'styled-components';
 import { LaptopInfoBox } from '@components/root/infoBox';
 import { Divider } from '@components/root/card';
 import { BadgeStroke, WarnBadge } from '@components/root/badge';
-import IconFrog from '@assets/images/icons/icon_frog.png';
+import IconChicken from '@assets/images/icons/icon_chicken.png';
+import IconZoozoo from '@assets/images/icons/icon_chick.png';
+import IconCat from '@assets/images/icons/icon_cat.png';
+import IconBear from '@assets/images/icons/icon_bear.png';
+import IconRaccon from '@assets/images/icons/icon_raccon.png';
 
 import { BankSavingsDetail } from './BankSavingsDetail';
 
@@ -72,6 +76,23 @@ const ProductAmount = styled.div`
     font-size: 16px;
     font-weight: bold;
 `;
+
+const getProductIcon = (productName) => {
+    switch (productName) {
+        case '주주예금':
+            return IconZoozoo;
+        case '꼬꼬예금':
+            return IconChicken;
+        case '야옹예금':
+            return IconCat;
+        case '주주적금':
+            return IconZoozoo;
+        case '너굴적금':
+            return IconRaccon;
+        case '곰곰적금':
+            return IconBear;
+    }
+};
 
 export const BankSavings = () => {
     const [isSelected, setIsSelected] = useState(false);
@@ -151,7 +172,6 @@ export const BankSavings = () => {
     }, []);
 
     useEffect(() => {}, [savingsData]);
-
     return (
         <Container>
             {isSelected ? (
@@ -181,11 +201,12 @@ export const BankSavings = () => {
                         savingsData.mySavingsResponseList &&
                         savingsData.mySavingsResponseList.length > 0 &&
                         savingsData.mySavingsResponseList.map((saving, index) => {
+                            const productIcon = getProductIcon(saving.name);
                             return (
                                 <div key={index}>
                                     <ProductBox onClick={() => handleSelect(saving)}>
                                         <ProductTitleBox>
-                                            <img src={IconFrog} width={30} />
+                                            <img src={productIcon} width={30} />
                                             <ProductName>{saving.name}</ProductName>
                                             <BadgeStroke
                                                 color={saving.restTurn === 1 ? 'warn' : 'tertiary'}
@@ -223,11 +244,12 @@ export const BankSavings = () => {
                                     savingsData.myDepositResponseList &&
                                     savingsData.myDepositResponseList.length > 0 &&
                                     savingsData.myDepositResponseList.map((deposit, index) => {
+                                        const productIcon = getProductIcon(deposit.name);
                                         return (
                                             <div key={index}>
                                                 <ProductBox onClick={() => handleSelect(deposit)}>
                                                     <ProductTitleBox>
-                                                        <img src={IconFrog} width={30} />
+                                                        <img src={productIcon} width={30} />
                                                         <ProductName>{deposit.name}</ProductName>
                                                         <BadgeStroke
                                                             color={

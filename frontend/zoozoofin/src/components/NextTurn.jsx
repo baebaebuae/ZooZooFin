@@ -126,7 +126,7 @@ const NextTurn = ({ isOpen, onClose, onConfirm, bankruptcyRisk }) => {
           <Subtitle>잠을 자면 이번 턴이 마무리되고, 다음 턴으로 넘어가요.</Subtitle>
           {bankruptcyRisk && (
             <WarningMessage>
-              주의! 다음 턴에 파산 위험이 있습니다. 부족액: {bankruptcyRisk.deficit}
+              ⚠️주의! 다음 턴에 파산이야!⚠️ (부족액: {bankruptcyRisk.deficit})
             </WarningMessage>
           )}
           <ButtonWrapper>

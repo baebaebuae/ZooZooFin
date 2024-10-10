@@ -13,27 +13,23 @@ export const checkBankruptcyRisk = async () => {
         // 현재 자산
         const totalAssets = animalAssets;
 
-        // 내일 지불해야 할 총액 계산
-        const totalPayments = nextLoanRepayment + nextSavingsPayment + nextCapitalRepayment;
-
-        // nextCapitalRepayment가 0이 아닐 경우에만 파산 위험 체크
+        // nextCapitalRepayment가 0이 아닐 때만 파산 위험을 체크
         if (nextCapitalRepayment !== 0) {
-            // 파산 위험 (내 자산보다 지불해야 할 금액이 큰 경우)
-            if (totalAssets + totalPayments < 0) {
-                const deficit = Math.abs(totalAssets + totalPayments);
+            // 내일 지불해야 할 총액 계산
+            const totalPayments = nextLoanRepayment + nextSavingsPayment + nextCapitalRepayment;
+            if (totalAssets < totalPayments) {
+                const deficit = totalPayments - totalAssets; 
                 return {
                     isBankrupt: true,
-                    message: `주의: 내일 지불해야 할 금액이 현재 자산을 초과합니다. 부족액: ${deficit}`,
                     deficit
                 };
             }
         }
 
-        // nextCapitalRepayment가 0이거나 파산 위험이 없는 경우
+        // 파산 위험이 없는 경우
         return {
             isBankrupt: false,
-            message: "현재 자산으로 내일의 지불을 충분히 커버할 수 있습니다.",
-            surplus: totalAssets + totalPayments
+            surplus: totalAssets - (nextLoanRepayment + nextSavingsPayment + nextCapitalRepayment)
         };
     } catch (error) {
         console.error('파산 위험 확인 중 오류 발생:', error);
