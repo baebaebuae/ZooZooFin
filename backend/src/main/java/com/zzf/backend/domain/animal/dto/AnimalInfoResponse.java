@@ -4,7 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record AnimalInfoResponse(String animalName,
-                                 Long animalAbility,
+                                 String animalAbility,
                                  String animalHierarchy,
                                  Long animalCredit,
                                  Boolean isWorkToday,

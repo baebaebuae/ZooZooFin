@@ -145,19 +145,67 @@ public class AnimalServiceImpl implements AnimalService {
     @Override
     public AnimalPortfolioResponse getPortfolio(String memberId, Long animalId) {
         Animal animal = animalRepository.findById(animalId)
-                .orElseThrow(() -> new CustomException(ANIMAL_NOT_FOUND_EXCEPTION));
+                .orElseThrow(() -> new CustomException(ANIMAL_ALL_END_EXCEPTION));
 
         if (!animal.getMember().getUsername().equals(memberId)) {
             throw new CustomException(ANIMAL_UNAVAILABLE_EXCEPTION);
         }
 
+        List<Deposit> deposit = depositRepository.findAllByAnimalAndDepositIsEndFalse(animal);
+        Long depositTotal = deposit.stream()
+                .map(Deposit::getDepositAmount)
+                .reduce(0L, Long::sum);
+
+        List<Savings> savings = savingsRepository.findAllByAnimalAndSavingsIsEndFalse(animal);
+        Long savingsTotal = savings.stream()
+                .map(Savings::getSavingsAmount)
+                .reduce(0L, Long::sum);
+
+        List<StockHoldings> stockHoldings = stockHoldingsRepository.findAllByAnimalAndStockIsSoldFalse(animal);
+        Long stockTotal = stockHoldings.stream()
+                .map(sh -> {
+                    Chart chart = chartRepository.findByStockAndTurn(sh.getStock(), animal.getTurn())
+                            .orElseThrow(() -> new CustomException(CHART_NOT_FOUND_EXCEPTION));
+                    return chart.getPrice() * sh.getStockCount();
+                })
+                .reduce(0L, Long::sum);
+
+        List<Loan> loan = loanRepository.findAllByAnimalAndLoanIsEndFalse(animal);
+        Long loanTotal = loan.stream()
+                .map(Loan::getLoanAmount)
+                .reduce(0L, Long::sum);
+
+        List<Capital> capital = capitalRepository.findAllByAnimalAndCapitalIsEndFalse(animal);
+        Long capitalTotal = capital.stream()
+                .map(Capital::getCapitalAmount)
+                .reduce(0L, Long::sum);
+
+        long total = 0L;
+        total += animal.getAssets();
+        total += depositTotal;
+        total += savingsTotal;
+        total += stockTotal;
+        total += loanTotal;
+        total += capitalTotal;
+
         Portfolio portfolio = portfolioRepository.findByAnimal(animal)
                 .orElseThrow(() -> new CustomException(PORTFOLIO_NOT_FOUND_EXCEPTION));
 
+        List<Portfolio> portfolioList = portfolioRepository.findAllByOrderByPortfolioScoreDesc();
+
+        int index = portfolioList.indexOf(portfolio) + 1;
+
         return AnimalPortfolioResponse.builder()
                 .animalName(animal.getName())
-                .animalAsset(animal.getAssets())
+                .animalHierarchy(animal.getHierarchy())
+                .animalAbility(animal.getAnimalType().getAnimalAbility())
                 .animalCredit(animal.getCredit())
+                .totalAmount(total)
+                .totalAssets(animal.getAssets())
+                .totalDeposit(depositTotal)
+                .totalSavings(savingsTotal)
+                .totalStock(stockTotal)
+                .totalLoan(loanTotal)
                 .portfolio(AnimalPortfolioResponse.Portfolio.builder()
                         .depositPercent(portfolio.getPortfolioDepositPercent())
                         .savingsPercent(portfolio.getPortfolioSavingsPercent())
@@ -166,6 +214,7 @@ public class AnimalServiceImpl implements AnimalService {
                         .ending(EndingStatus
                                 .getEndingStatus(portfolio.getPortfolioEnding())
                                 .getEndingName())
+                        .totalFundsPercent(100L * index / portfolioList.size())
                         .build())
                 .build();
     }

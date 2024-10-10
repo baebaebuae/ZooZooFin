@@ -10,7 +10,11 @@ import java.util.Optional;
 
 @Repository
 public interface PortfolioRepository extends JpaRepository<Portfolio, Long> {
-    Optional<Portfolio> findByAnimal(Animal animal);
     boolean existsByAnimal(Animal animal);
+
+    Optional<Portfolio> findByAnimal(Animal animal);
+
+    List<Portfolio> findAllByOrderByPortfolioScoreDesc();
+
     List<Portfolio> findTop10ByOrderByPortfolioScoreDesc();
 }
