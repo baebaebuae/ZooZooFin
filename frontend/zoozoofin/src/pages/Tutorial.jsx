@@ -121,11 +121,12 @@ const NpcImage = styled.img`
 // };
 
 const Tutorial = () => {
-    const { setScripts, scripts, fetchTutorialScript } = useStore();
+    // const { setScripts, scripts, fetchTutorialScript } = useStore();
+    // const { setScripts, fetchTutorialScript } = useStore();
     const [currentId, setCurrentId] = useState(1);
     const [currentScript, setCurrentScript] = useState(null);
     const [animalName, setAnimalName] = useState(null);
-    const [tutorialScript, setTutorialScript] = useState(null);
+    const [scripts, setScripts] = useState(null);
 
     const { nowAnimal, getAnimalData } = useAnimalStore();
 
@@ -133,9 +134,9 @@ const Tutorial = () => {
     const location = useLocation();
 
     useEffect(() => {
+        // setScripts([]); // 스크립트 상태 초기화
         setScripts([]); // 스크립트 상태 초기화
-        getAnimalData();
-    }, [location.pathname, setScripts, getAnimalData]);
+    }, [location.pathname, setScripts]);
 
     // scripts 가져오기(비동기)
     useEffect(() => {
@@ -151,7 +152,7 @@ const Tutorial = () => {
 
                     if (res.status === 200) {
                         const scripts = res.data.body.scripts;
-                        setTutorialScript(scripts);
+                        setScripts(scripts);
                         return res.data.body.scripts;
                     }
                 } catch (error) {
