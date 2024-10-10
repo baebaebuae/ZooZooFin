@@ -96,7 +96,7 @@ export const MovingAverage = () => {
         {
             name: '단기 이동평균선',
             type: 'line',
-            data: shortTermMA.map((price, index) => ({ x: index, y: price })),
+            data: shortTermMA.map((price, index) => ({ x: index - 24, y: price })),
             stroke: {
                 curve: 'smooth',
                 width: 2,
@@ -106,7 +106,7 @@ export const MovingAverage = () => {
         {
             name: '장기 이동평균선',
             type: 'line',
-            data: longTermMA.map((price, index) => ({ x: index, y: price })),
+            data: longTermMA.map((price, index) => ({ x: index - 24, y: price })),
             stroke: {
                 curve: 'smooth',
                 width: 2,
@@ -117,7 +117,7 @@ export const MovingAverage = () => {
             name: '캔들차트',
             type: 'candlestick',
             data: dataPrices.map((price, index) => ({
-                x: index,
+                x: index - 24,
                 y: price ? price : 0,
             })),
         },
