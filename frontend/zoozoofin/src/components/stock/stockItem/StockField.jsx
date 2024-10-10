@@ -28,7 +28,7 @@ export const StockFieldList = {
         Entertainment: '엔터',
         Bio: '바이오',
         Food: '식품',
-        Oil: '화학/정유',
+        Oil: '화학(정유)',
         Bank: '금융',
     },
     ETF: {

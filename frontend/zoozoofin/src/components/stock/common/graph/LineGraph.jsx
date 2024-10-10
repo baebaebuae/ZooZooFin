@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import ReactApexChart from 'react-apexcharts';
 import useStockStore from '@components/stock/common/store/StockStore';
 import { useEffect, useState } from 'react';
+import useUserStore from '../../../../stores/useUserStore';
 
 const GraphWrapper = styled.div`
     padding-top: 10px;
@@ -15,6 +16,10 @@ export const LineGraph = () => {
     const [stockData, setStockData] = useState(0);
     const [turns, setTurns] = useState([]);
     const [closePrices, setClosePrices] = useState(null);
+
+    const { turn } = useUserStore();
+    // -25부터 turn까지의 카테고리 생성
+    const categories = Array.from({ length: turn + 26 }, (_, index) => index - 24);
 
     // 클릭된 주식 차트를 상태에 저장
     useEffect(() => {
@@ -29,7 +34,7 @@ export const LineGraph = () => {
     // 주식 데이터에서 endPrice만 추출
     useEffect(() => {
         if (stockData) {
-            const prices = Object.values(stockData).map((item) => (item ? item['endPrice'] : 0));
+            const prices = Object.values(stockData).map((item) => (item ? item['price'] : 0));
             setClosePrices(prices);
         }
     }, [stockData]);
@@ -81,7 +86,7 @@ export const LineGraph = () => {
             labels: {
                 show: false,
             },
-            // categories: turns,
+            categories: categories,
         },
         yaxis: {
             show: false,
