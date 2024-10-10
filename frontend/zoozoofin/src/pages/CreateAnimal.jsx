@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import styled from 'styled-components';
 import Rabbit from '@assets/images/characters/rabbit.png';
@@ -104,6 +104,7 @@ const CreateAnimal = () => {
     const [isNameModalShown, setIsNameModalShown] = useState(false);
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     // isStarted 받아서
     const isStarted = location.state.isStarted;
