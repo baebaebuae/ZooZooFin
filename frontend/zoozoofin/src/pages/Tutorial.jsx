@@ -216,7 +216,7 @@ const Tutorial = () => {
         backgroundImage = MyRoomBackground;
     }
 
-    if (currentScript.content.includes('${name}')) {
+    if (currentScript.scriptId === 5 && currentScript.content.includes('${name}')) {
         currentScript.content = currentScript.content.replace(
             '${name}',
             `**${nowAnimal.animalName}**`
