@@ -82,7 +82,7 @@ export const OrderCard = ({ channel, type }) => {
                 />
                 <InputOrder
                     type={type}
-                    stockPrice={clickedNowPrice ? clickedNowPrice : 0}
+                    stockPrice={clickedMyStock ? clickedMyStock.stockPrice : 0}
                     max={maxStock}
                 />
             </OrderCardBox>
