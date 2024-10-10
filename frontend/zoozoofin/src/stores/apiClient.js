@@ -56,26 +56,25 @@ export const getApiClient = () => {
                             originalRequest.headers['Authorization'] = `Bearer ${getAccessToken()}`;
                             return apiClient(originalRequest);
                         } else {
-                            clearAccessToken();
-                            clearRefreshToken();
                             return Promise.reject(new Error('Token reissue failed, logging out.'));
                         } 
                     }
                 } catch (err) {
-                    clearAccessToken();
-                    clearRefreshToken();
                     return Promise.reject(err);
                 } 
             } 
             else {
-                clearAccessToken();
-                clearRefreshToken();
-                const currentURL = window.location.href;
-                if (currentURL.includes("localhost")){
-                    window.location.href = 'http://localhost:5173/start'
-                } else {
-                    window.location.href = `https://zoozoofin.site/start`
-                }
+                console.log(error.response.status, error.response.data.httpStatus)
+                if (error.response.data.httpStatus == 401){
+                    clearAccessToken();
+                    clearRefreshToken();
+                    const currentURL = window.location.href;
+                    if (currentURL.includes("localhost")){
+                        window.location.href = 'http://localhost:5173/start'
+                    } else {
+                        window.location.href = `https://zoozoofin.site/start`
+                    }
+                    }
                 return Promise.reject(new Error('No refresh token'));
             }
             if (error.response?.status == 400) {
