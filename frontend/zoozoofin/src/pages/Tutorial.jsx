@@ -30,10 +30,8 @@ const TutorialContainer = styled.div`
 
 const BubbleBlock = styled(Bubble)`
     position: fixed;
-    /* bottom: 0;
-    right: 0; */
-    top: 320px;
-    left: -10px;
+    bottom: 0;
+    right: 0;
 `;
 
 const NameModalBLock = styled.div`
@@ -95,14 +93,13 @@ const ArrowBox = styled.div`
 
 const ImageContainer = styled.div`
     position: fixed;
-    /* bottom: 16%;
-    right: -69%; */
-    top: 220px;
-    left: 160px;
+    bottom: 26%;
+    right: -13%;
 `;
 
 const NpcImage = styled.img`
-    width: 200px;
+    width: 300px;
+    height: 250px;
     object-fit: contain;
 `;
 
@@ -124,10 +121,12 @@ const NpcImage = styled.img`
 // };
 
 const Tutorial = () => {
-    const { setScripts, scripts, fetchTutorialScript } = useStore();
+    // const { setScripts, scripts, fetchTutorialScript } = useStore();
+
     const [currentId, setCurrentId] = useState(1);
     const [currentScript, setCurrentScript] = useState(null);
     const [animalName, setAnimalName] = useState(null);
+    const [scripts, setScripts] = useState([]);
 
     const { nowAnimal, getAnimalData } = useAnimalStore();
 
@@ -136,19 +135,34 @@ const Tutorial = () => {
 
     useEffect(() => {
         setScripts([]); // 스크립트 상태 초기화
-        getAnimalData();
-    }, [location.pathname, setScripts, getAnimalData]);
+    }, [location.pathname, setScripts]);
 
     // scripts 가져오기(비동기)
     useEffect(() => {
         if (!scripts || scripts.length === 0) {
             const loadScripts = async () => {
                 // await fetchTutorialScript('tutorial');
-                fetchTutorialScript('tutorial');
+                // fetchTutorialScript('tutorial');
+
+                try {
+                    const apiClient = getApiClient();
+
+                    const res = await apiClient.get('/scripts/tutorial');
+
+                    if (res.status === 200) {
+                        const scripts = res.data.body.scripts;
+                        setScripts(scripts);
+                        return res.data.body.scripts;
+                    }
+                } catch (error) {
+                    console.error('error: ', error);
+                    return error;
+                }
             };
             loadScripts();
         }
-    }, [fetchTutorialScript, scripts]);
+        // }, [fetchTutorialScript, scripts]);
+    }, [scripts]);
 
     // currentScript 설정
     useEffect(() => {
@@ -216,7 +230,7 @@ const Tutorial = () => {
         backgroundImage = MyRoomBackground;
     }
 
-    if (currentScript.scriptId === 5 && currentScript.content.includes('${name}')) {
+    if (currentScript.content.includes('${name}')) {
         currentScript.content = currentScript.content.replace(
             '${name}',
             `**${nowAnimal.animalName}**`

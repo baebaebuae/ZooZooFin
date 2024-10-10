@@ -19,7 +19,7 @@ const getRefreshToken = () => localStorage.getItem('refreshToken');
 const setAccessToken = (token) => localStorage.setItem('accessToken', token);
 const setRefreshToken = (token) => localStorage.setItem('refreshToken', token);
 const clearAccessToken = () => localStorage.removeItem('accessToken');
-const clearRefreshToken = () => localStorage.removeItem('refreshToken'); 
+const clearRefreshToken = () => localStorage.removeItem('refreshToken');
 
 export const isLoggedIn = () => !!getAccessToken();
 
@@ -36,7 +36,6 @@ export const getApiClient = () => {
             return response;
         },
         async (error) => {
-           
             const originalRequest = error.config;
             if (originalRequest._retry) {
                 console.error('Refresh token request failed again, stopping further requests.');
@@ -49,37 +48,40 @@ export const getApiClient = () => {
                         const res = await apiClient.patch('/auth/reissue', {
                             refreshToken: refreshToken,
                         });
-                        console.log(res)
-                        if (res.status == 200){
+                        console.log(res);
+                        if (res.status == 200) {
                             setAccessToken(res.data.body.accessToken);
                             setRefreshToken(res.data.body.refreshToken);
                             originalRequest.headers['Authorization'] = `Bearer ${getAccessToken()}`;
                             return apiClient(originalRequest);
                         } else {
                             return Promise.reject(new Error('Token reissue failed, logging out.'));
-                        } 
+                        }
                     }
                 } catch (err) {
                     return Promise.reject(err);
-                } 
-            } 
-            else {
-                console.log(error.response.status, error.response.data.httpStatus)
-                if (error.response.data.httpStatus == 401){
+                }
+            } else {
+                console.log(
+                    `error status: ${error.response.status}, httpStatus: ${error.response.data.httpStatus}`
+                );
+                if (error.response.data.httpStatus == 401) {
                     clearAccessToken();
                     clearRefreshToken();
                     const currentURL = window.location.href;
-                    if (currentURL.includes("localhost")){
-                        window.location.href = 'http://localhost:5173/start'
+                    if (currentURL.includes('localhost')) {
+                        window.location.href = 'http://localhost:5173/start';
                     } else {
-                        window.location.href = `https://zoozoofin.site/start`
+                        window.location.href = `https://zoozoofin.site/start`;
                     }
-                    }
-                return Promise.reject(new Error('No refresh token'));
+                }
+                return Promise.reject(new Error('잘못된 axios 요청'));
             }
             if (error.response?.status == 400) {
                 console.error('Bad Request (400):', error.response.data);
-                return Promise.reject(new Error('Request failed with status 400, stopping further requests.'));
+                return Promise.reject(
+                    new Error('Request failed with status 400, stopping further requests.')
+                );
             }
 
             return Promise.reject(error);
