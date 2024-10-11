@@ -14,6 +14,8 @@ import { BankSavingsDetail } from './BankSavingsDetail';
 
 import { getApiClient } from '@stores/apiClient';
 
+import { useAnimalStore } from '../../store';
+
 const Container = styled.div`
     width: 100%;
     display: flex;
@@ -95,6 +97,8 @@ const getProductIcon = (productName) => {
 };
 
 export const BankSavings = () => {
+    const { getAnimalData } = useAnimalStore();
+
     const [isSelected, setIsSelected] = useState(false);
     const [savingsData, setSavingsData] = useState([]);
     const [selectedData, setSelectedData] = useState(null);
@@ -168,6 +172,10 @@ export const BankSavings = () => {
     };
 
     useEffect(() => {
+        getAnimalData();
+    });
+
+    useEffect(() => {
         fetchSavingsData();
     }, []);
 
@@ -191,7 +199,8 @@ export const BankSavings = () => {
                     {savingsData && savingsData.totalMoney > 0 && (
                         <LaptopInfoBox
                             color={'primaryDeep'}
-                            infoTitle={'님의 저축 총 자산'}
+                            infoTitle={`님의 저축 총 자산`}
+                            // infoTitle={`${savingsData.totalMoney}님의 저축 총 자산`}
                             infoContent={`${savingsData.totalMoney.toLocaleString()}원`}
                         ></LaptopInfoBox>
                     )}
