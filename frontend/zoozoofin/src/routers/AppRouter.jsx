@@ -33,6 +33,12 @@ import defaultMusic from '@assets/music/default.mp3';
 import startMusic from '@assets/music/start.mp3';
 import bankMusic from '@assets/music/bank.mp3';
 import capitalMusic from '@assets/music/lender.mp3';
+import laptopMusic from '@assets/music/laptop.mp3';
+import mapMusic from '@assets/music/map.mp3';
+import myRoomMusic from '@assets/music/myroom.mp3';
+import schoolMusic from '@assets/music/school.mp3';
+import stockMusic from '@assets/music/stock.mp3';
+import workMusic from '@assets/music/work.mp3';
 
 import { useMusic } from '@components/useMusic';
 import { useMusicStore } from '@stores/useMusicStore.js';
@@ -88,6 +94,12 @@ const AppRouter = () => {
         bank: bankMusic,
         lender: capitalMusic,
         default: defaultMusic,
+        laptop: laptopMusic,
+        map: mapMusic,
+        myroom: myRoomMusic,
+        school: schoolMusic,
+        stock: stockMusic,
+        work: workMusic,
     };
 
     //  페이지 넘어갈 때 해당하는 페이지의 pathname을 가져와서 currentMusic에 상태 저장 후 bgm 재생
@@ -109,9 +121,9 @@ const AppRouter = () => {
         setBackgroundimage(image.default);
     };
 
-    // useEffect(() => {
-    //     !isMusicOn && audioRef.current.pause();
-    // });
+    useEffect(() => {
+        !isMusicOn && audioRef.current.pause();
+    });
 
     // 페이지 넘어갔을 때 path에서 바로 pathname 찾기
     useEffect(() => {
@@ -122,7 +134,7 @@ const AppRouter = () => {
             setMusic(pathname);
 
             // defaultMusic으로 계속 연결되는 경우에는 useEffect 안에서 바꾸지 않음
-            if (audioRef.current && currentMusic != defaultMusic) {
+            if (isMusicOn && audioRef.current && currentMusic != defaultMusic) {
                 audioRef.current.load();
 
                 if (isMusicOn) {

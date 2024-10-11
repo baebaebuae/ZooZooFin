@@ -183,7 +183,7 @@ export const HeaderHamburgerButton = () => {
                     <ListItemIcon>
                         {isMusicOn ? <VolumeOffRoundedIcon /> : <VolumeUpRoundedIcon />}
                     </ListItemIcon>
-                    {isMusicOn ? 'BGM 켜기' : 'BGM 끄기'}
+                    {isMusicOn ? 'BGM 끄기' : 'BGM 켜기'}
                 </MenuItem>
                 <MenuItem onClick={handleLogoutClick}>
                     <ListItemIcon>
