@@ -53,7 +53,7 @@ const RoomModel = () => {
             //     navigate('/map');
             // } else if (name === 'Bed') {
             //     console.log('로딩화면 및 API 연결 예정');
-            if (name === 'Computer') {
+            if (name === 'Computer' || name === '책상') {
                 navigate('/laptop');
             }
         }
