@@ -4,6 +4,7 @@ import Chart from 'react-apexcharts';
 import { X } from 'lucide-react';
 import IconCarrot from '@assets/images/icons/icon_carrot.png';
 import { NormalIcon } from '@components/root/icon';
+import { getApiClient } from "@/stores/apiClient";
 
 const ModalOverlay = styled.div`
     position: fixed;
@@ -26,9 +27,10 @@ const ModalContent = styled.div`
         0 10px 15px -3px rgba(0, 0, 0, 0.1),
         0 4px 6px -2px rgba(0, 0, 0, 0.05);
     max-width: 80vw;
-    max-height: 80vh;
+    max-height: 430px;
     overflow-y: auto;
     position: relative;
+    top: 50px; 
 `;
 
 const CloseButton = styled.button`
@@ -91,15 +93,60 @@ const NewsContent = styled.p`
     margin-left: 1.5rem;
 `;
 
-const Modal = ({ onClose, data }) => {
-    const formattedPrice = data.price.map((price) => Math.floor(price));
-    const formattedPredictedPrice = Math.floor(data.predicted_price);
+const LoadingModalContent = styled(ModalContent)`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+`;
 
-    const maxSentiment = Math.max(data.positive_ratio, data.negative_ratio, data.neutral_ratio);
+const LoadingText = styled.p`
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+`;
+
+const LoadingSpinner = styled.div`
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+`;
+
+const LoadingModal = ({ onClose }) => (
+    <ModalOverlay onClick={onClose}>
+        <LoadingModalContent onClick={(e) => e.stopPropagation()}>
+            <LoadingText>주가 예측중...</LoadingText>
+            <LoadingSpinner />
+        </LoadingModalContent>
+    </ModalOverlay>
+);
+
+const Modal = ({ onClose, data }) => {
+    if (!data || !data.price || !Array.isArray(data.price)) {
+        console.error('Invalid data structure:', data);
+        return <div>Error: Invalid data structure</div>;
+    }
+
+    const formattedPrice = data.price.map((price) => Math.floor(price));
+    const formattedPredictedPrice = Math.floor(data.predictedPrice || 0);
+
+    const maxSentiment = Math.max(
+        data.positiveRatio || 0,
+        data.negativeRatio || 0,
+        data.neutralRatio || 0
+    );
     const maxSentimentLabel =
-        maxSentiment === data.positive_ratio
+        maxSentiment === (data.positiveRatio || 0)
             ? '긍정적'
-            : maxSentiment === data.negative_ratio
+            : maxSentiment === (data.negativeRatio || 0)
               ? '부정적'
               : '중립적';
 
@@ -116,7 +163,7 @@ const Modal = ({ onClose, data }) => {
         },
     };
 
-    const pieSeries = [data.negative_ratio, data.neutral_ratio, data.positive_ratio];
+    const pieSeries = [data.negativeRatio || 0, data.neutralRatio || 0, data.positiveRatio || 0];
 
     const lineOptions = {
         chart: {
@@ -165,7 +212,7 @@ const Modal = ({ onClose, data }) => {
                 <CloseButton onClick={onClose}>
                     <X size={24} />
                 </CloseButton>
-                <Title>{data.news_title}</Title>
+                <Title>{data.newsTitle}</Title>
                 <hr />
                 <ChartContainer>
                     <Chart options={pieOptions} series={pieSeries} type="donut" height={300} />
@@ -186,7 +233,7 @@ const Modal = ({ onClose, data }) => {
                 <NewsSection>
                     <div>
                         <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>긍정적인 문장</h3>
-                        {data.positive_sentences.map((sentence, index) => (
+                        {data.positiveSentences.map((sentence, index) => (
                             <NewsContent key={index}>
                                 {index + 1}. {sentence.sentence}
                             </NewsContent>
@@ -194,7 +241,7 @@ const Modal = ({ onClose, data }) => {
                     </div>
                     <div>
                         <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>부정적인 문장</h3>
-                        {data.negative_sentences.map((sentence, index) => (
+                        {data.negativeSentences.map((sentence, index) => (
                             <NewsContent key={index}>
                                 {index + 1}. {sentence.sentence}
                             </NewsContent>
@@ -212,69 +259,68 @@ const StockHint = ({ isOpen, onClose, stockId }) => {
     const [error, setError] = useState(null);
 
     const defaultData = {
-        news_title: '지분 860억 받고…개굴전자 기술 해외에 빼돌린 전 직원들 구속 기소',
-        negative_ratio: 46.58,
-        neutral_ratio: 44.17,
-        positive_ratio: 9.25,
-        negative_sentences: [
+        newsTitle: '지분 860억 받고…개굴전자 기술 해외에 빼돌린 전 직원들 구속 기소',
+        negativeRatio: 0.0,
+        negativeSentences: [],
+        neutralRatio: 80.94051214325934,
+        positiveRatio: 19.059487856740652,
+        positiveSentences: [
             {
-                score: 0.9997,
-                sentence:
-                    '개굴전자가 약 4조 원을 투입해 개발한 반도체 핵심 기술을 해외에 빼돌린 혐의를 받는 개굴전자 전 직원들이 구속 상태로 재판에 넘겨졌다.',
+                score: 0.9985945820808411,
+                sentence: "매 터는 인터넷 프로 토 콜 (IP) 기반 스마트 홈 통신 표준 기술이다."
             },
             {
-                score: 0.9996,
-                sentence:
-                    '서울 중앙 지검 정보기술범죄 수사부는 해외 반도체 회사 청두가 오전(CHJS) 대표 최 모 씨와 개발실장 오 모 씨를 구속 기소했다.',
+                score: 0.9985324144363403,
+                sentence: "개굴 전자가 1년에 공급하는 제품만 5억대다."
             },
             {
-                score: 0.9994,
-                sentence: '개굴전자가 독자 개발한 20 나노급 D램 기술을 부정 사용한 혐의를 받는다.',
-            },
+                score: 0.9906037449836731,
+                sentence: "스마트 홈 기기를 위한 개방형 통신 프로 토 콜 규격을 개발하고 표준화하는 단체인 글로벌 표준 연합 (CSA ·Connectivity Standards Alliance) 이 주도하고 있다."
+            }
         ],
-        positive_sentences: [
-            {
-                score: 0.9921,
-                sentence:
-                    '글로벌 반도체 회사들도 통상 4~5년이 소요되는 D램 공정기술을 1년 6개월 만에 개발했다.',
-            },
-        ],
-        predicted_price: 97830.52,
-        summary:
-            '개굴전자가 개발한 반도체 핵심 기술을 해외에 빼돌린 혐의를 받는 개굴전자 전 직원들이 구속 상태로 재판에 넘겨졌다.',
-        price: [98000, 98100, 98300, 98000, 98200, 98000],
+        predictedPrice: 61560.33793501819,
+        summary: "한 부회장은 앱으로 제어할 수 있는 기기 표준을 다른 기업들과 협업해서 만들겠다는 구상이며 스마트싱스 원년 선언한 부회장은 독일 베를린에서 국내 기자간담회를 열고 스마트싱스",
+        price: [61545, 61560, 61550, 61565, 61560],
     };
 
     useEffect(() => {
         const fetchStockData = async () => {
             if (!isOpen) return;
-
+    
             setIsLoading(true);
             try {
-                const response = await fetch(`/stock/hint/${stockId}`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch stock data');
+                const apiClient = getApiClient();
+                const response = await apiClient.get(`/stock/hint/${stockId}`);
+                const data = response.data.body;
+                console.log('API response:', data);
+                if (data && Object.keys(data).length > 0 && data.price && Array.isArray(data.price)) {
+                    setStockData(data);
+                } else {
+                    console.log('Using default data due to invalid API response');
+                    setStockData(defaultData);
                 }
-                const data = await response.json();
-                setStockData(data);
             } catch (err) {
                 console.error('Error fetching stock data:', err);
                 setError(err);
-                // API 호출 실패 시 임시 데이터 사용
+                console.log('Using default data due to API error');
                 setStockData(defaultData);
             } finally {
                 setIsLoading(false);
             }
         };
-
+    
         fetchStockData();
     }, [isOpen, stockId]);
 
     if (!isOpen) return null;
-    if (isLoading) return <div>Loading...</div>;
+    
+    if (isLoading) {
+        return <LoadingModal onClose={onClose} />;
+    }
+    
     if (error) console.error('Error occurred, using default data');
 
-    return <Modal onClose={onClose} data={stockData || defaultData} />;
+    return stockData ? <Modal onClose={onClose} data={stockData} /> : null;
 };
 
 export default StockHint;
