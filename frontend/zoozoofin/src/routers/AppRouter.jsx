@@ -29,16 +29,17 @@ import AppRanking from '@pages/laptop/AppRanking';
 
 import CharacterHistory from '../pages/CharacterHistory';
 
-import defaultMusic from '@assets/music/default.mp3';
-import startMusic from '@assets/music/start.mp3';
-import bankMusic from '@assets/music/bank.mp3';
-import capitalMusic from '@assets/music/lender.mp3';
-import laptopMusic from '@assets/music/laptop.mp3';
-import mapMusic from '@assets/music/map.mp3';
-import myRoomMusic from '@assets/music/myroom.mp3';
-import schoolMusic from '@assets/music/school.mp3';
-import stockMusic from '@assets/music/stock.mp3';
-import workMusic from '@assets/music/work.mp3';
+import defaultMusic from '/music/default.mp3';
+import startMusic from '/music/start.mp3';
+// import bankMusic from '@assets/music/bank.mp3';
+import bankMusic from '/music/bank.mp3';
+import capitalMusic from '/music/lender.mp3';
+import laptopMusic from '/music/laptop.mp3';
+import mapMusic from '/music/map.mp3';
+import myRoomMusic from '/music/myroom.mp3';
+import schoolMusic from '/music/school.mp3';
+import stockMusic from '/music/stock.mp3';
+import workMusic from '/music/work.mp3';
 
 import { useMusic } from '@components/useMusic';
 import { useMusicStore } from '@stores/useMusicStore.js';
