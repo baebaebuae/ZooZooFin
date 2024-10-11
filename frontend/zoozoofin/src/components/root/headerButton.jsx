@@ -83,13 +83,15 @@ export const HeaderHamburgerButton = () => {
     const [isMissionOpen, setIsMissionOpen] = useState(false);
     const [isCharacterHistoryOpen, setIsCharacterHistoryOpen] = useState(false);
     const [isSleepModalOpen, setIsSleepModalOpen] = useState(false);
-    // const isMusicOn = useMusicStore((state) => state.isMusicOn);
-    // const toggleMusic = useMusicStore((state) => state.toggleMusic);
+
+    const isMusicOn = useMusicStore((state) => state.isMusicOn);
+    const toggleMusic = useMusicStore((state) => state.toggleMusic);
+
     const fetchUserProfile = useUserStore((state) => state.fetchUserProfile);
     const { updateBillState } = useBillStore();
     const { updateBankruptState } = useBankruptStore();
 
-    const { isMusicOn, toggleMusic } = useMusic();
+    // const { isMusicOn, toggleMusic } = useMusic();
 
     const open = Boolean(anchorEl);
 
