@@ -26,9 +26,10 @@ const ModalContent = styled.div`
         0 10px 15px -3px rgba(0, 0, 0, 0.1),
         0 4px 6px -2px rgba(0, 0, 0, 0.05);
     max-width: 80vw;
-    max-height: 80vh;
+    max-height: 430px;
     overflow-y: auto;
     position: relative;
+    top: 50px; 
 `;
 
 const CloseButton = styled.button`
@@ -213,36 +214,27 @@ const StockHint = ({ isOpen, onClose, stockId }) => {
 
     const defaultData = {
         news_title: '지분 860억 받고…개굴전자 기술 해외에 빼돌린 전 직원들 구속 기소',
-        negative_ratio: 46.58,
-        neutral_ratio: 44.17,
-        positive_ratio: 9.25,
-        negative_sentences: [
+        "negative_ratio": 0.0,
+        "negative_sentences": [],
+        "neutral_ratio": 80.94051214325934,
+        "positive_ratio": 19.059487856740652,
+        "positive_sentences": [
             {
-                score: 0.9997,
-                sentence:
-                    '개굴전자가 약 4조 원을 투입해 개발한 반도체 핵심 기술을 해외에 빼돌린 혐의를 받는 개굴전자 전 직원들이 구속 상태로 재판에 넘겨졌다.',
+                "score": 0.9985945820808411,
+                "sentence": "매 터는 인터넷 프로 토 콜 (IP) 기반 스마트 홈 통신 표준 기술이다."
             },
             {
-                score: 0.9996,
-                sentence:
-                    '서울 중앙 지검 정보기술범죄 수사부는 해외 반도체 회사 청두가 오전(CHJS) 대표 최 모 씨와 개발실장 오 모 씨를 구속 기소했다.',
+                "score": 0.9985324144363403,
+                "sentence": "개굴 전자가 1년에 공급하는 제품만 5억대다."
             },
             {
-                score: 0.9994,
-                sentence: '개굴전자가 독자 개발한 20 나노급 D램 기술을 부정 사용한 혐의를 받는다.',
-            },
+                "score": 0.9906037449836731,
+                "sentence": "스마트 홈 기기를 위한 개방형 통신 프로 토 콜 규격을 개발하고 표준화하는 단체인 글로벌 표준 연합 (CSA ·Connectivity Standards Alliance) 이 주도하고 있다."
+            }
         ],
-        positive_sentences: [
-            {
-                score: 0.9921,
-                sentence:
-                    '글로벌 반도체 회사들도 통상 4~5년이 소요되는 D램 공정기술을 1년 6개월 만에 개발했다.',
-            },
-        ],
-        predicted_price: 97830.52,
-        summary:
-            '개굴전자가 개발한 반도체 핵심 기술을 해외에 빼돌린 혐의를 받는 개굴전자 전 직원들이 구속 상태로 재판에 넘겨졌다.',
-        price: [98000, 98100, 98300, 98000, 98200, 98000],
+        predicted_price: 61560.33793501819,
+        summary: "한 부회장은 앱으로 제어할 수 있는 기기 표준을 다른 기업들과 협업해서 만들겠다는 구상이며 스마트싱스 원년 선언한 부회장은 독일 베를린에서 국내 기자간담회를 열고 스마트싱스",
+        price: [61545, 61560, 61550, 61565, 61560, 61558],
     };
 
     useEffect(() => {
