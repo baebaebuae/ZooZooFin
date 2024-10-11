@@ -11,8 +11,13 @@ import com.zzf.backend.global.exception.CustomException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -325,13 +330,22 @@ public class StockServiceImpl implements StockService {
 
         News news = newsList.getFirst();
 
-        AiInputDto inputDto = AiInputDto.builder()
-                .industryField(stock.getStockField())
-                .stockField(stock.getStockType())
-                .stockCode(stock.getStockCode())
-                .inputDate(news.getDate())
-                .newsData(news.getContent())
-                .build();
+        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+        formData.add("industry_field", switch (stock.getStockField()) {
+            case "제조" -> "manufacturing";
+            case "IT" -> "it";
+            case "엔터" -> "entertainment";
+            case "바이오" -> "bio";
+            case "식품" -> "food";
+            case "화학" -> "chemical";
+            case "금융" -> "finance";
+            case "반도체" -> "semiconductor";
+            default -> throw new CustomException(STOCK_TYPE_NOT_ALLOWED_EXCEPTION);
+        });
+        formData.add("stock_field", stock.getStockType());
+        formData.add("stock_code", stock.getStockCode());
+        formData.add("input_date", news.getDate().toString());
+        formData.add("news_data", news.getContent());
 
         AiOutputDto aiOutput = WebClient.create(aiServerUri)
                 .post()
@@ -340,7 +354,8 @@ public class StockServiceImpl implements StockService {
                         .path(aiServerPath)
                         .build(true)
                 )
-                .bodyValue(inputDto)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                .body(BodyInserters.fromFormData(formData))
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError,
                         clientResponse -> Mono.error(new CustomException(AI_SERVER_ERROR)))
