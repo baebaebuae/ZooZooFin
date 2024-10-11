@@ -342,10 +342,15 @@ public class StockServiceImpl implements StockService {
             case "반도체" -> "semiconductor";
             default -> throw new CustomException(STOCK_TYPE_NOT_ALLOWED_EXCEPTION);
         });
-        formData.add("stock_field", stock.getStockType());
+        formData.add("stock_field", switch (stock.getStockType()) {
+            case "국내" -> "domestic";
+            case "해외" -> "oversea";
+            case "ETF" -> "etf";
+            default -> throw new CustomException(STOCK_TYPE_NOT_ALLOWED_EXCEPTION);
+        });
         formData.add("stock_code", stock.getStockCode());
-        formData.add("input_date", news.getDate().toString());
-        formData.add("news_data", news.getContent());
+        formData.add("input_date", news.getDate().toString().substring(0, 10));
+        formData.add("news_data", "\"" + news.getContent() + "\"");
 
         AiOutputDto aiOutput = WebClient.create(aiServerUri)
                 .post()
