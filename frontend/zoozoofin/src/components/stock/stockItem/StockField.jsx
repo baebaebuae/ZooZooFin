@@ -250,7 +250,7 @@ const StockField = ({ field, type, onFieldSelect }) => {
                 {/* 환율 금액 업데이트 예정 */}
                 <PriceContainer>
                     <TextStyle type="content" size="large">
-                        {nowExchange}
+                        {nowExchange.toLocaleString()}
                     </TextStyle>
                     <TextStyle size="small" now={nowExchangeRate > 0 ? 'up' : 'down'}>
                         {nowExchangeRate !== 0 ? formatStockRate(nowExchangeRate) : '-'}

@@ -9,13 +9,17 @@ import { StockOrder } from '@components/stock/stockList/StockOrder';
 import StockDetail from '@components/stock/stockList/StockDetail';
 
 const StoreWrapper = styled.div`
-    width: 95%;
+    width: 100%;
+    max-width: 1200px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 21px;
     margin: 0px auto;
-    margin-top: 120px;
+    padding-top: 120px;
+    position: relative;
+    overflow-x: hidden;
+    min-height: calc(100vh - 120px); 
 `;
 
 export const StockBuy = ({ channel, onOrderCompletion }) => {
