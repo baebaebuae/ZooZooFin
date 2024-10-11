@@ -20,14 +20,6 @@ const StoreWrapper = styled.div`
     position: relative;
     overflow-x: hidden;
     min-height: calc(100vh - 120px); 
-    
-    /* 내부 스크롤을 위한 요소 추가 */
-    .scrollable-content {
-        width: 100%;
-        max-width: 1200px;
-        overflow-y: auto; /* 내부 요소만 스크롤 가능하게 설정 */
-        height: calc(100vh - 120px); /* padding-top만큼 뺀 높이를 설정 */
-    }
 `;
 
 export const StockBuy = ({ channel, onOrderCompletion }) => {
