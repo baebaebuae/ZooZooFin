@@ -35,7 +35,8 @@ const MapSample = ({ setIsPostboxClicked }) => {
     const navigate = useNavigate();
 
     // const { scene } = useGLTF('/realfinal.glb');
-    const { scene } = useGLTF('/floor_final.glb');
+    // const { scene } = useGLTF('/floor_final.glb');
+    const { scene } = useGLTF('/errorcontrol.glb');
     // Selected Objects는 ground만 뽑히고 나머지는 사라짐 - 실패
 
     //// --------------------------------- ////
@@ -177,7 +178,7 @@ const Map = () => {
             <CanvasBoard>
                 <Canvas
                     shadows
-                    camera={{ fov: 45, position: [5, 4.3, 4.9] }}
+                    camera={{ fov: 45, position: [4, 4.3, 4.9] }}
                     style={{ background: 'none' }}
                 >
                     <ambientLight color={'#EBF4F0'} intensity={3} />
