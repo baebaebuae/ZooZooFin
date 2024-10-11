@@ -117,10 +117,11 @@ const MapSample = ({ setIsPostboxClicked }) => {
                 navigate('/myroom');
             } else if (clickedObject.parent.name === 'Carrots') {
                 navigate('/work');
-            } else if (clickedObject.parent.name === 'Postbox') {
-                setIsPostboxClicked(true);
-                // navigate('/work');
             }
+            // else if (clickedObject.parent.name === 'Postbox') {
+            //     // setIsPostboxClicked(true);
+            //     navigate('/myroom');
+            // }
         }
     };
     // useFrame(() => {s
