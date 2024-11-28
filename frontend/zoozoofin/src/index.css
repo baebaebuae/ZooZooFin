@@ -1,0 +1,76 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+    overflow: hidden;
+}
+
+#root {
+    /* background-color: pink; */
+    width: 360px;
+    height: 640px;
+}
+
+@font-face {
+    font-family: 'OneMobile';
+    src: url('/fonts/ONE\ Mobile\ Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'OneMobile';
+    src: url('/fonts/ONE\ Mobile\ Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'OneMobile';
+    src: url('/fonts/ONE\ Mobile\ Light.ttf') format('truetype');
+    font-weight: light;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'OneMobilePop';
+    src: url('/fonts/ONE\ Mobile\ POP.ttf') format('truetype');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'neodgm_code';
+    src: url('/fonts/neodgm_code.ttf') format('truetype');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MangoDdobak';
+    src: url('/fonts/MangoDdobak.ttf') format('truetype');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'YeongdeokSea';
+    src: url('/fonts/Yeongdeok\ Sea.ttf') format('truetype');
+    font-display: swap;
+}
+
+@media (min-width: 360px) and (min-height: 640px) {
+    body {
+        font-family: 'OneMobile';
+        overflow: auto;
+        margin: 0;
+        max-width: 360px;
+        max-height: 640px;
+        caret-color: transparent;
+    }
+    ::-webkit-scrollbar {
+        display: none;
+    }
+}
