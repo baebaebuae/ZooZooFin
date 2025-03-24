@@ -1,3 +1,3 @@
 # README
 
-- SSAFY 11기 자율 PJT
+- SSAFY 11기 특화 PJT
