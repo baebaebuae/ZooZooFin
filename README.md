@@ -1,4 +1,3 @@
 # README
 
-- juyeon test
-- juyeon test 2
+- SSAFY 11기 자율 PJT
